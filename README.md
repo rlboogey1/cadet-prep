@@ -1,4 +1,4 @@
-# AFOQT Study (C++)
+# AFOQT Study (C++ and Claude AI) 
 
 A console study app for the AFOQT knowledge sections: Word Knowledge, Math Knowledge,
 Arithmetic Reasoning, Verbal Analogies, and Reading Comprehension. It's built so pilot
