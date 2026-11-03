@@ -1,0 +1,50 @@
+{
+  "_note": "Time limits here are practice pacing, not official values. Check the current AFOQT study guide and adjust. To add a pilot section later, add an entry with \"category\": \"pilot\" and its own question file.",
+  "subtests": [
+    {
+      "id": "word_knowledge",
+      "name": "Word Knowledge",
+      "category": "knowledge",
+      "file": "word_knowledge.json",
+      "time_limit_seconds": 300,
+      "question_count": 10,
+      "tips": "Break unfamiliar words into roots, prefixes and suffixes. If unsure, eliminate choices with the wrong tone (positive vs. negative)."
+    },
+    {
+      "id": "math_knowledge",
+      "name": "Math Knowledge",
+      "category": "knowledge",
+      "file": "math_knowledge.json",
+      "time_limit_seconds": 600,
+      "question_count": 10,
+      "tips": "When solving takes too long, plug the answer choices back into the problem."
+    },
+    {
+      "id": "arithmetic_reasoning",
+      "name": "Arithmetic Reasoning",
+      "category": "knowledge",
+      "file": "arithmetic_reasoning.json",
+      "time_limit_seconds": 600,
+      "question_count": 8,
+      "tips": "Write down exactly what is being asked, then estimate to rule out impossible choices before calculating."
+    },
+    {
+      "id": "verbal_analogies",
+      "name": "Verbal Analogies",
+      "category": "knowledge",
+      "file": "verbal_analogies.json",
+      "time_limit_seconds": 240,
+      "question_count": 8,
+      "tips": "Make a short sentence linking the first pair (\"a ___ is used by a ___\"), then test that sentence on each choice."
+    },
+    {
+      "id": "reading_comprehension",
+      "name": "Reading Comprehension",
+      "category": "knowledge",
+      "file": "reading_comprehension.json",
+      "time_limit_seconds": 360,
+      "question_count": 6,
+      "tips": "Pick the answer the passage supports, not what you know from elsewhere."
+    }
+  ]
+}

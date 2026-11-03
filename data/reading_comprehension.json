@@ -1,0 +1,71 @@
+{
+  "_note": "Passages are stored with each question so questions can be shuffled independently. Repeat the passage text for every question that uses it.",
+  "questions": [
+    { "id": "RC-001",
+      "passage": "In the early days of commercial aviation, the captain's authority in the cockpit was rarely questioned. Investigations of several accidents in the 1970s, however, found that other crew members had noticed problems but hesitated to speak up. In response, airlines developed training known as Crew Resource Management (CRM), which teaches every crew member to share observations, state concerns clearly, and work through decisions together. The captain still has final authority, but CRM treats the cockpit as a team in which good information can come from anyone. Today the approach has spread beyond aviation to fields such as surgery and firefighting.",
+      "prompt": "Which of the following best states the main idea of the passage?",
+      "choices": [
+        "Captains no longer have authority in the cockpit.",
+        "CRM was developed to improve communication and teamwork among flight crews.",
+        "Most accidents in the 1970s were caused by mechanical failure.",
+        "CRM was first developed for surgeons and firefighters.",
+        "Airline training has become shorter over time."
+      ], "answer": 1,
+      "explanation": "The passage explains why CRM was created and what it teaches. Choice A contradicts the passage, which says the captain keeps final authority." },
+    { "id": "RC-002",
+      "passage": "In the early days of commercial aviation, the captain's authority in the cockpit was rarely questioned. Investigations of several accidents in the 1970s, however, found that other crew members had noticed problems but hesitated to speak up. In response, airlines developed training known as Crew Resource Management (CRM), which teaches every crew member to share observations, state concerns clearly, and work through decisions together. The captain still has final authority, but CRM treats the cockpit as a team in which good information can come from anyone. Today the approach has spread beyond aviation to fields such as surgery and firefighting.",
+      "prompt": "According to the passage, accident investigations in the 1970s found that",
+      "choices": [
+        "captains lacked flying experience",
+        "the aircraft were poorly designed",
+        "training programs lasted too long",
+        "other crew members noticed problems but hesitated to speak up",
+        "radio communication with the ground failed"
+      ], "answer": 3,
+      "explanation": "The second sentence states this directly. None of the other choices is mentioned." },
+    { "id": "RC-003",
+      "passage": "In the early days of commercial aviation, the captain's authority in the cockpit was rarely questioned. Investigations of several accidents in the 1970s, however, found that other crew members had noticed problems but hesitated to speak up. In response, airlines developed training known as Crew Resource Management (CRM), which teaches every crew member to share observations, state concerns clearly, and work through decisions together. The captain still has final authority, but CRM treats the cockpit as a team in which good information can come from anyone. Today the approach has spread beyond aviation to fields such as surgery and firefighting.",
+      "prompt": "The passage suggests that under CRM",
+      "choices": [
+        "the captain makes the final decision but is expected to consider input from the crew",
+        "any crew member can override the captain",
+        "cockpit decisions are made by majority vote",
+        "junior crew members should remain silent",
+        "the captain's role has been eliminated"
+      ], "answer": 0,
+      "explanation": "The captain 'still has final authority,' but information can come from anyone on the team." },
+    { "id": "RC-004",
+      "passage": "Pilots often say that hot, high, and humid conditions are an airplane's enemy. As air warms, rises in elevation, or holds more moisture, it becomes less dense. Thinner air gives the wings less to push against, so the airplane needs a longer runway to reach takeoff speed, and the engine and propeller produce less power. The combined effect is described as density altitude: the altitude at which the airplane performs as though it were operating. On a summer afternoon at a mountain airport, density altitude can be thousands of feet higher than the field's actual elevation, and a takeoff that is routine on a cool morning may become dangerous.",
+      "prompt": "Based on the passage, which conditions would most likely INCREASE the takeoff distance an airplane needs?",
+      "choices": [
+        "Cold, dry air at a sea-level airport",
+        "A cool morning at a mountain airport",
+        "A longer runway",
+        "Dense air over the ocean",
+        "A hot, humid afternoon at a high-elevation airport"
+      ], "answer": 4,
+      "explanation": "Heat, elevation, and humidity all thin the air, which lengthens the takeoff run. Choice E combines all three." },
+    { "id": "RC-005",
+      "passage": "Pilots often say that hot, high, and humid conditions are an airplane's enemy. As air warms, rises in elevation, or holds more moisture, it becomes less dense. Thinner air gives the wings less to push against, so the airplane needs a longer runway to reach takeoff speed, and the engine and propeller produce less power. The combined effect is described as density altitude: the altitude at which the airplane performs as though it were operating. On a summer afternoon at a mountain airport, density altitude can be thousands of feet higher than the field's actual elevation, and a takeoff that is routine on a cool morning may become dangerous.",
+      "prompt": "As used in the passage, \"density altitude\" refers to",
+      "choices": [
+        "the actual elevation of the airport",
+        "the altitude the airplane performs as if it were at, given current air conditions",
+        "the maximum altitude an airplane can reach",
+        "the height of the cloud base",
+        "the altitude at which the air is most humid"
+      ], "answer": 1,
+      "explanation": "The passage defines it as the altitude at which the airplane performs as though it were operating, which can differ from the real field elevation." },
+    { "id": "RC-006",
+      "passage": "Pilots often say that hot, high, and humid conditions are an airplane's enemy. As air warms, rises in elevation, or holds more moisture, it becomes less dense. Thinner air gives the wings less to push against, so the airplane needs a longer runway to reach takeoff speed, and the engine and propeller produce less power. The combined effect is described as density altitude: the altitude at which the airplane performs as though it were operating. On a summer afternoon at a mountain airport, density altitude can be thousands of feet higher than the field's actual elevation, and a takeoff that is routine on a cool morning may become dangerous.",
+      "prompt": "The author's primary purpose is to",
+      "choices": [
+        "persuade pilots to avoid mountain airports",
+        "compare propeller and jet engines",
+        "explain why certain air conditions reduce airplane performance",
+        "describe the history of airport construction",
+        "argue that humidity has little effect on flight"
+      ], "answer": 2,
+      "explanation": "The passage explains cause and effect: thinner air leads to weaker performance. It does not tell pilots to avoid mountain airports." }
+  ]
+}

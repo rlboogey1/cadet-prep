@@ -1,0 +1,28 @@
+{
+  "questions": [
+    { "id": "AR-001", "prompt": "An aircraft flies at 450 mph for 2.5 hours. How far does it travel?",
+      "choices": ["900 miles", "1,000 miles", "1,125 miles", "1,200 miles", "1,350 miles"], "answer": 2,
+      "explanation": "Distance = rate × time = 450 × 2.5 = 1,125 miles." },
+    { "id": "AR-002", "prompt": "A jacket costs $80. It is discounted 25%, and then 5% sales tax is added to the sale price. What is the final cost?",
+      "choices": ["$60", "$63", "$57", "$64", "$84"], "answer": 1,
+      "explanation": "$80 × 0.75 = $60. Tax: $60 × 1.05 = $63." },
+    { "id": "AR-003", "prompt": "Crew A can complete an inspection in 6 hours. Crew B can complete it in 3 hours. Working together, how long will it take?",
+      "choices": ["4.5 hours", "3 hours", "9 hours", "2 hours", "1.5 hours"], "answer": 3,
+      "explanation": "Rates add: 1/6 + 1/3 = 1/6 + 2/6 = 3/6 = 1/2 job per hour, so 2 hours." },
+    { "id": "AR-004", "prompt": "An airplane burns 12 gallons of fuel per hour and carries 90 gallons. The pilot must land with a 30-minute fuel reserve. How many hours can the plane fly before reaching the reserve?",
+      "choices": ["7.5", "7", "6.5", "6", "8"], "answer": 1,
+      "explanation": "Reserve = 0.5 × 12 = 6 gallons. Usable fuel = 84 gallons. 84 ÷ 12 = 7 hours." },
+    { "id": "AR-005", "prompt": "A student's average on 4 tests is 85. What score is needed on the 5th test to raise the average to 87?",
+      "choices": ["87", "89", "91", "93", "95"], "answer": 4,
+      "explanation": "Needed total = 5 × 87 = 435. Current total = 4 × 85 = 340. 435 - 340 = 95." },
+    { "id": "AR-006", "prompt": "A squadron of 40 people has officers and enlisted members in a 3:5 ratio. How many are officers?",
+      "choices": ["15", "12", "24", "25", "8"], "answer": 0,
+      "explanation": "3 + 5 = 8 parts. 40 ÷ 8 = 5 per part. Officers = 3 × 5 = 15." },
+    { "id": "AR-007", "prompt": "$2,000 is invested at 4% simple annual interest. How much interest is earned in 3 years?",
+      "choices": ["$2,240", "$240", "$120", "$80", "$2,400"], "answer": 1,
+      "explanation": "I = Prt = 2,000 × 0.04 × 3 = $240. $2,240 is the total balance, not the interest." },
+    { "id": "AR-008", "prompt": "Two jets leave the same base at the same time, flying in opposite directions at 400 mph and 500 mph. After how many hours will they be 2,700 miles apart?",
+      "choices": ["3.5", "4", "2.5", "2", "3"], "answer": 4,
+      "explanation": "Moving apart, their speeds add: 900 mph. 2,700 ÷ 900 = 3 hours." }
+  ]
+}

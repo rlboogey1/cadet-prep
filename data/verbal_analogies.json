@@ -1,0 +1,28 @@
+{
+  "questions": [
+    { "id": "VA-001", "prompt": "PILOT is to AIRCRAFT as CAPTAIN is to",
+      "choices": ["ship", "ocean", "crew", "anchor", "port"], "answer": 0,
+      "explanation": "A pilot commands an aircraft; a captain commands a ship." },
+    { "id": "VA-002", "prompt": "GLOVE is to HAND as SOCK is to",
+      "choices": ["shoe", "foot", "wool", "leg", "toe"], "answer": 1,
+      "explanation": "A glove covers a hand; a sock covers a foot." },
+    { "id": "VA-003", "prompt": "HAPPY is to ECSTATIC as WARM is to",
+      "choices": ["cool", "sunny", "scorching", "mild", "summer"], "answer": 2,
+      "explanation": "Ecstatic is an extreme degree of happy; scorching is an extreme degree of warm." },
+    { "id": "VA-004", "prompt": "SCALPEL is to SURGEON as",
+      "choices": ["hammer is to nail", "brush is to painter", "book is to library", "pen is to ink", "stove is to kitchen"], "answer": 1,
+      "explanation": "A scalpel is a tool used by a surgeon; a brush is a tool used by a painter. A hammer acts on a nail, which is a different relationship." },
+    { "id": "VA-005", "prompt": "DROUGHT is to WATER as FAMINE is to",
+      "choices": ["hunger", "drought", "food", "farmer", "crop"], "answer": 2,
+      "explanation": "A drought is a lack of water; a famine is a lack of food. Hunger is a result of famine, not what is lacking." },
+    { "id": "VA-006", "prompt": "ALTIMETER is to ALTITUDE as THERMOMETER is to",
+      "choices": ["heat", "temperature", "weather", "mercury", "degree"], "answer": 1,
+      "explanation": "An altimeter measures altitude; a thermometer measures temperature." },
+    { "id": "VA-007", "prompt": "PREFACE is to BOOK as",
+      "choices": ["chapter is to novel", "ending is to story", "cover is to page", "author is to text", "overture is to opera"], "answer": 4,
+      "explanation": "A preface is an introduction that comes before a book; an overture is an introduction that comes before an opera. A chapter is a part of a novel but not an introduction." },
+    { "id": "VA-008", "prompt": "COWARDLY is to BRAVE as FRUGAL is to",
+      "choices": ["thrifty", "wealthy", "wasteful", "poor", "careful"], "answer": 2,
+      "explanation": "Cowardly is the opposite of brave; frugal is the opposite of wasteful. 'Thrifty' is a synonym, a common trap." }
+  ]
+}
