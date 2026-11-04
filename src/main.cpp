@@ -1,4 +1,5 @@
 #include "ConsoleUI.h"
+#include "FlashcardDeck.h"
 #include "ProgressStore.h"
 #include "QuestionBank.h"
 #include "SubtestRegistry.h"
@@ -22,7 +23,53 @@ struct App {
     SubtestRegistry registry;
     QuestionBank bank;
     ProgressStore progress{"afoqt_progress.json"};
+    FlashcardDeck deck;
     std::mt19937 rng{std::random_device{}()};
+
+    static std::string readKey() {
+        std::string line;
+        if (!std::getline(std::cin, line)) return "q";
+        return line;
+    }
+
+    void flashcards() {
+        std::ostringstream intro;
+        intro << "\nMastered " << deck.masteredCount() << " of " << deck.size() << " words.";
+        ui.showMessage(intro.str());
+        int choice = ui.menu("Word Knowledge flashcards",
+                             {"Study 20 words", "Study words I'm still learning",
+                              "Study the whole deck", "Back"});
+        if (choice == 3) return;
+        deck.startSession(choice == 0 ? 20 : choice == 1 ? 30 : 0, choice == 1, rng);
+        if (deck.sessionDone()) {
+            ui.showMessage("No words to study. You've mastered them all!");
+            return;
+        }
+
+        while (!deck.sessionDone()) {
+            const Flashcard& c = deck.current();
+            std::cout << "\n----------------------------------------------------------\n"
+                      << deck.remaining() << " cards left\n\n   " << c.word << "  ("
+                      << c.partOfSpeech << ")\n\nPress Enter to flip (q to stop)... ";
+            if (readKey() == "q") return;
+            std::cout << "\n   " << c.definition << "\n   Synonym: " << c.synonym << "\n";
+            if (!c.example.empty()) std::cout << "   \"" << c.example << "\"\n";
+
+            std::string k;
+            do {
+                std::cout << "\n1 = still learning, 2 = got it, q = stop: ";
+                k = readKey();
+            } while (k != "1" && k != "2" && k != "q");
+            if (k == "q") return;
+            deck.mark(k == "2");
+        }
+        std::ostringstream done;
+        done << "\nSession complete. Knew it: " << deck.sessionGotIt()
+             << ", still learning: " << deck.sessionMissed() << ". Mastered overall: "
+             << deck.masteredCount() << " of " << deck.size() << ".";
+        ui.showMessage(done.str());
+        ui.pause();
+    }
 
     // Lets the user pick any subtest from the config file. Returns nullptr on "Back".
     const SubtestInfo* pickSubtest() {
@@ -148,6 +195,8 @@ int main(int argc, char* argv[]) {
         app.registry.load(dataDir + "/subtests.json");
         for (const auto& s : app.registry.all())
             app.bank.loadFile(dataDir + "/" + s.file, s.id);
+        app.deck.load(dataDir + "/flashcards.json");
+        app.deck.loadProgress("afoqt_flashcards.json");
     } catch (const std::exception& e) {
         std::cerr << "Startup error: " << e.what() << "\n"
                   << "Usage: afoqt [path/to/data]\n";
@@ -160,6 +209,7 @@ int main(int argc, char* argv[]) {
             "Practice a subtest (untimed, instant feedback)",
             "Timed test (one subtest)",
             "Full knowledge battery (all sections, timed)",
+            "Word Knowledge flashcards",
             "Review missed questions",
             "View progress",
             "Quit",
@@ -168,8 +218,9 @@ int main(int argc, char* argv[]) {
             case 0: if (auto s = app.pickSubtest()) app.runSubtest(*s, SessionMode::Practice); break;
             case 1: if (auto s = app.pickSubtest()) app.runSubtest(*s, SessionMode::Timed); break;
             case 2: app.fullBattery(); break;
-            case 3: app.reviewMissed(); break;
-            case 4: app.showProgress(); break;
+            case 3: app.flashcards(); break;
+            case 4: app.reviewMissed(); break;
+            case 5: app.showProgress(); break;
             default: return 0;
         }
     }

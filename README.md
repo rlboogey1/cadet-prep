@@ -1,4 +1,4 @@
-# AFOQT Study (C++ and Claude AI) 
+# AFOQT Study (C++)
 
 A console study app for the AFOQT knowledge sections: Word Knowledge, Math Knowledge,
 Arithmetic Reasoning, Verbal Analogies, and Reading Comprehension. It's built so pilot
@@ -12,13 +12,15 @@ The JSON library (nlohmann/json) downloads automatically the first time you conf
 ```bash
 cmake -S . -B build
 cmake --build build
-./build/afoqt            # Windows: build\Debug\afoqt.exe
+./build/afoqt_gui        # window version
+./build/afoqt            # console version
 ```
 
 The app reads questions from the project's `data/` folder, so you can edit question
 files and rerun without rebuilding. To use a different folder: `./build/afoqt path/to/data`.
 
-Progress is saved to `afoqt_progress.json` in the folder you run it from.
+Progress is saved to `afoqt_progress.json` (tests) and `afoqt_flashcards.json` (flashcards)
+in the folder you run it from.
 
 ## Features
 
@@ -27,6 +29,31 @@ Progress is saved to `afoqt_progress.json` in the folder you run it from.
 - **Full battery**: all knowledge sections back to back, timed
 - **Review missed**: re-asks every question you've gotten wrong until you get it right
 - **Progress**: accuracy and seconds per question by section, plus your weakest area
+- **Word Knowledge flashcards**: 161 words with definitions, synonyms, and example
+  sentences. Uses spaced repetition: words you miss come back more often, and a word
+  counts as mastered after 3 correct in a row. Keys: Space flips, 1 = still learning,
+  2 = got it. You can also show the definition first and guess the word.
+
+## Question bank
+
+| Section | Questions |
+|---|---|
+| Word Knowledge | 161 |
+| Math Knowledge | 45 |
+| Arithmetic Reasoning | 38 |
+| Verbal Analogies | 38 |
+| Reading Comprehension | 21 (7 passages) |
+
+Timed tests draw a random subset each time, so repeated tests differ.
+
+## Adding flashcards
+
+Add an entry to `data/flashcards.json`:
+
+```json
+{ "word": "vigilant", "pos": "adj", "definition": "Alert and watching for danger.",
+  "synonym": "watchful", "example": "Guards remained vigilant all night." }
+```
 
 ## Project layout
 
@@ -37,6 +64,9 @@ data/
   ...
 src/
   Question.h                 Question and AnswerRecord structs
+  QuizEngine.*               step-by-step quiz logic used by the GUI
+  FlashcardDeck.*            flashcards and spaced repetition
+  GuiApp.*, gui_main.cpp     the window version (Dear ImGui)
   QuestionBank.*             loads JSON, validates, shuffles
   SubtestRegistry.*          reads subtests.json
   TestSession.*              runs a set of questions and the timer

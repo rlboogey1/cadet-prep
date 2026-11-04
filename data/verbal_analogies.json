@@ -1,28 +1,498 @@
 {
   "questions": [
-    { "id": "VA-001", "prompt": "PILOT is to AIRCRAFT as CAPTAIN is to",
-      "choices": ["ship", "ocean", "crew", "anchor", "port"], "answer": 0,
-      "explanation": "A pilot commands an aircraft; a captain commands a ship." },
-    { "id": "VA-002", "prompt": "GLOVE is to HAND as SOCK is to",
-      "choices": ["shoe", "foot", "wool", "leg", "toe"], "answer": 1,
-      "explanation": "A glove covers a hand; a sock covers a foot." },
-    { "id": "VA-003", "prompt": "HAPPY is to ECSTATIC as WARM is to",
-      "choices": ["cool", "sunny", "scorching", "mild", "summer"], "answer": 2,
-      "explanation": "Ecstatic is an extreme degree of happy; scorching is an extreme degree of warm." },
-    { "id": "VA-004", "prompt": "SCALPEL is to SURGEON as",
-      "choices": ["hammer is to nail", "brush is to painter", "book is to library", "pen is to ink", "stove is to kitchen"], "answer": 1,
-      "explanation": "A scalpel is a tool used by a surgeon; a brush is a tool used by a painter. A hammer acts on a nail, which is a different relationship." },
-    { "id": "VA-005", "prompt": "DROUGHT is to WATER as FAMINE is to",
-      "choices": ["hunger", "drought", "food", "farmer", "crop"], "answer": 2,
-      "explanation": "A drought is a lack of water; a famine is a lack of food. Hunger is a result of famine, not what is lacking." },
-    { "id": "VA-006", "prompt": "ALTIMETER is to ALTITUDE as THERMOMETER is to",
-      "choices": ["heat", "temperature", "weather", "mercury", "degree"], "answer": 1,
-      "explanation": "An altimeter measures altitude; a thermometer measures temperature." },
-    { "id": "VA-007", "prompt": "PREFACE is to BOOK as",
-      "choices": ["chapter is to novel", "ending is to story", "cover is to page", "author is to text", "overture is to opera"], "answer": 4,
-      "explanation": "A preface is an introduction that comes before a book; an overture is an introduction that comes before an opera. A chapter is a part of a novel but not an introduction." },
-    { "id": "VA-008", "prompt": "COWARDLY is to BRAVE as FRUGAL is to",
-      "choices": ["thrifty", "wealthy", "wasteful", "poor", "careful"], "answer": 2,
-      "explanation": "Cowardly is the opposite of brave; frugal is the opposite of wasteful. 'Thrifty' is a synonym, a common trap." }
+    {
+      "id": "VA-001",
+      "prompt": "PILOT is to AIRCRAFT as CAPTAIN is to",
+      "choices": [
+        "ship",
+        "ocean",
+        "crew",
+        "anchor",
+        "port"
+      ],
+      "answer": 0,
+      "explanation": "A pilot commands an aircraft; a captain commands a ship."
+    },
+    {
+      "id": "VA-002",
+      "prompt": "GLOVE is to HAND as SOCK is to",
+      "choices": [
+        "shoe",
+        "foot",
+        "wool",
+        "leg",
+        "toe"
+      ],
+      "answer": 1,
+      "explanation": "A glove covers a hand; a sock covers a foot."
+    },
+    {
+      "id": "VA-003",
+      "prompt": "HAPPY is to ECSTATIC as WARM is to",
+      "choices": [
+        "cool",
+        "sunny",
+        "scorching",
+        "mild",
+        "summer"
+      ],
+      "answer": 2,
+      "explanation": "Ecstatic is an extreme degree of happy; scorching is an extreme degree of warm."
+    },
+    {
+      "id": "VA-004",
+      "prompt": "SCALPEL is to SURGEON as",
+      "choices": [
+        "hammer is to nail",
+        "brush is to painter",
+        "book is to library",
+        "pen is to ink",
+        "stove is to kitchen"
+      ],
+      "answer": 1,
+      "explanation": "A scalpel is a tool used by a surgeon; a brush is a tool used by a painter. A hammer acts on a nail, which is a different relationship."
+    },
+    {
+      "id": "VA-005",
+      "prompt": "DROUGHT is to WATER as FAMINE is to",
+      "choices": [
+        "hunger",
+        "drought",
+        "food",
+        "farmer",
+        "crop"
+      ],
+      "answer": 2,
+      "explanation": "A drought is a lack of water; a famine is a lack of food. Hunger is a result of famine, not what is lacking."
+    },
+    {
+      "id": "VA-006",
+      "prompt": "ALTIMETER is to ALTITUDE as THERMOMETER is to",
+      "choices": [
+        "heat",
+        "temperature",
+        "weather",
+        "mercury",
+        "degree"
+      ],
+      "answer": 1,
+      "explanation": "An altimeter measures altitude; a thermometer measures temperature."
+    },
+    {
+      "id": "VA-007",
+      "prompt": "PREFACE is to BOOK as",
+      "choices": [
+        "chapter is to novel",
+        "ending is to story",
+        "cover is to page",
+        "author is to text",
+        "overture is to opera"
+      ],
+      "answer": 4,
+      "explanation": "A preface is an introduction that comes before a book; an overture is an introduction that comes before an opera. A chapter is a part of a novel but not an introduction."
+    },
+    {
+      "id": "VA-008",
+      "prompt": "COWARDLY is to BRAVE as FRUGAL is to",
+      "choices": [
+        "thrifty",
+        "wealthy",
+        "wasteful",
+        "poor",
+        "careful"
+      ],
+      "answer": 2,
+      "explanation": "Cowardly is the opposite of brave; frugal is the opposite of wasteful. 'Thrifty' is a synonym, a common trap."
+    },
+    {
+      "id": "VA-009",
+      "prompt": "ARCHITECT is to BLUEPRINT as COMPOSER is to",
+      "choices": [
+        "concert",
+        "score",
+        "piano",
+        "orchestra",
+        "audience"
+      ],
+      "answer": 1,
+      "explanation": "An architect creates a blueprint (a written plan); a composer creates a score (written music)."
+    },
+    {
+      "id": "VA-010",
+      "prompt": "FISH is to SCHOOL as WOLF is to",
+      "choices": [
+        "forest",
+        "den",
+        "howl",
+        "cub",
+        "pack"
+      ],
+      "answer": 4,
+      "explanation": "A group of fish is a school; a group of wolves is a pack."
+    },
+    {
+      "id": "VA-011",
+      "prompt": "HOT is to COLD as VICTORY is to",
+      "choices": [
+        "medal",
+        "defeat",
+        "war",
+        "battle",
+        "triumph"
+      ],
+      "answer": 1,
+      "explanation": "Opposites. Triumph is a synonym of victory, a common trap."
+    },
+    {
+      "id": "VA-012",
+      "prompt": "PETAL is to FLOWER as PAGE is to",
+      "choices": [
+        "read",
+        "paper",
+        "book",
+        "author",
+        "ink"
+      ],
+      "answer": 2,
+      "explanation": "A petal is part of a flower; a page is part of a book. Paper is what a page is made of, a different relationship."
+    },
+    {
+      "id": "VA-013",
+      "prompt": "COMPASS is to DIRECTION as CLOCK is to",
+      "choices": [
+        "time",
+        "watch",
+        "hand",
+        "alarm",
+        "wall"
+      ],
+      "answer": 0,
+      "explanation": "A compass shows direction; a clock shows time."
+    },
+    {
+      "id": "VA-014",
+      "prompt": "NOVEL is to CHAPTER as SYMPHONY is to",
+      "choices": [
+        "conductor",
+        "violin",
+        "movement",
+        "music",
+        "concert"
+      ],
+      "answer": 2,
+      "explanation": "A novel is divided into chapters; a symphony is divided into movements."
+    },
+    {
+      "id": "VA-015",
+      "prompt": "FLOCK is to SHEEP as SWARM is to",
+      "choices": [
+        "hive",
+        "bees",
+        "honey",
+        "farmer",
+        "sting"
+      ],
+      "answer": 1,
+      "explanation": "A flock is a group of sheep; a swarm is a group of bees."
+    },
+    {
+      "id": "VA-016",
+      "prompt": "MINUTE is to HOUR as OUNCE is to",
+      "choices": [
+        "pound",
+        "weight",
+        "gram",
+        "scale",
+        "inch"
+      ],
+      "answer": 0,
+      "explanation": "A minute is a smaller unit of an hour; an ounce is a smaller unit of a pound."
+    },
+    {
+      "id": "VA-017",
+      "prompt": "CARPENTER is to WOOD as MASON is to",
+      "choices": [
+        "glass",
+        "stone",
+        "saw",
+        "house",
+        "hammer"
+      ],
+      "answer": 1,
+      "explanation": "A carpenter works with wood; a mason works with stone."
+    },
+    {
+      "id": "VA-018",
+      "prompt": "DILIGENT is to LAZY as GENEROUS is to",
+      "choices": [
+        "honest",
+        "giving",
+        "selfish",
+        "wealthy",
+        "kind"
+      ],
+      "answer": 2,
+      "explanation": "Opposites. Giving is a synonym of generous, a trap."
+    },
+    {
+      "id": "VA-019",
+      "prompt": "PROLOGUE is to EPILOGUE as BEGINNING is to",
+      "choices": [
+        "chapter",
+        "start",
+        "end",
+        "middle",
+        "story"
+      ],
+      "answer": 2,
+      "explanation": "A prologue comes first and an epilogue comes last, as beginning and end do."
+    },
+    {
+      "id": "VA-020",
+      "prompt": "DOCTOR is to HOSPITAL as TEACHER is to",
+      "choices": [
+        "school",
+        "principal",
+        "student",
+        "desk",
+        "lesson"
+      ],
+      "answer": 0,
+      "explanation": "Where each person works."
+    },
+    {
+      "id": "VA-021",
+      "prompt": "HANGAR is to AIRCRAFT as GARAGE is to",
+      "choices": [
+        "house",
+        "tool",
+        "driveway",
+        "mechanic",
+        "car"
+      ],
+      "answer": 4,
+      "explanation": "A hangar shelters aircraft; a garage shelters cars."
+    },
+    {
+      "id": "VA-022",
+      "prompt": "BOLD is to TIMID as VERBOSE is to",
+      "choices": [
+        "clever",
+        "loud",
+        "wordy",
+        "tired",
+        "concise"
+      ],
+      "answer": 4,
+      "explanation": "Opposites. Wordy is a synonym of verbose, a trap."
+    },
+    {
+      "id": "VA-023",
+      "prompt": "PAINTER is to CANVAS as SCULPTOR is to",
+      "choices": [
+        "museum",
+        "brush",
+        "chisel",
+        "marble",
+        "statue"
+      ],
+      "answer": 3,
+      "explanation": "A painter works on canvas; a sculptor works in marble. A chisel is a tool and a statue is the finished product."
+    },
+    {
+      "id": "VA-024",
+      "prompt": "BREEZE is to HURRICANE as DRIZZLE is to",
+      "choices": [
+        "cloud",
+        "rain",
+        "downpour",
+        "mist",
+        "umbrella"
+      ],
+      "answer": 2,
+      "explanation": "A breeze is mild wind and a hurricane is extreme wind; a drizzle is light rain and a downpour is extreme rain."
+    },
+    {
+      "id": "VA-025",
+      "prompt": "KEY is to LOCK as",
+      "choices": [
+        "door is to house",
+        "lid is to jar",
+        "map is to city",
+        "password is to account",
+        "ring is to finger"
+      ],
+      "answer": 3,
+      "explanation": "A key opens a lock; a password opens an account."
+    },
+    {
+      "id": "VA-026",
+      "prompt": "THIRSTY is to DRINK as",
+      "choices": [
+        "cold is to winter",
+        "happy is to smile",
+        "tired is to sleep",
+        "hungry is to kitchen",
+        "sad is to tears"
+      ],
+      "answer": 2,
+      "explanation": "Drinking relieves thirst; sleep relieves tiredness. Smile and tears are results, not remedies."
+    },
+    {
+      "id": "VA-027",
+      "prompt": "OBSERVE is to SCRUTINIZE as",
+      "choices": [
+        "sleep is to dream",
+        "speak is to listen",
+        "like is to adore",
+        "eat is to cook",
+        "see is to blind"
+      ],
+      "answer": 2,
+      "explanation": "Scrutinize is a more intense form of observe; adore is a more intense form of like."
+    },
+    {
+      "id": "VA-028",
+      "prompt": "ACROPHOBIA is to HEIGHTS as CLAUSTROPHOBIA is to",
+      "choices": [
+        "water",
+        "spiders",
+        "enclosed spaces",
+        "crowds",
+        "darkness"
+      ],
+      "answer": 2,
+      "explanation": "Each is a fear of the thing named."
+    },
+    {
+      "id": "VA-029",
+      "prompt": "TREE is to FOREST as STAR is to",
+      "choices": [
+        "galaxy",
+        "sun",
+        "night",
+        "moon",
+        "sky"
+      ],
+      "answer": 0,
+      "explanation": "Many trees make up a forest; many stars make up a galaxy."
+    },
+    {
+      "id": "VA-030",
+      "prompt": "LIBRARY is to BOOKS as ARMORY is to",
+      "choices": [
+        "soldiers",
+        "battles",
+        "castle",
+        "weapons",
+        "generals"
+      ],
+      "answer": 3,
+      "explanation": "A library stores books; an armory stores weapons."
+    },
+    {
+      "id": "VA-031",
+      "prompt": "COPILOT is to PILOT as VICE PRESIDENT is to",
+      "choices": [
+        "election",
+        "president",
+        "senator",
+        "deputy",
+        "cabinet"
+      ],
+      "answer": 1,
+      "explanation": "Second in command to the first."
+    },
+    {
+      "id": "VA-032",
+      "prompt": "INCH is to FOOT as CENTIMETER is to",
+      "choices": [
+        "ruler",
+        "yard",
+        "meter",
+        "length",
+        "millimeter"
+      ],
+      "answer": 2,
+      "explanation": "A smaller unit to the next standard unit in the same system."
+    },
+    {
+      "id": "VA-033",
+      "prompt": "ALTRUISTIC is to SELFLESS as CANDID is to",
+      "choices": [
+        "sly",
+        "rude",
+        "shy",
+        "frank",
+        "hidden"
+      ],
+      "answer": 3,
+      "explanation": "Synonyms."
+    },
+    {
+      "id": "VA-034",
+      "prompt": "EMBARK is to DISEMBARK as ASCEND is to",
+      "choices": [
+        "climb",
+        "rise",
+        "soar",
+        "elevate",
+        "descend"
+      ],
+      "answer": 4,
+      "explanation": "Opposites."
+    },
+    {
+      "id": "VA-035",
+      "prompt": "PEN is to WRITE as KNIFE is to",
+      "choices": [
+        "kitchen",
+        "steel",
+        "cut",
+        "fork",
+        "sharp"
+      ],
+      "answer": 2,
+      "explanation": "A tool and the action it performs."
+    },
+    {
+      "id": "VA-036",
+      "prompt": "ENGINE is to CAR as",
+      "choices": [
+        "tire is to road",
+        "seat is to chair",
+        "window is to wall",
+        "heart is to body",
+        "roof is to house"
+      ],
+      "answer": 3,
+      "explanation": "The engine powers a car; the heart powers the body."
+    },
+    {
+      "id": "VA-037",
+      "prompt": "FAMISHED is to HUNGRY as EXHAUSTED is to",
+      "choices": [
+        "energetic",
+        "restless",
+        "sick",
+        "tired",
+        "bored"
+      ],
+      "answer": 3,
+      "explanation": "Famished is extremely hungry; exhausted is extremely tired."
+    },
+    {
+      "id": "VA-038",
+      "prompt": "TEAM is to PLAYERS as CHOIR is to",
+      "choices": [
+        "music",
+        "church",
+        "singers",
+        "songs",
+        "conductor"
+      ],
+      "answer": 2,
+      "explanation": "A group and its members."
+    }
   ]
 }

@@ -1,28 +1,498 @@
 {
   "questions": [
-    { "id": "AR-001", "prompt": "An aircraft flies at 450 mph for 2.5 hours. How far does it travel?",
-      "choices": ["900 miles", "1,000 miles", "1,125 miles", "1,200 miles", "1,350 miles"], "answer": 2,
-      "explanation": "Distance = rate × time = 450 × 2.5 = 1,125 miles." },
-    { "id": "AR-002", "prompt": "A jacket costs $80. It is discounted 25%, and then 5% sales tax is added to the sale price. What is the final cost?",
-      "choices": ["$60", "$63", "$57", "$64", "$84"], "answer": 1,
-      "explanation": "$80 × 0.75 = $60. Tax: $60 × 1.05 = $63." },
-    { "id": "AR-003", "prompt": "Crew A can complete an inspection in 6 hours. Crew B can complete it in 3 hours. Working together, how long will it take?",
-      "choices": ["4.5 hours", "3 hours", "9 hours", "2 hours", "1.5 hours"], "answer": 3,
-      "explanation": "Rates add: 1/6 + 1/3 = 1/6 + 2/6 = 3/6 = 1/2 job per hour, so 2 hours." },
-    { "id": "AR-004", "prompt": "An airplane burns 12 gallons of fuel per hour and carries 90 gallons. The pilot must land with a 30-minute fuel reserve. How many hours can the plane fly before reaching the reserve?",
-      "choices": ["7.5", "7", "6.5", "6", "8"], "answer": 1,
-      "explanation": "Reserve = 0.5 × 12 = 6 gallons. Usable fuel = 84 gallons. 84 ÷ 12 = 7 hours." },
-    { "id": "AR-005", "prompt": "A student's average on 4 tests is 85. What score is needed on the 5th test to raise the average to 87?",
-      "choices": ["87", "89", "91", "93", "95"], "answer": 4,
-      "explanation": "Needed total = 5 × 87 = 435. Current total = 4 × 85 = 340. 435 - 340 = 95." },
-    { "id": "AR-006", "prompt": "A squadron of 40 people has officers and enlisted members in a 3:5 ratio. How many are officers?",
-      "choices": ["15", "12", "24", "25", "8"], "answer": 0,
-      "explanation": "3 + 5 = 8 parts. 40 ÷ 8 = 5 per part. Officers = 3 × 5 = 15." },
-    { "id": "AR-007", "prompt": "$2,000 is invested at 4% simple annual interest. How much interest is earned in 3 years?",
-      "choices": ["$2,240", "$240", "$120", "$80", "$2,400"], "answer": 1,
-      "explanation": "I = Prt = 2,000 × 0.04 × 3 = $240. $2,240 is the total balance, not the interest." },
-    { "id": "AR-008", "prompt": "Two jets leave the same base at the same time, flying in opposite directions at 400 mph and 500 mph. After how many hours will they be 2,700 miles apart?",
-      "choices": ["3.5", "4", "2.5", "2", "3"], "answer": 4,
-      "explanation": "Moving apart, their speeds add: 900 mph. 2,700 ÷ 900 = 3 hours." }
+    {
+      "id": "AR-001",
+      "prompt": "An aircraft flies at 450 mph for 2.5 hours. How far does it travel?",
+      "choices": [
+        "900 miles",
+        "1,000 miles",
+        "1,125 miles",
+        "1,200 miles",
+        "1,350 miles"
+      ],
+      "answer": 2,
+      "explanation": "Distance = rate × time = 450 × 2.5 = 1,125 miles."
+    },
+    {
+      "id": "AR-002",
+      "prompt": "A jacket costs $80. It is discounted 25%, and then 5% sales tax is added to the sale price. What is the final cost?",
+      "choices": [
+        "$60",
+        "$63",
+        "$57",
+        "$64",
+        "$84"
+      ],
+      "answer": 1,
+      "explanation": "$80 × 0.75 = $60. Tax: $60 × 1.05 = $63."
+    },
+    {
+      "id": "AR-003",
+      "prompt": "Crew A can complete an inspection in 6 hours. Crew B can complete it in 3 hours. Working together, how long will it take?",
+      "choices": [
+        "4.5 hours",
+        "3 hours",
+        "9 hours",
+        "2 hours",
+        "1.5 hours"
+      ],
+      "answer": 3,
+      "explanation": "Rates add: 1/6 + 1/3 = 1/6 + 2/6 = 3/6 = 1/2 job per hour, so 2 hours."
+    },
+    {
+      "id": "AR-004",
+      "prompt": "An airplane burns 12 gallons of fuel per hour and carries 90 gallons. The pilot must land with a 30-minute fuel reserve. How many hours can the plane fly before reaching the reserve?",
+      "choices": [
+        "7.5",
+        "7",
+        "6.5",
+        "6",
+        "8"
+      ],
+      "answer": 1,
+      "explanation": "Reserve = 0.5 × 12 = 6 gallons. Usable fuel = 84 gallons. 84 ÷ 12 = 7 hours."
+    },
+    {
+      "id": "AR-005",
+      "prompt": "A student's average on 4 tests is 85. What score is needed on the 5th test to raise the average to 87?",
+      "choices": [
+        "87",
+        "89",
+        "91",
+        "93",
+        "95"
+      ],
+      "answer": 4,
+      "explanation": "Needed total = 5 × 87 = 435. Current total = 4 × 85 = 340. 435 - 340 = 95."
+    },
+    {
+      "id": "AR-006",
+      "prompt": "A squadron of 40 people has officers and enlisted members in a 3:5 ratio. How many are officers?",
+      "choices": [
+        "15",
+        "12",
+        "24",
+        "25",
+        "8"
+      ],
+      "answer": 0,
+      "explanation": "3 + 5 = 8 parts. 40 ÷ 8 = 5 per part. Officers = 3 × 5 = 15."
+    },
+    {
+      "id": "AR-007",
+      "prompt": "$2,000 is invested at 4% simple annual interest. How much interest is earned in 3 years?",
+      "choices": [
+        "$2,240",
+        "$240",
+        "$120",
+        "$80",
+        "$2,400"
+      ],
+      "answer": 1,
+      "explanation": "I = Prt = 2,000 × 0.04 × 3 = $240. $2,240 is the total balance, not the interest."
+    },
+    {
+      "id": "AR-008",
+      "prompt": "Two jets leave the same base at the same time, flying in opposite directions at 400 mph and 500 mph. After how many hours will they be 2,700 miles apart?",
+      "choices": [
+        "3.5",
+        "4",
+        "2.5",
+        "2",
+        "3"
+      ],
+      "answer": 4,
+      "explanation": "Moving apart, their speeds add: 900 mph. 2,700 ÷ 900 = 3 hours."
+    },
+    {
+      "id": "AR-009",
+      "prompt": "A car travels 240 miles on 8 gallons of gas. How many miles per gallon does it get?",
+      "choices": [
+        "32",
+        "30",
+        "1,920",
+        "28",
+        "24"
+      ],
+      "answer": 1,
+      "explanation": "240 ÷ 8 = 30 miles per gallon."
+    },
+    {
+      "id": "AR-010",
+      "prompt": "A pilot flies 600 miles in 1.5 hours. What is the average speed?",
+      "choices": [
+        "300 mph",
+        "450 mph",
+        "900 mph",
+        "400 mph",
+        "350 mph"
+      ],
+      "answer": 3,
+      "explanation": "Speed = distance ÷ time = 600 ÷ 1.5 = 400 mph."
+    },
+    {
+      "id": "AR-011",
+      "prompt": "A store buys an item for $45 and marks it up 20%. What is the selling price?",
+      "choices": [
+        "$54",
+        "$65",
+        "$49",
+        "$56",
+        "$36"
+      ],
+      "answer": 0,
+      "explanation": "20% of $45 = $9. $45 + $9 = $54."
+    },
+    {
+      "id": "AR-012",
+      "prompt": "12 is 15% of what number?",
+      "choices": [
+        "120",
+        "60",
+        "80",
+        "180",
+        "1.8"
+      ],
+      "answer": 2,
+      "explanation": "12 ÷ 0.15 = 80."
+    },
+    {
+      "id": "AR-013",
+      "prompt": "A recipe uses 3 cups of flour for 24 cookies. How many cups are needed for 60 cookies?",
+      "choices": [
+        "6",
+        "7.5",
+        "8",
+        "7",
+        "9"
+      ],
+      "answer": 1,
+      "explanation": "60 ÷ 24 = 2.5 batches. 2.5 × 3 = 7.5 cups."
+    },
+    {
+      "id": "AR-014",
+      "prompt": "A worker earns $18 per hour, with time-and-a-half for hours over 40. How much does she earn for 46 hours?",
+      "choices": [
+        "$882",
+        "$828",
+        "$936",
+        "$846",
+        "$900"
+      ],
+      "answer": 0,
+      "explanation": "40 × $18 = $720. Overtime: 6 × $27 = $162. Total $882."
+    },
+    {
+      "id": "AR-015",
+      "prompt": "A flight departs at 9:45 a.m. and lasts 2 hours 50 minutes. When does it arrive?",
+      "choices": [
+        "12:45 p.m.",
+        "1:35 p.m.",
+        "12:35 p.m.",
+        "11:35 a.m.",
+        "12:15 p.m."
+      ],
+      "answer": 2,
+      "explanation": "9:45 + 2:00 = 11:45. 11:45 + 0:50 = 12:35 p.m."
+    },
+    {
+      "id": "AR-016",
+      "prompt": "On a map, 1 inch represents 25 miles. How many miles do 3.4 inches represent?",
+      "choices": [
+        "68",
+        "95",
+        "85",
+        "80",
+        "75"
+      ],
+      "answer": 2,
+      "explanation": "3.4 × 25 = 85 miles."
+    },
+    {
+      "id": "AR-017",
+      "prompt": "A plane flies 60 miles at 30 mph, then another 60 miles at 60 mph. What is its average speed for the whole trip?",
+      "choices": [
+        "35 mph",
+        "40 mph",
+        "45 mph",
+        "42 mph",
+        "50 mph"
+      ],
+      "answer": 1,
+      "explanation": "Total time = 2 h + 1 h = 3 h. 120 miles ÷ 3 h = 40 mph. 45 (averaging the speeds) is the trap."
+    },
+    {
+      "id": "AR-018",
+      "prompt": "A town of 2,000 people grows 10% per year. What is its population after 2 years?",
+      "choices": [
+        "2,440",
+        "2,200",
+        "2,420",
+        "2,400",
+        "4,000"
+      ],
+      "answer": 2,
+      "explanation": "Year 1: 2,200. Year 2: 2,200 × 1.1 = 2,420. 2,400 forgets compounding."
+    },
+    {
+      "id": "AR-019",
+      "prompt": "Five consecutive integers add up to 115. What is the largest?",
+      "choices": [
+        "24",
+        "27",
+        "23",
+        "25",
+        "26"
+      ],
+      "answer": 3,
+      "explanation": "The middle number is 115 ÷ 5 = 23, so the integers are 21 to 25."
+    },
+    {
+      "id": "AR-020",
+      "prompt": "A 400-gallon tank is 20% full. It fills at 8 gallons per minute. How long until it is full?",
+      "choices": [
+        "50 minutes",
+        "40 minutes",
+        "10 minutes",
+        "32 minutes",
+        "30 minutes"
+      ],
+      "answer": 1,
+      "explanation": "20% of 400 = 80 gallons. 320 gallons remain. 320 ÷ 8 = 40 minutes."
+    },
+    {
+      "id": "AR-021",
+      "prompt": "Ann is 3 times as old as Ben. In 10 years, Ann will be twice as old as Ben. How old is Ben now?",
+      "choices": [
+        "20",
+        "30",
+        "10",
+        "15",
+        "5"
+      ],
+      "answer": 2,
+      "explanation": "3b + 10 = 2(b + 10), so b = 10. (30 is Ann's age.)"
+    },
+    {
+      "id": "AR-022",
+      "prompt": "A jar holds 25 coins, all dimes and quarters, worth $4.00 in total. How many quarters are there?",
+      "choices": [
+        "15",
+        "8",
+        "5",
+        "10",
+        "12"
+      ],
+      "answer": 3,
+      "explanation": "If q = quarters: 25q + 10(25 − q) = 400, so 15q = 150 and q = 10."
+    },
+    {
+      "id": "AR-023",
+      "prompt": "A shirt costs $36 after a 25% discount. What was the original price?",
+      "choices": [
+        "$27",
+        "$46",
+        "$48",
+        "$54",
+        "$45"
+      ],
+      "answer": 2,
+      "explanation": "$36 is 75% of the original: 36 ÷ 0.75 = $48."
+    },
+    {
+      "id": "AR-024",
+      "prompt": "How many minutes are in 3.5 hours?",
+      "choices": [
+        "215",
+        "350",
+        "180",
+        "200",
+        "210"
+      ],
+      "answer": 4,
+      "explanation": "3.5 × 60 = 210."
+    },
+    {
+      "id": "AR-025",
+      "prompt": "An aircraft has 2,400 pounds of fuel and burns 600 pounds per hour. How much fuel remains after 3 hours 15 minutes?",
+      "choices": [
+        "600 pounds",
+        "450 pounds",
+        "300 pounds",
+        "750 pounds",
+        "150 pounds"
+      ],
+      "answer": 1,
+      "explanation": "3.25 h × 600 = 1,950 pounds burned. 2,400 − 1,950 = 450."
+    },
+    {
+      "id": "AR-026",
+      "prompt": "20 liters of a 30% solution are mixed with 30 liters of a 10% solution. What is the concentration of the mixture?",
+      "choices": [
+        "15%",
+        "25%",
+        "40%",
+        "20%",
+        "18%"
+      ],
+      "answer": 4,
+      "explanation": "Pure part: 6 + 3 = 9 liters out of 50. 9 ÷ 50 = 18%."
+    },
+    {
+      "id": "AR-027",
+      "prompt": "Four roommates split $2,100 rent equally. A fifth roommate joins. How much less does each person pay now?",
+      "choices": [
+        "$125",
+        "$420",
+        "$85",
+        "$105",
+        "$100"
+      ],
+      "answer": 3,
+      "explanation": "$2,100 ÷ 4 = $525. $2,100 ÷ 5 = $420. $525 − $420 = $105."
+    },
+    {
+      "id": "AR-028",
+      "prompt": "$1,000 is invested at 5% interest, compounded yearly. What is the balance after 2 years?",
+      "choices": [
+        "$1,102.50",
+        "$1,050.00",
+        "$1,100.00",
+        "$1,105.00",
+        "$1,125.00"
+      ],
+      "answer": 0,
+      "explanation": "Year 1: $1,050. Year 2: $1,050 × 1.05 = $1,102.50."
+    },
+    {
+      "id": "AR-029",
+      "prompt": "A school needs 3 instructors for every 18 students. How many instructors are needed for 120 students?",
+      "choices": [
+        "22",
+        "24",
+        "20",
+        "18",
+        "40"
+      ],
+      "answer": 2,
+      "explanation": "18 ÷ 3 = 6 students per instructor. 120 ÷ 6 = 20."
+    },
+    {
+      "id": "AR-030",
+      "prompt": "A 6-foot person casts a 4-foot shadow. At the same time, a tree casts a 30-foot shadow. How tall is the tree?",
+      "choices": [
+        "45 feet",
+        "20 feet",
+        "36 feet",
+        "40 feet",
+        "50 feet"
+      ],
+      "answer": 0,
+      "explanation": "Height is 1.5 times the shadow (6 ÷ 4). 30 × 1.5 = 45 feet."
+    },
+    {
+      "id": "AR-031",
+      "prompt": "A crew paints 3 hangars in 12 days. At the same rate, how many days will 5 hangars take?",
+      "choices": [
+        "25",
+        "15",
+        "18",
+        "20",
+        "24"
+      ],
+      "answer": 3,
+      "explanation": "4 days per hangar. 5 × 4 = 20 days."
+    },
+    {
+      "id": "AR-032",
+      "prompt": "A $200 item is discounted 20%, then the sale price is discounted another 10%. What is the final price?",
+      "choices": [
+        "$144",
+        "$156",
+        "$160",
+        "$140",
+        "$150"
+      ],
+      "answer": 0,
+      "explanation": "$200 × 0.8 = $160. $160 × 0.9 = $144. Not the same as 30% off ($140)."
+    },
+    {
+      "id": "AR-033",
+      "prompt": "The average of 6 numbers is 20. When one number is removed, the average of the rest is 18. What number was removed?",
+      "choices": [
+        "22",
+        "30",
+        "2",
+        "20",
+        "38"
+      ],
+      "answer": 1,
+      "explanation": "Total of 6 = 120. Total of 5 = 90. 120 − 90 = 30."
+    },
+    {
+      "id": "AR-034",
+      "prompt": "An aircraft climbs at 1,500 feet per minute from 2,000 feet to 11,000 feet. How long does the climb take?",
+      "choices": [
+        "5 minutes",
+        "7.5 minutes",
+        "4.5 minutes",
+        "7 minutes",
+        "6 minutes"
+      ],
+      "answer": 4,
+      "explanation": "Climb = 9,000 feet. 9,000 ÷ 1,500 = 6 minutes."
+    },
+    {
+      "id": "AR-035",
+      "prompt": "One pipe fills a pool in 4 hours and another in 12 hours. How long do they take together?",
+      "choices": [
+        "6 hours",
+        "8 hours",
+        "2 hours",
+        "3 hours",
+        "16 hours"
+      ],
+      "answer": 3,
+      "explanation": "1/4 + 1/12 = 4/12 = 1/3 pool per hour, so 3 hours."
+    },
+    {
+      "id": "AR-036",
+      "prompt": "A price drops from $80 to $68. What is the percent decrease?",
+      "choices": [
+        "17.6%",
+        "12%",
+        "15%",
+        "20%",
+        "18%"
+      ],
+      "answer": 2,
+      "explanation": "Change = $12. 12 ÷ 80 = 0.15 = 15%. (17.6% divides by the new price by mistake.)"
+    },
+    {
+      "id": "AR-037",
+      "prompt": "Sam earns $2,400 a month and saves 15% of it. How much does he save in a year?",
+      "choices": [
+        "$360",
+        "$4,000",
+        "$4,800",
+        "$3,600",
+        "$4,320"
+      ],
+      "answer": 4,
+      "explanation": "15% of $2,400 = $360 per month. $360 × 12 = $4,320."
+    },
+    {
+      "id": "AR-038",
+      "prompt": "Jet A leaves at 300 mph. One hour later, Jet B follows the same route at 400 mph. How many hours after Jet B departs does it catch up?",
+      "choices": [
+        "7",
+        "3",
+        "2",
+        "1.5",
+        "4"
+      ],
+      "answer": 1,
+      "explanation": "Jet A has a 300-mile head start. B gains 100 mph, so 300 ÷ 100 = 3 hours."
+    }
   ]
 }

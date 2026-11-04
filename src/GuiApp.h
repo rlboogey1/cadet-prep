@@ -1,4 +1,5 @@
 #pragma once
+#include "FlashcardDeck.h"
 #include "ProgressStore.h"
 #include "QuestionBank.h"
 #include "QuizEngine.h"
@@ -14,13 +15,15 @@ public:
     void draw();
 
 private:
-    enum class Screen { Menu, PickSubtest, Quiz, Results, Progress };
+    enum class Screen { Menu, PickSubtest, Quiz, Results, Progress, FlashcardMenu, Flashcard };
 
     void drawMenu();
     void drawPickSubtest();
     void drawQuiz();
     void drawResults();
     void drawProgress();
+    void drawFlashcardMenu();
+    void drawFlashcard();
 
     void startSubtest(const SubtestInfo& s, SessionMode mode);
     void startNextInQueue();
@@ -40,4 +43,9 @@ private:
     std::string sessionTips_;
     bool isReview_ = false;
     std::string message_;
+
+    // Flashcards
+    FlashcardDeck deck_;
+    bool cardFlipped_ = false;
+    bool definitionFirst_ = false;  // show the definition, guess the word
 };

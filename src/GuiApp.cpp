@@ -7,6 +7,14 @@ const ImVec4 kGreen(0.25f, 0.70f, 0.35f, 1.0f);
 const ImVec4 kRed(0.85f, 0.30f, 0.30f, 1.0f);
 const ImVec4 kGray(0.65f, 0.65f, 0.70f, 1.0f);
 const ImVec2 kMenuButton(380, 44);
+// Draws text in the larger heading font if it was loaded.
+void heading(const char* text) {
+    ImGuiIO& io = ImGui::GetIO();
+    ImFont* f = io.Fonts->Fonts.Size > 1 ? io.Fonts->Fonts[1] : nullptr;
+    if (f) ImGui::PushFont(f);
+    ImGui::TextUnformatted(text);
+    if (f) ImGui::PopFont();
+}
 }  // namespace
 
 bool GuiApp::load(const std::string& dataDir, std::string& error) {
@@ -14,6 +22,8 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
         registry_.load(dataDir + "/subtests.json");
         for (const auto& s : registry_.all())
             bank_.loadFile(dataDir + "/" + s.file, s.id);
+        deck_.load(dataDir + "/flashcards.json");
+        deck_.loadProgress("afoqt_flashcards.json");
     } catch (const std::exception& e) {
         error = e.what();
         return false;
@@ -30,20 +40,31 @@ void GuiApp::draw() {
                  ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove |
                      ImGuiWindowFlags_NoSavedSettings);
 
+    // NEW: a centered column, at most 780 pixels wide
+    const float colWidth = std::min(780.0f, ImGui::GetContentRegionAvail().x);
+    ImGui::SetCursorPosX((ImGui::GetWindowWidth() - colWidth) * 0.5f);
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0, 0, 0, 0));
+    ImGui::BeginChild("column", ImVec2(colWidth, 0));
+    ImGui::PopStyleColor();
+
     switch (screen_) {
         case Screen::Menu: drawMenu(); break;
         case Screen::PickSubtest: drawPickSubtest(); break;
         case Screen::Quiz: drawQuiz(); break;
         case Screen::Results: drawResults(); break;
         case Screen::Progress: drawProgress(); break;
+        case Screen::FlashcardMenu: drawFlashcardMenu(); break;
+        case Screen::Flashcard: drawFlashcard(); break;
     }
+
+    ImGui::EndChild();  // NEW: closes the centered column
     ImGui::End();
 }
 
 // ---------------------------------------------------------------- screens
 
 void GuiApp::drawMenu() {
-    ImGui::Text("AFOQT Study");
+    heading("AFOQT Study");
     ImGui::TextColored(kGray, "Knowledge sections");
     ImGui::Separator();
     ImGui::Spacing();
@@ -60,6 +81,10 @@ void GuiApp::drawMenu() {
         queue_ = registry_.inCategory("knowledge");
         startNextInQueue();
     }
+    if (ImGui::Button("Word Knowledge flashcards", kMenuButton)) {
+        message_.clear();
+        screen_ = Screen::FlashcardMenu;
+    }
     if (ImGui::Button("Review missed questions", kMenuButton)) startReview();
     if (ImGui::Button("View progress", kMenuButton)) screen_ = Screen::Progress;
 
@@ -70,8 +95,8 @@ void GuiApp::drawMenu() {
 }
 
 void GuiApp::drawPickSubtest() {
-    ImGui::Text("%s", pickMode_ == SessionMode::Timed ? "Timed test: choose a subtest"
-                                                      : "Practice: choose a subtest");
+    heading(pickMode_ == SessionMode::Timed ? "Timed test: choose a subtest"
+                                        : "Practice: choose a subtest");
     ImGui::Separator();
     ImGui::Spacing();
 
@@ -97,7 +122,7 @@ void GuiApp::drawQuiz() {
     const bool feedback = engine_.showingFeedback();
 
     // Header: name, question number, timer
-    ImGui::Text("%s", sessionName_.c_str());
+    heading((sessionName_ + " results").c_str());
     ImGui::SameLine();
     ImGui::TextColored(kGray, "   Question %d of %d", engine_.index() + 1, engine_.total());
     const int left = engine_.secondsLeft();
@@ -139,7 +164,7 @@ void GuiApp::drawQuiz() {
         }
         std::string label = std::string(1, static_cast<char>('A' + i)) + ")  " + q.choices[i];
         ImGui::PushID(i);
-        if (ImGui::Button(label.c_str(), ImVec2(width, 0)) && !feedback) clicked = i;
+        if (ImGui::Button(label.c_str(), ImVec2(width, 48)) && !feedback) clicked = i;
         ImGui::PopID();
         ImGui::PopStyleColor(colors);
 
@@ -197,7 +222,7 @@ void GuiApp::drawResults() {
     }
 
     ImGui::Spacing();
-    ImGui::Text("Missed questions");
+    heading("Missed questions");
     ImGui::BeginChild("missed", ImVec2(0, 0), ImGuiChildFlags_Borders);
     const auto& qs = engine_.questions();
     bool any = false;
@@ -218,7 +243,7 @@ void GuiApp::drawResults() {
 }
 
 void GuiApp::drawProgress() {
-    ImGui::Text("Progress");
+    heading("Progress");
     ImGui::Separator();
     ImGui::Spacing();
 
@@ -257,6 +282,113 @@ void GuiApp::drawProgress() {
                 static_cast<int>(progress_.missedQuestionIds().size()));
     ImGui::Spacing();
     if (ImGui::Button("Back")) screen_ = Screen::Menu;
+}
+
+void GuiApp::drawFlashcardMenu() {
+    heading("Word Knowledge Flashcards")
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    const int mastered = deck_.masteredCount();
+    const int total = static_cast<int>(deck_.size());
+    ImGui::Text("Mastered %d of %d words", mastered, total);
+    ImGui::ProgressBar(total ? static_cast<float>(mastered) / total : 0.0f, ImVec2(380, 0));
+    ImGui::TextColored(kGray, "A word is mastered after you get it right 3 times in a row.");
+    ImGui::Spacing();
+
+    ImGui::Checkbox("Show the definition first (guess the word)", &definitionFirst_);
+    ImGui::Spacing();
+
+    auto start = [&](size_t count, bool learningOnly) {
+        deck_.startSession(count, learningOnly, rng_);
+        cardFlipped_ = false;
+        if (deck_.sessionDone()) message_ = "No words to study. You've mastered them all!";
+        else { message_.clear(); screen_ = Screen::Flashcard; }
+    };
+    if (ImGui::Button("Study 20 words", kMenuButton)) start(20, false);
+    if (ImGui::Button("Study words I'm still learning", kMenuButton)) start(30, true);
+    if (ImGui::Button("Study the whole deck", kMenuButton)) start(0, false);
+
+    if (!message_.empty()) ImGui::TextWrapped("%s", message_.c_str());
+    ImGui::Spacing();
+    if (ImGui::Button("Back")) {
+        message_.clear();
+        screen_ = Screen::Menu;
+    }
+}
+
+void GuiApp::drawFlashcard() {
+    if (deck_.sessionDone()) {
+        heading("Session complete");
+        ImGui::Separator();
+        ImGui::Text("Knew it:         %d", deck_.sessionGotIt());
+        ImGui::Text("Still learning:  %d", deck_.sessionMissed());
+        ImGui::Text("Mastered overall: %d of %d", deck_.masteredCount(),
+                    static_cast<int>(deck_.size()));
+        ImGui::Spacing();
+        if (ImGui::Button("Back to flashcards", kMenuButton)) screen_ = Screen::FlashcardMenu;
+        return;
+    }
+
+    const Flashcard& c = deck_.current();
+    heading("Flashcards");
+    ImGui::SameLine();
+    ImGui::TextColored(kGray, "   %d cards left in this session", static_cast<int>(deck_.remaining()));
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    // The card itself
+    ImGui::BeginChild("card", ImVec2(0, 300), ImGuiChildFlags_Borders);
+    ImGui::Spacing();
+    const bool showWord = !definitionFirst_ || cardFlipped_;
+    const bool showMeaning = definitionFirst_ || cardFlipped_;
+    if (showWord) {
+        ImGui::SetWindowFontScale(2.0f);
+        ImGui::Text("%s", c.word.c_str());
+        ImGui::SetWindowFontScale(1.0f);
+        ImGui::TextColored(kGray, "(%s)", c.partOfSpeech.c_str());
+        ImGui::Spacing();
+    }
+    if (showMeaning) {
+        ImGui::TextWrapped("%s", c.definition.c_str());
+        if (cardFlipped_) {
+            ImGui::Spacing();
+            ImGui::TextColored(kGreen, "Synonym: %s", c.synonym.c_str());
+            if (!c.example.empty()) {
+                ImGui::PushStyleColor(ImGuiCol_Text, kGray);
+                ImGui::TextWrapped("\"%s\"", c.example.c_str());
+                ImGui::PopStyleColor();
+            }
+        }
+    }
+    ImGui::EndChild();
+    ImGui::Spacing();
+
+    // Controls: Space flips; then 1 = still learning, 2 = got it
+    if (!cardFlipped_) {
+        if (ImGui::Button("Flip card (Space)", kMenuButton) ||
+            ImGui::IsKeyPressed(ImGuiKey_Space, false))
+            cardFlipped_ = true;
+    } else {
+        int answer = -1;
+        ImGui::PushStyleColor(ImGuiCol_Button, kRed);
+        if (ImGui::Button("Still learning (1)", ImVec2(220, 44))) answer = 0;
+        ImGui::PopStyleColor();
+        ImGui::SameLine();
+        ImGui::PushStyleColor(ImGuiCol_Button, kGreen);
+        if (ImGui::Button("Got it (2)", ImVec2(220, 44))) answer = 1;
+        ImGui::PopStyleColor();
+        if (ImGui::IsKeyPressed(ImGuiKey_1, false)) answer = 0;
+        if (ImGui::IsKeyPressed(ImGuiKey_2, false)) answer = 1;
+        if (answer >= 0) {
+            deck_.mark(answer == 1);
+            cardFlipped_ = false;
+        }
+    }
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    if (ImGui::Button("End session")) screen_ = Screen::FlashcardMenu;
 }
 
 // ---------------------------------------------------------------- actions

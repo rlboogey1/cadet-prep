@@ -1,34 +1,589 @@
 {
   "questions": [
-    { "id": "MK-001", "prompt": "If 3x - 7 = 11, then x =",
-      "choices": ["4", "5", "6", "7", "8"], "answer": 2,
-      "explanation": "Add 7 to both sides: 3x = 18. Divide by 3: x = 6." },
-    { "id": "MK-002", "prompt": "What is the area of a circle with a radius of 4?",
-      "choices": ["8π", "12π", "16π", "32π", "64π"], "answer": 2,
-      "explanation": "A = πr² = π(4²) = 16π. 8π is the circumference, a common trap." },
-    { "id": "MK-003", "prompt": "Which value is a solution of x² - 9x + 20 = 0?",
-      "choices": ["-5", "-4", "2", "5", "9"], "answer": 3,
-      "explanation": "Factor: (x - 4)(x - 5) = 0, so x = 4 or x = 5." },
-    { "id": "MK-004", "prompt": "What is the sum of the interior angles of a hexagon?",
-      "choices": ["360°", "540°", "720°", "900°", "1080°"], "answer": 2,
-      "explanation": "Sum = (n - 2) × 180° = (6 - 2) × 180° = 720°." },
-    { "id": "MK-005", "prompt": "(2³)(2⁴) =",
-      "choices": ["2⁷", "2¹²", "4⁷", "4¹²", "2"], "answer": 0,
-      "explanation": "When multiplying powers with the same base, add the exponents: 3 + 4 = 7." },
-    { "id": "MK-006", "prompt": "A right triangle has legs of 6 and 8. What is the hypotenuse?",
-      "choices": ["7", "10", "12", "14", "48"], "answer": 1,
-      "explanation": "6² + 8² = 36 + 64 = 100, and √100 = 10 (a 3-4-5 triangle doubled)." },
-    { "id": "MK-007", "prompt": "Simplify √50.",
-      "choices": ["25√2", "5√2", "2√5", "10√5", "5√10"], "answer": 1,
-      "explanation": "√50 = √(25 × 2) = 5√2." },
-    { "id": "MK-008", "prompt": "What is the slope of the line through (1, 2) and (3, 8)?",
-      "choices": ["1/3", "2", "3", "4", "6"], "answer": 2,
-      "explanation": "Slope = (8 - 2) / (3 - 1) = 6 / 2 = 3." },
-    { "id": "MK-009", "prompt": "If 2(x + 3) = 5x - 9, then x =",
-      "choices": ["1", "3", "7", "5", "15"], "answer": 3,
-      "explanation": "2x + 6 = 5x - 9, so 15 = 3x and x = 5." },
-    { "id": "MK-010", "prompt": "What is the volume of a cube with an edge length of 3?",
-      "choices": ["27", "9", "18", "36", "81"], "answer": 0,
-      "explanation": "V = s³ = 3³ = 27. 9 is the area of one face." }
+    {
+      "id": "MK-001",
+      "prompt": "If 3x - 7 = 11, then x =",
+      "choices": [
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "answer": 2,
+      "explanation": "Add 7 to both sides: 3x = 18. Divide by 3: x = 6."
+    },
+    {
+      "id": "MK-002",
+      "prompt": "What is the area of a circle with a radius of 4?",
+      "choices": [
+        "8π",
+        "12π",
+        "16π",
+        "32π",
+        "64π"
+      ],
+      "answer": 2,
+      "explanation": "A = πr² = π(4²) = 16π. 8π is the circumference, a common trap."
+    },
+    {
+      "id": "MK-003",
+      "prompt": "Which value is a solution of x² - 9x + 20 = 0?",
+      "choices": [
+        "-5",
+        "-4",
+        "2",
+        "5",
+        "9"
+      ],
+      "answer": 3,
+      "explanation": "Factor: (x - 4)(x - 5) = 0, so x = 4 or x = 5."
+    },
+    {
+      "id": "MK-004",
+      "prompt": "What is the sum of the interior angles of a hexagon?",
+      "choices": [
+        "360°",
+        "540°",
+        "720°",
+        "900°",
+        "1080°"
+      ],
+      "answer": 2,
+      "explanation": "Sum = (n - 2) × 180° = (6 - 2) × 180° = 720°."
+    },
+    {
+      "id": "MK-005",
+      "prompt": "(2³)(2⁴) =",
+      "choices": [
+        "2⁷",
+        "2¹²",
+        "4⁷",
+        "4¹²",
+        "2"
+      ],
+      "answer": 0,
+      "explanation": "When multiplying powers with the same base, add the exponents: 3 + 4 = 7."
+    },
+    {
+      "id": "MK-006",
+      "prompt": "A right triangle has legs of 6 and 8. What is the hypotenuse?",
+      "choices": [
+        "7",
+        "10",
+        "12",
+        "14",
+        "48"
+      ],
+      "answer": 1,
+      "explanation": "6² + 8² = 36 + 64 = 100, and √100 = 10 (a 3-4-5 triangle doubled)."
+    },
+    {
+      "id": "MK-007",
+      "prompt": "Simplify √50.",
+      "choices": [
+        "25√2",
+        "5√2",
+        "2√5",
+        "10√5",
+        "5√10"
+      ],
+      "answer": 1,
+      "explanation": "√50 = √(25 × 2) = 5√2."
+    },
+    {
+      "id": "MK-008",
+      "prompt": "What is the slope of the line through (1, 2) and (3, 8)?",
+      "choices": [
+        "1/3",
+        "2",
+        "3",
+        "4",
+        "6"
+      ],
+      "answer": 2,
+      "explanation": "Slope = (8 - 2) / (3 - 1) = 6 / 2 = 3."
+    },
+    {
+      "id": "MK-009",
+      "prompt": "If 2(x + 3) = 5x - 9, then x =",
+      "choices": [
+        "1",
+        "3",
+        "7",
+        "5",
+        "15"
+      ],
+      "answer": 3,
+      "explanation": "2x + 6 = 5x - 9, so 15 = 3x and x = 5."
+    },
+    {
+      "id": "MK-010",
+      "prompt": "What is the volume of a cube with an edge length of 3?",
+      "choices": [
+        "27",
+        "9",
+        "18",
+        "36",
+        "81"
+      ],
+      "answer": 0,
+      "explanation": "V = s³ = 3³ = 27. 9 is the area of one face."
+    },
+    {
+      "id": "MK-011",
+      "prompt": "If 5x + 4 = 29, then x =",
+      "choices": [
+        "5",
+        "3",
+        "7",
+        "6",
+        "4"
+      ],
+      "answer": 0,
+      "explanation": "Subtract 4: 5x = 25. Divide by 5: x = 5."
+    },
+    {
+      "id": "MK-012",
+      "prompt": "If x/4 + 3 = 7, then x =",
+      "choices": [
+        "10",
+        "28",
+        "16",
+        "12",
+        "4"
+      ],
+      "answer": 2,
+      "explanation": "Subtract 3: x/4 = 4. Multiply by 4: x = 16."
+    },
+    {
+      "id": "MK-013",
+      "prompt": "Expand (x + 3)(x − 2).",
+      "choices": [
+        "x² + x − 6",
+        "x² + x + 6",
+        "x² − x − 6",
+        "x² + 5x − 6",
+        "x² − 6"
+      ],
+      "answer": 0,
+      "explanation": "FOIL: x² − 2x + 3x − 6 = x² + x − 6."
+    },
+    {
+      "id": "MK-014",
+      "prompt": "What is the area of a triangle with a base of 10 and a height of 7?",
+      "choices": [
+        "70",
+        "24.5",
+        "140",
+        "17",
+        "35"
+      ],
+      "answer": 4,
+      "explanation": "A = ½ × base × height = ½ × 10 × 7 = 35. 70 forgets the ½."
+    },
+    {
+      "id": "MK-015",
+      "prompt": "What is the circumference of a circle with a diameter of 9?",
+      "choices": [
+        "9π",
+        "4.5π",
+        "20.25π",
+        "18π",
+        "81π"
+      ],
+      "answer": 0,
+      "explanation": "C = πd = 9π. 20.25π is the area."
+    },
+    {
+      "id": "MK-016",
+      "prompt": "3² + 4³ =",
+      "choices": [
+        "145",
+        "81",
+        "25",
+        "49",
+        "73"
+      ],
+      "answer": 4,
+      "explanation": "9 + 64 = 73."
+    },
+    {
+      "id": "MK-017",
+      "prompt": "If x + y = 10 and x − y = 4, what is x?",
+      "choices": [
+        "7",
+        "3",
+        "5",
+        "6",
+        "14"
+      ],
+      "answer": 0,
+      "explanation": "Add the equations: 2x = 14, so x = 7 (and y = 3)."
+    },
+    {
+      "id": "MK-018",
+      "prompt": "What is the value of 2x² − 3x when x = −2?",
+      "choices": [
+        "10",
+        "2",
+        "−14",
+        "−2",
+        "14"
+      ],
+      "answer": 4,
+      "explanation": "2(4) − 3(−2) = 8 + 6 = 14."
+    },
+    {
+      "id": "MK-019",
+      "prompt": "What is the slope of the line y = −3x + 5?",
+      "choices": [
+        "−3",
+        "3",
+        "−5",
+        "5",
+        "1/3"
+      ],
+      "answer": 0,
+      "explanation": "In y = mx + b, the slope is m = −3."
+    },
+    {
+      "id": "MK-020",
+      "prompt": "What is the perimeter of a rectangle that is 8 by 5?",
+      "choices": [
+        "30",
+        "40",
+        "13",
+        "26",
+        "21"
+      ],
+      "answer": 3,
+      "explanation": "P = 2(8 + 5) = 26. 40 is the area."
+    },
+    {
+      "id": "MK-021",
+      "prompt": "Simplify 12x³y ÷ 4xy.",
+      "choices": [
+        "4x²",
+        "3x²",
+        "3x³",
+        "8x²",
+        "3x²y"
+      ],
+      "answer": 1,
+      "explanation": "12 ÷ 4 = 3, x³ ÷ x = x², and y ÷ y = 1."
+    },
+    {
+      "id": "MK-022",
+      "prompt": "Which fraction equals 0.25?",
+      "choices": [
+        "5/2",
+        "1/4",
+        "1/25",
+        "1/2",
+        "2/5"
+      ],
+      "answer": 1,
+      "explanation": "0.25 = 25/100 = 1/4."
+    },
+    {
+      "id": "MK-023",
+      "prompt": "Which of these numbers is prime?",
+      "choices": [
+        "33",
+        "21",
+        "27",
+        "29",
+        "39"
+      ],
+      "answer": 3,
+      "explanation": "29 has no factors besides 1 and itself. 21 = 3×7, 27 = 3×9, 33 = 3×11, 39 = 3×13."
+    },
+    {
+      "id": "MK-024",
+      "prompt": "What is the supplement of a 65° angle?",
+      "choices": [
+        "35°",
+        "25°",
+        "125°",
+        "115°",
+        "295°"
+      ],
+      "answer": 3,
+      "explanation": "Supplementary angles add to 180°: 180 − 65 = 115. 25° is the complement."
+    },
+    {
+      "id": "MK-025",
+      "prompt": "What is the volume of a box that is 4 by 5 by 6?",
+      "choices": [
+        "120",
+        "148",
+        "15",
+        "60",
+        "74"
+      ],
+      "answer": 0,
+      "explanation": "V = l × w × h = 4 × 5 × 6 = 120. 148 is the surface area."
+    },
+    {
+      "id": "MK-026",
+      "prompt": "√144 + √81 =",
+      "choices": [
+        "15",
+        "225",
+        "25",
+        "21",
+        "18"
+      ],
+      "answer": 3,
+      "explanation": "12 + 9 = 21."
+    },
+    {
+      "id": "MK-027",
+      "prompt": "If 2x² = 72 and x > 0, then x =",
+      "choices": [
+        "3",
+        "12",
+        "18",
+        "36",
+        "6"
+      ],
+      "answer": 4,
+      "explanation": "Divide by 2: x² = 36, so x = 6."
+    },
+    {
+      "id": "MK-028",
+      "prompt": "Simplify (x⁴)³.",
+      "choices": [
+        "12x",
+        "x⁷",
+        "x⁶⁴",
+        "3x⁴",
+        "x¹²"
+      ],
+      "answer": 4,
+      "explanation": "A power raised to a power: multiply exponents, 4 × 3 = 12."
+    },
+    {
+      "id": "MK-029",
+      "prompt": "Solve 3x − 5 > 7.",
+      "choices": [
+        "x > 2/3",
+        "x > 12",
+        "x < 4",
+        "x < −4",
+        "x > 4"
+      ],
+      "answer": 4,
+      "explanation": "Add 5: 3x > 12. Divide by 3: x > 4."
+    },
+    {
+      "id": "MK-030",
+      "prompt": "What is the mean of 4, 8, 15, 16, and 23?",
+      "choices": [
+        "12",
+        "13",
+        "15",
+        "14.5",
+        "13.2"
+      ],
+      "answer": 4,
+      "explanation": "Sum = 66. 66 ÷ 5 = 13.2. (15 is the median.)"
+    },
+    {
+      "id": "MK-031",
+      "prompt": "What is the distance between the points (0, 0) and (5, 12)?",
+      "choices": [
+        "12",
+        "7",
+        "17",
+        "169",
+        "13"
+      ],
+      "answer": 4,
+      "explanation": "√(5² + 12²) = √169 = 13."
+    },
+    {
+      "id": "MK-032",
+      "prompt": "What is the least common multiple of 6 and 8?",
+      "choices": [
+        "12",
+        "48",
+        "14",
+        "2",
+        "24"
+      ],
+      "answer": 4,
+      "explanation": "Multiples of 8: 8, 16, 24. 24 is the first that 6 divides."
+    },
+    {
+      "id": "MK-033",
+      "prompt": "What is the greatest common factor of 36 and 60?",
+      "choices": [
+        "12",
+        "180",
+        "4",
+        "24",
+        "6"
+      ],
+      "answer": 0,
+      "explanation": "36 = 12 × 3 and 60 = 12 × 5, and 3 and 5 share no factors."
+    },
+    {
+      "id": "MK-034",
+      "prompt": "Write 0.00045 in scientific notation.",
+      "choices": [
+        "4.5 × 10⁻⁵",
+        "4.5 × 10⁻³",
+        "45 × 10⁻³",
+        "4.5 × 10⁻⁴",
+        "4.5 × 10⁴"
+      ],
+      "answer": 3,
+      "explanation": "Move the decimal 4 places right to get 4.5, so the exponent is −4."
+    },
+    {
+      "id": "MK-035",
+      "prompt": "Factor x² − 16.",
+      "choices": [
+        "(x − 16)(x + 1)",
+        "(x − 4)(x + 4)",
+        "(x − 8)(x + 2)",
+        "(x + 4)²",
+        "(x − 4)²"
+      ],
+      "answer": 1,
+      "explanation": "Difference of squares: a² − b² = (a − b)(a + b)."
+    },
+    {
+      "id": "MK-036",
+      "prompt": "If f(x) = 3x − 2, what is f(4)?",
+      "choices": [
+        "6",
+        "10",
+        "9",
+        "12",
+        "14"
+      ],
+      "answer": 1,
+      "explanation": "f(4) = 3(4) − 2 = 12 − 2 = 10."
+    },
+    {
+      "id": "MK-037",
+      "prompt": "What is the measure of each interior angle of a regular pentagon?",
+      "choices": [
+        "540°",
+        "72°",
+        "90°",
+        "120°",
+        "108°"
+      ],
+      "answer": 4,
+      "explanation": "Total = (5 − 2) × 180° = 540°. 540 ÷ 5 = 108°. 72° is each exterior angle."
+    },
+    {
+      "id": "MK-038",
+      "prompt": "What is the area of a square whose diagonal is 10?",
+      "choices": [
+        "25",
+        "50",
+        "40",
+        "200",
+        "100"
+      ],
+      "answer": 1,
+      "explanation": "Side = 10/√2, so area = 100/2 = 50. (Or: area = diagonal² ÷ 2.)"
+    },
+    {
+      "id": "MK-039",
+      "prompt": "−3 − (−8) =",
+      "choices": [
+        "−11",
+        "11",
+        "24",
+        "−5",
+        "5"
+      ],
+      "answer": 4,
+      "explanation": "Subtracting a negative is adding: −3 + 8 = 5."
+    },
+    {
+      "id": "MK-040",
+      "prompt": "Which value is a solution of |x − 3| = 5?",
+      "choices": [
+        "−2",
+        "2",
+        "15",
+        "−8",
+        "3"
+      ],
+      "answer": 0,
+      "explanation": "x − 3 = 5 gives x = 8; x − 3 = −5 gives x = −2."
+    },
+    {
+      "id": "MK-041",
+      "prompt": "In a 30°-60°-90° triangle, the shortest side is 4. How long is the hypotenuse?",
+      "choices": [
+        "4√3",
+        "6",
+        "8",
+        "4√2",
+        "12"
+      ],
+      "answer": 2,
+      "explanation": "The hypotenuse is twice the shortest side. The longer leg would be 4√3."
+    },
+    {
+      "id": "MK-042",
+      "prompt": "A fair six-sided die is rolled once. What is the probability of an even number?",
+      "choices": [
+        "5/6",
+        "2/3",
+        "1/2",
+        "1/3",
+        "1/6"
+      ],
+      "answer": 2,
+      "explanation": "Even outcomes are 2, 4, 6: 3 of 6 = 1/2."
+    },
+    {
+      "id": "MK-043",
+      "prompt": "What is the reciprocal of 2/5?",
+      "choices": [
+        "−5/2",
+        "5/2",
+        "4/25",
+        "2/5",
+        "−2/5"
+      ],
+      "answer": 1,
+      "explanation": "Flip the fraction: 2/5 × 5/2 = 1. −2/5 is the opposite, not the reciprocal."
+    },
+    {
+      "id": "MK-044",
+      "prompt": "Simplify (2x)³.",
+      "choices": [
+        "2x³",
+        "8x",
+        "8x³",
+        "6x",
+        "6x³"
+      ],
+      "answer": 2,
+      "explanation": "(2x)³ = 2³ × x³ = 8x³."
+    },
+    {
+      "id": "MK-045",
+      "prompt": "What is the area of a circle with a diameter of 10?",
+      "choices": [
+        "100π",
+        "20π",
+        "5π",
+        "25π",
+        "10π"
+      ],
+      "answer": 3,
+      "explanation": "Radius = 5, so A = π(5²) = 25π. 100π uses the diameter by mistake."
+    }
   ]
 }

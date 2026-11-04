@@ -6,8 +6,8 @@
       "name": "Word Knowledge",
       "category": "knowledge",
       "file": "word_knowledge.json",
-      "time_limit_seconds": 300,
-      "question_count": 10,
+      "time_limit_seconds": 600,
+      "question_count": 20,
       "tips": "Break unfamiliar words into roots, prefixes and suffixes. If unsure, eliminate choices with the wrong tone (positive vs. negative)."
     },
     {
@@ -15,8 +15,8 @@
       "name": "Math Knowledge",
       "category": "knowledge",
       "file": "math_knowledge.json",
-      "time_limit_seconds": 600,
-      "question_count": 10,
+      "time_limit_seconds": 900,
+      "question_count": 15,
       "tips": "When solving takes too long, plug the answer choices back into the problem."
     },
     {
@@ -24,8 +24,8 @@
       "name": "Arithmetic Reasoning",
       "category": "knowledge",
       "file": "arithmetic_reasoning.json",
-      "time_limit_seconds": 600,
-      "question_count": 8,
+      "time_limit_seconds": 900,
+      "question_count": 12,
       "tips": "Write down exactly what is being asked, then estimate to rule out impossible choices before calculating."
     },
     {
@@ -33,8 +33,8 @@
       "name": "Verbal Analogies",
       "category": "knowledge",
       "file": "verbal_analogies.json",
-      "time_limit_seconds": 240,
-      "question_count": 8,
+      "time_limit_seconds": 450,
+      "question_count": 15,
       "tips": "Make a short sentence linking the first pair (\"a ___ is used by a ___\"), then test that sentence on each choice."
     },
     {
@@ -42,8 +42,8 @@
       "name": "Reading Comprehension",
       "category": "knowledge",
       "file": "reading_comprehension.json",
-      "time_limit_seconds": 360,
-      "question_count": 6,
+      "time_limit_seconds": 540,
+      "question_count": 9,
       "tips": "Pick the answer the passage supports, not what you know from elsewhere."
     }
   ]

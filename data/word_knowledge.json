@@ -1,34 +1,2097 @@
 {
   "questions": [
-    { "id": "WK-001", "prompt": "CANDID most nearly means:",
-      "choices": ["frank", "sweet", "hidden", "careful", "bright"], "answer": 0,
-      "explanation": "Candid means open and honest; 'frank' is the closest synonym." },
-    { "id": "WK-002", "prompt": "BENEVOLENT most nearly means:",
-      "choices": ["hostile", "kind", "wealthy", "lazy", "fortunate"], "answer": 1,
-      "explanation": "Bene- means 'good' (as in benefit); benevolent means well-meaning and kind." },
-    { "id": "WK-003", "prompt": "MITIGATE most nearly means:",
-      "choices": ["worsen", "delay", "lessen", "argue", "divide"], "answer": 2,
-      "explanation": "To mitigate is to make something less severe." },
-    { "id": "WK-004", "prompt": "TENACIOUS most nearly means:",
-      "choices": ["fragile", "talkative", "nervous", "persistent", "cautious"], "answer": 3,
-      "explanation": "Tenacious describes someone who holds on firmly and does not give up." },
-    { "id": "WK-005", "prompt": "AMBIGUOUS most nearly means:",
-      "choices": ["certain", "ambitious", "unclear", "huge", "ancient"], "answer": 2,
-      "explanation": "Ambiguous means open to more than one interpretation. Don't confuse it with 'ambitious'." },
-    { "id": "WK-006", "prompt": "LUCID most nearly means:",
-      "choices": ["clear", "lazy", "lucky", "dark", "brief"], "answer": 0,
-      "explanation": "Lucid shares the root of 'lucent' (light); it means clear and easy to understand." },
-    { "id": "WK-007", "prompt": "AUSTERE most nearly means:",
-      "choices": ["generous", "severe", "foreign", "careless", "lively"], "answer": 1,
-      "explanation": "Austere means stern, plain, or severe in manner or appearance." },
-    { "id": "WK-008", "prompt": "PRUDENT most nearly means:",
-      "choices": ["arrogant", "proud", "hasty", "shy", "sensible"], "answer": 4,
-      "explanation": "Prudent means showing good judgment and care for the future. 'Proud' is a sound-alike trap." },
-    { "id": "WK-009", "prompt": "EPHEMERAL most nearly means:",
-      "choices": ["eternal", "fleeting", "ethereal", "enormous", "careful"], "answer": 1,
-      "explanation": "Ephemeral means lasting a very short time. 'Eternal' is its opposite." },
-    { "id": "WK-010", "prompt": "ZEALOUS most nearly means:",
-      "choices": ["jealous", "calm", "eager", "weak", "cruel"], "answer": 2,
-      "explanation": "Zealous means full of enthusiasm and energy for a cause." }
+    {
+      "id": "WK-001",
+      "prompt": "CANDID most nearly means:",
+      "choices": [
+        "frank",
+        "sweet",
+        "hidden",
+        "careful",
+        "bright"
+      ],
+      "answer": 0,
+      "explanation": "Candid means open and honest; 'frank' is the closest synonym."
+    },
+    {
+      "id": "WK-002",
+      "prompt": "BENEVOLENT most nearly means:",
+      "choices": [
+        "hostile",
+        "kind",
+        "wealthy",
+        "lazy",
+        "fortunate"
+      ],
+      "answer": 1,
+      "explanation": "Bene- means 'good' (as in benefit); benevolent means well-meaning and kind."
+    },
+    {
+      "id": "WK-003",
+      "prompt": "MITIGATE most nearly means:",
+      "choices": [
+        "worsen",
+        "delay",
+        "lessen",
+        "argue",
+        "divide"
+      ],
+      "answer": 2,
+      "explanation": "To mitigate is to make something less severe."
+    },
+    {
+      "id": "WK-004",
+      "prompt": "TENACIOUS most nearly means:",
+      "choices": [
+        "fragile",
+        "talkative",
+        "nervous",
+        "persistent",
+        "cautious"
+      ],
+      "answer": 3,
+      "explanation": "Tenacious describes someone who holds on firmly and does not give up."
+    },
+    {
+      "id": "WK-005",
+      "prompt": "AMBIGUOUS most nearly means:",
+      "choices": [
+        "certain",
+        "ambitious",
+        "unclear",
+        "huge",
+        "ancient"
+      ],
+      "answer": 2,
+      "explanation": "Ambiguous means open to more than one interpretation. Don't confuse it with 'ambitious'."
+    },
+    {
+      "id": "WK-006",
+      "prompt": "LUCID most nearly means:",
+      "choices": [
+        "clear",
+        "lazy",
+        "lucky",
+        "dark",
+        "brief"
+      ],
+      "answer": 0,
+      "explanation": "Lucid shares the root of 'lucent' (light); it means clear and easy to understand."
+    },
+    {
+      "id": "WK-007",
+      "prompt": "AUSTERE most nearly means:",
+      "choices": [
+        "generous",
+        "severe",
+        "foreign",
+        "careless",
+        "lively"
+      ],
+      "answer": 1,
+      "explanation": "Austere means stern, plain, or severe in manner or appearance."
+    },
+    {
+      "id": "WK-008",
+      "prompt": "PRUDENT most nearly means:",
+      "choices": [
+        "arrogant",
+        "proud",
+        "hasty",
+        "shy",
+        "sensible"
+      ],
+      "answer": 4,
+      "explanation": "Prudent means showing good judgment and care for the future. 'Proud' is a sound-alike trap."
+    },
+    {
+      "id": "WK-009",
+      "prompt": "EPHEMERAL most nearly means:",
+      "choices": [
+        "eternal",
+        "fleeting",
+        "ethereal",
+        "enormous",
+        "careful"
+      ],
+      "answer": 1,
+      "explanation": "Ephemeral means lasting a very short time. 'Eternal' is its opposite."
+    },
+    {
+      "id": "WK-010",
+      "prompt": "ZEALOUS most nearly means:",
+      "choices": [
+        "jealous",
+        "calm",
+        "eager",
+        "weak",
+        "cruel"
+      ],
+      "answer": 2,
+      "explanation": "Zealous means full of enthusiasm and energy for a cause."
+    },
+    {
+      "id": "WK-011",
+      "prompt": "AFFLUENT most nearly means:",
+      "choices": [
+        "thoughtful",
+        "terse",
+        "outdated",
+        "eager",
+        "wealthy"
+      ],
+      "answer": 4,
+      "explanation": "Affluent: having a lot of money or possessions. Example: \"The affluent suburb had large homes and private schools.\""
+    },
+    {
+      "id": "WK-012",
+      "prompt": "AMIABLE most nearly means:",
+      "choices": [
+        "watchful",
+        "unimportant",
+        "friendly",
+        "unstable",
+        "stubborn"
+      ],
+      "answer": 2,
+      "explanation": "Amiable: pleasant and easy to get along with. Example: \"The amiable instructor put nervous students at ease.\""
+    },
+    {
+      "id": "WK-013",
+      "prompt": "ARDUOUS most nearly means:",
+      "choices": [
+        "shrewd",
+        "eager",
+        "nimble",
+        "convincing",
+        "difficult"
+      ],
+      "answer": 4,
+      "explanation": "Arduous: requiring great effort; hard to do. Example: \"The arduous march lasted twelve hours.\""
+    },
+    {
+      "id": "WK-014",
+      "prompt": "AUDACIOUS most nearly means:",
+      "choices": [
+        "harmless",
+        "bold",
+        "persistent",
+        "lazy",
+        "productive"
+      ],
+      "answer": 1,
+      "explanation": "Audacious: willing to take daring risks. Example: \"The audacious plan surprised everyone.\""
+    },
+    {
+      "id": "WK-015",
+      "prompt": "BELLIGERENT most nearly means:",
+      "choices": [
+        "unpredictable",
+        "hostile",
+        "peaceful",
+        "thrifty",
+        "constant"
+      ],
+      "answer": 1,
+      "explanation": "Belligerent: aggressive and eager to fight. Example: \"The belligerent passenger was removed from the flight.\""
+    },
+    {
+      "id": "WK-016",
+      "prompt": "BRUSQUE most nearly means:",
+      "choices": [
+        "practical",
+        "abrupt",
+        "unskilled",
+        "boring",
+        "occasional"
+      ],
+      "answer": 1,
+      "explanation": "Brusque: short and rude in speech or manner. Example: \"His brusque reply ended the conversation.\""
+    },
+    {
+      "id": "WK-017",
+      "prompt": "COGENT most nearly means:",
+      "choices": [
+        "stubborn",
+        "profitable",
+        "unstable",
+        "unclear",
+        "convincing"
+      ],
+      "answer": 4,
+      "explanation": "Cogent: clear, logical, and persuasive. Example: \"She made a cogent argument for changing the schedule.\""
+    },
+    {
+      "id": "WK-018",
+      "prompt": "COPIOUS most nearly means:",
+      "choices": [
+        "profitable",
+        "plentiful",
+        "threatening",
+        "lazy",
+        "reserved"
+      ],
+      "answer": 1,
+      "explanation": "Copious: large in amount; abundant. Example: \"He took copious notes during the lecture.\""
+    },
+    {
+      "id": "WK-019",
+      "prompt": "CURSORY most nearly means:",
+      "choices": [
+        "extravagant",
+        "useless",
+        "hostile",
+        "hasty",
+        "casual"
+      ],
+      "answer": 3,
+      "explanation": "Cursory: quick and not thorough. Example: \"A cursory inspection missed the cracked bolt.\""
+    },
+    {
+      "id": "WK-020",
+      "prompt": "DILIGENT most nearly means:",
+      "choices": [
+        "hostile",
+        "sluggish",
+        "fair",
+        "sociable",
+        "hardworking"
+      ],
+      "answer": 4,
+      "explanation": "Diligent: showing steady, careful effort. Example: \"Diligent study before the test paid off.\""
+    },
+    {
+      "id": "WK-021",
+      "prompt": "DOCILE most nearly means:",
+      "choices": [
+        "obedient",
+        "profitable",
+        "thrifty",
+        "unimportant",
+        "kind"
+      ],
+      "answer": 0,
+      "explanation": "Docile: easily led or controlled. Example: \"The docile horse let the children ride it.\""
+    },
+    {
+      "id": "WK-022",
+      "prompt": "ERRATIC most nearly means:",
+      "choices": [
+        "arrogant",
+        "mysterious",
+        "obvious",
+        "harmless",
+        "unpredictable"
+      ],
+      "answer": 4,
+      "explanation": "Erratic: irregular and inconsistent. Example: \"The engine made an erratic noise before it quit.\""
+    },
+    {
+      "id": "WK-023",
+      "prompt": "FASTIDIOUS most nearly means:",
+      "choices": [
+        "fussy",
+        "hardworking",
+        "thoughtful",
+        "possible",
+        "stubborn"
+      ],
+      "answer": 0,
+      "explanation": "Fastidious: very concerned with detail, accuracy, or cleanliness. Example: \"The fastidious mechanic wiped every tool before putting it away.\""
+    },
+    {
+      "id": "WK-024",
+      "prompt": "FEASIBLE most nearly means:",
+      "choices": [
+        "nimble",
+        "scant",
+        "possible",
+        "boring",
+        "unimportant"
+      ],
+      "answer": 2,
+      "explanation": "Feasible: able to be done; practical. Example: \"Landing on the short runway was feasible in calm wind.\""
+    },
+    {
+      "id": "WK-025",
+      "prompt": "FRUGAL most nearly means:",
+      "choices": [
+        "lazy",
+        "sturdy",
+        "thrifty",
+        "frank",
+        "sensible"
+      ],
+      "answer": 2,
+      "explanation": "Frugal: careful with money; avoiding waste. Example: \"A frugal shopper, he always compared prices.\""
+    },
+    {
+      "id": "WK-026",
+      "prompt": "GREGARIOUS most nearly means:",
+      "choices": [
+        "practical",
+        "sociable",
+        "fussy",
+        "sturdy",
+        "convincing"
+      ],
+      "answer": 1,
+      "explanation": "Gregarious: enjoying the company of others. Example: \"The gregarious new pilot knew everyone's name by Friday.\""
+    },
+    {
+      "id": "WK-027",
+      "prompt": "HAUGHTY most nearly means:",
+      "choices": [
+        "convincing",
+        "severe",
+        "abrupt",
+        "arrogant",
+        "unstable"
+      ],
+      "answer": 3,
+      "explanation": "Haughty: acting as if superior to others. Example: \"The haughty officer ignored questions from junior staff.\""
+    },
+    {
+      "id": "WK-028",
+      "prompt": "IMPARTIAL most nearly means:",
+      "choices": [
+        "fair",
+        "kind",
+        "wise",
+        "eager",
+        "calm"
+      ],
+      "answer": 0,
+      "explanation": "Impartial: not favoring one side over another. Example: \"An impartial judge reviewed the evidence.\""
+    },
+    {
+      "id": "WK-029",
+      "prompt": "IMPETUOUS most nearly means:",
+      "choices": [
+        "fickle",
+        "rash",
+        "abrupt",
+        "outdated",
+        "watchful"
+      ],
+      "answer": 1,
+      "explanation": "Impetuous: acting quickly without thinking. Example: \"His impetuous decision to take off in a storm was a mistake.\""
+    },
+    {
+      "id": "WK-030",
+      "prompt": "INCESSANT most nearly means:",
+      "choices": [
+        "sluggish",
+        "useless",
+        "constant",
+        "heartless",
+        "thrifty"
+      ],
+      "answer": 2,
+      "explanation": "Incessant: continuing without stopping. Example: \"The incessant alarm kept everyone awake.\""
+    },
+    {
+      "id": "WK-031",
+      "prompt": "INDOLENT most nearly means:",
+      "choices": [
+        "extravagant",
+        "lazy",
+        "fickle",
+        "watchful",
+        "occasional"
+      ],
+      "answer": 1,
+      "explanation": "Indolent: avoiding work or effort. Example: \"The indolent student never finished his homework.\""
+    },
+    {
+      "id": "WK-032",
+      "prompt": "INEPT most nearly means:",
+      "choices": [
+        "temporary",
+        "fussy",
+        "arrogant",
+        "practical",
+        "unskilled"
+      ],
+      "answer": 4,
+      "explanation": "Inept: lacking skill or ability. Example: \"The inept repair made the problem worse.\""
+    },
+    {
+      "id": "WK-033",
+      "prompt": "JOVIAL most nearly means:",
+      "choices": [
+        "cheerful",
+        "persistent",
+        "temporary",
+        "plentiful",
+        "bold"
+      ],
+      "answer": 0,
+      "explanation": "Jovial: good-humored and full of fun. Example: \"The jovial crew chief joked with everyone.\""
+    },
+    {
+      "id": "WK-034",
+      "prompt": "LACONIC most nearly means:",
+      "choices": [
+        "sturdy",
+        "ordinary",
+        "terse",
+        "shrewd",
+        "eager"
+      ],
+      "answer": 2,
+      "explanation": "Laconic: using very few words. Example: \"Her laconic reply was simply 'Affirmative.'\""
+    },
+    {
+      "id": "WK-035",
+      "prompt": "LETHARGIC most nearly means:",
+      "choices": [
+        "peaceful",
+        "sluggish",
+        "wordy",
+        "scant",
+        "shrewd"
+      ],
+      "answer": 1,
+      "explanation": "Lethargic: lacking energy; slow and drowsy. Example: \"The heat left the whole squadron lethargic.\""
+    },
+    {
+      "id": "WK-036",
+      "prompt": "METICULOUS most nearly means:",
+      "choices": [
+        "hardworking",
+        "boring",
+        "quiet",
+        "precise",
+        "unimportant"
+      ],
+      "answer": 3,
+      "explanation": "Meticulous: showing great attention to detail. Example: \"Meticulous record-keeping is required for aircraft maintenance.\""
+    },
+    {
+      "id": "WK-037",
+      "prompt": "MUNDANE most nearly means:",
+      "choices": [
+        "spotless",
+        "ordinary",
+        "fussy",
+        "articulate",
+        "shrewd"
+      ],
+      "answer": 1,
+      "explanation": "Mundane: dull and everyday; not exciting. Example: \"Filing reports is a mundane but necessary task.\""
+    },
+    {
+      "id": "WK-038",
+      "prompt": "NONCHALANT most nearly means:",
+      "choices": [
+        "friendly",
+        "fleeting",
+        "casual",
+        "mysterious",
+        "productive"
+      ],
+      "answer": 2,
+      "explanation": "Nonchalant: calm and seemingly unconcerned. Example: \"He was nonchalant about the delay, reading quietly at the gate.\""
+    },
+    {
+      "id": "WK-039",
+      "prompt": "OBSOLETE most nearly means:",
+      "choices": [
+        "outdated",
+        "forceful",
+        "obvious",
+        "persistent",
+        "frank"
+      ],
+      "answer": 0,
+      "explanation": "Obsolete: no longer used or useful. Example: \"The radar system was obsolete by the 1990s.\""
+    },
+    {
+      "id": "WK-040",
+      "prompt": "OMINOUS most nearly means:",
+      "choices": [
+        "skilled",
+        "threatening",
+        "nimble",
+        "forceful",
+        "outdated"
+      ],
+      "answer": 1,
+      "explanation": "Ominous: suggesting that something bad will happen. Example: \"Ominous clouds gathered over the runway.\""
+    },
+    {
+      "id": "WK-041",
+      "prompt": "OPULENT most nearly means:",
+      "choices": [
+        "nimble",
+        "hasty",
+        "convincing",
+        "luxurious",
+        "thrifty"
+      ],
+      "answer": 3,
+      "explanation": "Opulent: rich and showy; expensive-looking. Example: \"The opulent hotel lobby had marble floors.\""
+    },
+    {
+      "id": "WK-042",
+      "prompt": "PLACID most nearly means:",
+      "choices": [
+        "unclear",
+        "passionate",
+        "friendly",
+        "rash",
+        "calm"
+      ],
+      "answer": 4,
+      "explanation": "Placid: peaceful and not easily upset. Example: \"The lake was placid at dawn.\""
+    },
+    {
+      "id": "WK-043",
+      "prompt": "PRAGMATIC most nearly means:",
+      "choices": [
+        "unimportant",
+        "harmless",
+        "threatening",
+        "unskilled",
+        "practical"
+      ],
+      "answer": 4,
+      "explanation": "Pragmatic: dealing with things in a realistic, sensible way. Example: \"Her pragmatic solution fixed the problem with the tools on hand.\""
+    },
+    {
+      "id": "WK-044",
+      "prompt": "PRECARIOUS most nearly means:",
+      "choices": [
+        "obvious",
+        "mysterious",
+        "useless",
+        "unstable",
+        "watchful"
+      ],
+      "answer": 3,
+      "explanation": "Precarious: not secure; dangerously likely to fall or fail. Example: \"The ladder stood at a precarious angle.\""
+    },
+    {
+      "id": "WK-045",
+      "prompt": "PROLIFIC most nearly means:",
+      "choices": [
+        "difficult",
+        "productive",
+        "casual",
+        "sensible",
+        "fleeting"
+      ],
+      "answer": 1,
+      "explanation": "Prolific: producing a great amount. Example: \"The prolific author wrote three books a year.\""
+    },
+    {
+      "id": "WK-046",
+      "prompt": "RETICENT most nearly means:",
+      "choices": [
+        "luxurious",
+        "wealthy",
+        "temporary",
+        "occasional",
+        "reserved"
+      ],
+      "answer": 4,
+      "explanation": "Reticent: not revealing thoughts or feelings readily. Example: \"He was reticent about his time overseas.\""
+    },
+    {
+      "id": "WK-047",
+      "prompt": "ROBUST most nearly means:",
+      "choices": [
+        "arrogant",
+        "sturdy",
+        "lazy",
+        "kind",
+        "cautious"
+      ],
+      "answer": 1,
+      "explanation": "Robust: strong and healthy; able to withstand stress. Example: \"The robust landing gear handled rough fields.\""
+    },
+    {
+      "id": "WK-048",
+      "prompt": "SAGACIOUS most nearly means:",
+      "choices": [
+        "articulate",
+        "casual",
+        "hostile",
+        "wise",
+        "convincing"
+      ],
+      "answer": 3,
+      "explanation": "Sagacious: having good judgment and insight. Example: \"The sagacious commander anticipated the problem.\""
+    },
+    {
+      "id": "WK-049",
+      "prompt": "SCRUPULOUS most nearly means:",
+      "choices": [
+        "skilled",
+        "wise",
+        "ordinary",
+        "widespread",
+        "principled"
+      ],
+      "answer": 4,
+      "explanation": "Scrupulous: careful to do what is right and honest. Example: \"A scrupulous accountant reported every error.\""
+    },
+    {
+      "id": "WK-050",
+      "prompt": "SERENE most nearly means:",
+      "choices": [
+        "peaceful",
+        "scant",
+        "wealthy",
+        "explosive",
+        "sluggish"
+      ],
+      "answer": 0,
+      "explanation": "Serene: calm and untroubled. Example: \"The serene countryside looked beautiful from above.\""
+    },
+    {
+      "id": "WK-051",
+      "prompt": "SPORADIC most nearly means:",
+      "choices": [
+        "severe",
+        "occasional",
+        "practical",
+        "bold",
+        "casual"
+      ],
+      "answer": 1,
+      "explanation": "Sporadic: happening at irregular intervals. Example: \"There was sporadic rain throughout the day.\""
+    },
+    {
+      "id": "WK-052",
+      "prompt": "TACITURN most nearly means:",
+      "choices": [
+        "obedient",
+        "occasional",
+        "watchful",
+        "rash",
+        "quiet"
+      ],
+      "answer": 4,
+      "explanation": "Taciturn: saying little; habitually silent. Example: \"The taciturn sergeant spoke only when necessary.\""
+    },
+    {
+      "id": "WK-053",
+      "prompt": "TRIVIAL most nearly means:",
+      "choices": [
+        "fickle",
+        "doubtful",
+        "wise",
+        "eager",
+        "unimportant"
+      ],
+      "answer": 4,
+      "explanation": "Trivial: of little value or importance. Example: \"Don't waste time on trivial details.\""
+    },
+    {
+      "id": "WK-054",
+      "prompt": "UBIQUITOUS most nearly means:",
+      "choices": [
+        "widespread",
+        "obedient",
+        "bold",
+        "useless",
+        "rash"
+      ],
+      "answer": 0,
+      "explanation": "Ubiquitous: seeming to be everywhere at once. Example: \"Smartphones have become ubiquitous.\""
+    },
+    {
+      "id": "WK-055",
+      "prompt": "VEHEMENT most nearly means:",
+      "choices": [
+        "kind",
+        "productive",
+        "forceful",
+        "scant",
+        "profitable"
+      ],
+      "answer": 2,
+      "explanation": "Vehement: showing strong feeling; intense. Example: \"She made a vehement objection to the plan.\""
+    },
+    {
+      "id": "WK-056",
+      "prompt": "VERBOSE most nearly means:",
+      "choices": [
+        "principled",
+        "unclear",
+        "wordy",
+        "kind",
+        "threatening"
+      ],
+      "answer": 2,
+      "explanation": "Verbose: using more words than needed. Example: \"The verbose report could have been one page.\""
+    },
+    {
+      "id": "WK-057",
+      "prompt": "VOLATILE most nearly means:",
+      "choices": [
+        "nimble",
+        "stubborn",
+        "explosive",
+        "scant",
+        "unimportant"
+      ],
+      "answer": 2,
+      "explanation": "Volatile: liable to change suddenly and violently. Example: \"Fuel vapor is highly volatile.\""
+    },
+    {
+      "id": "WK-058",
+      "prompt": "WARY most nearly means:",
+      "choices": [
+        "cautious",
+        "frank",
+        "boring",
+        "terse",
+        "unimportant"
+      ],
+      "answer": 0,
+      "explanation": "Wary: watchful and careful about possible danger. Example: \"Pilots stay wary of wind shear near storms.\""
+    },
+    {
+      "id": "WK-059",
+      "prompt": "ADEPT most nearly means:",
+      "choices": [
+        "indifferent",
+        "sociable",
+        "arrogant",
+        "casual",
+        "skilled"
+      ],
+      "answer": 4,
+      "explanation": "Adept: very good at something. Example: \"She is adept at landing in crosswinds.\""
+    },
+    {
+      "id": "WK-060",
+      "prompt": "ASTUTE most nearly means:",
+      "choices": [
+        "heartless",
+        "productive",
+        "shrewd",
+        "unimportant",
+        "plentiful"
+      ],
+      "answer": 2,
+      "explanation": "Astute: quick to notice and understand. Example: \"An astute observer spotted the fuel leak.\""
+    },
+    {
+      "id": "WK-061",
+      "prompt": "BLATANT most nearly means:",
+      "choices": [
+        "plentiful",
+        "unclear",
+        "obvious",
+        "shrewd",
+        "sluggish"
+      ],
+      "answer": 2,
+      "explanation": "Blatant: done openly and without shame; very obvious. Example: \"It was a blatant violation of the rules.\""
+    },
+    {
+      "id": "WK-062",
+      "prompt": "CALLOUS most nearly means:",
+      "choices": [
+        "spotless",
+        "wordy",
+        "false",
+        "quiet",
+        "heartless"
+      ],
+      "answer": 4,
+      "explanation": "Callous: showing no concern for others' feelings. Example: \"His callous remark upset the family.\""
+    },
+    {
+      "id": "WK-063",
+      "prompt": "CAPRICIOUS most nearly means:",
+      "choices": [
+        "boring",
+        "clear",
+        "fickle",
+        "ordinary",
+        "friendly"
+      ],
+      "answer": 2,
+      "explanation": "Capricious: changing mood or behavior suddenly. Example: \"Mountain weather can be capricious.\""
+    },
+    {
+      "id": "WK-064",
+      "prompt": "COHERENT most nearly means:",
+      "choices": [
+        "heartless",
+        "watchful",
+        "bold",
+        "logical",
+        "unclear"
+      ],
+      "answer": 3,
+      "explanation": "Coherent: logical and consistent; easy to follow. Example: \"Despite being tired, he gave a coherent report.\""
+    },
+    {
+      "id": "WK-065",
+      "prompt": "DEFT most nearly means:",
+      "choices": [
+        "thoughtful",
+        "thrifty",
+        "fickle",
+        "terse",
+        "nimble"
+      ],
+      "answer": 4,
+      "explanation": "Deft: quick and skillful with the hands. Example: \"With deft movements, she rewired the panel.\""
+    },
+    {
+      "id": "WK-066",
+      "prompt": "DUBIOUS most nearly means:",
+      "choices": [
+        "unpredictable",
+        "logical",
+        "ordinary",
+        "peaceful",
+        "doubtful"
+      ],
+      "answer": 4,
+      "explanation": "Dubious: not to be relied upon; suspicious. Example: \"The source of the rumor was dubious.\""
+    },
+    {
+      "id": "WK-067",
+      "prompt": "ELOQUENT most nearly means:",
+      "choices": [
+        "practical",
+        "unimportant",
+        "articulate",
+        "obvious",
+        "occasional"
+      ],
+      "answer": 2,
+      "explanation": "Eloquent: fluent and persuasive in speaking or writing. Example: \"The general gave an eloquent speech at graduation.\""
+    },
+    {
+      "id": "WK-068",
+      "prompt": "FERVENT most nearly means:",
+      "choices": [
+        "sensible",
+        "passionate",
+        "stubborn",
+        "wise",
+        "practical"
+      ],
+      "answer": 1,
+      "explanation": "Fervent: showing intense feeling. Example: \"He was a fervent supporter of the team.\""
+    },
+    {
+      "id": "WK-069",
+      "prompt": "IMMACULATE most nearly means:",
+      "choices": [
+        "fair",
+        "occasional",
+        "thrifty",
+        "spotless",
+        "forceful"
+      ],
+      "answer": 3,
+      "explanation": "Immaculate: perfectly clean and neat. Example: \"Inspection required immaculate uniforms.\""
+    },
+    {
+      "id": "WK-070",
+      "prompt": "LAVISH most nearly means:",
+      "choices": [
+        "occasional",
+        "extravagant",
+        "cautious",
+        "precise",
+        "hasty"
+      ],
+      "answer": 1,
+      "explanation": "Lavish: generous or elaborate beyond what is needed. Example: \"They threw a lavish party for the retirement.\""
+    },
+    {
+      "id": "WK-071",
+      "prompt": "NEGLIGENT most nearly means:",
+      "choices": [
+        "passionate",
+        "doubtful",
+        "extravagant",
+        "sturdy",
+        "careless"
+      ],
+      "answer": 4,
+      "explanation": "Negligent: failing to take proper care. Example: \"The negligent driver ran a red light.\""
+    },
+    {
+      "id": "WK-072",
+      "prompt": "OBSTINATE most nearly means:",
+      "choices": [
+        "wise",
+        "obedient",
+        "stubborn",
+        "peaceful",
+        "eager"
+      ],
+      "answer": 2,
+      "explanation": "Obstinate: refusing to change one's mind. Example: \"The obstinate mule would not move.\""
+    },
+    {
+      "id": "WK-073",
+      "prompt": "PENSIVE most nearly means:",
+      "choices": [
+        "severe",
+        "persistent",
+        "unstable",
+        "peaceful",
+        "thoughtful"
+      ],
+      "answer": 4,
+      "explanation": "Pensive: deep in thought, often seriously. Example: \"She looked pensive as she studied the map.\""
+    },
+    {
+      "id": "WK-074",
+      "prompt": "SPURIOUS most nearly means:",
+      "choices": [
+        "false",
+        "occasional",
+        "forceful",
+        "heartless",
+        "logical"
+      ],
+      "answer": 0,
+      "explanation": "Spurious: not genuine or valid. Example: \"The report contained spurious data.\""
+    },
+    {
+      "id": "WK-075",
+      "prompt": "TEDIOUS most nearly means:",
+      "choices": [
+        "sturdy",
+        "boring",
+        "quiet",
+        "outdated",
+        "passionate"
+      ],
+      "answer": 1,
+      "explanation": "Tedious: long, slow, and dull. Example: \"Counting inventory is tedious work.\""
+    },
+    {
+      "id": "WK-076",
+      "prompt": "TRANSIENT most nearly means:",
+      "choices": [
+        "quiet",
+        "temporary",
+        "watchful",
+        "precise",
+        "persistent"
+      ],
+      "answer": 1,
+      "explanation": "Transient: lasting only a short time; passing. Example: \"The turbulence was transient and soon passed.\""
+    },
+    {
+      "id": "WK-077",
+      "prompt": "VIGILANT most nearly means:",
+      "choices": [
+        "watchful",
+        "passionate",
+        "scant",
+        "explosive",
+        "luxurious"
+      ],
+      "answer": 0,
+      "explanation": "Vigilant: alert and watching for danger. Example: \"Guards remained vigilant all night.\""
+    },
+    {
+      "id": "WK-078",
+      "prompt": "APATHETIC most nearly means:",
+      "choices": [
+        "mysterious",
+        "indifferent",
+        "hostile",
+        "false",
+        "unclear"
+      ],
+      "answer": 1,
+      "explanation": "Apathetic: showing no interest or concern. Example: \"Voters were apathetic about the local election.\""
+    },
+    {
+      "id": "WK-079",
+      "prompt": "BENIGN most nearly means:",
+      "choices": [
+        "obvious",
+        "mysterious",
+        "harmless",
+        "skilled",
+        "unstable"
+      ],
+      "answer": 2,
+      "explanation": "Benign: gentle; not harmful. Example: \"The doctor said the growth was benign.\""
+    },
+    {
+      "id": "WK-080",
+      "prompt": "CRYPTIC most nearly means:",
+      "choices": [
+        "mysterious",
+        "persistent",
+        "convincing",
+        "rash",
+        "sturdy"
+      ],
+      "answer": 0,
+      "explanation": "Cryptic: having a hidden or puzzling meaning. Example: \"He left a cryptic note on the desk.\""
+    },
+    {
+      "id": "WK-081",
+      "prompt": "FUTILE most nearly means:",
+      "choices": [
+        "forceful",
+        "outdated",
+        "productive",
+        "casual",
+        "useless"
+      ],
+      "answer": 4,
+      "explanation": "Futile: having no chance of success. Example: \"Further searching in the dark was futile.\""
+    },
+    {
+      "id": "WK-082",
+      "prompt": "LUCRATIVE most nearly means:",
+      "choices": [
+        "peaceful",
+        "profitable",
+        "explosive",
+        "scant",
+        "watchful"
+      ],
+      "answer": 1,
+      "explanation": "Lucrative: producing a lot of money. Example: \"Airline pilots can have a lucrative career.\""
+    },
+    {
+      "id": "WK-083",
+      "prompt": "MEAGER most nearly means:",
+      "choices": [
+        "logical",
+        "boring",
+        "eager",
+        "scant",
+        "hasty"
+      ],
+      "answer": 3,
+      "explanation": "Meager: lacking in quantity or quality. Example: \"They survived on meager rations.\""
+    },
+    {
+      "id": "WK-084",
+      "prompt": "ABATE most nearly means:",
+      "choices": [
+        "lose",
+        "diminish",
+        "hesitate",
+        "strengthen",
+        "correct"
+      ],
+      "answer": 1,
+      "explanation": "Abate: to become less intense or widespread. Example: \"We waited for the storm to abate.\""
+    },
+    {
+      "id": "WK-085",
+      "prompt": "ADMONISH most nearly means:",
+      "choices": [
+        "examine",
+        "scold",
+        "diminish",
+        "decorate",
+        "improve"
+      ],
+      "answer": 1,
+      "explanation": "Admonish: to warn or reprimand firmly. Example: \"The instructor admonished the student for skipping the checklist.\""
+    },
+    {
+      "id": "WK-086",
+      "prompt": "ALLEVIATE most nearly means:",
+      "choices": [
+        "perceive",
+        "correct",
+        "relieve",
+        "improve",
+        "surrender"
+      ],
+      "answer": 2,
+      "explanation": "Alleviate: to make suffering or a problem less severe. Example: \"Medicine alleviated his headache.\""
+    },
+    {
+      "id": "WK-087",
+      "prompt": "AUGMENT most nearly means:",
+      "choices": [
+        "increase",
+        "nullify",
+        "belittle",
+        "force",
+        "drain"
+      ],
+      "answer": 0,
+      "explanation": "Augment: to make larger by adding to. Example: \"Extra tanks augment the aircraft's range.\""
+    },
+    {
+      "id": "WK-088",
+      "prompt": "BOLSTER most nearly means:",
+      "choices": [
+        "strengthen",
+        "verify",
+        "invent",
+        "justify",
+        "imitate"
+      ],
+      "answer": 0,
+      "explanation": "Bolster: to support or make stronger. Example: \"Good grades bolstered her application.\""
+    },
+    {
+      "id": "WK-089",
+      "prompt": "COERCE most nearly means:",
+      "choices": [
+        "weaken",
+        "belittle",
+        "provoke",
+        "force",
+        "foil"
+      ],
+      "answer": 3,
+      "explanation": "Coerce: to persuade by using threats or pressure. Example: \"No one should be coerced into signing.\""
+    },
+    {
+      "id": "WK-090",
+      "prompt": "CONDONE most nearly means:",
+      "choices": [
+        "lose",
+        "excuse",
+        "hasten",
+        "evoke",
+        "provoke"
+      ],
+      "answer": 1,
+      "explanation": "Condone: to accept or allow behavior that is wrong. Example: \"The academy does not condone cheating.\""
+    },
+    {
+      "id": "WK-091",
+      "prompt": "CURTAIL most nearly means:",
+      "choices": [
+        "confirm",
+        "reduce",
+        "block",
+        "perceive",
+        "strengthen"
+      ],
+      "answer": 1,
+      "explanation": "Curtail: to cut short or limit. Example: \"Bad weather curtailed flight training.\""
+    },
+    {
+      "id": "WK-092",
+      "prompt": "DETER most nearly means:",
+      "choices": [
+        "discourage",
+        "replace",
+        "invent",
+        "scold",
+        "weaken"
+      ],
+      "answer": 0,
+      "explanation": "Deter: to prevent or discourage from acting. Example: \"Bright lights deter birds from the runway.\""
+    },
+    {
+      "id": "WK-093",
+      "prompt": "DISPARAGE most nearly means:",
+      "choices": [
+        "belittle",
+        "replace",
+        "correct",
+        "endanger",
+        "justify"
+      ],
+      "answer": 0,
+      "explanation": "Disparage: to speak about someone as having little value. Example: \"He disparaged his rival's work.\""
+    },
+    {
+      "id": "WK-094",
+      "prompt": "ELICIT most nearly means:",
+      "choices": [
+        "verify",
+        "decorate",
+        "examine",
+        "strengthen",
+        "evoke"
+      ],
+      "answer": 4,
+      "explanation": "Elicit: to draw out a response or reaction. Example: \"The question elicited a long silence.\""
+    },
+    {
+      "id": "WK-095",
+      "prompt": "EMBELLISH most nearly means:",
+      "choices": [
+        "decorate",
+        "rebuke",
+        "reduce",
+        "nullify",
+        "diminish"
+      ],
+      "answer": 0,
+      "explanation": "Embellish: to add details to make more attractive, sometimes untrue. Example: \"He embellished the story to make it more exciting.\""
+    },
+    {
+      "id": "WK-096",
+      "prompt": "EMULATE most nearly means:",
+      "choices": [
+        "lessen",
+        "soothe",
+        "imitate",
+        "determine",
+        "improve"
+      ],
+      "answer": 2,
+      "explanation": "Emulate: to copy someone in an effort to match them. Example: \"Young pilots emulate their instructors.\""
+    },
+    {
+      "id": "WK-097",
+      "prompt": "EXACERBATE most nearly means:",
+      "choices": [
+        "weaken",
+        "determine",
+        "diminish",
+        "replace",
+        "worsen"
+      ],
+      "answer": 4,
+      "explanation": "Exacerbate: to make a problem worse. Example: \"Fatigue exacerbates poor decision-making.\""
+    },
+    {
+      "id": "WK-098",
+      "prompt": "EXPEDITE most nearly means:",
+      "choices": [
+        "relieve",
+        "hasten",
+        "force",
+        "drain",
+        "determine"
+      ],
+      "answer": 1,
+      "explanation": "Expedite: to make something happen faster. Example: \"The clerk expedited the paperwork.\""
+    },
+    {
+      "id": "WK-099",
+      "prompt": "FABRICATE most nearly means:",
+      "choices": [
+        "drain",
+        "invent",
+        "block",
+        "diminish",
+        "nullify"
+      ],
+      "answer": 1,
+      "explanation": "Fabricate: to make up something false; or to build. Example: \"He fabricated an excuse for being late.\""
+    },
+    {
+      "id": "WK-100",
+      "prompt": "HINDER most nearly means:",
+      "choices": [
+        "replace",
+        "force",
+        "increase",
+        "obstruct",
+        "lose"
+      ],
+      "answer": 3,
+      "explanation": "Hinder: to get in the way of; slow down. Example: \"Heavy snow hindered the rescue.\""
+    },
+    {
+      "id": "WK-101",
+      "prompt": "IMPEDE most nearly means:",
+      "choices": [
+        "drain",
+        "invent",
+        "belittle",
+        "block",
+        "replace"
+      ],
+      "answer": 3,
+      "explanation": "Impede: to delay or prevent by getting in the way. Example: \"Fallen trees impeded traffic.\""
+    },
+    {
+      "id": "WK-102",
+      "prompt": "IMPLORE most nearly means:",
+      "choices": [
+        "force",
+        "increase",
+        "soothe",
+        "invent",
+        "beg"
+      ],
+      "answer": 4,
+      "explanation": "Implore: to ask urgently and emotionally. Example: \"She implored him to reconsider.\""
+    },
+    {
+      "id": "WK-103",
+      "prompt": "INSTIGATE most nearly means:",
+      "choices": [
+        "mourn",
+        "worsen",
+        "provoke",
+        "endanger",
+        "correct"
+      ],
+      "answer": 2,
+      "explanation": "Instigate: to bring about or start something, often trouble. Example: \"He instigated the argument.\""
+    },
+    {
+      "id": "WK-104",
+      "prompt": "JEOPARDIZE most nearly means:",
+      "choices": [
+        "endanger",
+        "justify",
+        "examine",
+        "relieve",
+        "discourage"
+      ],
+      "answer": 0,
+      "explanation": "Jeopardize: to put at risk. Example: \"Skipping maintenance jeopardizes safety.\""
+    },
+    {
+      "id": "WK-105",
+      "prompt": "LAMENT most nearly means:",
+      "choices": [
+        "evoke",
+        "hesitate",
+        "mourn",
+        "verify",
+        "obstruct"
+      ],
+      "answer": 2,
+      "explanation": "Lament: to express grief or regret. Example: \"The town lamented the loss of its factory.\""
+    },
+    {
+      "id": "WK-106",
+      "prompt": "MOLLIFY most nearly means:",
+      "choices": [
+        "correct",
+        "delay",
+        "soothe",
+        "examine",
+        "justify"
+      ],
+      "answer": 2,
+      "explanation": "Mollify: to calm someone's anger or anxiety. Example: \"An apology mollified the angry customer.\""
+    },
+    {
+      "id": "WK-107",
+      "prompt": "NEGATE most nearly means:",
+      "choices": [
+        "nullify",
+        "examine",
+        "pretend",
+        "excuse",
+        "beg"
+      ],
+      "answer": 0,
+      "explanation": "Negate: to cancel the effect of. Example: \"The headwind negated the faster engine.\""
+    },
+    {
+      "id": "WK-108",
+      "prompt": "PROCRASTINATE most nearly means:",
+      "choices": [
+        "delay",
+        "lessen",
+        "imitate",
+        "agree",
+        "mourn"
+      ],
+      "answer": 0,
+      "explanation": "Procrastinate: to put off doing something. Example: \"Don't procrastinate on studying for the AFOQT.\""
+    },
+    {
+      "id": "WK-109",
+      "prompt": "RECTIFY most nearly means:",
+      "choices": [
+        "correct",
+        "diminish",
+        "delay",
+        "provoke",
+        "discourage"
+      ],
+      "answer": 0,
+      "explanation": "Rectify: to fix or make right. Example: \"The error was rectified the next day.\""
+    },
+    {
+      "id": "WK-110",
+      "prompt": "RELINQUISH most nearly means:",
+      "choices": [
+        "weaken",
+        "soothe",
+        "justify",
+        "strengthen",
+        "surrender"
+      ],
+      "answer": 4,
+      "explanation": "Relinquish: to give up willingly. Example: \"The captain relinquished command to his replacement.\""
+    },
+    {
+      "id": "WK-111",
+      "prompt": "REPRIMAND most nearly means:",
+      "choices": [
+        "relieve",
+        "increase",
+        "obstruct",
+        "rebuke",
+        "reduce"
+      ],
+      "answer": 3,
+      "explanation": "Reprimand: to scold formally. Example: \"The officer was reprimanded for being late.\""
+    },
+    {
+      "id": "WK-112",
+      "prompt": "SCRUTINIZE most nearly means:",
+      "choices": [
+        "belittle",
+        "examine",
+        "correct",
+        "surrender",
+        "confirm"
+      ],
+      "answer": 1,
+      "explanation": "Scrutinize: to inspect closely and carefully. Example: \"Inspectors scrutinized every weld.\""
+    },
+    {
+      "id": "WK-113",
+      "prompt": "SUBSTANTIATE most nearly means:",
+      "choices": [
+        "strengthen",
+        "mourn",
+        "worsen",
+        "verify",
+        "provoke"
+      ],
+      "answer": 3,
+      "explanation": "Substantiate: to provide evidence to support a claim. Example: \"Can you substantiate your claim with data?\""
+    },
+    {
+      "id": "WK-114",
+      "prompt": "SUPPLANT most nearly means:",
+      "choices": [
+        "lessen",
+        "decorate",
+        "beg",
+        "determine",
+        "replace"
+      ],
+      "answer": 4,
+      "explanation": "Supplant: to take the place of. Example: \"Jets supplanted propeller aircraft on long routes.\""
+    },
+    {
+      "id": "WK-115",
+      "prompt": "THWART most nearly means:",
+      "choices": [
+        "correct",
+        "beg",
+        "belittle",
+        "foil",
+        "weaken"
+      ],
+      "answer": 3,
+      "explanation": "Thwart: to prevent someone from accomplishing something. Example: \"Security thwarted the break-in.\""
+    },
+    {
+      "id": "WK-116",
+      "prompt": "UNDERMINE most nearly means:",
+      "choices": [
+        "discourage",
+        "weaken",
+        "force",
+        "replace",
+        "improve"
+      ],
+      "answer": 1,
+      "explanation": "Undermine: to gradually damage or weaken. Example: \"Rumors undermined trust in the leader.\""
+    },
+    {
+      "id": "WK-117",
+      "prompt": "VINDICATE most nearly means:",
+      "choices": [
+        "force",
+        "increase",
+        "nullify",
+        "justify",
+        "relieve"
+      ],
+      "answer": 3,
+      "explanation": "Vindicate: to clear of blame or prove right. Example: \"The investigation vindicated the pilot.\""
+    },
+    {
+      "id": "WK-118",
+      "prompt": "WAVER most nearly means:",
+      "choices": [
+        "evoke",
+        "surrender",
+        "endanger",
+        "perceive",
+        "hesitate"
+      ],
+      "answer": 4,
+      "explanation": "Waver: to be unsure or unsteady. Example: \"She did not waver in her decision.\""
+    },
+    {
+      "id": "WK-119",
+      "prompt": "ASCERTAIN most nearly means:",
+      "choices": [
+        "reduce",
+        "determine",
+        "replace",
+        "beg",
+        "rebuke"
+      ],
+      "answer": 1,
+      "explanation": "Ascertain: to find out for certain. Example: \"The crew tried to ascertain the cause of the noise.\""
+    },
+    {
+      "id": "WK-120",
+      "prompt": "CONCUR most nearly means:",
+      "choices": [
+        "agree",
+        "diminish",
+        "hesitate",
+        "perceive",
+        "reduce"
+      ],
+      "answer": 0,
+      "explanation": "Concur: to have the same opinion. Example: \"The doctors concurred on the diagnosis.\""
+    },
+    {
+      "id": "WK-121",
+      "prompt": "CORROBORATE most nearly means:",
+      "choices": [
+        "lessen",
+        "confirm",
+        "beg",
+        "surrender",
+        "weaken"
+      ],
+      "answer": 1,
+      "explanation": "Corroborate: to support with evidence. Example: \"Two witnesses corroborated his story.\""
+    },
+    {
+      "id": "WK-122",
+      "prompt": "DEPLETE most nearly means:",
+      "choices": [
+        "excuse",
+        "drain",
+        "worsen",
+        "confirm",
+        "lose"
+      ],
+      "answer": 1,
+      "explanation": "Deplete: to use up the supply of. Example: \"The long flight depleted the fuel reserves.\""
+    },
+    {
+      "id": "WK-123",
+      "prompt": "DISCERN most nearly means:",
+      "choices": [
+        "nullify",
+        "mourn",
+        "perceive",
+        "agree",
+        "decorate"
+      ],
+      "answer": 2,
+      "explanation": "Discern: to notice or recognize something hard to see. Example: \"He could barely discern the runway lights through the fog.\""
+    },
+    {
+      "id": "WK-124",
+      "prompt": "ENHANCE most nearly means:",
+      "choices": [
+        "discourage",
+        "force",
+        "lessen",
+        "relieve",
+        "improve"
+      ],
+      "answer": 4,
+      "explanation": "Enhance: to increase in quality or value. Example: \"New software enhanced the radar's accuracy.\""
+    },
+    {
+      "id": "WK-125",
+      "prompt": "FEIGN most nearly means:",
+      "choices": [
+        "delay",
+        "worsen",
+        "evoke",
+        "pretend",
+        "soothe"
+      ],
+      "answer": 3,
+      "explanation": "Feign: to fake a feeling or condition. Example: \"He feigned illness to skip the run.\""
+    },
+    {
+      "id": "WK-126",
+      "prompt": "FORFEIT most nearly means:",
+      "choices": [
+        "weaken",
+        "endanger",
+        "rebuke",
+        "lose",
+        "belittle"
+      ],
+      "answer": 3,
+      "explanation": "Forfeit: to give up as a penalty. Example: \"The team forfeited the game by not showing up.\""
+    },
+    {
+      "id": "WK-127",
+      "prompt": "ADVERSARY most nearly means:",
+      "choices": [
+        "front",
+        "honor",
+        "misconception",
+        "contradiction",
+        "opponent"
+      ],
+      "answer": 4,
+      "explanation": "Adversary: an enemy or opponent. Example: \"Know your adversary's strengths.\""
+    },
+    {
+      "id": "WK-128",
+      "prompt": "ANOMALY most nearly means:",
+      "choices": [
+        "obedience",
+        "irregularity",
+        "courage",
+        "talent",
+        "harmony"
+      ],
+      "answer": 1,
+      "explanation": "Anomaly: something that differs from what is normal. Example: \"The sensor reading was an anomaly.\""
+    },
+    {
+      "id": "WK-129",
+      "prompt": "APTITUDE most nearly means:",
+      "choices": [
+        "privilege",
+        "inconsistency",
+        "shrewdness",
+        "patron",
+        "talent"
+      ],
+      "answer": 4,
+      "explanation": "Aptitude: a natural ability to do something. Example: \"The AFOQT measures aptitude for different careers.\""
+    },
+    {
+      "id": "WK-130",
+      "prompt": "BENEFACTOR most nearly means:",
+      "choices": [
+        "courage",
+        "privilege",
+        "patron",
+        "regret",
+        "shrewdness"
+      ],
+      "answer": 2,
+      "explanation": "Benefactor: a person who gives help, especially money. Example: \"An anonymous benefactor funded the scholarship.\""
+    },
+    {
+      "id": "WK-131",
+      "prompt": "CANDOR most nearly means:",
+      "choices": [
+        "front",
+        "honesty",
+        "peak",
+        "inconsistency",
+        "trigger"
+      ],
+      "answer": 1,
+      "explanation": "Candor: the quality of being open and honest. Example: \"I appreciate your candor about the problem.\""
+    },
+    {
+      "id": "WK-132",
+      "prompt": "CATALYST most nearly means:",
+      "choices": [
+        "beginner",
+        "patron",
+        "courage",
+        "shrewdness",
+        "trigger"
+      ],
+      "answer": 4,
+      "explanation": "Catalyst: something that causes an important change. Example: \"The accident was a catalyst for new safety rules.\""
+    },
+    {
+      "id": "WK-133",
+      "prompt": "CONSENSUS most nearly means:",
+      "choices": [
+        "stimulus",
+        "front",
+        "honesty",
+        "agreement",
+        "passion"
+      ],
+      "answer": 3,
+      "explanation": "Consensus: general agreement among a group. Example: \"The committee reached a consensus.\""
+    },
+    {
+      "id": "WK-134",
+      "prompt": "DEFERENCE most nearly means:",
+      "choices": [
+        "respect",
+        "privilege",
+        "talent",
+        "courage",
+        "regret"
+      ],
+      "answer": 0,
+      "explanation": "Deference: polite submission to someone's opinion or authority. Example: \"Out of deference to the general, everyone stood.\""
+    },
+    {
+      "id": "WK-135",
+      "prompt": "DILEMMA most nearly means:",
+      "choices": [
+        "beginner",
+        "courage",
+        "indifference",
+        "irregularity",
+        "predicament"
+      ],
+      "answer": 4,
+      "explanation": "Dilemma: a situation requiring a difficult choice. Example: \"Divert or continue? It was a real dilemma.\""
+    },
+    {
+      "id": "WK-136",
+      "prompt": "FACADE most nearly means:",
+      "choices": [
+        "front",
+        "agreement",
+        "beginner",
+        "honesty",
+        "opponent"
+      ],
+      "answer": 0,
+      "explanation": "Facade: an outward appearance that hides something. Example: \"His calm was only a facade.\""
+    },
+    {
+      "id": "WK-137",
+      "prompt": "FALLACY most nearly means:",
+      "choices": [
+        "energy",
+        "indifference",
+        "misconception",
+        "stimulus",
+        "front"
+      ],
+      "answer": 2,
+      "explanation": "Fallacy: a mistaken belief or faulty reasoning. Example: \"It is a fallacy that heavier planes always fly slower.\""
+    },
+    {
+      "id": "WK-138",
+      "prompt": "FORTITUDE most nearly means:",
+      "choices": [
+        "harmony",
+        "front",
+        "courage",
+        "agreement",
+        "passion"
+      ],
+      "answer": 2,
+      "explanation": "Fortitude: strength of mind in facing pain or danger. Example: \"She showed great fortitude during recovery.\""
+    },
+    {
+      "id": "WK-139",
+      "prompt": "HIERARCHY most nearly means:",
+      "choices": [
+        "nearness",
+        "flood",
+        "agreement",
+        "ranking",
+        "predicament"
+      ],
+      "answer": 3,
+      "explanation": "Hierarchy: a system of levels of authority. Example: \"The military has a clear hierarchy.\""
+    },
+    {
+      "id": "WK-140",
+      "prompt": "IMPETUS most nearly means:",
+      "choices": [
+        "stimulus",
+        "predicament",
+        "opponent",
+        "contradiction",
+        "respect"
+      ],
+      "answer": 0,
+      "explanation": "Impetus: a force that makes something happen. Example: \"The new law gave impetus to the project.\""
+    },
+    {
+      "id": "WK-141",
+      "prompt": "INTEGRITY most nearly means:",
+      "choices": [
+        "nearness",
+        "respect",
+        "honor",
+        "subtlety",
+        "spite"
+      ],
+      "answer": 2,
+      "explanation": "Integrity: being honest and having strong moral principles. Example: \"Integrity first is an Air Force core value.\""
+    },
+    {
+      "id": "WK-142",
+      "prompt": "MALICE most nearly means:",
+      "choices": [
+        "privilege",
+        "nearness",
+        "spite",
+        "honor",
+        "beginner"
+      ],
+      "answer": 2,
+      "explanation": "Malice: the desire to harm others. Example: \"He acted out of malice, not ignorance.\""
+    },
+    {
+      "id": "WK-143",
+      "prompt": "NOVICE most nearly means:",
+      "choices": [
+        "privilege",
+        "indifference",
+        "beginner",
+        "flood",
+        "patron"
+      ],
+      "answer": 2,
+      "explanation": "Novice: a person new to an activity. Example: \"As a novice, he practiced landings daily.\""
+    },
+    {
+      "id": "WK-144",
+      "prompt": "PARADOX most nearly means:",
+      "choices": [
+        "contradiction",
+        "privilege",
+        "obedience",
+        "stimulus",
+        "regret"
+      ],
+      "answer": 0,
+      "explanation": "Paradox: a statement that seems self-contradictory but may be true. Example: \"It's a paradox that slowing down can get you there sooner.\""
+    },
+    {
+      "id": "WK-145",
+      "prompt": "PROXIMITY most nearly means:",
+      "choices": [
+        "nearness",
+        "honesty",
+        "front",
+        "bravery",
+        "opponent"
+      ],
+      "answer": 0,
+      "explanation": "Proximity: closeness in space or time. Example: \"The base's proximity to the city was convenient.\""
+    },
+    {
+      "id": "WK-146",
+      "prompt": "RAPPORT most nearly means:",
+      "choices": [
+        "harmony",
+        "talent",
+        "passion",
+        "break",
+        "bravery"
+      ],
+      "answer": 0,
+      "explanation": "Rapport: a friendly, understanding relationship. Example: \"Good rapport between crew members improves safety.\""
+    },
+    {
+      "id": "WK-147",
+      "prompt": "REMORSE most nearly means:",
+      "choices": [
+        "regret",
+        "talent",
+        "ranking",
+        "inconsistency",
+        "nearness"
+      ],
+      "answer": 0,
+      "explanation": "Remorse: deep regret for a wrong committed. Example: \"He felt remorse for his mistake.\""
+    },
+    {
+      "id": "WK-148",
+      "prompt": "RESPITE most nearly means:",
+      "choices": [
+        "break",
+        "indifference",
+        "trigger",
+        "agreement",
+        "regret"
+      ],
+      "answer": 0,
+      "explanation": "Respite: a short period of rest or relief. Example: \"The holiday gave a brief respite from training.\""
+    },
+    {
+      "id": "WK-149",
+      "prompt": "VALOR most nearly means:",
+      "choices": [
+        "predicament",
+        "ranking",
+        "beginner",
+        "misconception",
+        "bravery"
+      ],
+      "answer": 4,
+      "explanation": "Valor: great courage in the face of danger. Example: \"The pilot received a medal for valor.\""
+    },
+    {
+      "id": "WK-150",
+      "prompt": "ZENITH most nearly means:",
+      "choices": [
+        "ranking",
+        "peak",
+        "front",
+        "subtlety",
+        "stimulus"
+      ],
+      "answer": 1,
+      "explanation": "Zenith: the highest point. Example: \"At the zenith of her career, she commanded a wing.\""
+    },
+    {
+      "id": "WK-151",
+      "prompt": "VIGOR most nearly means:",
+      "choices": [
+        "inconsistency",
+        "fellowship",
+        "courage",
+        "energy",
+        "filth"
+      ],
+      "answer": 3,
+      "explanation": "Vigor: physical strength and good health. Example: \"He attacked the problem with vigor.\""
+    },
+    {
+      "id": "WK-152",
+      "prompt": "APATHY most nearly means:",
+      "choices": [
+        "trigger",
+        "regret",
+        "indifference",
+        "irregularity",
+        "energy"
+      ],
+      "answer": 2,
+      "explanation": "Apathy: lack of interest or concern. Example: \"Apathy among members led to poor attendance.\""
+    },
+    {
+      "id": "WK-153",
+      "prompt": "COMPLIANCE most nearly means:",
+      "choices": [
+        "contradiction",
+        "stimulus",
+        "patron",
+        "obedience",
+        "flood"
+      ],
+      "answer": 3,
+      "explanation": "Compliance: the act of following rules or requests. Example: \"Compliance with safety rules is mandatory.\""
+    },
+    {
+      "id": "WK-154",
+      "prompt": "DISCREPANCY most nearly means:",
+      "choices": [
+        "trigger",
+        "predicament",
+        "honor",
+        "honesty",
+        "inconsistency"
+      ],
+      "answer": 4,
+      "explanation": "Discrepancy: a difference between things that should match. Example: \"There was a discrepancy between the two fuel gauges.\""
+    },
+    {
+      "id": "WK-155",
+      "prompt": "ACUMEN most nearly means:",
+      "choices": [
+        "flood",
+        "respect",
+        "shrewdness",
+        "spite",
+        "energy"
+      ],
+      "answer": 2,
+      "explanation": "Acumen: skill in making good judgments quickly. Example: \"Her business acumen made the company profitable.\""
+    },
+    {
+      "id": "WK-156",
+      "prompt": "CAMARADERIE most nearly means:",
+      "choices": [
+        "stimulus",
+        "beginner",
+        "fellowship",
+        "contradiction",
+        "shrewdness"
+      ],
+      "answer": 2,
+      "explanation": "Camaraderie: trust and friendship among people who spend time together. Example: \"The camaraderie of the squadron lasted for decades.\""
+    },
+    {
+      "id": "WK-157",
+      "prompt": "DELUGE most nearly means:",
+      "choices": [
+        "peak",
+        "flood",
+        "break",
+        "stimulus",
+        "energy"
+      ],
+      "answer": 1,
+      "explanation": "Deluge: a severe flood or an overwhelming amount. Example: \"A deluge of applications arrived after the announcement.\""
+    },
+    {
+      "id": "WK-158",
+      "prompt": "FERVOR most nearly means:",
+      "choices": [
+        "irregularity",
+        "indifference",
+        "respect",
+        "trigger",
+        "passion"
+      ],
+      "answer": 4,
+      "explanation": "Fervor: intense and passionate feeling. Example: \"They cheered with fervor.\""
+    },
+    {
+      "id": "WK-159",
+      "prompt": "NUANCE most nearly means:",
+      "choices": [
+        "obedience",
+        "regret",
+        "irregularity",
+        "flood",
+        "subtlety"
+      ],
+      "answer": 4,
+      "explanation": "Nuance: a slight difference in meaning or expression. Example: \"Good translators understand every nuance.\""
+    },
+    {
+      "id": "WK-160",
+      "prompt": "PREROGATIVE most nearly means:",
+      "choices": [
+        "regret",
+        "opponent",
+        "privilege",
+        "courage",
+        "irregularity"
+      ],
+      "answer": 2,
+      "explanation": "Prerogative: a right that belongs to a particular person or group. Example: \"It is the commander's prerogative to cancel the mission.\""
+    },
+    {
+      "id": "WK-161",
+      "prompt": "SQUALOR most nearly means:",
+      "choices": [
+        "filth",
+        "trigger",
+        "misconception",
+        "regret",
+        "bravery"
+      ],
+      "answer": 0,
+      "explanation": "Squalor: a state of being extremely dirty and unpleasant. Example: \"The refugees lived in squalor.\""
+    }
   ]
 }
