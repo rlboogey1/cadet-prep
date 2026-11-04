@@ -53,7 +53,7 @@ add_executable(afoqt src/main.cpp src/ConsoleUI.cpp)
 target_link_libraries(afoqt PRIVATE afoqt_core)
 
 # --- GUI app (on macOS, a double-clickable "AFOQT Study.app") ---
-add_executable(afoqt_gui MACOSX_BUNDLE src/gui_main.cpp src/GuiApp.cpp)
+add_executable(afoqt_gui MACOSX_BUNDLE src/gui_main.cpp src/GuiApp.cpp src/Widgets.cpp)
 target_link_libraries(afoqt_gui PRIVATE afoqt_core imgui)
 
 if(APPLE)
