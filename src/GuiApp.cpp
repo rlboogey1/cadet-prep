@@ -285,7 +285,7 @@ void GuiApp::drawProgress() {
 }
 
 void GuiApp::drawFlashcardMenu() {
-    heading("Word Knowledge Flashcards")
+    heading("Word Knowledge Flashcards");
     ImGui::Separator();
     ImGui::Spacing();
 
