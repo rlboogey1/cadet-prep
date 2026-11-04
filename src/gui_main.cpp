@@ -1,4 +1,5 @@
 #define GL_SILENCE_DEPRECATION  // macOS marks OpenGL deprecated; it still works
+#include "AppPaths.h"
 #include "GuiApp.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -69,10 +70,13 @@ static void applyTheme() {
 }
 
 int main(int argc, char* argv[]) {
+    // Find the questions, then switch to the folder where progress is saved.
+    const std::string dataDir = apppaths::findDataDir(argc, argv);
+    apppaths::useUserDataDir();
+
     // Load questions first so a bad data file is reported clearly.
     GuiApp app;
     std::string error;
-    std::string dataDir = argc > 1 ? argv[1] : AFOQT_DATA_DIR;
     if (!app.load(dataDir, error)) {
         std::cerr << "Startup error: " << error << "\n";
         return 1;

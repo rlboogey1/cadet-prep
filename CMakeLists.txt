@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(AFOQTStudy VERSION 0.2 LANGUAGES C CXX)
+project(AFOQTStudy VERSION 0.3 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -52,9 +52,28 @@ target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="${CMAKE_SOURCE_DIR}
 add_executable(afoqt src/main.cpp src/ConsoleUI.cpp)
 target_link_libraries(afoqt PRIVATE afoqt_core)
 
-# --- GUI app ---
-add_executable(afoqt_gui src/gui_main.cpp src/GuiApp.cpp)
+# --- GUI app (on macOS, a double-clickable "AFOQT Study.app") ---
+add_executable(afoqt_gui MACOSX_BUNDLE src/gui_main.cpp src/GuiApp.cpp)
 target_link_libraries(afoqt_gui PRIVATE afoqt_core imgui)
+
+if(APPLE)
+    set_target_properties(afoqt_gui PROPERTIES
+        OUTPUT_NAME "AFOQT Study"
+        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/Info.plist.in"
+        MACOSX_BUNDLE_BUNDLE_NAME "AFOQT Study"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "com.renzo.afoqtstudy"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}")
+
+    # Copy the question files into the app, so it keeps working after you move
+    # it to Applications. Runs on every build, so edited questions are picked up.
+    add_custom_target(afoqt_gui_data ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${CMAKE_SOURCE_DIR}/data"
+                "$<TARGET_BUNDLE_CONTENT_DIR:afoqt_gui>/Resources/data"
+        VERBATIM)
+    add_dependencies(afoqt_gui_data afoqt_gui)
+endif()
 
 foreach(t afoqt_core afoqt afoqt_gui)
     if(MSVC)

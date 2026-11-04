@@ -1,3 +1,4 @@
+#include "AppPaths.h"
 #include "ConsoleUI.h"
 #include "FlashcardDeck.h"
 #include "ProgressStore.h"
@@ -188,7 +189,9 @@ struct App {
 }  // namespace
 
 int main(int argc, char* argv[]) {
-    std::string dataDir = argc > 1 ? argv[1] : AFOQT_DATA_DIR;
+    // Find the questions, then switch to the folder where progress is saved.
+    const std::string dataDir = apppaths::findDataDir(argc, argv);
+    apppaths::useUserDataDir();
     App app;
 
     try {
