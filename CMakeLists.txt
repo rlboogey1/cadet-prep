@@ -1,36 +1,64 @@
 cmake_minimum_required(VERSION 3.16)
-project(AFOQTStudy VERSION 0.1 LANGUAGES CXX)
+project(AFOQTStudy VERSION 0.2 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# --- nlohmann/json: downloaded automatically the first time you configure ---
 include(FetchContent)
-FetchContent_Declare(
-    json
-    URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-)
-FetchContent_MakeAvailable(json)
 
-add_executable(afoqt
-    src/main.cpp
+# --- Libraries, downloaded automatically the first time you configure ---
+FetchContent_Declare(json
+    URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+
+FetchContent_Declare(glfw                     # creates the window
+    GIT_REPOSITORY https://github.com/glfw/glfw.git
+    GIT_TAG 3.4)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+FetchContent_Declare(imgui                    # draws buttons, text, tables
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG v1.91.5)
+
+FetchContent_MakeAvailable(json glfw imgui)
+find_package(OpenGL REQUIRED)
+
+# Dear ImGui has no CMake file of its own, so we list its source files here.
+add_library(imgui STATIC
+    ${imgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp)
+target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
+target_link_libraries(imgui PUBLIC glfw OpenGL::GL)
+
+# --- Shared quiz logic, used by both the console and GUI apps ---
+add_library(afoqt_core STATIC
     src/QuestionBank.cpp
     src/SubtestRegistry.cpp
     src/TestSession.cpp
     src/ProgressStore.cpp
-    src/ConsoleUI.cpp
-)
+    src/QuizEngine.cpp)
+target_include_directories(afoqt_core PUBLIC src)
+target_link_libraries(afoqt_core PUBLIC nlohmann_json::nlohmann_json)
+target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
 
-target_include_directories(afoqt PRIVATE src)
-target_link_libraries(afoqt PRIVATE nlohmann_json::nlohmann_json)
+# --- Console app (unchanged) ---
+add_executable(afoqt src/main.cpp src/ConsoleUI.cpp)
+target_link_libraries(afoqt PRIVATE afoqt_core)
 
-# Default data folder = the project's data/ directory, so editing a question
-# file takes effect on the next run without rebuilding.
-target_compile_definitions(afoqt PRIVATE AFOQT_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
+# --- GUI app ---
+add_executable(afoqt_gui src/gui_main.cpp src/GuiApp.cpp)
+target_link_libraries(afoqt_gui PRIVATE afoqt_core imgui)
 
-if(MSVC)
-    target_compile_options(afoqt PRIVATE /W4)
-else()
-    target_compile_options(afoqt PRIVATE -Wall -Wextra -Wpedantic)
-endif()
+foreach(t afoqt_core afoqt afoqt_gui)
+    if(MSVC)
+        target_compile_options(${t} PRIVATE /W4)
+    else()
+        target_compile_options(${t} PRIVATE -Wall -Wextra -Wpedantic)
+    endif()
+endforeach()
