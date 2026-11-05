@@ -12,12 +12,20 @@ public:
     // Throws std::runtime_error on bad files so mistakes are caught early.
     void loadFile(const std::string& path, const std::string& subtestId);
 
-    // Returns up to `count` random questions from one subtest (0 = all).
+    // Returns up to `count` random questions from one subtest (0 = all), with
+    // the answer choices shuffled. For Math Knowledge and Arithmetic Reasoning,
+    // about a third of the set is newly generated with random numbers.
     std::vector<Question> draw(const std::string& subtestId, size_t count,
                                std::mt19937& rng) const;
 
-    // Looks up questions by id (used for "review missed questions").
+    // Looks up questions by id (used to count missed questions).
     std::vector<Question> byIds(const std::vector<std::string>& ids) const;
+
+    // Same as byIds, but in random order with shuffled choices (for review).
+    std::vector<Question> drawByIds(const std::vector<std::string>& ids, std::mt19937& rng) const;
+
+    // Puts a question's answer choices in a random order and updates the answer.
+    static void shuffleChoices(Question& q, std::mt19937& rng);
 
     size_t size(const std::string& subtestId) const;
 

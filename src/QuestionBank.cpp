@@ -1,4 +1,6 @@
 #include "QuestionBank.h"
+#include "QuestionGenerator.h"
+#include <numeric>
 #include <algorithm>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -44,8 +46,41 @@ std::vector<Question> QuestionBank::draw(const std::string& subtestId, size_t co
 
     std::vector<Question> pool = it->second;
     std::shuffle(pool.begin(), pool.end(), rng);
+
+    if (QuestionGenerator::supports(subtestId)) {
+        // Timed test: a third of the questions are generated.
+        // Practice (count 0): every written question, plus 20 generated ones.
+        const size_t generated = count > 0 ? count / 3 : 20;
+        if (count > 0 && count - generated < pool.size()) pool.resize(count - generated);
+        auto extra = QuestionGenerator::generate(subtestId, generated, rng);
+        pool.insert(pool.end(), extra.begin(), extra.end());
+        std::shuffle(pool.begin(), pool.end(), rng);
+    }
     if (count > 0 && count < pool.size()) pool.resize(count);
+
+    for (auto& q : pool) shuffleChoices(q, rng);
     return pool;
+}
+
+std::vector<Question> QuestionBank::drawByIds(const std::vector<std::string>& ids,
+                                              std::mt19937& rng) const {
+    auto out = byIds(ids);
+    std::shuffle(out.begin(), out.end(), rng);
+    for (auto& q : out) shuffleChoices(q, rng);
+    return out;
+}
+
+void QuestionBank::shuffleChoices(Question& q, std::mt19937& rng) {
+    const std::string correct = q.choices[q.correctIndex];
+    std::vector<size_t> order(q.choices.size());
+    std::iota(order.begin(), order.end(), 0);
+    std::shuffle(order.begin(), order.end(), rng);
+
+    std::vector<std::string> shuffled;
+    for (size_t i : order) shuffled.push_back(q.choices[i]);
+    q.choices = std::move(shuffled);
+    q.correctIndex = static_cast<int>(
+        std::find(q.choices.begin(), q.choices.end(), correct) - q.choices.begin());
 }
 
 std::vector<Question> QuestionBank::byIds(const std::vector<std::string>& ids) const {

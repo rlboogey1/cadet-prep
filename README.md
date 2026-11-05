@@ -36,15 +36,24 @@ in the folder you run it from.
 
 ## Question bank
 
-| Section | Questions |
-|---|---|
-| Word Knowledge | 161 |
-| Math Knowledge | 45 |
-| Arithmetic Reasoning | 38 |
-| Verbal Analogies | 38 |
-| Reading Comprehension | 21 (7 passages) |
+| Section | Written questions | Plus |
+|---|---|---|
+| Word Knowledge | 233 | 233 flashcards |
+| Math Knowledge | 60 | unlimited generated questions |
+| Arithmetic Reasoning | 50 | unlimited generated questions |
+| Verbal Analogies | 63 | |
+| Reading Comprehension | 33 (11 passages) | |
 
-Timed tests draw a random subset each time, so repeated tests differ.
+Everything is randomized:
+- **Question order:** each test draws questions in a random order.
+- **Answer order:** the choices are shuffled every time a question is shown,
+  so the correct answer can land on any letter.
+- **Generated questions** (`src/QuestionGenerator.cpp`): Math Knowledge and
+  Arithmetic Reasoning mix in brand-new questions with random numbers, about a
+  third of a timed test and 20 extra in practice. The wrong choices come from
+  common mistakes. There are 12 question types for each section; add a function
+  there and list it in `templatesFor()` to add more. Generated questions don't
+  go into "Review missed", since they aren't saved anywhere.
 
 ## Adding flashcards
 
@@ -65,6 +74,7 @@ data/
 src/
   Question.h                 Question and AnswerRecord structs
   QuizEngine.*               step-by-step quiz logic used by the GUI
+  QuestionGenerator.*        random-number math questions
   FlashcardDeck.*            flashcards and spaced repetition
   GuiApp.*, gui_main.cpp     the window version (Dear ImGui)
   QuestionBank.*             loads JSON, validates, shuffles

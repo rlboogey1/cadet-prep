@@ -493,6 +493,162 @@
       ],
       "answer": 1,
       "explanation": "Jet A has a 300-mile head start. B gains 100 mph, so 300 ÷ 100 = 3 hours."
+    },
+    {
+      "id": "AR-039",
+      "prompt": "A map scale is 1 inch = 15 miles. Two bases are 4.6 inches apart on the map. How far apart are they?",
+      "choices": [
+        "64 miles",
+        "46 miles",
+        "60 miles",
+        "69 miles",
+        "75 miles"
+      ],
+      "answer": 3,
+      "explanation": "4.6 × 15 = 69 miles."
+    },
+    {
+      "id": "AR-040",
+      "prompt": "Gasoline costs $3.60 per gallon. How much do 12.5 gallons cost?",
+      "choices": [
+        "$36.00",
+        "$43.20",
+        "$48.00",
+        "$45.00",
+        "$40.50"
+      ],
+      "answer": 3,
+      "explanation": "12.5 × $3.60 = $45.00."
+    },
+    {
+      "id": "AR-041",
+      "prompt": "A plane's speed is 9 miles per minute. What is its speed in miles per hour?",
+      "choices": [
+        "450 mph",
+        "540 mph",
+        "600 mph",
+        "90 mph",
+        "324 mph"
+      ],
+      "answer": 1,
+      "explanation": "60 minutes × 9 = 540 miles per hour."
+    },
+    {
+      "id": "AR-042",
+      "prompt": "Three cadets split a $96 restaurant bill. They add a 20% tip to the total and split it all equally. How much does each pay?",
+      "choices": [
+        "$38.00",
+        "$32.00",
+        "$115.20",
+        "$34.20",
+        "$38.40"
+      ],
+      "answer": 4,
+      "explanation": "$96 × 1.2 = $115.20. $115.20 ÷ 3 = $38.40."
+    },
+    {
+      "id": "AR-043",
+      "prompt": "A runner completes 8 laps of a 400-meter track. How many kilometers did she run?",
+      "choices": [
+        "3,200 km",
+        "3.2 km",
+        "2.4 km",
+        "32 km",
+        "0.32 km"
+      ],
+      "answer": 1,
+      "explanation": "8 × 400 = 3,200 meters = 3.2 km (1 km = 1,000 m)."
+    },
+    {
+      "id": "AR-044",
+      "prompt": "A tank holds 120 gallons and is 3/8 full. How many more gallons are needed to fill it?",
+      "choices": [
+        "75",
+        "90",
+        "40",
+        "45",
+        "80"
+      ],
+      "answer": 0,
+      "explanation": "3/8 × 120 = 45 gallons in the tank. 120 − 45 = 75."
+    },
+    {
+      "id": "AR-045",
+      "prompt": "Sam is 4 years older than Maria. The sum of their ages is 36. How old is Maria?",
+      "choices": [
+        "14",
+        "16",
+        "32",
+        "18",
+        "20"
+      ],
+      "answer": 1,
+      "explanation": "m + (m + 4) = 36, so 2m = 32 and m = 16. (20 is Sam's age.)"
+    },
+    {
+      "id": "AR-046",
+      "prompt": "A team won 18 of its 30 games. What percent did it lose?",
+      "choices": [
+        "18%",
+        "12%",
+        "40%",
+        "33%",
+        "60%"
+      ],
+      "answer": 2,
+      "explanation": "It lost 12 games. 12 ÷ 30 = 0.4 = 40%. (60% is the percent won.)"
+    },
+    {
+      "id": "AR-047",
+      "prompt": "A printer prints 45 pages per minute. How long does it take to print 1,620 pages?",
+      "choices": [
+        "36 minutes",
+        "32 minutes",
+        "45 minutes",
+        "40 minutes",
+        "27 minutes"
+      ],
+      "answer": 0,
+      "explanation": "1,620 ÷ 45 = 36 minutes."
+    },
+    {
+      "id": "AR-048",
+      "prompt": "A photo 4 inches wide and 6 inches tall is enlarged so it is 10 inches wide. How tall is it now?",
+      "choices": [
+        "12 inches",
+        "24 inches",
+        "14 inches",
+        "15 inches",
+        "16 inches"
+      ],
+      "answer": 3,
+      "explanation": "The scale factor is 10 ÷ 4 = 2.5. 6 × 2.5 = 15 inches."
+    },
+    {
+      "id": "AR-049",
+      "prompt": "A cadet buys 3 notebooks at $2.75 each and 2 pens at $1.40 each, paying with a $20 bill. How much change does she get?",
+      "choices": [
+        "$7.95",
+        "$9.45",
+        "$8.95",
+        "$15.85",
+        "$11.05"
+      ],
+      "answer": 2,
+      "explanation": "Cost: $8.25 + $2.80 = $11.05. Change: $20 − $11.05 = $8.95."
+    },
+    {
+      "id": "AR-050",
+      "prompt": "Temperatures over five days were −4°, 2°, −1°, 5°, and 3°. What was the average temperature?",
+      "choices": [
+        "2°",
+        "3°",
+        "−1°",
+        "1°",
+        "0°"
+      ],
+      "answer": 3,
+      "explanation": "Sum = −4 + 2 − 1 + 5 + 3 = 5. 5 ÷ 5 = 1°."
     }
   ]
 }

@@ -13,7 +13,7 @@
         "Airline training has become shorter over time."
       ],
       "answer": 1,
-      "explanation": "The passage explains why CRM was created and what it teaches. Choice A contradicts the passage, which says the captain keeps final authority."
+      "explanation": "The passage explains why CRM was created and what it teaches. Saying captains no longer have authority contradicts the passage, which says the captain keeps final authority."
     },
     {
       "id": "RC-002",
@@ -55,7 +55,7 @@
         "A hot, humid afternoon at a high-elevation airport"
       ],
       "answer": 4,
-      "explanation": "Heat, elevation, and humidity all thin the air, which lengthens the takeoff run. Choice E combines all three."
+      "explanation": "Heat, elevation, and humidity all thin the air, which lengthens the takeoff run. The hot, humid, high-elevation choice combines all three."
     },
     {
       "id": "RC-005",
@@ -294,6 +294,174 @@
       ],
       "answer": 1,
       "explanation": "The whole passage explains how one bee tells others where food is."
+    },
+    {
+      "id": "RC-022",
+      "passage": "Before satellites, sailors and pilots crossing open water relied on dead reckoning. Starting from a known position, the navigator used speed, heading, and elapsed time to estimate where the vehicle had traveled. The method was simple, but small errors added up: a slightly wrong wind estimate or a compass a few degrees off could put a ship miles from its intended course after a long voyage. For that reason, navigators checked their estimates against landmarks, the stars, or radio beacons whenever they could, correcting the plot each time.",
+      "prompt": "According to the passage, dead reckoning estimates position using",
+      "choices": [
+        "speed, heading, and elapsed time",
+        "the depth of the water",
+        "radio beacons alone",
+        "the position of other ships",
+        "satellite signals"
+      ],
+      "answer": 0,
+      "explanation": "The second sentence lists speed, heading, and elapsed time. Radio beacons were used to check the estimate, not to make it."
+    },
+    {
+      "id": "RC-023",
+      "passage": "Before satellites, sailors and pilots crossing open water relied on dead reckoning. Starting from a known position, the navigator used speed, heading, and elapsed time to estimate where the vehicle had traveled. The method was simple, but small errors added up: a slightly wrong wind estimate or a compass a few degrees off could put a ship miles from its intended course after a long voyage. For that reason, navigators checked their estimates against landmarks, the stars, or radio beacons whenever they could, correcting the plot each time.",
+      "prompt": "Why did navigators check their estimates against landmarks and stars?",
+      "choices": [
+        "Satellites were unreliable.",
+        "Landmarks were required by law.",
+        "Small errors in dead reckoning grow over a long trip.",
+        "Compasses did not work over water.",
+        "Dead reckoning only worked at night."
+      ],
+      "answer": 2,
+      "explanation": "The passage says small errors 'added up,' which is why navigators corrected the plot whenever they could."
+    },
+    {
+      "id": "RC-024",
+      "passage": "Before satellites, sailors and pilots crossing open water relied on dead reckoning. Starting from a known position, the navigator used speed, heading, and elapsed time to estimate where the vehicle had traveled. The method was simple, but small errors added up: a slightly wrong wind estimate or a compass a few degrees off could put a ship miles from its intended course after a long voyage. For that reason, navigators checked their estimates against landmarks, the stars, or radio beacons whenever they could, correcting the plot each time.",
+      "prompt": "As used in the passage, \"plot\" most nearly means",
+      "choices": [
+        "a secret plan",
+        "the record of a vehicle's estimated course",
+        "a small piece of land",
+        "a type of compass",
+        "the story of a book"
+      ],
+      "answer": 1,
+      "explanation": "Navigators were 'correcting the plot,' meaning the course they had marked on the chart."
+    },
+    {
+      "id": "RC-025",
+      "passage": "Many people assume that thunderstorms are dangerous to aircraft only because of lightning. In fact, modern airplanes are designed to conduct lightning safely around the passengers and fuel. The greater threats are less visible. Strong updrafts and downdrafts inside a storm can push an aircraft thousands of feet up or down in seconds, and hail can crack windscreens and damage engines. Severe turbulence may extend miles from the storm itself, which is why pilots are taught to give thunderstorms a wide berth rather than flying just around the edge of the clouds.",
+      "prompt": "The main point of the passage is that",
+      "choices": [
+        "a thunderstorm's biggest dangers to aircraft are not lightning",
+        "hail rarely damages aircraft",
+        "modern airplanes can fly through any storm",
+        "lightning is the greatest danger to airplanes",
+        "pilots should fly along the edge of storms"
+      ],
+      "answer": 0,
+      "explanation": "The passage corrects the common belief about lightning and describes drafts, hail, and turbulence as the greater threats."
+    },
+    {
+      "id": "RC-026",
+      "passage": "Many people assume that thunderstorms are dangerous to aircraft only because of lightning. In fact, modern airplanes are designed to conduct lightning safely around the passengers and fuel. The greater threats are less visible. Strong updrafts and downdrafts inside a storm can push an aircraft thousands of feet up or down in seconds, and hail can crack windscreens and damage engines. Severe turbulence may extend miles from the storm itself, which is why pilots are taught to give thunderstorms a wide berth rather than flying just around the edge of the clouds.",
+      "prompt": "Why are pilots taught to stay far from thunderstorms?",
+      "choices": [
+        "Airplanes are not designed to handle lightning.",
+        "Severe turbulence can extend miles beyond the storm clouds.",
+        "Lightning can travel hundreds of miles.",
+        "Hail falls only at the storm's edge.",
+        "Radio signals do not work near storms."
+      ],
+      "answer": 1,
+      "explanation": "The last sentence gives this reason directly."
+    },
+    {
+      "id": "RC-027",
+      "passage": "Many people assume that thunderstorms are dangerous to aircraft only because of lightning. In fact, modern airplanes are designed to conduct lightning safely around the passengers and fuel. The greater threats are less visible. Strong updrafts and downdrafts inside a storm can push an aircraft thousands of feet up or down in seconds, and hail can crack windscreens and damage engines. Severe turbulence may extend miles from the storm itself, which is why pilots are taught to give thunderstorms a wide berth rather than flying just around the edge of the clouds.",
+      "prompt": "The passage suggests that lightning strikes on modern airplanes are",
+      "choices": [
+        "the leading cause of accidents",
+        "more dangerous than hail",
+        "a reason to cancel every flight",
+        "usually not dangerous to the people on board",
+        "impossible"
+      ],
+      "answer": 3,
+      "explanation": "Airplanes are 'designed to conduct lightning safely around the passengers and fuel.'"
+    },
+    {
+      "id": "RC-028",
+      "passage": "The Wright brothers' success in 1903 is often credited to their engine, but historians point to a different breakthrough: control. Earlier experimenters had focused on building wings strong enough to lift a machine, assuming that balance would take care of itself. The Wrights, who had built bicycles, believed that a flying machine, like a bicycle, would need to be actively balanced by its operator. Their system of twisting the wingtips, called wing warping, let the pilot roll the aircraft to keep it level or bank into a turn.",
+      "prompt": "According to the passage, historians consider the Wrights' key breakthrough to be",
+      "choices": [
+        "a more powerful engine",
+        "the first bicycle",
+        "a lighter frame",
+        "stronger wings",
+        "a way for the pilot to control the aircraft"
+      ],
+      "answer": 4,
+      "explanation": "The first sentence says historians point to control rather than the engine."
+    },
+    {
+      "id": "RC-029",
+      "passage": "The Wright brothers' success in 1903 is often credited to their engine, but historians point to a different breakthrough: control. Earlier experimenters had focused on building wings strong enough to lift a machine, assuming that balance would take care of itself. The Wrights, who had built bicycles, believed that a flying machine, like a bicycle, would need to be actively balanced by its operator. Their system of twisting the wingtips, called wing warping, let the pilot roll the aircraft to keep it level or bank into a turn.",
+      "prompt": "The Wrights' experience with bicycles suggested to them that",
+      "choices": [
+        "engines matter more than control",
+        "balance would take care of itself",
+        "wings should be built from bicycle parts",
+        "airplanes should have two wheels",
+        "an aircraft would need to be balanced actively by its pilot"
+      ],
+      "answer": 4,
+      "explanation": "Like a bicycle, a flying machine 'would need to be actively balanced by its operator.' The idea that balance would take care of itself belonged to earlier experimenters."
+    },
+    {
+      "id": "RC-030",
+      "passage": "The Wright brothers' success in 1903 is often credited to their engine, but historians point to a different breakthrough: control. Earlier experimenters had focused on building wings strong enough to lift a machine, assuming that balance would take care of itself. The Wrights, who had built bicycles, believed that a flying machine, like a bicycle, would need to be actively balanced by its operator. Their system of twisting the wingtips, called wing warping, let the pilot roll the aircraft to keep it level or bank into a turn.",
+      "prompt": "Wing warping allowed the pilot to",
+      "choices": [
+        "lift heavier loads",
+        "roll the aircraft to stay level or turn",
+        "fly without wings",
+        "increase engine power",
+        "land without wheels"
+      ],
+      "answer": 1,
+      "explanation": "The final sentence describes wing warping as rolling the aircraft to keep it level or bank into a turn."
+    },
+    {
+      "id": "RC-031",
+      "passage": "Spatial disorientation occurs when a pilot's senses give a false picture of the aircraft's attitude. The inner ear, which normally helps people keep their balance, can be fooled in flight. During a long, gentle turn, for example, the fluid in the inner ear stops signaling motion, and the pilot may feel level while still banking. In clouds or on a dark night with no visible horizon, there is nothing to correct the false sensation. Pilots are therefore trained to trust their flight instruments over their bodily feelings, even when the instruments seem wrong.",
+      "prompt": "According to the passage, during a long, gentle turn a pilot may",
+      "choices": [
+        "lose the use of the instruments",
+        "see the horizon more clearly",
+        "feel level while the aircraft is still banking",
+        "become physically ill",
+        "feel the turn more strongly than usual"
+      ],
+      "answer": 2,
+      "explanation": "The third sentence describes this exact situation."
+    },
+    {
+      "id": "RC-032",
+      "passage": "Spatial disorientation occurs when a pilot's senses give a false picture of the aircraft's attitude. The inner ear, which normally helps people keep their balance, can be fooled in flight. During a long, gentle turn, for example, the fluid in the inner ear stops signaling motion, and the pilot may feel level while still banking. In clouds or on a dark night with no visible horizon, there is nothing to correct the false sensation. Pilots are therefore trained to trust their flight instruments over their bodily feelings, even when the instruments seem wrong.",
+      "prompt": "Disorientation is most likely when",
+      "choices": [
+        "there is no visible horizon",
+        "the aircraft flies straight and level",
+        "the weather is clear",
+        "the pilot trusts the instruments",
+        "the flight is short"
+      ],
+      "answer": 0,
+      "explanation": "In clouds or on a dark night with no visible horizon, nothing corrects the false sensation."
+    },
+    {
+      "id": "RC-033",
+      "passage": "Spatial disorientation occurs when a pilot's senses give a false picture of the aircraft's attitude. The inner ear, which normally helps people keep their balance, can be fooled in flight. During a long, gentle turn, for example, the fluid in the inner ear stops signaling motion, and the pilot may feel level while still banking. In clouds or on a dark night with no visible horizon, there is nothing to correct the false sensation. Pilots are therefore trained to trust their flight instruments over their bodily feelings, even when the instruments seem wrong.",
+      "prompt": "What does the passage recommend pilots do when their senses and instruments disagree?",
+      "choices": [
+        "Trust the instruments",
+        "Close their eyes",
+        "Trust their sense of balance",
+        "Climb to a higher altitude",
+        "Turn back immediately"
+      ],
+      "answer": 0,
+      "explanation": "Pilots are trained to trust their instruments 'even when the instruments seem wrong.'"
     }
   ]
 }

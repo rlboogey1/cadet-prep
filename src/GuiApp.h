@@ -3,6 +3,8 @@
 #include "ProgressStore.h"
 #include "QuestionBank.h"
 #include "QuizEngine.h"
+#include "Sound.h"
+#include "imgui.h"
 #include "SubtestRegistry.h"
 #include <map>
 #include <random>
@@ -11,42 +13,46 @@
 
 // The whole GUI. draw() is called once per frame.
 //
-// Layout (like a dashboard):
-//   +-------------------------------------------------+
-//   | logo |  top bar                          avatar |
-//   +------+-----------------------------+------------+
-//   | icon |  center: the current screen |  side      |
-//   | rail |                             |  panel     |
-//   +------+-----------------------------+------------+
+// Layout:
+//   +------------+-------------------------------------------+
+//   |  sidebar   |  main area (scrolls)                      |
+//   |  (navy)    |  header label .................. chips    |
+//   |  logo      |  page content: banner, cards, quiz...     |
+//   |  menu      |                                           |
+//   |  focus     |                                           |
+//   +------------+-------------------------------------------+
 class GuiApp {
 public:
     bool load(const std::string& dataDir, std::string& error);
     void draw();
 
 private:
-    enum class Screen { Dashboard, Quiz, Results, Flashcards, Progress };
-    enum class Mode { Practice, Timed, Review };
+    enum class Screen { Dashboard, Practice, Review, Flashcards, Progress, Quiz, Results };
 
     // Frame pieces
-    void drawTopBar();
-    void drawRail();
+    void drawSidebar(float height);
+    void drawHeader(const std::string& label);  // small CAPS label + chips on the right
 
-    // Each screen has a center part and a side-panel part
+    // Pages
     void drawDashboard();
-    void drawQuiz();
-    void drawQuizSide();
-    void drawResults();
+    void drawPractice();
+    void drawReview();
     void drawFlashcards();
-    void drawFlashcardsSide();
     void drawProgress();
-    void drawOverviewSide();  // progress summary, shared by several screens
-    void focusMenuItems();    // the list of choices in the focus-area menu
-    void cardFocusMenu(const SubtestInfo& s);  // right-click menu on a subtest card
+    void drawQuiz();
+    void drawResults();
+
+    // Shared pieces
+    void drawStatRow();
+    int subjectIndex(const std::string& id) const;  // position in the subtest list
+    void focusMenuItems();
+    void cardFocusMenu(const SubtestInfo& s, ImVec2 cardMin, ImVec2 cardMax);
 
     // Actions
     void startSubtest(const SubtestInfo& s, SessionMode mode);
     void startBattery();
     void startNextInQueue();
+    void startWarmup();
     void startReview(const std::string& subtestId);  // empty = all sections
     void startFlashcards(size_t count, bool learningOnly);
     void finishSession();
@@ -58,28 +64,32 @@ private:
     std::string weakestId() const;  // lowest accuracy
     std::string focusId() const;    // pinned section, or the weakest if none is pinned
     void setFocus(const std::string& id);  // "" = automatic
+    std::map<std::string, int> missedBySubtest() const;
 
     // Settings saved between launches (afoqt_settings.json)
     void loadSettings();
     void saveSettings() const;
-    std::map<std::string, int> missedBySubtest() const;
 
     SubtestRegistry registry_;
     QuestionBank bank_;
     ProgressStore progress_{"afoqt_progress.json"};
     QuizEngine engine_;
+    Sound sound_;
     std::mt19937 rng_{std::random_device{}()};
 
     Screen screen_ = Screen::Dashboard;
-    Mode mode_ = Mode::Practice;
+    Screen lastScreen_ = Screen::Dashboard;
     std::vector<SubtestInfo> queue_;  // remaining sections in a full battery
     std::string sessionName_;
-    std::string sessionTag_;          // "PRACTICE", "TIMED TEST", "REVIEW"
+    std::string sessionTag_;          // "PRACTICE", "TIMED TEST", "REVIEW", "WARM-UP"
     std::string sessionTips_;
     int sessionTimeLimit_ = 0;
     bool isReview_ = false;
     std::string message_;
     std::string pinnedFocus_;  // subtest id chosen by the user; empty = automatic
+
+    // Answer animation: when the current feedback started (ImGui time), or -1
+    double feedbackTime_ = -1.0;
 
     // Flashcards
     FlashcardDeck deck_;

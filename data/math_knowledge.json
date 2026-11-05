@@ -584,6 +584,201 @@
       ],
       "answer": 3,
       "explanation": "Radius = 5, so A = π(5²) = 25π. 100π uses the diameter by mistake."
+    },
+    {
+      "id": "MK-046",
+      "prompt": "What is the volume of a cylinder with a radius of 3 and a height of 5?",
+      "choices": [
+        "75π",
+        "30π",
+        "15π",
+        "45π",
+        "90π"
+      ],
+      "answer": 3,
+      "explanation": "V = πr²h = π(9)(5) = 45π. 30π is the lateral area."
+    },
+    {
+      "id": "MK-047",
+      "prompt": "Factor x² + 7x + 12.",
+      "choices": [
+        "(x + 3)(x + 4)",
+        "(x + 1)(x + 12)",
+        "(x + 7)(x + 12)",
+        "(x + 2)(x + 6)",
+        "(x − 3)(x − 4)"
+      ],
+      "answer": 0,
+      "explanation": "Find two numbers that multiply to 12 and add to 7: 3 and 4."
+    },
+    {
+      "id": "MK-048",
+      "prompt": "Solve for x: −2x + 5 ≥ 11.",
+      "choices": [
+        "x ≥ 3",
+        "x ≤ −8",
+        "x ≥ −3",
+        "x ≤ −3",
+        "x ≤ 3"
+      ],
+      "answer": 3,
+      "explanation": "Subtract 5: −2x ≥ 6. Dividing by a negative number flips the sign: x ≤ −3."
+    },
+    {
+      "id": "MK-049",
+      "prompt": "If g(x) = x² − 4x, what is g(−2)?",
+      "choices": [
+        "4",
+        "12",
+        "8",
+        "−12",
+        "−4"
+      ],
+      "answer": 1,
+      "explanation": "(−2)² − 4(−2) = 4 + 8 = 12."
+    },
+    {
+      "id": "MK-050",
+      "prompt": "A bag has 3 red, 5 blue, and 2 green marbles. What is the probability of drawing a blue marble?",
+      "choices": [
+        "1/2",
+        "3/10",
+        "5/8",
+        "1/3",
+        "1/5"
+      ],
+      "answer": 0,
+      "explanation": "5 blue out of 10 total = 5/10 = 1/2."
+    },
+    {
+      "id": "MK-051",
+      "prompt": "Two coins are flipped. What is the probability that both land heads?",
+      "choices": [
+        "1/4",
+        "2/3",
+        "3/4",
+        "1/2",
+        "1/3"
+      ],
+      "answer": 0,
+      "explanation": "Four equally likely outcomes (HH, HT, TH, TT); only one is HH."
+    },
+    {
+      "id": "MK-052",
+      "prompt": "Write 3.2 × 10⁵ in standard form.",
+      "choices": [
+        "320",
+        "32,000",
+        "320,000",
+        "3,200,000",
+        "0.000032"
+      ],
+      "answer": 2,
+      "explanation": "Move the decimal 5 places to the right."
+    },
+    {
+      "id": "MK-053",
+      "prompt": "What is 2/3 + 3/4?",
+      "choices": [
+        "1 1/2",
+        "5/12",
+        "6/12",
+        "17/12",
+        "5/7"
+      ],
+      "answer": 3,
+      "explanation": "Common denominator 12: 8/12 + 9/12 = 17/12."
+    },
+    {
+      "id": "MK-054",
+      "prompt": "What is 3/5 ÷ 9/10?",
+      "choices": [
+        "27/50",
+        "1/3",
+        "6/5",
+        "3/2",
+        "2/3"
+      ],
+      "answer": 4,
+      "explanation": "Multiply by the reciprocal: 3/5 × 10/9 = 30/45 = 2/3."
+    },
+    {
+      "id": "MK-055",
+      "prompt": "Two angles are complementary. One measures 27°. What is the other?",
+      "choices": [
+        "27°",
+        "117°",
+        "153°",
+        "63°",
+        "73°"
+      ],
+      "answer": 3,
+      "explanation": "Complementary angles add to 90°: 90 − 27 = 63. 153° would be the supplement."
+    },
+    {
+      "id": "MK-056",
+      "prompt": "What is the y-intercept of the line 3x + 2y = 12?",
+      "choices": [
+        "3",
+        "−6",
+        "12",
+        "4",
+        "6"
+      ],
+      "answer": 4,
+      "explanation": "Set x = 0: 2y = 12, so y = 6. (4 is the x-intercept.)"
+    },
+    {
+      "id": "MK-057",
+      "prompt": "Simplify: 4(2x − 3) − 2(x − 5)",
+      "choices": [
+        "10x − 2",
+        "6x − 2",
+        "6x + 2",
+        "6x − 22",
+        "6x − 17"
+      ],
+      "answer": 1,
+      "explanation": "8x − 12 − 2x + 10 = 6x − 2. Distribute the −2 to both terms."
+    },
+    {
+      "id": "MK-058",
+      "prompt": "What is the median of 7, 2, 9, 4, 11, 6?",
+      "choices": [
+        "6.5",
+        "4.5",
+        "7",
+        "6",
+        "6.6"
+      ],
+      "answer": 0,
+      "explanation": "Order them: 2, 4, 6, 7, 9, 11. With six numbers, average the middle two: (6 + 7) ÷ 2 = 6.5."
+    },
+    {
+      "id": "MK-059",
+      "prompt": "If 0.4x = 18, then x =",
+      "choices": [
+        "4.5",
+        "7.2",
+        "72",
+        "450",
+        "45"
+      ],
+      "answer": 4,
+      "explanation": "Divide both sides by 0.4: 18 ÷ 0.4 = 45."
+    },
+    {
+      "id": "MK-060",
+      "prompt": "What is the surface area of a cube with an edge of 4?",
+      "choices": [
+        "48",
+        "96",
+        "16",
+        "64",
+        "24"
+      ],
+      "answer": 1,
+      "explanation": "6 faces × 4² = 6 × 16 = 96. 64 is the volume."
     }
   ]
 }

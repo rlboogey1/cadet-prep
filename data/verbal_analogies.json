@@ -493,6 +493,331 @@
       ],
       "answer": 2,
       "explanation": "A group and its members."
+    },
+    {
+      "id": "VA-039",
+      "prompt": "RUNWAY is to AIRPLANE as DOCK is to",
+      "choices": [
+        "water",
+        "ship",
+        "harbor",
+        "rope",
+        "captain"
+      ],
+      "answer": 1,
+      "explanation": "An airplane lands on a runway; a ship ties up at a dock."
+    },
+    {
+      "id": "VA-040",
+      "prompt": "SURGEON is to SCALPEL as PILOT is to",
+      "choices": [
+        "cockpit",
+        "airport",
+        "wing",
+        "passenger",
+        "yoke"
+      ],
+      "answer": 4,
+      "explanation": "A tool each person handles directly to do the job: a surgeon's scalpel, a pilot's control yoke."
+    },
+    {
+      "id": "VA-041",
+      "prompt": "LOCK is to SECURE as SHIELD is to",
+      "choices": [
+        "armor",
+        "attack",
+        "sword",
+        "protect",
+        "knight"
+      ],
+      "answer": 3,
+      "explanation": "The purpose of each object: a lock secures, a shield protects."
+    },
+    {
+      "id": "VA-042",
+      "prompt": "TADPOLE is to FROG as CATERPILLAR is to",
+      "choices": [
+        "butterfly",
+        "insect",
+        "worm",
+        "cocoon",
+        "leaf"
+      ],
+      "answer": 0,
+      "explanation": "Each is the young form of the animal named. A cocoon is a stage, not the adult."
+    },
+    {
+      "id": "VA-043",
+      "prompt": "COLD is to SHIVER as HOT is to",
+      "choices": [
+        "burn",
+        "sweat",
+        "summer",
+        "sun",
+        "fan"
+      ],
+      "answer": 1,
+      "explanation": "Shivering is the body's reaction to cold; sweating is its reaction to heat."
+    },
+    {
+      "id": "VA-044",
+      "prompt": "ISLAND is to WATER as OASIS is to",
+      "choices": [
+        "sand",
+        "camel",
+        "well",
+        "palm",
+        "desert"
+      ],
+      "answer": 4,
+      "explanation": "An island is surrounded by water; an oasis is surrounded by desert."
+    },
+    {
+      "id": "VA-045",
+      "prompt": "PRESCRIBE is to DOCTOR as SENTENCE is to",
+      "choices": [
+        "crime",
+        "judge",
+        "lawyer",
+        "court",
+        "prisoner"
+      ],
+      "answer": 1,
+      "explanation": "A doctor prescribes; a judge sentences. Each is the action the person performs."
+    },
+    {
+      "id": "VA-046",
+      "prompt": "SPEEDOMETER is to SPEED as ALTIMETER is to",
+      "choices": [
+        "weather",
+        "pilot",
+        "altitude",
+        "airplane",
+        "pressure"
+      ],
+      "answer": 2,
+      "explanation": "Each instrument measures the thing named."
+    },
+    {
+      "id": "VA-047",
+      "prompt": "WALL is to BRICK as SENTENCE is to",
+      "choices": [
+        "book",
+        "paragraph",
+        "grammar",
+        "word",
+        "period"
+      ],
+      "answer": 3,
+      "explanation": "A wall is built from bricks; a sentence is built from words."
+    },
+    {
+      "id": "VA-048",
+      "prompt": "CENSOR is to REMOVE as EDIT is to",
+      "choices": [
+        "read",
+        "print",
+        "publish",
+        "revise",
+        "writer"
+      ],
+      "answer": 3,
+      "explanation": "To censor is to remove material; to edit is to revise it."
+    },
+    {
+      "id": "VA-049",
+      "prompt": "ARID is to MOIST as SPARSE is to",
+      "choices": [
+        "dense",
+        "dry",
+        "thin",
+        "rare",
+        "empty"
+      ],
+      "answer": 0,
+      "explanation": "Opposites. Thin and rare are synonyms of sparse, the traps."
+    },
+    {
+      "id": "VA-050",
+      "prompt": "BOW is to VIOLIN as STICK is to",
+      "choices": [
+        "music",
+        "tree",
+        "drum",
+        "band",
+        "wood"
+      ],
+      "answer": 2,
+      "explanation": "A bow is used to play a violin; a stick is used to play a drum."
+    },
+    {
+      "id": "VA-051",
+      "prompt": "NOVICE is to EXPERT as SPARK is to",
+      "choices": [
+        "smoke",
+        "fire alarm",
+        "match",
+        "flicker",
+        "blaze"
+      ],
+      "answer": 4,
+      "explanation": "A novice grows into an expert; a spark grows into a blaze. Small to large."
+    },
+    {
+      "id": "VA-052",
+      "prompt": "THROTTLE is to ENGINE as RUDDER is to",
+      "choices": [
+        "tail",
+        "direction",
+        "pedal",
+        "wind",
+        "fuel"
+      ],
+      "answer": 1,
+      "explanation": "A throttle controls an engine's power; a rudder controls direction."
+    },
+    {
+      "id": "VA-053",
+      "prompt": "HIVE is to BEE as NEST is to",
+      "choices": [
+        "tree",
+        "twig",
+        "egg",
+        "feather",
+        "bird"
+      ],
+      "answer": 4,
+      "explanation": "Where each animal lives."
+    },
+    {
+      "id": "VA-054",
+      "prompt": "FRAGILE is to BREAK as FLAMMABLE is to",
+      "choices": [
+        "safe",
+        "smoke",
+        "gas",
+        "burn",
+        "fire"
+      ],
+      "answer": 3,
+      "explanation": "Something fragile breaks easily; something flammable burns easily."
+    },
+    {
+      "id": "VA-055",
+      "prompt": "HYPOTHESIS is to TEST as BLUEPRINT is to",
+      "choices": [
+        "paper",
+        "engineer",
+        "house",
+        "build",
+        "draw"
+      ],
+      "answer": 3,
+      "explanation": "A hypothesis is made to be tested; a blueprint is made to be built from."
+    },
+    {
+      "id": "VA-056",
+      "prompt": "GENEROUS is to MISERLY as CANDID is to",
+      "choices": [
+        "open",
+        "evasive",
+        "blunt",
+        "honest",
+        "rude"
+      ],
+      "answer": 1,
+      "explanation": "Opposites. Honest, blunt, and open are close to candid."
+    },
+    {
+      "id": "VA-057",
+      "prompt": "MECHANIC is to WRENCH as",
+      "choices": [
+        "nurse is to hospital",
+        "teacher is to student",
+        "driver is to road",
+        "chef is to knife",
+        "farmer is to crop"
+      ],
+      "answer": 3,
+      "explanation": "A worker and a tool of the trade. Hospital is a workplace and crop is a product."
+    },
+    {
+      "id": "VA-058",
+      "prompt": "DROP is to OCEAN as",
+      "choices": [
+        "fish is to sea",
+        "salt is to water",
+        "wave is to shore",
+        "grain is to beach",
+        "rain is to cloud"
+      ],
+      "answer": 3,
+      "explanation": "A drop is one tiny part of an ocean; a grain of sand is one tiny part of a beach."
+    },
+    {
+      "id": "VA-059",
+      "prompt": "ANTIDOTE is to POISON as",
+      "choices": [
+        "repair is to damage",
+        "doctor is to patient",
+        "venom is to snake",
+        "pill is to bottle",
+        "cure is to medicine"
+      ],
+      "answer": 0,
+      "explanation": "An antidote counteracts poison; a repair counteracts damage."
+    },
+    {
+      "id": "VA-060",
+      "prompt": "RECKLESS is to CAUTION as",
+      "choices": [
+        "loud is to noise",
+        "rude is to courtesy",
+        "wise is to knowledge",
+        "brave is to courage",
+        "quick is to speed"
+      ],
+      "answer": 1,
+      "explanation": "Reckless means lacking caution; rude means lacking courtesy. The others describe having the quality."
+    },
+    {
+      "id": "VA-061",
+      "prompt": "COMPASS is to NAVIGATOR as",
+      "choices": [
+        "plane is to sky",
+        "clock is to time",
+        "stethoscope is to doctor",
+        "ship is to sea",
+        "map is to road"
+      ],
+      "answer": 2,
+      "explanation": "A tool and the professional who uses it."
+    },
+    {
+      "id": "VA-062",
+      "prompt": "GILLS is to FISH as LUNGS is to",
+      "choices": [
+        "chest",
+        "oxygen",
+        "air",
+        "human",
+        "breath"
+      ],
+      "answer": 3,
+      "explanation": "Fish breathe with gills; humans breathe with lungs."
+    },
+    {
+      "id": "VA-063",
+      "prompt": "SQUADRON is to PILOTS as",
+      "choices": [
+        "army is to weapons",
+        "orchestra is to musicians",
+        "airport is to planes",
+        "ship is to ocean",
+        "school is to books"
+      ],
+      "answer": 1,
+      "explanation": "A group and the people who make it up."
     }
   ]
 }

@@ -27,12 +27,12 @@ int main(int argc, char* argv[]) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    GLFWwindow* window = glfwCreateWindow(1320, 840, "AFOQT Study", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(1380, 900, "AFOQT Study", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         return 1;
     }
-    glfwSetWindowSizeLimits(window, 1180, 740, GLFW_DONT_CARE, GLFW_DONT_CARE);
+    glfwSetWindowSizeLimits(window, 1180, 760, GLFW_DONT_CARE, GLFW_DONT_CARE);
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);  // vsync
 

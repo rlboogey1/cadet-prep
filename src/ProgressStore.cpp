@@ -66,6 +66,7 @@ void ProgressStore::record(const SessionResult& result, bool isReview) {
     sessions_.push_back(e);
 
     for (const auto& a : result.answers) {
+        if (a.questionId.rfind("GEN-", 0) == 0) continue;  // generated: can't be reviewed later
         if (a.correct) missed_.erase(a.questionId);
         else missed_.insert(a.questionId);
     }

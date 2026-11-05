@@ -22,7 +22,12 @@ FetchContent_Declare(imgui                    # draws buttons, text, tables
     GIT_REPOSITORY https://github.com/ocornut/imgui.git
     GIT_TAG v1.91.5)
 
-FetchContent_MakeAvailable(json glfw imgui)
+FetchContent_Declare(miniaudio               # plays the sound effects
+    GIT_REPOSITORY https://github.com/mackron/miniaudio.git
+    GIT_TAG 0.11.21
+    GIT_SHALLOW TRUE)
+
+FetchContent_MakeAvailable(json glfw imgui miniaudio)
 find_package(OpenGL REQUIRED)
 
 # Dear ImGui has no CMake file of its own, so we list its source files here.
@@ -43,7 +48,8 @@ add_library(afoqt_core STATIC
     src/TestSession.cpp
     src/ProgressStore.cpp
     src/QuizEngine.cpp
-    src/FlashcardDeck.cpp)
+    src/FlashcardDeck.cpp
+    src/QuestionGenerator.cpp)
 target_include_directories(afoqt_core PUBLIC src)
 target_link_libraries(afoqt_core PUBLIC nlohmann_json::nlohmann_json)
 target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
@@ -53,8 +59,14 @@ add_executable(afoqt src/main.cpp src/ConsoleUI.cpp)
 target_link_libraries(afoqt PRIVATE afoqt_core)
 
 # --- GUI app (on macOS, a double-clickable "AFOQT Study.app") ---
-add_executable(afoqt_gui MACOSX_BUNDLE src/gui_main.cpp src/GuiApp.cpp src/Widgets.cpp)
+add_executable(afoqt_gui MACOSX_BUNDLE src/gui_main.cpp src/GuiApp.cpp src/Widgets.cpp src/Sound.cpp)
 target_link_libraries(afoqt_gui PRIVATE afoqt_core imgui)
+target_include_directories(afoqt_gui PRIVATE ${miniaudio_SOURCE_DIR})
+if(APPLE)
+    target_link_libraries(afoqt_gui PRIVATE "-framework CoreFoundation" "-framework CoreAudio" "-framework AudioToolbox")
+elseif(UNIX)
+    target_link_libraries(afoqt_gui PRIVATE dl pthread m)
+endif()
 
 if(APPLE)
     set_target_properties(afoqt_gui PROPERTIES

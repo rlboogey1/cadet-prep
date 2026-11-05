@@ -133,7 +133,7 @@ struct App {
     }
 
     void reviewMissed() {
-        auto questions = bank.byIds(progress.missedQuestionIds());
+        auto questions = bank.drawByIds(progress.missedQuestionIds(), rng);
         if (questions.empty()) {
             ui.showMessage("\nNo missed questions to review. Nice work!");
             return;

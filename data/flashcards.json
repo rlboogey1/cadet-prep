@@ -1126,6 +1126,510 @@
       "definition": "A state of being extremely dirty and unpleasant.",
       "synonym": "filth",
       "example": "The refugees lived in squalor."
+    },
+    {
+      "word": "abundant",
+      "pos": "adj",
+      "definition": "Existing in large quantities.",
+      "synonym": "plentiful",
+      "example": "Water was abundant after the spring rains."
+    },
+    {
+      "word": "acute",
+      "pos": "adj",
+      "definition": "Severe or intense; also keen and perceptive.",
+      "synonym": "sharp",
+      "example": "She has an acute sense of hearing."
+    },
+    {
+      "word": "adamant",
+      "pos": "adj",
+      "definition": "Refusing to change one's mind.",
+      "synonym": "unyielding",
+      "example": "He was adamant that the checklist be followed."
+    },
+    {
+      "word": "agile",
+      "pos": "adj",
+      "definition": "Able to move quickly and easily.",
+      "synonym": "nimble",
+      "example": "The agile fighter jet turned sharply."
+    },
+    {
+      "word": "aloof",
+      "pos": "adj",
+      "definition": "Cool and not friendly; keeping apart.",
+      "synonym": "distant",
+      "example": "The new officer seemed aloof at first."
+    },
+    {
+      "word": "ample",
+      "pos": "adj",
+      "definition": "Enough or more than enough.",
+      "synonym": "sufficient",
+      "example": "There was ample time to finish the test."
+    },
+    {
+      "word": "arbitrary",
+      "pos": "adj",
+      "definition": "Based on chance or whim rather than reason.",
+      "synonym": "random",
+      "example": "The rule seemed arbitrary to the cadets."
+    },
+    {
+      "word": "articulate",
+      "pos": "adj",
+      "definition": "Able to express ideas clearly.",
+      "synonym": "well-spoken",
+      "example": "She gave an articulate answer to the board."
+    },
+    {
+      "word": "brazen",
+      "pos": "adj",
+      "definition": "Bold and without shame.",
+      "synonym": "shameless",
+      "example": "It was a brazen attempt to cheat."
+    },
+    {
+      "word": "cordial",
+      "pos": "adj",
+      "definition": "Warm and friendly.",
+      "synonym": "warm",
+      "example": "The two commanders had a cordial meeting."
+    },
+    {
+      "word": "credible",
+      "pos": "adj",
+      "definition": "Able to be believed; convincing.",
+      "synonym": "believable",
+      "example": "The witness gave a credible account."
+    },
+    {
+      "word": "dauntless",
+      "pos": "adj",
+      "definition": "Showing courage and determination.",
+      "synonym": "fearless",
+      "example": "The dauntless crew flew into the storm to rescue survivors."
+    },
+    {
+      "word": "despondent",
+      "pos": "adj",
+      "definition": "In low spirits from loss of hope.",
+      "synonym": "hopeless",
+      "example": "After failing twice, he felt despondent."
+    },
+    {
+      "word": "discreet",
+      "pos": "adj",
+      "definition": "Careful in what one says or does to avoid offense.",
+      "synonym": "tactful",
+      "example": "Please be discreet about the new assignment."
+    },
+    {
+      "word": "elusive",
+      "pos": "adj",
+      "definition": "Difficult to find, catch, or achieve.",
+      "synonym": "hard to catch",
+      "example": "The answer remained elusive."
+    },
+    {
+      "word": "exemplary",
+      "pos": "adj",
+      "definition": "Serving as a desirable example.",
+      "synonym": "model",
+      "example": "Her exemplary record earned her a promotion."
+    },
+    {
+      "word": "exuberant",
+      "pos": "adj",
+      "definition": "Full of energy and excitement.",
+      "synonym": "enthusiastic",
+      "example": "The exuberant graduates threw their caps."
+    },
+    {
+      "word": "formidable",
+      "pos": "adj",
+      "definition": "Inspiring fear or respect through size or strength.",
+      "synonym": "daunting",
+      "example": "The obstacle course was formidable."
+    },
+    {
+      "word": "frivolous",
+      "pos": "adj",
+      "definition": "Not having any serious purpose or value.",
+      "synonym": "silly",
+      "example": "Don't waste money on frivolous purchases."
+    },
+    {
+      "word": "genial",
+      "pos": "adj",
+      "definition": "Friendly and cheerful.",
+      "synonym": "good-natured",
+      "example": "The genial host greeted every guest."
+    },
+    {
+      "word": "hostile",
+      "pos": "adj",
+      "definition": "Showing opposition or dislike; aggressive.",
+      "synonym": "unfriendly",
+      "example": "The pilots flew over hostile territory."
+    },
+    {
+      "word": "innate",
+      "pos": "adj",
+      "definition": "Existing from birth; natural.",
+      "synonym": "inborn",
+      "example": "She had an innate talent for navigation."
+    },
+    {
+      "word": "intrepid",
+      "pos": "adj",
+      "definition": "Not afraid of danger.",
+      "synonym": "fearless",
+      "example": "The intrepid explorer crossed the ice cap."
+    },
+    {
+      "word": "lenient",
+      "pos": "adj",
+      "definition": "Not strict in punishing or judging.",
+      "synonym": "permissive",
+      "example": "The lenient instructor allowed a retake."
+    },
+    {
+      "word": "mediocre",
+      "pos": "adj",
+      "definition": "Only ordinary; not very good.",
+      "synonym": "average",
+      "example": "His first landing was mediocre."
+    },
+    {
+      "word": "nebulous",
+      "pos": "adj",
+      "definition": "Unclear or not well defined.",
+      "synonym": "vague",
+      "example": "The plan was too nebulous to act on."
+    },
+    {
+      "word": "prominent",
+      "pos": "adj",
+      "definition": "Important or easily seen.",
+      "synonym": "notable",
+      "example": "A prominent general spoke at graduation."
+    },
+    {
+      "word": "resilient",
+      "pos": "adj",
+      "definition": "Able to recover quickly from difficulty.",
+      "synonym": "tough",
+      "example": "Resilient airmen bounce back from setbacks."
+    },
+    {
+      "word": "stoic",
+      "pos": "adj",
+      "definition": "Enduring pain or hardship without complaint.",
+      "synonym": "impassive",
+      "example": "He remained stoic through the long march."
+    },
+    {
+      "word": "tangible",
+      "pos": "adj",
+      "definition": "Able to be touched; real.",
+      "synonym": "concrete",
+      "example": "The training produced tangible results."
+    },
+    {
+      "word": "tenuous",
+      "pos": "adj",
+      "definition": "Very weak or slight.",
+      "synonym": "flimsy",
+      "example": "His connection to the case was tenuous."
+    },
+    {
+      "word": "unanimous",
+      "pos": "adj",
+      "definition": "Fully in agreement.",
+      "synonym": "undisputed",
+      "example": "The vote was unanimous."
+    },
+    {
+      "word": "venerable",
+      "pos": "adj",
+      "definition": "Respected because of age or wisdom.",
+      "synonym": "respected",
+      "example": "The venerable aircraft flew for fifty years."
+    },
+    {
+      "word": "vivid",
+      "pos": "adj",
+      "definition": "Producing strong, clear images; intense.",
+      "synonym": "bright",
+      "example": "He gave a vivid description of the crash."
+    },
+    {
+      "word": "abhor",
+      "pos": "verb",
+      "definition": "To hate strongly.",
+      "synonym": "detest",
+      "example": "She abhors dishonesty."
+    },
+    {
+      "word": "acquiesce",
+      "pos": "verb",
+      "definition": "To accept something without protest.",
+      "synonym": "comply",
+      "example": "He acquiesced to the new schedule."
+    },
+    {
+      "word": "advocate",
+      "pos": "verb",
+      "definition": "To publicly recommend or support.",
+      "synonym": "support",
+      "example": "The report advocates more simulator time."
+    },
+    {
+      "word": "allocate",
+      "pos": "verb",
+      "definition": "To distribute for a particular purpose.",
+      "synonym": "assign",
+      "example": "The base allocated funds for new radios."
+    },
+    {
+      "word": "ameliorate",
+      "pos": "verb",
+      "definition": "To make something bad better.",
+      "synonym": "improve",
+      "example": "New lighting ameliorated night conditions on the ramp."
+    },
+    {
+      "word": "berate",
+      "pos": "verb",
+      "definition": "To criticize angrily.",
+      "synonym": "scold",
+      "example": "The coach berated the team after the loss."
+    },
+    {
+      "word": "circumvent",
+      "pos": "verb",
+      "definition": "To find a way around an obstacle or rule.",
+      "synonym": "bypass",
+      "example": "They circumvented the traffic by taking back roads."
+    },
+    {
+      "word": "deviate",
+      "pos": "verb",
+      "definition": "To depart from an established course.",
+      "synonym": "stray",
+      "example": "The pilot deviated around the thunderstorm."
+    },
+    {
+      "word": "diminish",
+      "pos": "verb",
+      "definition": "To make or become less.",
+      "synonym": "decrease",
+      "example": "The noise diminished as the jet climbed away."
+    },
+    {
+      "word": "emanate",
+      "pos": "verb",
+      "definition": "To come out from a source.",
+      "synonym": "radiate",
+      "example": "Heat emanated from the engine."
+    },
+    {
+      "word": "endorse",
+      "pos": "verb",
+      "definition": "To declare public approval of.",
+      "synonym": "approve",
+      "example": "The commander endorsed the proposal."
+    },
+    {
+      "word": "eradicate",
+      "pos": "verb",
+      "definition": "To destroy completely.",
+      "synonym": "eliminate",
+      "example": "The program aimed to eradicate the disease."
+    },
+    {
+      "word": "exonerate",
+      "pos": "verb",
+      "definition": "To clear from blame.",
+      "synonym": "acquit",
+      "example": "The board exonerated the pilot."
+    },
+    {
+      "word": "fortify",
+      "pos": "verb",
+      "definition": "To strengthen, especially against attack.",
+      "synonym": "reinforce",
+      "example": "Engineers fortified the bunker."
+    },
+    {
+      "word": "hamper",
+      "pos": "verb",
+      "definition": "To slow or prevent progress.",
+      "synonym": "hinder",
+      "example": "Fog hampered the search."
+    },
+    {
+      "word": "incite",
+      "pos": "verb",
+      "definition": "To encourage or provoke action.",
+      "synonym": "stir up",
+      "example": "The speech incited a riot."
+    },
+    {
+      "word": "insinuate",
+      "pos": "verb",
+      "definition": "To suggest something indirectly.",
+      "synonym": "imply",
+      "example": "He insinuated that she had cheated."
+    },
+    {
+      "word": "mandate",
+      "pos": "verb",
+      "definition": "To officially order.",
+      "synonym": "require",
+      "example": "The rules mandate a preflight briefing."
+    },
+    {
+      "word": "placate",
+      "pos": "verb",
+      "definition": "To make less angry.",
+      "synonym": "pacify",
+      "example": "The manager placated the upset traveler."
+    },
+    {
+      "word": "refute",
+      "pos": "verb",
+      "definition": "To prove a statement wrong.",
+      "synonym": "disprove",
+      "example": "The data refuted his theory."
+    },
+    {
+      "word": "reiterate",
+      "pos": "verb",
+      "definition": "To say again for emphasis.",
+      "synonym": "repeat",
+      "example": "The instructor reiterated the safety rules."
+    },
+    {
+      "word": "rescind",
+      "pos": "verb",
+      "definition": "To cancel officially.",
+      "synonym": "revoke",
+      "example": "The order was rescinded the next day."
+    },
+    {
+      "word": "adherence",
+      "pos": "noun",
+      "definition": "The act of following rules closely.",
+      "synonym": "observance",
+      "example": "Strict adherence to procedures prevents accidents."
+    },
+    {
+      "word": "ambivalence",
+      "pos": "noun",
+      "definition": "Mixed feelings about something.",
+      "synonym": "uncertainty",
+      "example": "She felt ambivalence about moving overseas."
+    },
+    {
+      "word": "ardor",
+      "pos": "noun",
+      "definition": "Great energy and passion.",
+      "synonym": "enthusiasm",
+      "example": "He studied with ardor."
+    },
+    {
+      "word": "brevity",
+      "pos": "noun",
+      "definition": "The use of few words; shortness.",
+      "synonym": "conciseness",
+      "example": "Radio calls require brevity."
+    },
+    {
+      "word": "calamity",
+      "pos": "noun",
+      "definition": "An event causing great damage.",
+      "synonym": "disaster",
+      "example": "The flood was a calamity for the town."
+    },
+    {
+      "word": "conjecture",
+      "pos": "noun",
+      "definition": "An opinion formed without proof.",
+      "synonym": "guess",
+      "example": "The cause of the crash was only conjecture."
+    },
+    {
+      "word": "diligence",
+      "pos": "noun",
+      "definition": "Careful and persistent effort.",
+      "synonym": "care",
+      "example": "Her diligence paid off on the test."
+    },
+    {
+      "word": "eminence",
+      "pos": "noun",
+      "definition": "Fame or importance in a field.",
+      "synonym": "distinction",
+      "example": "A scientist of great eminence spoke."
+    },
+    {
+      "word": "feat",
+      "pos": "noun",
+      "definition": "An act of skill or courage.",
+      "synonym": "achievement",
+      "example": "Landing without power was an amazing feat."
+    },
+    {
+      "word": "humility",
+      "pos": "noun",
+      "definition": "A modest view of one's own importance.",
+      "synonym": "modesty",
+      "example": "Good leaders show humility."
+    },
+    {
+      "word": "lethargy",
+      "pos": "noun",
+      "definition": "A lack of energy.",
+      "synonym": "sluggishness",
+      "example": "Heat brought on lethargy."
+    },
+    {
+      "word": "magnitude",
+      "pos": "noun",
+      "definition": "Great size or importance.",
+      "synonym": "size",
+      "example": "They underestimated the magnitude of the storm."
+    },
+    {
+      "word": "obscurity",
+      "pos": "noun",
+      "definition": "The state of being unknown or unclear.",
+      "synonym": "darkness",
+      "example": "The author died in obscurity."
+    },
+    {
+      "word": "prudence",
+      "pos": "noun",
+      "definition": "Good judgment in practical matters.",
+      "synonym": "caution",
+      "example": "Prudence dictated a diversion to another airport."
+    },
+    {
+      "word": "tenacity",
+      "pos": "noun",
+      "definition": "The quality of not giving up.",
+      "synonym": "persistence",
+      "example": "Her tenacity got her through pilot training."
+    },
+    {
+      "word": "vestige",
+      "pos": "noun",
+      "definition": "A small remaining part of something.",
+      "synonym": "trace",
+      "example": "Not a vestige of the old runway remained."
     }
   ]
 }
