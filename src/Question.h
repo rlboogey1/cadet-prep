@@ -8,7 +8,9 @@
 //                 X = -R on the left)
 //   Instruments:  bank (degrees, + = right wing down), pitch (+ = nose up), heading
 //   Blocks:       block count, then x, y, z, sizeX, sizeY, sizeZ, label for each block
-enum class VisualKind { None, Table, Instruments, Blocks };
+//   Aircraft:     bank, pitch, heading (same meaning as Instruments), drawn as a
+//                 plane seen from behind and a little above, looking north
+enum class VisualKind { None, Table, Instruments, Blocks, Aircraft };
 struct Visual {
     VisualKind kind = VisualKind::None;
     std::vector<int> data;
@@ -25,6 +27,8 @@ struct Question {
     int correctIndex = 0;     // 0-based index into choices
     std::string explanation;
     Visual visual;            // optional picture (pilot sections)
+    std::vector<Visual> choiceVisuals;  // optional: one picture per choice, shown instead
+                                        // of the choice text (Instrument Comprehension)
 };
 
 // Result of answering one question.

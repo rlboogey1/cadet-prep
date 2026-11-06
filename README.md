@@ -34,6 +34,11 @@ in the folder you run it from.
 - **Full battery**: all knowledge sections, or all pilot sections, back to back, timed
 - **Review missed**: re-asks every question you've gotten wrong until you get it right
 - **Progress**: accuracy and seconds per question by section, plus your weakest area
+- **Estimated composite scores**: Pilot, CSO, ABM, Academic Aptitude, Verbal, and
+  Quantitative, each the average of your accuracy on the sections that make it up,
+  with the weakest section and any you haven't practiced yet. The real AFOQT reports
+  composites as percentiles compared with other test takers, and the formula isn't
+  public, so these are a guide, not a prediction of your official score.
 - **Word Knowledge flashcards**: 161 words with definitions, synonyms, and example
   sentences. Uses spaced repetition: words you miss come back more often, and a word
   counts as mastered after 3 correct in a row. Keys: Space flips, 1 = still learning,
@@ -56,7 +61,7 @@ in the folder you run it from.
 | Section | Questions | Timed test |
 |---|---|---|
 | Table Reading | unlimited, a new 21 x 21 table each session | 40 in 7 min |
-| Instrument Comprehension | unlimited: artificial horizon + compass | 25 in 5 min |
+| Instrument Comprehension | unlimited: artificial horizon + compass, pick the matching aircraft picture | 25 in 5 min |
 | Aviation Information | 44 written | 20 in 8 min |
 | Block Counting | unlimited 3D block stacks | 30 in 5 min |
 
@@ -64,9 +69,10 @@ The Pilot composite score uses Math Knowledge, Table Reading, Instrument
 Comprehension, and Aviation Information. Block Counting counts toward other
 composites (CSO and ABM). Sections with pictures only appear in the window
 version, not the console version. The real Table Reading test uses a larger
-table (X and Y from -15 to +15); this app uses -10 to +10 so it fits on screen,
-and Instrument Comprehension answers are written descriptions rather than the
-aircraft pictures on the real test.
+table (X and Y from -15 to +15); this app uses -10 to +10 so it fits on screen.
+Instrument Comprehension answers are aircraft pictures, as on the real test: you
+look north from behind the aircraft, so heading north points away from you and
+heading east points right.
 
 Everything is randomized:
 - **Question order:** each test draws questions in a random order.
@@ -104,7 +110,8 @@ src/
   Question.h                 Question and AnswerRecord structs
   QuizEngine.*               step-by-step quiz logic used by the GUI
   QuestionGenerator.*        random math questions and the pilot sections
-  Visuals.*                  tables, cockpit dials, and block stacks
+  Visuals.*                  tables, cockpit dials, aircraft pictures, and block stacks
+  Composites.*               estimated composite scores
   Sound.*                    sound effects (synthesized, using miniaudio)
   JetShape.h                 the F-22 outline used by the logo
   FlashcardDeck.*            flashcards and spaced repetition

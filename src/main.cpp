@@ -1,6 +1,7 @@
 #include "AppPaths.h"
 #include "ConsoleUI.h"
 #include "FlashcardDeck.h"
+#include "Composites.h"
 #include "ProgressStore.h"
 #include "QuestionBank.h"
 #include "SubtestRegistry.h"
@@ -186,7 +187,20 @@ struct App {
             }
         }
         os << "\nWeakest area: " << weakest << "\n"
-           << "Questions waiting in review: " << progress.missedQuestionIds().size();
+           << "Questions waiting in review: " << progress.missedQuestionIds().size() << "\n";
+
+        os << "\nEstimated composites (average accuracy of their sections, not official percentiles)\n"
+           << std::string(55, '-') << "\n";
+        for (const auto& e : estimateComposites(stats)) {
+            os << std::left << std::setw(24) << e.info->name << std::right;
+            if (!e.hasData()) {
+                os << "  not started\n";
+                continue;
+            }
+            os << std::setw(8) << std::fixed << std::setprecision(0) << e.score << "%";
+            if (!e.complete()) os << "   (" << e.practiced << " of " << e.info->sections.size() << " sections)";
+            os << "\n";
+        }
         ui.showMessage(os.str());
         ui.pause();
     }

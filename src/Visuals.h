@@ -14,6 +14,11 @@ float visualWidth(const Visual& v, float available);
 // Draws the picture at the cursor and advances past it.
 void drawVisual(const Visual& v, float width);
 
+// An aircraft in the given attitude, filling the box from `a` to `b` (Instrument
+// Comprehension answers). The viewer is behind the aircraft's starting point,
+// looking north and a little down: heading north points away, east points right.
+void drawAircraft(ImDrawList* dl, ImVec2 a, ImVec2 b, int bankDeg, int pitchDeg, int headingDeg);
+
 // The app logo: an F-22 in a blue circle.
 void drawLogo(ImDrawList* dl, ImVec2 center, float radius);
 

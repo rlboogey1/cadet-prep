@@ -537,6 +537,60 @@ bool answerCard(const char* id, char letter, const char* text, AnswerState state
     return clicked;
 }
 
+bool pictureAnswerCard(const char* id, char letter, AnswerState state, ImVec2 size, float anim,
+                       const std::function<void(ImDrawList*, ImVec2, ImVec2)>& drawPicture) {
+    const ImVec2 p = ImGui::GetCursorScreenPos();
+    const bool interactive = state == AnswerState::Normal;
+    bool clicked = ImGui::InvisibleButton(id, size) && interactive;
+    bool hov = ImGui::IsItemHovered() && interactive;
+    if (interactive) handCursorIfHovered();
+
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    ImVec4 fill = col::Card, edge = col::CardBorder;
+    float edgeW = 1.3f;
+    switch (state) {
+        case AnswerState::Normal:
+            if (hov) { fill = col::AccentSoft; edge = col::Accent; edgeW = 2.0f; }
+            break;
+        case AnswerState::Correct: fill = col::GoodSoft; edge = col::Good; edgeW = 2.5f; break;
+        case AnswerState::Wrong: fill = col::BadSoft; edge = col::Bad; edgeW = 2.5f; break;
+        case AnswerState::Dimmed: break;
+    }
+    const bool animating = anim >= 0.0f && anim < 1.0f;
+    if (animating && state == AnswerState::Correct) {
+        float e = easeOut(anim / 0.7f) * 14.0f;
+        float a = std::max(0.0f, 1.0f - anim / 0.7f) * 0.5f;
+        dl->AddRect(p - ImVec2(e, e), p + size + ImVec2(e, e), u32(col::Good, a), 12.0f + e, 0, 3.0f);
+    }
+    dl->AddRectFilled(p, p + size, u32(fill), 12.0f);
+
+    // The picture, inset from the card edge
+    const float inset = 7.0f;
+    const ImVec2 a = p + ImVec2(inset, inset), b = p + size - ImVec2(inset, inset);
+    dl->PushClipRect(a, b, true);
+    drawPicture(dl, a, b);
+    if (state == AnswerState::Dimmed) dl->AddRectFilled(a, b, u32(col::Card, 0.55f));
+    dl->PopClipRect();
+    dl->AddRect(p, p + size, u32(edge), 12.0f, 0, edgeW);
+
+    // Letter badge in the top-left corner (a check or an X after answering)
+    const ImVec2 bc = p + ImVec2(22, 22);
+    float r = 13.0f;
+    if (animating && (state == AnswerState::Correct || state == AnswerState::Wrong))
+        r *= 1.0f + 0.4f * std::sin(kPi * std::clamp(anim / 0.3f, 0.0f, 1.0f));
+    const char l[2] = {letter, 0};
+    if (state == AnswerState::Correct || state == AnswerState::Wrong) {
+        dl->AddCircleFilled(bc, r, u32(edge));
+        drawIcon(dl, state == AnswerState::Correct ? Icon::Check : Icon::Cross, bc, r * 1.1f, u32(col::White));
+    } else {
+        dl->AddCircleFilled(bc, r, u32(hov ? col::Accent : col::White));
+        dl->AddCircle(bc, r, u32(hov ? col::Accent : ImVec4(0.80f, 0.835f, 0.902f, 1.0f)), 0, 1.3f);
+        textCentered(dl, fonts.label, bc, u32(hov ? col::White : state == AnswerState::Dimmed ? col::Muted : col::InkSoft), l);
+    }
+    if (animating && state == AnswerState::Correct) celebrate(ImGui::GetForegroundDrawList(), bc, anim);
+    return clicked;
+}
+
 void celebrate(ImDrawList* dl, ImVec2 center, float t) {
     const float dur = 0.95f;
     if (t < 0 || t > dur) return;

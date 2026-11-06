@@ -44,6 +44,7 @@ private:
 
     // Shared pieces
     void drawStatRow();
+    void drawComposites();  // estimated composite scores (Progress page)
     void drawSectionGrid(const std::vector<SubtestInfo>& sections, bool practicePage, bool addVocabCard);
     int subjectIndex(const std::string& id) const;  // position in the subtest list
     void focusMenuItems();

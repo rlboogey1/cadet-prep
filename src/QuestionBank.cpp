@@ -81,6 +81,11 @@ void QuestionBank::shuffleChoices(Question& q, std::mt19937& rng) {
     std::vector<std::string> shuffled;
     for (size_t i : order) shuffled.push_back(q.choices[i]);
     q.choices = std::move(shuffled);
+    if (q.choiceVisuals.size() == order.size()) {  // keep each picture with its choice
+        std::vector<Visual> pics;
+        for (size_t i : order) pics.push_back(q.choiceVisuals[i]);
+        q.choiceVisuals = std::move(pics);
+    }
     q.correctIndex = static_cast<int>(
         std::find(q.choices.begin(), q.choices.end(), correct) - q.choices.begin());
 }

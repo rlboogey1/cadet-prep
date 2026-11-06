@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <functional>
+#include <map>
 #include <numeric>
 #include <set>
 
@@ -566,10 +567,23 @@ std::string attitude(int pitch, int bank, int heading) {
     return p + ", " + b + ", heading " + direction(heading);
 }
 
+int normHeading(int h) { return ((h % 360) + 360) % 360; }
+
+// The real test shows the two dials and asks which of several aircraft pictures
+// matches them. Each choice keeps its written description too: it's used in the
+// results review, and as the answer text in the console version.
 bool icQuestion(Rng& rng, Question& q) {
-    const int bank = pick(rng, std::vector<int>{-45, -30, -15, 0, 15, 30, 45});
-    const int pitch = pick(rng, std::vector<int>{-10, 0, 10});
+    const int bank = pick(rng, std::vector<int>{-45, -30, 0, 30, 45});
+    const int pitch = pick(rng, std::vector<int>{-15, 0, 15});
     const int heading = ri(rng, 0, 7) * 45;
+
+    // Remember the attitude behind each description, to draw it later
+    std::map<std::string, std::vector<int>> attitudes;
+    auto attitude = [&](int p, int b, int h) {
+        std::string text = ::attitude(p, b, h);
+        attitudes.emplace(text, std::vector<int>{b, p, normHeading(h)});
+        return text;
+    };
 
     // Each wrong answer gets one part wrong (sometimes two)
     std::vector<std::string> w;
@@ -577,7 +591,7 @@ bool icQuestion(Rng& rng, Question& q) {
     if (pitch != 0) w.push_back(attitude(-pitch, bank, heading));
     w.push_back(attitude(pitch, bank, heading + 180));
     if (bank == 0) { w.push_back(attitude(pitch, 30, heading)); w.push_back(attitude(pitch, -30, heading)); }
-    if (pitch == 0) { w.push_back(attitude(10, bank, heading)); w.push_back(attitude(-10, bank, heading)); }
+    if (pitch == 0) { w.push_back(attitude(15, bank, heading)); w.push_back(attitude(-15, bank, heading)); }
     w.push_back(attitude(pitch, bank, heading + 90));
     w.push_back(attitude(-pitch, -bank, heading));
     w.push_back(attitude(pitch, bank, heading - 45));
@@ -592,10 +606,12 @@ bool icQuestion(Rng& rng, Question& q) {
     else expl += "The horizon crosses the center, so the nose is level. ";
     expl += std::string("The compass arrow points ") + direction(heading) + ".";
 
-    if (!build(q, IC, "IC-att", "Which statement describes the aircraft?", attitude(pitch, bank, heading), w, expl))
-        return false;
+    const std::string correct = attitude(pitch, bank, heading);
+    if (!build(q, IC, "IC-att", "Which aircraft matches the instruments?", correct, w, expl)) return false;
+    q.explanation += " Answer: " + correct + ".";
     q.visual.kind = VisualKind::Instruments;
     q.visual.data = {bank, pitch, heading};
+    for (const auto& c : q.choices) q.choiceVisuals.push_back(Visual{VisualKind::Aircraft, attitudes.at(c)});
     return true;
 }
 

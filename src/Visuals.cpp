@@ -184,6 +184,153 @@ void drawInstruments(const Visual& v, float width) {
     textCentered(dl, fonts.label, ImVec2(c2.x, p.y + r * 2 + 16), u32(col::Muted), "COMPASS");
 }
 
+// ---------------------------------------------------------------- aircraft (Instrument Comprehension answers)
+
+struct V3 { float x, y, z; };
+V3 operator+(V3 a, V3 b) { return {a.x + b.x, a.y + b.y, a.z + b.z}; }
+V3 operator-(V3 a, V3 b) { return {a.x - b.x, a.y - b.y, a.z - b.z}; }
+V3 operator*(V3 a, float s) { return {a.x * s, a.y * s, a.z * s}; }
+float dot(V3 a, V3 b) { return a.x * b.x + a.y * b.y + a.z * b.z; }
+V3 cross(V3 a, V3 b) { return {a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x}; }
+V3 normalize(V3 a) {
+    float l = std::sqrt(dot(a, a));
+    return l > 0 ? a * (1.0f / l) : a;
+}
+
+enum class Part { Body, Wing, Fin, Canopy };
+struct Face { std::vector<V3> pts; Part part; bool twoSided; };
+
+// A simple jet in body coordinates: x = right wing, y = up, z = nose.
+const std::vector<Face>& aircraftModel() {
+    static const std::vector<Face> faces = [] {
+        std::vector<Face> f;
+        // Fuselage: rings of 8 points along its length, closed to a point at the nose
+        const float ring[][2] = {{-1.05f, 0.05f}, {-0.70f, 0.10f}, {0.30f, 0.13f}, {0.75f, 0.11f}, {1.00f, 0.06f}};
+        const int K = 8, R = 5;
+        auto at = [&](int s, int k) {
+            float a = 2.0f * kPi * (static_cast<float>(k) + 0.5f) / K;
+            return V3{std::cos(a) * ring[s][1], std::sin(a) * ring[s][1] * 0.9f, ring[s][0]};
+        };
+        for (int s = 0; s + 1 < R; ++s)
+            for (int k = 0; k < K; ++k)
+                f.push_back({{at(s, k), at(s, (k + 1) % K), at(s + 1, (k + 1) % K), at(s + 1, k)}, Part::Body, false});
+        const V3 nose{0, 0, 1.28f};
+        for (int k = 0; k < K; ++k) f.push_back({{at(R - 1, k), at(R - 1, (k + 1) % K), nose}, Part::Body, false});
+        std::vector<V3> tail;
+        for (int k = K - 1; k >= 0; --k) tail.push_back(at(0, k));
+        f.push_back({tail, Part::Body, false});
+
+        // Wings and tailplanes: flat, split into strips so they sort well against the body
+        auto surface = [&](float x0, float x1, float lead0, float trail0, float lead1, float trail1, float y0,
+                           float dihedral, Part part, int strips) {
+            for (int side : {-1, 1})
+                for (int i = 0; i < strips; ++i) {
+                    float t0 = static_cast<float>(i) / strips, t1 = static_cast<float>(i + 1) / strips;
+                    auto pt = [&](float t, bool lead) {
+                        float x = x0 + (x1 - x0) * t;
+                        float z = lead ? lead0 + (lead1 - lead0) * t : trail0 + (trail1 - trail0) * t;
+                        return V3{side * x, y0 + dihedral * (x - x0), z};
+                    };
+                    f.push_back({{pt(t0, true), pt(t1, true), pt(t1, false), pt(t0, false)}, part, true});
+                }
+        };
+        surface(0.10f, 1.15f, 0.35f, -0.25f, -0.12f, -0.38f, 0.0f, 0.05f, Part::Wing, 3);
+        surface(0.06f, 0.46f, -0.62f, -1.00f, -0.88f, -1.05f, 0.02f, 0.0f, Part::Wing, 1);
+        // Tail fin
+        f.push_back({{{0, 0.08f, -0.55f}, {0, 0.52f, -0.92f}, {0, 0.52f, -1.06f}, {0, 0.05f, -1.05f}}, Part::Fin, true});
+        // Canopy
+        const V3 cf{0, 0.10f, 0.95f}, cp{0, 0.20f, 0.62f}, cb{0, 0.12f, 0.32f}, cl{-0.08f, 0.10f, 0.62f}, cr{0.08f, 0.10f, 0.62f};
+        f.push_back({{cf, cp, cl}, Part::Canopy, false});
+        f.push_back({{cf, cr, cp}, Part::Canopy, false});
+        f.push_back({{cb, cl, cp}, Part::Canopy, false});
+        f.push_back({{cb, cp, cr}, Part::Canopy, false});
+        return f;
+    }();
+    return faces;
+}
+
+ImVec4 shade(ImVec4 c, float k) { return ImVec4(c.x * k, c.y * k, c.z * k, c.w); }
+
+}  // namespace
+
+void drawAircraft(ImDrawList* dl, ImVec2 a, ImVec2 b, int bankDeg, int pitchDeg, int headingDeg) {
+    // Backdrop: sky, and a strip of ground at the bottom so "down" is obvious
+    const float groundY = b.y - (b.y - a.y) * 0.18f;
+    const int v0 = dl->VtxBuffer.Size;
+    dl->AddRectFilled(a, ImVec2(b.x, groundY), IM_COL32_WHITE);
+    ImGui::ShadeVertsLinearColorGradientKeepAlpha(dl, v0, dl->VtxBuffer.Size, a, ImVec2(a.x, groundY),
+                                                   IM_COL32(205, 225, 250, 255), IM_COL32(240, 246, 253, 255));
+    dl->AddRectFilled(ImVec2(a.x, groundY), b, IM_COL32(222, 210, 186, 255));
+    dl->AddLine(ImVec2(a.x, groundY), ImVec2(b.x, groundY), IM_COL32(176, 156, 120, 255), 1.0f);
+
+    // Orientation: start from the heading, raise the nose by the pitch, then roll by the bank.
+    // World axes: x = east, y = up, z = north.
+    const float h = headingDeg * kPi / 180.0f, th = pitchDeg * kPi / 180.0f, ph = bankDeg * kPi / 180.0f;
+    const V3 up0{0, 1, 0}, fwd0{std::sin(h), 0, std::cos(h)}, right0{std::cos(h), 0, -std::sin(h)};
+    const V3 fwd = fwd0 * std::cos(th) + up0 * std::sin(th);
+    const V3 upP = up0 * std::cos(th) - fwd0 * std::sin(th);
+    const V3 right = right0 * std::cos(ph) - upP * std::sin(ph);  // bank right = right wing down
+    const V3 up = upP * std::cos(ph) + right0 * std::sin(ph);
+    auto toWorld = [&](V3 p) { return right * p.x + up * p.y + fwd * p.z; };
+
+    // Camera looking north, tilted 12 degrees down, with a little perspective
+    const float e = 12.0f * kPi / 180.0f, D = 5.0f;
+    auto toCam = [&](V3 w) { return V3{w.x, w.y * std::cos(e) + w.z * std::sin(e), -w.y * std::sin(e) + w.z * std::cos(e)}; };
+    const ImVec2 c((a.x + b.x) * 0.5f, (a.y + groundY) * 0.5f + (b.y - a.y) * 0.04f);
+    const float S = std::min((b.x - a.x) * 0.42f, (groundY - a.y) * 0.50f);
+    auto project = [&](V3 cam) {
+        float k = S * D / (D + cam.z);
+        return ImVec2(c.x + cam.x * k, c.y - cam.y * k);
+    };
+
+    const V3 light = normalize({-0.35f, 0.85f, -0.4f});
+    const ImVec4 topCol(0.93f, 0.94f, 0.97f, 1), underCol(0.45f, 0.52f, 0.66f, 1), bodyCol(0.80f, 0.83f, 0.90f, 1),
+                 finCol(0.247f, 0.373f, 0.855f, 1), glass(0.10f, 0.16f, 0.32f, 1), edge(0.16f, 0.22f, 0.40f, 1);
+
+    struct Drawn { std::vector<ImVec2> pts; float depth; ImU32 fill; };
+    std::vector<Drawn> drawn;
+    for (const Face& f : aircraftModel()) {
+        std::vector<V3> cam;
+        for (const V3& p : f.pts) cam.push_back(toCam(toWorld(p)));
+        V3 n = normalize(cross(cam[1] - cam[0], cam[2] - cam[0]));
+        // The camera looks along +z, so a face points at it when n.z < 0
+        bool facing = n.z < 0;
+        if (!f.twoSided && !facing) continue;
+        if (!facing) n = n * -1.0f;
+
+        ImVec4 base = bodyCol;
+        if (f.part == Part::Wing) {
+            // Which side are we seeing? Compare with the aircraft's "up", in camera space
+            const V3 upCam = toCam(up);
+            base = dot(n, upCam) > 0 ? topCol : underCol;
+        } else if (f.part == Part::Fin) {
+            base = finCol;
+        } else if (f.part == Part::Canopy) {
+            base = glass;
+        }
+        const V3 lightCam = toCam(light);
+        float k = 0.62f + 0.38f * std::max(0.0f, dot(n, lightCam));
+        Drawn d;
+        d.fill = u32(shade(base, k));
+        d.depth = 0;
+        for (const V3& p : cam) {
+            d.pts.push_back(project(p));
+            d.depth += p.z;
+        }
+        d.depth /= static_cast<float>(cam.size());
+        drawn.push_back(std::move(d));
+    }
+    std::sort(drawn.begin(), drawn.end(), [](const Drawn& x, const Drawn& y) { return x.depth > y.depth; });
+    const ImU32 line = u32(edge, 0.55f);
+    for (const Drawn& d : drawn) {
+        const int n = static_cast<int>(d.pts.size());
+        dl->AddConvexPolyFilled(d.pts.data(), n, d.fill);
+        dl->AddPolyline(d.pts.data(), n, line, ImDrawFlags_Closed, 0.8f);
+    }
+}
+
+namespace {
+
 // ---------------------------------------------------------------- Block Counting
 
 float blockUnit(float available) { return std::clamp(available * 0.42f / 5.6f, 34.0f, 54.0f); }

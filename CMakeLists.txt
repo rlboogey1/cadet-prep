@@ -49,7 +49,8 @@ add_library(afoqt_core STATIC
     src/ProgressStore.cpp
     src/QuizEngine.cpp
     src/FlashcardDeck.cpp
-    src/QuestionGenerator.cpp)
+    src/QuestionGenerator.cpp
+    src/Composites.cpp)
 target_include_directories(afoqt_core PUBLIC src)
 target_link_libraries(afoqt_core PUBLIC nlohmann_json::nlohmann_json)
 target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="${CMAKE_SOURCE_DIR}/data")

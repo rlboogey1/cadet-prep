@@ -1,5 +1,6 @@
 #define IMGUI_DEFINE_MATH_OPERATORS  // lets us write ImVec2 + ImVec2
 #include "GuiApp.h"
+#include "Composites.h"
 #include "Visuals.h"
 #include "Widgets.h"
 #include "imgui.h"
@@ -685,8 +686,31 @@ void GuiApp::drawQuiz() {
 
     int clicked = -2;  // -2 = nothing, -1 = skip, 0+ = choice
     const float aw = ImGui::GetContentRegionAvail().x;
+    const bool pictures = q.choiceVisuals.size() == q.choices.size();
+    const int perRow = 3;
+    const float picGap = 12.0f, picW = (aw - picGap * (perRow - 1)) / perRow, picH = std::floor(picW * 0.78f);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(12, 10));
-    for (int i = 0; i < static_cast<int>(q.choices.size()); ++i) {
+    for (int i = 0; pictures && i < static_cast<int>(q.choices.size()); ++i) {
+        AnswerState st = AnswerState::Normal;
+        if (feedback) {
+            if (i == q.correctIndex) st = AnswerState::Correct;
+            else if (i == engine_.lastChoice()) st = AnswerState::Wrong;
+            else st = AnswerState::Dimmed;
+        }
+        if (i % perRow != 0) ImGui::SameLine(0, picGap);
+        float shake = 0.0f;
+        if (st == AnswerState::Wrong && anim >= 0 && anim < 0.4f) shake = std::sin(anim * 48.0f) * 7.0f * (1.0f - anim / 0.4f);
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + shake);
+        ImGui::PushID(i);
+        const Visual& v = q.choiceVisuals[static_cast<size_t>(i)];
+        const bool animated = st == AnswerState::Correct || st == AnswerState::Wrong;
+        if (pictureAnswerCard("pic", static_cast<char>('A' + i), st, ImVec2(picW, picH), animated ? anim : -1.0f,
+                              [&](ImDrawList* d, ImVec2 a, ImVec2 b) { drawAircraft(d, a, b, v.data[0], v.data[1], v.data[2]); }))
+            clicked = i;
+        ImGui::PopID();
+        if (!feedback && ImGui::IsKeyPressed(static_cast<ImGuiKey>(ImGuiKey_A + i), false)) clicked = i;
+    }
+    for (int i = 0; !pictures && i < static_cast<int>(q.choices.size()); ++i) {
         AnswerState st = AnswerState::Normal;
         if (feedback) {
             if (i == q.correctIndex) st = AnswerState::Correct;
@@ -949,6 +973,8 @@ void GuiApp::drawProgress() {
     pageTitle("My progress", "Accuracy and pace for each section. Your focus area is highlighted.");
     drawStatRow();
     ImGui::Dummy(ImVec2(0, 10));
+    drawComposites();
+    ImGui::Dummy(ImVec2(0, 10));
 
     const auto stats = progress_.stats();
     const std::string focusSid = focusId();
@@ -1023,6 +1049,73 @@ void GuiApp::drawProgress() {
         focusMenuItems();
         ImGui::EndPopup();
     }
+    endCard();
+}
+
+void GuiApp::drawComposites() {
+    const auto estimates = estimateComposites(progress_.stats());
+    const int perRow = 3;
+    const float tileH = 150.0f, gap = 14.0f;
+    const int rows = (static_cast<int>(estimates.size()) + perRow - 1) / perRow;
+    beginCard("composites", ImVec2(0, 130 + rows * tileH + (rows - 1) * gap));
+    spacedLabel("ESTIMATED COMPOSITE SCORES", col::Muted, 1.8f);
+    wrappedIn(fonts.small, col::Muted,
+              "The average of your accuracy on the sections in each composite. The real AFOQT reports "
+              "percentiles (1\xE2\x80\x93" "99) compared with other test takers, so use these as a guide to "
+              "where you're strong, not as your official score.");
+    ImGui::Dummy(ImVec2(0, 4));
+
+    auto nameOf = [&](const std::string& id) {
+        const SubtestInfo* s = registry_.find(id);
+        return s ? s->name : id;
+    };
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    const float tileW = (ImGui::GetContentRegionAvail().x - gap * (perRow - 1)) / perRow;
+    const ImVec2 origin = ImGui::GetCursorScreenPos();
+    for (size_t i = 0; i < estimates.size(); ++i) {
+        const CompositeEstimate& e = estimates[i];
+        const int r = static_cast<int>(i) / perRow, c = static_cast<int>(i) % perRow;
+        const ImVec2 p = origin + ImVec2(c * (tileW + gap), r * (tileH + gap));
+        const bool pilot = i == 0;
+        dl->AddRectFilled(p, p + ImVec2(tileW, tileH), u32(pilot ? col::AccentSoft : col::Bg), 12.0f);
+        if (pilot) dl->AddRect(p, p + ImVec2(tileW, tileH), u32(col::Accent, 0.5f), 12.0f, 0, 1.3f);
+
+        const float pad = 16.0f, inner = tileW - pad * 2;
+        dl->AddText(fonts.strong, fontPx(fonts.strong), p + ImVec2(pad, 14), u32(col::Ink), e.info->name.c_str());
+        dl->AddText(fonts.small, fontPx(fonts.small), p + ImVec2(pad, 37), u32(col::Muted), e.info->description.c_str());
+
+        const ImVec4 color = !e.hasData() ? col::Muted : e.score >= 80 ? col::Good : e.score >= 60 ? col::Accent : col::Bad;
+        std::string big = e.hasData() ? fmt("%.0f%%", e.score) : "\xE2\x80\x94";
+        ImVec2 bs = textSize(fonts.heading, big.c_str());
+        dl->AddText(fonts.heading, fontPx(fonts.heading), ImVec2(p.x + tileW - pad - bs.x, p.y + 12), u32(color), big.c_str());
+
+        const float by = p.y + 66;
+        dl->AddRectFilled(ImVec2(p.x + pad, by), ImVec2(p.x + pad + inner, by + 6), u32(col::Track), 3.0f);
+        if (e.hasData())
+            dl->AddRectFilled(ImVec2(p.x + pad, by), ImVec2(p.x + pad + inner * static_cast<float>(e.score / 100.0), by + 6),
+                              u32(color), 3.0f);
+
+        // What's in it, and what's holding it back
+        std::string line1, line2;
+        if (!e.hasData()) {
+            line1 = fmt("%d sections, none practiced yet", static_cast<int>(e.info->sections.size()));
+        } else {
+            line1 = "Weakest: " + nameOf(e.weakest);
+            if (!e.complete()) {
+                line2 = "Not practiced: ";
+                for (size_t k = 0; k < e.missing.size(); ++k) line2 += (k ? ", " : "") + nameOf(e.missing[k]);
+            } else {
+                line2 = fmt("Based on all %d sections", static_cast<int>(e.info->sections.size()));
+            }
+        }
+        dl->PushClipRect(p, p + ImVec2(tileW - pad, tileH), true);
+        dl->AddText(fonts.small, fontPx(fonts.small), ImVec2(p.x + pad, by + 18), u32(col::InkSoft), line1.c_str());
+        if (!line2.empty())  // can be a long list of names, so it wraps
+            dl->AddText(fonts.small, fontPx(fonts.small), ImVec2(p.x + pad, by + 38),
+                        u32(e.complete() ? col::Muted : col::Bad), line2.c_str(), nullptr, inner);
+        dl->PopClipRect();
+    }
+    ImGui::Dummy(ImVec2(0, rows * tileH + (rows - 1) * gap));
     endCard();
 }
 

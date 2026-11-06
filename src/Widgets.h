@@ -6,6 +6,7 @@
 // "study lab" look: a navy sidebar, white cards with soft shadows, pill badges,
 // and line icons.
 #include "imgui.h"
+#include <functional>
 
 namespace ui {
 
@@ -107,6 +108,9 @@ void iconTile(ImDrawList* dl, ImVec2 p, float size, Tint t, const char* glyph, I
 enum class AnswerState { Normal, Correct, Wrong, Dimmed };
 // `anim` = seconds since the answer was given (or < 0 for no animation).
 bool answerCard(const char* id, char letter, const char* text, AnswerState state, float width, float anim);
+// An answer that's a picture: `drawPicture` fills the area between the two corners.
+bool pictureAnswerCard(const char* id, char letter, AnswerState state, ImVec2 size, float anim,
+                       const std::function<void(ImDrawList*, ImVec2, ImVec2)>& drawPicture);
 
 bool toggle(const char* id, bool* value);
 void thinBar(float fraction, float width, ImVec4 color = col::Accent, float height = 7.0f);
