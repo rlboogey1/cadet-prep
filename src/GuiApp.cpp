@@ -452,28 +452,25 @@ void GuiApp::drawHome() {
     // ---- Welcome banner
     ImDrawList* dl = ImGui::GetWindowDrawList();
     const float w = ImGui::GetContentRegionAvail().x;
-    const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, 270);
+    const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, 190);
     gradientRect(dl, a, b, col::HeroA, col::HeroB, 24.0f);
     dl->PushClipRect(a, b, true);
-    dl->AddCircle(ImVec2(b.x - 150, a.y + 70), 200, u32(col::White, 0.10f), 96, 1.5f);
-    dl->AddCircle(ImVec2(b.x - 110, a.y + 110), 140, u32(col::White, 0.08f), 96, 1.5f);
+    dl->AddCircle(ImVec2(b.x - 130, a.y + 40), 170, u32(col::White, 0.10f), 96, 1.5f);
     dl->PopClipRect();
-    drawLogo(dl, ImVec2(b.x - 150, a.y + 135), 70.0f);
+    drawLogo(dl, ImVec2(b.x - 120, a.y + 95), 58.0f);
     const float pad = 42.0f;
     ImGui::SetCursorScreenPos(a + ImVec2(pad, 38));
     spacedLabel("CADET PREP", ImVec4(1, 1, 1, 0.85f), 2.2f);
     float y = ImGui::GetCursorScreenPos().y + 6;
-    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), "Let's get some");
-    y += fontPx(fonts.hero) + 2;
-    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), "reps in.");
-    y += fontPx(fonts.hero) + 16;
-    const char* blurb = "AFOQT practice or Warrior Knowledge for the next LLAB. Pick one below. Your progress saves as you go.";
+    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), "Choose a section");
+    y += fontPx(fonts.hero) + 14;
+    const char* blurb = "AFOQT Prep or Warrior Knowledge. Your progress saves automatically.";
     dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(a.x + pad, y), u32(col::White, 0.88f), blurb, nullptr,
                 std::min(620.0f, w * 0.6f));
     ImGui::SetCursorScreenPos(ImVec2(a.x, b.y + 28));
 
     // ---- One card per prep section
-    textIn(fonts.title, col::Ink, "Pick a section");
+    textIn(fonts.title, col::Ink, "Sections");
     ImGui::Dummy(ImVec2(0, 6));
     Grid grid(2);
     const ImVec2 size(grid.cardW, 262);
