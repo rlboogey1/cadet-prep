@@ -4,6 +4,9 @@ A console study app for the AFOQT knowledge sections: Word Knowledge, Math Knowl
 Arithmetic Reasoning, Verbal Analogies, and Reading Comprehension. It's built so pilot
 sections can be added later without restructuring.
 
+> This project was built with [Claude Code](https://claude.com/claude-code), Anthropic's
+> AI coding assistant.
+
 ## Build and run
 
 Requires CMake 3.16+ and a C++17 compiler (g++, clang, or Visual Studio 2019+).
