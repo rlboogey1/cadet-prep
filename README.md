@@ -36,6 +36,8 @@ in the folder you run it from.
 
 ## Question bank
 
+**Knowledge sections**
+
 | Section | Written questions | Plus |
 |---|---|---|
 | Word Knowledge | 233 | 233 flashcards |
@@ -43,6 +45,23 @@ in the folder you run it from.
 | Arithmetic Reasoning | 50 | unlimited generated questions |
 | Verbal Analogies | 63 | |
 | Reading Comprehension | 33 (11 passages) | |
+
+**Pilot sections** (official question counts and time limits)
+
+| Section | Questions | Timed test |
+|---|---|---|
+| Table Reading | unlimited, a new 21 x 21 table each session | 40 in 7 min |
+| Instrument Comprehension | unlimited: artificial horizon + compass | 25 in 5 min |
+| Aviation Information | 44 written | 20 in 8 min |
+| Block Counting | unlimited 3D block stacks | 30 in 5 min |
+
+The Pilot composite score uses Math Knowledge, Table Reading, Instrument
+Comprehension, and Aviation Information. Block Counting counts toward other
+composites (CSO and ABM). Sections with pictures only appear in the window
+version, not the console version. The real Table Reading test uses a larger
+table (X and Y from -15 to +15); this app uses -10 to +10 so it fits on screen,
+and Instrument Comprehension answers are written descriptions rather than the
+aircraft pictures on the real test.
 
 Everything is randomized:
 - **Question order:** each test draws questions in a random order.
@@ -64,6 +83,11 @@ Add an entry to `data/flashcards.json`:
   "synonym": "watchful", "example": "Guards remained vigilant all night." }
 ```
 
+## Logo
+
+`assets/` has the F-22 logo as `logo.svg` (vector), `logo_1024.png`, and `AppIcon.icns`
+(the Mac app icon, built into the app automatically).
+
 ## Project layout
 
 ```
@@ -74,7 +98,10 @@ data/
 src/
   Question.h                 Question and AnswerRecord structs
   QuizEngine.*               step-by-step quiz logic used by the GUI
-  QuestionGenerator.*        random-number math questions
+  QuestionGenerator.*        random math questions and the pilot sections
+  Visuals.*                  tables, cockpit dials, and block stacks
+  Sound.*                    sound effects (synthesized, using miniaudio)
+  JetShape.h                 the F-22 outline used by the logo
   FlashcardDeck.*            flashcards and spaced repetition
   GuiApp.*, gui_main.cpp     the window version (Dear ImGui)
   QuestionBank.*             loads JSON, validates, shuffles

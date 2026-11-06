@@ -44,13 +44,14 @@ private:
 
     // Shared pieces
     void drawStatRow();
+    void drawSectionGrid(const std::vector<SubtestInfo>& sections, bool practicePage, bool addVocabCard);
     int subjectIndex(const std::string& id) const;  // position in the subtest list
     void focusMenuItems();
     void cardFocusMenu(const SubtestInfo& s, ImVec2 cardMin, ImVec2 cardMax);
 
     // Actions
     void startSubtest(const SubtestInfo& s, SessionMode mode);
-    void startBattery();
+    void startBattery(const std::string& category);
     void startNextInQueue();
     void startWarmup();
     void startReview(const std::string& subtestId);  // empty = all sections

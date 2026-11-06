@@ -42,15 +42,17 @@ void QuestionBank::loadFile(const std::string& path, const std::string& subtestI
 std::vector<Question> QuestionBank::draw(const std::string& subtestId, size_t count,
                                          std::mt19937& rng) const {
     auto it = bySubtest_.find(subtestId);
-    if (it == bySubtest_.end()) return {};
-
-    std::vector<Question> pool = it->second;
+    std::vector<Question> pool;
+    if (it != bySubtest_.end()) pool = it->second;
+    else if (!QuestionGenerator::supports(subtestId)) return {};
     std::shuffle(pool.begin(), pool.end(), rng);
 
     if (QuestionGenerator::supports(subtestId)) {
-        // Timed test: a third of the questions are generated.
-        // Practice (count 0): every written question, plus 20 generated ones.
-        const size_t generated = count > 0 ? count / 3 : 20;
+        // Sections with written questions: a third of a timed test is generated,
+        // and practice (count 0) gets every written question plus 20 generated.
+        // Generated-only sections (Table Reading, etc.) get a full set.
+        size_t generated = count > 0 ? count / 3 : 20;
+        if (pool.empty()) generated = count > 0 ? count : 20;
         if (count > 0 && count - generated < pool.size()) pool.resize(count - generated);
         auto extra = QuestionGenerator::generate(subtestId, generated, rng);
         pool.insert(pool.end(), extra.begin(), extra.end());

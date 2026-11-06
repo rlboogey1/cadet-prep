@@ -1,5 +1,5 @@
 {
-  "_note": "Time limits here are practice pacing, not official values. Check the current AFOQT study guide and adjust. To add a pilot section later, add an entry with \"category\": \"pilot\" and its own question file.",
+  "_note": "Pilot sections use the official question counts and time limits. Knowledge sections use practice pacing; adjust them to match the current official study guide if you like.",
   "subtests": [
     {
       "id": "word_knowledge",
@@ -45,6 +45,42 @@
       "time_limit_seconds": 540,
       "question_count": 9,
       "tips": "Pick the answer the passage supports, not what you know from elsewhere."
+    },
+    {
+      "id": "table_reading",
+      "name": "Table Reading",
+      "category": "pilot",
+      "visual": true,
+      "time_limit_seconds": 420,
+      "question_count": 40,
+      "tips": "Slide along the top to the X column, then down to the Y row. Watch the signs: +4 and -4 are different columns."
+    },
+    {
+      "id": "instrument_comprehension",
+      "name": "Instrument Comprehension",
+      "category": "pilot",
+      "visual": true,
+      "time_limit_seconds": 300,
+      "question_count": 25,
+      "tips": "Read bank and pitch from the horizon line first, then the heading from the compass. Eliminate any choice that gets one part wrong."
+    },
+    {
+      "id": "aviation_information",
+      "name": "Aviation Information",
+      "category": "pilot",
+      "file": "aviation_information.json",
+      "time_limit_seconds": 480,
+      "question_count": 20,
+      "tips": "Picture the three axes: ailerons roll, the elevator pitches, and the rudder yaws."
+    },
+    {
+      "id": "block_counting",
+      "name": "Block Counting",
+      "category": "pilot",
+      "visual": true,
+      "time_limit_seconds": 300,
+      "question_count": 30,
+      "tips": "Count blocks beside it in its layer, then every block it crosses in the layers directly above and below."
     }
   ]
 }

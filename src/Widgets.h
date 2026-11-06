@@ -64,7 +64,8 @@ float fontPx(ImFont* f);
 ImVec2 textSize(ImFont* font, const char* text, float wrap = -1.0f);
 
 // ---------------------------------------------------------------- icons
-enum class Icon { Home, Target, Clock, Review, Cards, Chart, List, Check, Cross, Sparkle, SpeakerOn, SpeakerOff, Bolt };
+enum class Icon { Home, Target, Clock, Review, Cards, Chart, List, Check, Cross, Sparkle, SpeakerOn, SpeakerOff, Bolt,
+                  Jet, Table, Gauge, Cube };
 void drawIcon(ImDrawList* dl, Icon icon, ImVec2 center, float size, ImU32 color);
 
 // ---------------------------------------------------------------- text

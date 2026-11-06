@@ -17,7 +17,8 @@ void SubtestRegistry::load(const std::string& path) {
         info.id = s.at("id").get<std::string>();
         info.name = s.at("name").get<std::string>();
         info.category = s.value("category", "knowledge");
-        info.file = s.at("file").get<std::string>();
+        info.file = s.value("file", "");
+        info.visual = s.value("visual", false);
         info.timeLimitSeconds = s.value("time_limit_seconds", 0);
         info.questionCount = s.value("question_count", 0);
         info.tips = s.value("tips", "");

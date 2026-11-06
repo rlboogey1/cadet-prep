@@ -1,5 +1,6 @@
 #define IMGUI_DEFINE_MATH_OPERATORS  // lets us write ImVec2 + ImVec2
 #include "Widgets.h"
+#include "Visuals.h"         // drawJet, for the jet icon
 #include "imgui_internal.h"  // ShadeVertsLinearColorGradientKeepAlpha, for gradients
 #include <algorithm>
 #include <cfloat>
@@ -76,15 +77,18 @@ Tint tint(int i) {
         {{0.894f, 0.965f, 0.906f, 1}, {0.180f, 0.565f, 0.282f, 1}},  // green
         {{0.992f, 0.906f, 0.933f, 1}, {0.812f, 0.239f, 0.420f, 1}},  // rose
         {{0.894f, 0.937f, 0.996f, 1}, {0.157f, 0.427f, 0.808f, 1}},  // blue
+        {{0.996f, 0.957f, 0.851f, 1}, {0.733f, 0.502f, 0.035f, 1}},  // amber
+        {{0.871f, 0.957f, 0.980f, 1}, {0.035f, 0.494f, 0.620f, 1}},  // cyan
+        {{0.918f, 0.929f, 0.957f, 1}, {0.278f, 0.333f, 0.459f, 1}},  // slate
     };
-    return t[((i % 7) + 7) % 7];
+    return t[((i % 10) + 10) % 10];
 }
 
 void loadFonts(ImGuiIO& io, float scale) {
     // Latin, Greek (pi), punctuation, superscripts and subscripts, arrows, math symbols
     static const ImWchar fullRanges[] = {0x0020, 0x00FF, 0x0370, 0x03FF, 0x2000, 0x206F, 0x2070, 0x209F,
                                          0x2190, 0x21FF, 0x2200, 0x22FF, 0};
-    static const ImWchar basicRanges[] = {0x0020, 0x00FF, 0x2013, 0x2014, 0x2022, 0x2022, 0x2190, 0x2193, 0};
+    static const ImWchar basicRanges[] = {0x0020, 0x00FF, 0x2013, 0x2014, 0x2022, 0x2022, 0x2190, 0x2193, 0x2212, 0x2212, 0};
 
     const char* regular = firstExisting({
         "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",  // macOS
@@ -252,6 +256,30 @@ void drawIcon(ImDrawList* dl, Icon icon, ImVec2 c, float size, ImU32 color) {
                 dl->AddLine(P(0.35f, -0.3f), P(0.9f, 0.3f), color, t);
                 dl->AddLine(P(0.9f, -0.3f), P(0.35f, 0.3f), color, t);
             }
+            break;
+        }
+        case Icon::Jet:
+            drawJet(dl, c + ImVec2(0, h * 0.28f), h * 1.0f, 0.0f, color);
+            break;
+        case Icon::Table:
+            dl->AddRect(P(-0.9f, -0.8f), P(0.9f, 0.8f), color, 2.0f, 0, t);
+            dl->AddLine(P(-0.9f, -0.27f), P(0.9f, -0.27f), color, t);
+            dl->AddLine(P(-0.9f, 0.27f), P(0.9f, 0.27f), color, t);
+            dl->AddLine(P(-0.3f, -0.8f), P(-0.3f, 0.8f), color, t);
+            dl->AddLine(P(0.3f, -0.8f), P(0.3f, 0.8f), color, t);
+            break;
+        case Icon::Gauge:
+            dl->AddCircle(c, h * 0.9f, color, 0, t);
+            dl->AddLine(P(-0.9f, 0.12f), P(0.9f, -0.2f), color, t);
+            dl->AddLine(P(-0.42f, 0.18f), P(0.42f, 0.18f), color, t * 1.2f);
+            dl->AddCircleFilled(P(0.0f, 0.18f), h * 0.1f, color);
+            break;
+        case Icon::Cube: {
+            ImVec2 top = P(0.0f, -0.95f), l = P(-0.85f, -0.5f), r = P(0.85f, -0.5f), m = P(0.0f, -0.05f);
+            ImVec2 lb = P(-0.85f, 0.45f), rb = P(0.85f, 0.45f), b = P(0.0f, 0.95f);
+            dl->AddLine(top, l, color, t); dl->AddLine(top, r, color, t); dl->AddLine(l, m, color, t);
+            dl->AddLine(r, m, color, t); dl->AddLine(m, b, color, t); dl->AddLine(l, lb, color, t);
+            dl->AddLine(r, rb, color, t); dl->AddLine(lb, b, color, t); dl->AddLine(rb, b, color, t);
             break;
         }
         case Icon::Bolt:  // lightning: two overlapping triangles

@@ -1,0 +1,576 @@
+{
+  "questions": [
+    {
+      "id": "AI-001",
+      "prompt": "Which control surfaces roll the aircraft around its longitudinal axis?",
+      "choices": [
+        "Rudder",
+        "Flaps",
+        "Ailerons",
+        "Trim tabs",
+        "Elevators"
+      ],
+      "answer": 2,
+      "explanation": "Ailerons on the outer trailing edge of each wing move in opposite directions, raising one wing and lowering the other."
+    },
+    {
+      "id": "AI-002",
+      "prompt": "Moving the elevator rotates the aircraft around which axis?",
+      "choices": [
+        "The propeller's axis",
+        "The wing's chord line",
+        "The vertical axis",
+        "The lateral axis",
+        "The longitudinal axis"
+      ],
+      "answer": 3,
+      "explanation": "The lateral axis runs wingtip to wingtip. The elevator pitches the nose up or down around it."
+    },
+    {
+      "id": "AI-003",
+      "prompt": "The rudder controls movement around which axis?",
+      "choices": [
+        "The longitudinal axis (roll)",
+        "The landing gear axle",
+        "The wing's chord line",
+        "The lateral axis (pitch)",
+        "The vertical axis (yaw)"
+      ],
+      "answer": 4,
+      "explanation": "The rudder swings the nose left or right, which is yaw around the vertical axis."
+    },
+    {
+      "id": "AI-004",
+      "prompt": "What are the four forces acting on an aircraft in flight?",
+      "choices": [
+        "Lift, weight, thrust, and drag",
+        "Lift, weight, torque, and inertia",
+        "Pressure, speed, lift, and friction",
+        "Lift, gravity, speed, and drag",
+        "Thrust, power, drag, and torque"
+      ],
+      "answer": 0,
+      "explanation": "Lift opposes weight, and thrust opposes drag. In steady, level flight they balance."
+    },
+    {
+      "id": "AI-005",
+      "prompt": "Angle of attack is the angle between the wing's chord line and the",
+      "choices": [
+        "fuselage's centerline",
+        "horizon",
+        "ground",
+        "flight path of the previous aircraft",
+        "relative wind"
+      ],
+      "answer": 4,
+      "explanation": "Angle of attack is measured against the oncoming airflow. The angle between the chord line and the fuselage is the angle of incidence, a different thing."
+    },
+    {
+      "id": "AI-006",
+      "prompt": "A wing stalls when",
+      "choices": [
+        "airspeed drops below 100 knots",
+        "the aircraft climbs above 10,000 feet",
+        "it exceeds its critical angle of attack",
+        "the flaps are extended",
+        "the engine stops running"
+      ],
+      "answer": 2,
+      "explanation": "A stall is caused by too high an angle of attack, which disrupts smooth airflow over the wing. It can happen at any airspeed or attitude."
+    },
+    {
+      "id": "AI-007",
+      "prompt": "What is the main purpose of wing flaps?",
+      "choices": [
+        "To steer on the ground",
+        "To increase top speed",
+        "To roll the aircraft",
+        "To reduce the aircraft's weight",
+        "To add lift and drag for slower, steeper approaches"
+      ],
+      "answer": 4,
+      "explanation": "Flaps change the wing's shape, so it makes more lift at low speed. The added drag also allows a steeper descent without gaining speed."
+    },
+    {
+      "id": "AI-008",
+      "prompt": "In a level turn with a 60-degree bank, the load factor is about",
+      "choices": [
+        "3 G",
+        "2 G",
+        "1 G",
+        "1.5 G",
+        "0.5 G"
+      ],
+      "answer": 1,
+      "explanation": "Load factor in a level turn is 1 divided by the cosine of the bank angle. The cosine of 60 degrees is 0.5, so 1 / 0.5 = 2 G."
+    },
+    {
+      "id": "AI-009",
+      "prompt": "Ground effect, felt within about one wingspan of the ground, mainly reduces",
+      "choices": [
+        "parasite drag",
+        "induced drag",
+        "the need for a runway",
+        "the aircraft's weight",
+        "engine thrust"
+      ],
+      "answer": 1,
+      "explanation": "The ground interferes with the wingtip vortices, reducing induced drag. That's why airplanes tend to float just before touchdown."
+    },
+    {
+      "id": "AI-010",
+      "prompt": "Runway 27 is lined up with a magnetic heading of about",
+      "choices": [
+        "27 degrees",
+        "270 degrees",
+        "207 degrees",
+        "360 degrees",
+        "90 degrees"
+      ],
+      "answer": 1,
+      "explanation": "Runway numbers are the magnetic heading divided by 10 and rounded: 270 degrees becomes 27."
+    },
+    {
+      "id": "AI-011",
+      "prompt": "What number is painted on the opposite end of Runway 09?",
+      "choices": [
+        "18",
+        "90",
+        "9",
+        "27",
+        "36"
+      ],
+      "answer": 3,
+      "explanation": "The two ends of a runway differ by 180 degrees: 090 + 180 = 270, so the other end is Runway 27."
+    },
+    {
+      "id": "AI-012",
+      "prompt": "What color are taxiway edge lights?",
+      "choices": [
+        "Blue",
+        "White",
+        "Amber",
+        "Green",
+        "Red"
+      ],
+      "answer": 0,
+      "explanation": "Taxiway edges are blue. Runway edges are white, and taxiway centerline lights are green."
+    },
+    {
+      "id": "AI-013",
+      "prompt": "What color are runway edge lights along most of the runway?",
+      "choices": [
+        "Green",
+        "White",
+        "Blue",
+        "Red",
+        "Purple"
+      ],
+      "answer": 1,
+      "explanation": "Runway edge lights are white. On instrument runways, the last 2,000 feet show yellow as a caution zone."
+    },
+    {
+      "id": "AI-014",
+      "prompt": "To a pilot about to land, the runway threshold lights appear",
+      "choices": [
+        "white",
+        "green",
+        "red",
+        "purple",
+        "blue"
+      ],
+      "answer": 1,
+      "explanation": "Threshold lights show green toward approaching aircraft and red toward aircraft on the runway, marking the runway's end."
+    },
+    {
+      "id": "AI-015",
+      "prompt": "On a PAPI, two white lights and two red lights mean the aircraft is",
+      "choices": [
+        "on the correct glide path",
+        "too high",
+        "off the runway centerline",
+        "too fast",
+        "too low"
+      ],
+      "answer": 0,
+      "explanation": "A PAPI uses four lights. Two white and two red means on glide path, more white means high, and more red means low."
+    },
+    {
+      "id": "AI-016",
+      "prompt": "On a PAPI, four white lights mean the aircraft is",
+      "choices": [
+        "well below the glide path",
+        "slightly below the glide path",
+        "on the glide path",
+        "lined up with the wrong runway",
+        "well above the glide path"
+      ],
+      "answer": 4,
+      "explanation": "All white means too high. All red means dangerously low."
+    },
+    {
+      "id": "AI-017",
+      "prompt": "A rotating beacon flashing white and green marks a",
+      "choices": [
+        "heliport",
+        "closed airport",
+        "water airport",
+        "military airport",
+        "civilian land airport"
+      ],
+      "answer": 4,
+      "explanation": "White and green is a civilian land airport. White and yellow marks a water airport, and a military airport shows two quick white flashes between each green."
+    },
+    {
+      "id": "AI-018",
+      "prompt": "An altimeter finds altitude by measuring",
+      "choices": [
+        "signals from satellites",
+        "outside air (static) pressure",
+        "the outside air temperature",
+        "the aircraft's speed",
+        "pressure in the pitot tube"
+      ],
+      "answer": 1,
+      "explanation": "Air pressure drops as you climb. A standard altimeter converts static pressure to altitude."
+    },
+    {
+      "id": "AI-019",
+      "prompt": "An airspeed indicator works by comparing",
+      "choices": [
+        "static pressure with temperature",
+        "GPS position over time",
+        "the compass heading with the wind",
+        "engine power with drag",
+        "pitot (ram) pressure with static pressure"
+      ],
+      "answer": 4,
+      "explanation": "The faster the airplane moves, the more ram pressure enters the pitot tube compared with the still air at the static port."
+    },
+    {
+      "id": "AI-020",
+      "prompt": "The vertical speed indicator shows",
+      "choices": [
+        "the bank angle",
+        "magnetic heading",
+        "altitude above the ground",
+        "airspeed",
+        "the rate of climb or descent"
+      ],
+      "answer": 4,
+      "explanation": "It reads in feet per minute, positive in a climb and negative in a descent."
+    },
+    {
+      "id": "AI-021",
+      "prompt": "The attitude indicator shows the aircraft's",
+      "choices": [
+        "heading",
+        "pitch and bank relative to the horizon",
+        "airspeed",
+        "rate of climb",
+        "altitude"
+      ],
+      "answer": 1,
+      "explanation": "Its miniature airplane and horizon bar show whether the nose is up or down and whether the wings are banked."
+    },
+    {
+      "id": "AI-022",
+      "prompt": "Why must the heading indicator be checked against the magnetic compass during flight?",
+      "choices": [
+        "It shows true north instead of magnetic",
+        "It only works on the ground",
+        "It reverses direction in turns",
+        "Its gyroscope slowly drifts (precesses)",
+        "It runs on a battery that fades"
+      ],
+      "answer": 3,
+      "explanation": "Friction makes the gyroscope precess, so pilots reset the heading indicator to the compass every 15 minutes or so in steady flight."
+    },
+    {
+      "id": "AI-023",
+      "prompt": "In a coordinated turn, the ball in the turn coordinator is",
+      "choices": [
+        "moving back and forth",
+        "toward the inside of the turn",
+        "at the top of its tube",
+        "centered",
+        "toward the outside of the turn"
+      ],
+      "answer": 3,
+      "explanation": "A centered ball means no slip or skid. Pilots \"step on the ball\" with rudder to center it."
+    },
+    {
+      "id": "AI-024",
+      "prompt": "A knot is a speed of one",
+      "choices": [
+        "kilometer per hour",
+        "statute mile per hour",
+        "thousand feet per minute",
+        "nautical mile per hour",
+        "mile per minute"
+      ],
+      "answer": 3,
+      "explanation": "A nautical mile is about 6,076 feet, so 1 knot is about 1.15 miles per hour."
+    },
+    {
+      "id": "AI-025",
+      "prompt": "Mach 1 is",
+      "choices": [
+        "the speed of light",
+        "the speed needed to reach orbit",
+        "1,000 miles per hour",
+        "twice the speed of sound",
+        "the speed of sound"
+      ],
+      "answer": 4,
+      "explanation": "The speed of sound changes with air temperature, so Mach 1 is slower at high, cold altitudes than at sea level."
+    },
+    {
+      "id": "AI-026",
+      "prompt": "Which condition increases density altitude and reduces aircraft performance?",
+      "choices": [
+        "Hot air temperatures",
+        "Cold air temperatures",
+        "High barometric pressure",
+        "Low humidity",
+        "A low field elevation"
+      ],
+      "answer": 0,
+      "explanation": "Heat, height, and humidity all thin the air. Thinner air means less lift and less engine power."
+    },
+    {
+      "id": "AI-027",
+      "prompt": "Taking off into a headwind",
+      "choices": [
+        "increases groundspeed at liftoff",
+        "lengthens the takeoff roll",
+        "has no effect on the takeoff roll",
+        "shortens the takeoff roll",
+        "raises the stall speed"
+      ],
+      "answer": 3,
+      "explanation": "The wing needs a certain airspeed. A headwind supplies some of it, so the airplane reaches flying speed at a lower groundspeed."
+    },
+    {
+      "id": "AI-028",
+      "prompt": "Adverse yaw, the nose swinging away from a turn when the ailerons are used, is corrected with the",
+      "choices": [
+        "elevator",
+        "throttle",
+        "landing gear",
+        "flaps",
+        "rudder"
+      ],
+      "answer": 4,
+      "explanation": "The rising wing has more drag and pulls the nose the wrong way. Rudder in the direction of the turn cancels it."
+    },
+    {
+      "id": "AI-029",
+      "prompt": "What do trim tabs do?",
+      "choices": [
+        "Lower the landing gear",
+        "Relieve the pilot from holding steady control pressure",
+        "Steer the aircraft on the ground",
+        "Control engine power",
+        "Add lift for takeoff"
+      ],
+      "answer": 1,
+      "explanation": "Trim holds a control surface in position, so the pilot doesn't have to keep pushing or pulling."
+    },
+    {
+      "id": "AI-030",
+      "prompt": "In a helicopter, the collective control",
+      "choices": [
+        "only adjusts the radio volume",
+        "tilts the rotor disc forward or sideways",
+        "steers the helicopter on the ground",
+        "changes the pitch of all main rotor blades at once",
+        "controls the tail rotor"
+      ],
+      "answer": 3,
+      "explanation": "Raising the collective increases every blade's pitch together, so the helicopter climbs. Tilting the disc is the cyclic's job."
+    },
+    {
+      "id": "AI-031",
+      "prompt": "A helicopter's cyclic control",
+      "choices": [
+        "sets engine power only",
+        "locks the rotor on the ground",
+        "tilts the main rotor disc to move forward, back, or sideways",
+        "changes the pitch of all blades at once",
+        "controls the tail rotor"
+      ],
+      "answer": 2,
+      "explanation": "Tilting the rotor disc tilts its lift, pulling the helicopter in that direction."
+    },
+    {
+      "id": "AI-032",
+      "prompt": "What is the main job of a helicopter's tail rotor?",
+      "choices": [
+        "To provide a backup power source",
+        "To counteract the torque of the main rotor",
+        "To make the helicopter faster",
+        "To cool the engine",
+        "To lift the helicopter"
+      ],
+      "answer": 1,
+      "explanation": "As the main rotor turns one way, the body tries to spin the other way. The tail rotor pushes against that, and the pedals adjust it to control yaw."
+    },
+    {
+      "id": "AI-033",
+      "prompt": "Autorotation lets a helicopter",
+      "choices": [
+        "fly faster than normal",
+        "descend under control after an engine failure",
+        "climb without power",
+        "hover with no fuel",
+        "take off without a runway"
+      ],
+      "answer": 1,
+      "explanation": "Air flowing up through the rotor as the helicopter descends keeps the blades turning, so the pilot can still steer and flare for landing."
+    },
+    {
+      "id": "AI-034",
+      "prompt": "In the phonetic alphabet, the letter T is",
+      "choices": [
+        "Texas",
+        "Tare",
+        "Tiger",
+        "Tango",
+        "Tom"
+      ],
+      "answer": 3,
+      "explanation": "Pilots use Alfa, Bravo, Charlie... Tango. Tare was used in an older alphabet that is no longer used."
+    },
+    {
+      "id": "AI-035",
+      "prompt": "In military time, 2:30 p.m. is written",
+      "choices": [
+        "0230",
+        "1430",
+        "1230",
+        "1530",
+        "2430"
+      ],
+      "answer": 1,
+      "explanation": "Add 12 to afternoon hours: 2 + 12 = 14, so 1430."
+    },
+    {
+      "id": "AI-036",
+      "prompt": "A pilot sets the transponder to 7700 to signal",
+      "choices": [
+        "a radio failure",
+        "a change of destination",
+        "an emergency",
+        "a hijacking",
+        "normal visual flight"
+      ],
+      "answer": 2,
+      "explanation": "7700 means emergency, 7600 means lost communications, and 7500 means hijacking."
+    },
+    {
+      "id": "AI-037",
+      "prompt": "What does transponder code 7600 mean?",
+      "choices": [
+        "The aircraft has been hijacked",
+        "The aircraft is a military jet",
+        "The aircraft is landing",
+        "The aircraft has an emergency",
+        "The aircraft has lost radio communication"
+      ],
+      "answer": 4,
+      "explanation": "7600 tells controllers the pilot can't talk to them, so they clear the way and expect standard lost-communication procedures."
+    },
+    {
+      "id": "AI-038",
+      "prompt": "According to Bernoulli's principle, as air speeds up over the top of a wing, its pressure",
+      "choices": [
+        "decreases",
+        "stays the same",
+        "doubles",
+        "turns into thrust",
+        "increases"
+      ],
+      "answer": 0,
+      "explanation": "Faster-moving air has lower pressure. Lower pressure above the wing and higher pressure below help create lift."
+    },
+    {
+      "id": "AI-039",
+      "prompt": "Induced drag is greatest when the aircraft is",
+      "choices": [
+        "diving at high speed",
+        "parked on the ramp",
+        "flying fast in level flight",
+        "cruising at normal speed",
+        "flying slowly at a high angle of attack"
+      ],
+      "answer": 4,
+      "explanation": "Induced drag comes from making lift. It is highest at low speed, when the wing works hardest. Parasite drag is the type that grows with speed."
+    },
+    {
+      "id": "AI-040",
+      "prompt": "The curve of a wing's airfoil from front to back is called",
+      "choices": [
+        "dihedral",
+        "aspect ratio",
+        "camber",
+        "sweep",
+        "chord"
+      ],
+      "answer": 2,
+      "explanation": "Camber is the curve of the airfoil. The chord is the straight line from leading edge to trailing edge."
+    },
+    {
+      "id": "AI-041",
+      "prompt": "Dihedral, the upward angle of the wings from root to tip, improves",
+      "choices": [
+        "pitch control",
+        "fuel economy",
+        "engine cooling",
+        "top speed",
+        "lateral (roll) stability"
+      ],
+      "answer": 4,
+      "explanation": "With dihedral, a wing that dips gains lift and helps level the airplane on its own."
+    },
+    {
+      "id": "AI-042",
+      "prompt": "A center of gravity that is too far aft makes an airplane",
+      "choices": [
+        "unable to roll",
+        "unable to take off",
+        "more stable in pitch",
+        "safer in turbulence",
+        "less stable and harder to recover from a stall"
+      ],
+      "answer": 4,
+      "explanation": "The tail has less leverage to keep the nose under control, so the airplane becomes unstable and may not recover from a stall."
+    },
+    {
+      "id": "AI-043",
+      "prompt": "At a runway holding position marking, an aircraft waiting for clearance stays on the side with the",
+      "choices": [
+        "green lights",
+        "dashed lines",
+        "solid lines",
+        "white lines",
+        "runway numbers"
+      ],
+      "answer": 2,
+      "explanation": "The marking has two solid and two dashed yellow lines. Stop on the solid side until cleared onto the runway."
+    },
+    {
+      "id": "AI-044",
+      "prompt": "The runway area before a displaced threshold, marked with white arrows, may be used for",
+      "choices": [
+        "touchdown only",
+        "nothing at all",
+        "helicopters only",
+        "parking aircraft",
+        "takeoff and landing rollout, but not touchdown"
+      ],
+      "answer": 4,
+      "explanation": "You may take off from it or roll through it after landing, but you must touch down past the threshold line."
+    }
+  ]
+}

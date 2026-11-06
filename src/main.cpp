@@ -73,14 +73,20 @@ struct App {
     }
 
     // Lets the user pick any subtest from the config file. Returns nullptr on "Back".
+    // Sections with pictures (Table Reading, Instrument Comprehension, Block
+    // Counting) are only in the window version.
     const SubtestInfo* pickSubtest() {
+        std::vector<const SubtestInfo*> shown;
         std::vector<std::string> names;
-        for (const auto& s : registry.all())
+        for (const auto& s : registry.all()) {
+            if (s.visual) continue;
+            shown.push_back(&s);
             names.push_back(s.name + "  (" + std::to_string(bank.size(s.id)) + " questions)");
+        }
         names.push_back("Back");
         int choice = ui.menu("Choose a subtest", names);
-        if (choice == static_cast<int>(registry.all().size())) return nullptr;
-        return &registry.all()[choice];
+        if (choice == static_cast<int>(shown.size())) return nullptr;
+        return shown[choice];
     }
 
     void showSummary(const SubtestInfo& info, const SessionResult& r) {
@@ -197,7 +203,7 @@ int main(int argc, char* argv[]) {
     try {
         app.registry.load(dataDir + "/subtests.json");
         for (const auto& s : app.registry.all())
-            app.bank.loadFile(dataDir + "/" + s.file, s.id);
+            if (!s.file.empty()) app.bank.loadFile(dataDir + "/" + s.file, s.id);
         app.deck.load(dataDir + "/flashcards.json");
         app.deck.loadProgress("afoqt_flashcards.json");
     } catch (const std::exception& e) {

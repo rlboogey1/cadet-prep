@@ -8,8 +8,9 @@
 struct SubtestInfo {
     std::string id;            // "word_knowledge"
     std::string name;          // "Word Knowledge"
-    std::string category;      // "knowledge" now; "pilot" later
-    std::string file;          // question file, relative to data dir
+    std::string category;      // "knowledge" or "pilot"
+    std::string file;          // question file, relative to data dir ("" = generated only)
+    bool visual = false;       // questions need pictures (GUI only, not the console)
     int timeLimitSeconds = 0;  // timed-test limit (0 = untimed)
     int questionCount = 0;     // questions per timed test (0 = all)
     std::string tips;          // short strategy note shown before starting

@@ -1,5 +1,6 @@
 #define IMGUI_DEFINE_MATH_OPERATORS  // lets us write ImVec2 + ImVec2
 #include "GuiApp.h"
+#include "Visuals.h"
 #include "Widgets.h"
 #include "imgui.h"
 #include <algorithm>
@@ -47,22 +48,30 @@ void alignRight(float itemWidth) {
 }
 
 // Per-subject look: icon glyph and a one-line description
-struct SubjectStyle { const char* glyph; const char* desc; };
+struct SubjectStyle {
+    const char* glyph;  // short text for the icon tile, or nullptr to draw `icon`
+    Icon icon;
+    const char* desc;
+};
 SubjectStyle styleFor(const std::string& id) {
-    if (id == "word_knowledge") return {"Aa", "Build vocabulary and pick the closest synonym."};
-    if (id == "math_knowledge") return {"x\xC2\xB2", "Practice algebra, geometry, and number rules."};
-    if (id == "arithmetic_reasoning") return {"\xC3\xB7", "Turn word problems into calculations."};
-    if (id == "verbal_analogies") return {"A:B", "Learn word relationships and avoid misleading answers."};
-    if (id == "reading_comprehension") return {"\xC2\xB6", "Read short passages and find what they support."};
-    return {"?", ""};
+    if (id == "word_knowledge") return {"Aa", Icon::Home, "Build vocabulary and pick the closest synonym."};
+    if (id == "math_knowledge") return {"x\xC2\xB2", Icon::Home, "Practice algebra, geometry, and number rules."};
+    if (id == "arithmetic_reasoning") return {"\xC3\xB7", Icon::Home, "Turn word problems into calculations."};
+    if (id == "verbal_analogies") return {"A:B", Icon::Home, "Learn word relationships and avoid misleading answers."};
+    if (id == "reading_comprehension") return {"\xC2\xB6", Icon::Home, "Read short passages and find what they support."};
+    if (id == "table_reading") return {nullptr, Icon::Table, "Find values in a grid fast. A new table every session."};
+    if (id == "instrument_comprehension") return {nullptr, Icon::Gauge, "Read the artificial horizon and compass to find the aircraft's position."};
+    if (id == "aviation_information") return {nullptr, Icon::Jet, "Aerodynamics, flight controls, instruments, and airports."};
+    if (id == "block_counting") return {nullptr, Icon::Cube, "Count how many blocks touch a numbered block in a 3D stack."};
+    return {"?", Icon::Home, ""};
 }
 
 // A white subject card: icon tile, badges, title, description, progress bar,
 // footer text, and up to two buttons. Returns 1 or 2 when a button is clicked.
 struct SubjectCard {
     int tint = 0;
-    const char* glyph = nullptr;
-    Icon* icon = nullptr;
+    const char* glyph = nullptr;  // text for the icon tile...
+    Icon icon = Icon::Home;       // ...or an icon, when glyph is nullptr
     std::string title, desc, badge, tag;  // tag = extra badge such as "FOCUS"
     float progress = -1.0f;               // < 0 hides the bar
     std::string footer;
@@ -89,7 +98,8 @@ int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
 
     Tint t = tint(c.tint);
     if (c.disabled) t.strong.w = 0.5f;
-    iconTile(dl, q + ImVec2(pad, pad), 50.0f, t, c.glyph, c.icon);
+    Icon ic = c.icon;
+    iconTile(dl, q + ImVec2(pad, pad), 50.0f, t, c.glyph, c.glyph ? nullptr : &ic);
 
     // Badges in the top-right corner, right to left
     float bx = q.x + size.x - pad;
@@ -186,7 +196,7 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
     try {
         registry_.load(dataDir + "/subtests.json");
         for (const auto& s : registry_.all())
-            bank_.loadFile(dataDir + "/" + s.file, s.id);
+            if (!s.file.empty()) bank_.loadFile(dataDir + "/" + s.file, s.id);
         deck_.load(dataDir + "/flashcards.json");
         deck_.loadProgress("afoqt_flashcards.json");
     } catch (const std::exception& e) {
@@ -253,9 +263,7 @@ void GuiApp::drawSidebar(float height) {
 
     // Brand: gradient "A" tile, name, and tagline
     const ImVec2 p = ImGui::GetCursorScreenPos();
-    gradientRect(dl, p, p + ImVec2(48, 48), ImVec4(0.40f, 0.58f, 1.0f, 1.0f), ImVec4(0.23f, 0.38f, 0.88f, 1.0f), 13.0f);
-    ImVec2 as = textSize(fonts.heading, "A");
-    dl->AddText(fonts.heading, fontPx(fonts.heading), p + ImVec2(24 - as.x * 0.5f, 24 - as.y * 0.5f), u32(col::White), "A");
+    drawLogo(dl, p + ImVec2(25, 25), 26.0f);
     dl->AddText(fonts.heading, fontPx(fonts.heading), p + ImVec2(62, -2), u32(col::White), "AFOQT");
     dl->AddText(fonts.heading, fontPx(fonts.heading), p + ImVec2(62, 22), u32(col::White), "Study Lab");
     ImGui::SetCursorScreenPos(p + ImVec2(62, 52));
@@ -416,37 +424,61 @@ void GuiApp::drawDashboard() {
     textIn(fonts.body, col::Muted, note);
     ImGui::Dummy(ImVec2(0, 6));
 
+    spacedLabel("KNOWLEDGE SECTIONS", col::Muted, 2.0f);
+    drawSectionGrid(registry_.inCategory("knowledge"), false, true);
+    const auto pilot = registry_.inCategory("pilot");
+    if (!pilot.empty()) {
+        ImGui::Dummy(ImVec2(0, 14));
+        spacedLabel("PILOT SECTIONS", col::Muted, 2.0f);
+        textIn(fonts.body, col::Muted, "Table Reading, Instrument Comprehension, and Aviation Information count toward "
+                                       "the Pilot score, along with Math Knowledge.");
+        ImGui::Dummy(ImVec2(0, 2));
+        drawSectionGrid(pilot, false, false);
+    }
+}
+
+void GuiApp::drawSectionGrid(const std::vector<SubtestInfo>& sections, bool practicePage, bool addVocabCard) {
     const auto stats = progress_.stats();
     const std::string focus = focusId();
     Grid grid(2);
     const ImVec2 size(grid.cardW, 262);
-    const auto& subs = registry_.all();
-    for (size_t i = 0; i < subs.size(); ++i) {
-        const SubtestInfo& s = subs[i];
+    for (const auto& s : sections) {
         auto it = stats.find(s.id);
+        const SubjectStyle st = styleFor(s.id);
         SubjectCard c;
         c.tint = subjectIndex(s.id);
-        c.glyph = styleFor(s.id).glyph;
+        c.glyph = st.glyph;
+        c.icon = st.icon;
         c.title = s.name;
-        c.desc = styleFor(s.id).desc;
-        c.badge = plural(static_cast<int>(bank_.size(s.id)), "question");
+        c.desc = st.desc;
+        const size_t n = bank_.size(s.id);
+        c.badge = n ? plural(static_cast<int>(n), "question") : "Unlimited";
         c.highlight = s.id == focus;
         if (c.highlight) c.tag = "FOCUS";
         c.progress = it != stats.end() ? static_cast<float>(it->second.accuracy() / 100.0) : 0.0f;
-        c.footer = it != stats.end()
-            ? fmt("%.0f%% accuracy  \xC2\xB7  %.0f sec/question", it->second.accuracy(), it->second.avgSecondsPerQuestion())
-            : "Not started yet";
-        c.primary = "Train  \xE2\x86\x92";
+        if (practicePage) {
+            c.footer = it != stats.end() ? fmt("%.0f%% accuracy", it->second.accuracy()) : "Not started yet";
+            c.primary = "Practice  \xE2\x86\x92";
+            c.primaryStyle = ButtonStyle::Primary;
+        } else {
+            c.footer = it != stats.end() ? fmt("%.0f%% accuracy  \xC2\xB7  %.0f sec/question", it->second.accuracy(),
+                                               it->second.avgSecondsPerQuestion())
+                                         : "Not started yet";
+            c.primary = "Train  \xE2\x86\x92";
+        }
+        std::string timed = fmt("Timed \xC2\xB7 %d min", (s.timeLimitSeconds + 30) / 60);
+        if (practicePage) c.secondary = timed.c_str();
         grid.next();
         const ImVec2 p = ImGui::GetCursorScreenPos();
-        if (subjectCard(s.id.c_str(), c, size) == 1) startSubtest(s, SessionMode::Practice);
+        const int hit = subjectCard(s.id.c_str(), c, size);
         cardFocusMenu(s, p, p + size);
+        if (hit == 1) startSubtest(s, SessionMode::Practice);
+        if (hit == 2) startSubtest(s, SessionMode::Timed);
     }
-    // Vocabulary card
-    Icon cards = Icon::Cards;
+    if (!addVocabCard) return;
     SubjectCard v;
     v.tint = 5;
-    v.icon = &cards;
+    v.icon = Icon::Cards;
     v.title = "Vocabulary cards";
     v.desc = "Flip through Word Knowledge flashcards with spaced repetition.";
     v.badge = plural(static_cast<int>(deck_.size()), "word");
@@ -478,47 +510,33 @@ void GuiApp::drawPractice() {
     dl->PushClipRect(a, b, true);
     dl->AddCircle(ImVec2(b.x - 260, a.y + 10), 120, u32(col::White, 0.08f), 64, 1.5f);
     dl->PopClipRect();
-    int secs = 0;
-    for (const auto& s : registry_.inCategory("knowledge")) secs += s.timeLimitSeconds;
-    dl->AddText(fonts.heading, fontPx(fonts.heading), a + ImVec2(32, 30), u32(col::White), "Full knowledge battery");
-    std::string sub = fmt("All five sections, timed and back to back. About %d minutes.", secs / 60);
-    dl->AddText(fonts.body, fontPx(fonts.body), a + ImVec2(32, 64), u32(col::White, 0.85f), sub.c_str());
-    const char* bl = "Start battery  \xE2\x86\x92";
-    const float bw = textSize(fonts.strong, bl).x + 40;
-    ImGui::SetCursorScreenPos(ImVec2(b.x - 32 - bw, a.y + 35));
-    if (button(bl, ButtonStyle::White, ImVec2(bw, 48))) {
-        startBattery();
+    int kSecs = 0, pSecs = 0;
+    for (const auto& s : registry_.inCategory("knowledge")) kSecs += s.timeLimitSeconds;
+    for (const auto& s : registry_.inCategory("pilot")) pSecs += s.timeLimitSeconds;
+    dl->AddText(fonts.heading, fontPx(fonts.heading), a + ImVec2(32, 30), u32(col::White), "Full batteries");
+    std::string sub = fmt("Every section in a group, timed and back to back. Knowledge: about %d min. Pilot: about %d min.",
+                          kSecs / 60, pSecs / 60);
+    dl->AddText(fonts.body, fontPx(fonts.body), a + ImVec2(32, 64), u32(col::White, 0.85f), sub.c_str(), nullptr, w - 520);
+    const char* b1 = "Knowledge  \xE2\x86\x92";
+    const char* b2 = "Pilot  \xE2\x86\x92";
+    const float w1 = textSize(fonts.strong, b1).x + 40, w2 = textSize(fonts.strong, b2).x + 40;
+    ImGui::SetCursorScreenPos(ImVec2(b.x - 32 - w2 - 12 - w1, a.y + 35));
+    if (button(b1, ButtonStyle::White, ImVec2(w1, 48))) {
+        startBattery("knowledge");
+        return;
+    }
+    ImGui::SameLine(0, 12);
+    if (button(b2, ButtonStyle::White, ImVec2(w2, 48))) {
+        startBattery("pilot");
         return;
     }
     ImGui::SetCursorScreenPos(ImVec2(a.x, b.y + 24));
 
-    const auto stats = progress_.stats();
-    const std::string focus = focusId();
-    Grid grid(2);
-    const ImVec2 size(grid.cardW, 262);
-    for (const auto& s : registry_.all()) {
-        auto it = stats.find(s.id);
-        SubjectCard c;
-        c.tint = subjectIndex(s.id);
-        c.glyph = styleFor(s.id).glyph;
-        c.title = s.name;
-        c.desc = styleFor(s.id).desc;
-        c.badge = plural(static_cast<int>(bank_.size(s.id)), "question");
-        c.highlight = s.id == focus;
-        if (c.highlight) c.tag = "FOCUS";
-        c.progress = it != stats.end() ? static_cast<float>(it->second.accuracy() / 100.0) : 0.0f;
-        c.footer = it != stats.end() ? fmt("%.0f%% accuracy", it->second.accuracy()) : "Not started yet";
-        c.primary = "Practice  \xE2\x86\x92";
-        c.primaryStyle = ButtonStyle::Primary;
-        std::string timed = fmt("Timed \xC2\xB7 %d min", (s.timeLimitSeconds + 30) / 60);
-        c.secondary = timed.c_str();
-        grid.next();
-        const ImVec2 p = ImGui::GetCursorScreenPos();
-        const int hit = subjectCard(s.id.c_str(), c, size);
-        cardFocusMenu(s, p, p + size);
-        if (hit == 1) { startSubtest(s, SessionMode::Practice); return; }
-        if (hit == 2) { startSubtest(s, SessionMode::Timed); return; }
-    }
+    spacedLabel("KNOWLEDGE SECTIONS", col::Muted, 2.0f);
+    drawSectionGrid(registry_.inCategory("knowledge"), true, false);
+    ImGui::Dummy(ImVec2(0, 14));
+    spacedLabel("PILOT SECTIONS", col::Muted, 2.0f);
+    drawSectionGrid(registry_.inCategory("pilot"), true, false);
 }
 
 // ================================================================ review
@@ -564,10 +582,12 @@ void GuiApp::drawReview() {
     Grid grid(2);
     const ImVec2 size(grid.cardW, 236);
     for (const auto& s : registry_.all()) {
+        if (bank_.size(s.id) == 0) continue;  // generated sections have nothing saved to review
         const int n = missed.count(s.id) ? missed.at(s.id) : 0;
         SubjectCard c;
         c.tint = subjectIndex(s.id);
         c.glyph = styleFor(s.id).glyph;
+        c.icon = styleFor(s.id).icon;
         c.title = s.name;
         c.desc = n ? "Questions you missed in this section." : "Nothing to review here.";
         c.badge = n ? plural(n, "question") : "All clear";
@@ -642,6 +662,15 @@ void GuiApp::drawQuiz() {
 
     // ---- The question card
     beginCard("question", ImVec2(0, std::max(420.0f, ImGui::GetContentRegionAvail().y - 26)), true, ImVec2(32, 30));
+    const bool hasVisual = q.visual.kind != VisualKind::None;
+    if (hasVisual) {
+        const float vw = visualWidth(q.visual, ImGui::GetContentRegionAvail().x);
+        ImGui::BeginGroup();
+        drawVisual(q.visual, vw);
+        ImGui::EndGroup();
+        ImGui::SameLine(0, 34);
+        ImGui::BeginGroup();
+    }
     if (!q.passage.empty()) {
         spacedLabel("PASSAGE", col::Muted, 1.8f);
         beginCallout();
@@ -692,6 +721,7 @@ void GuiApp::drawQuiz() {
             feedbackTime_ = -1.0;
         }
     }
+    if (hasVisual) ImGui::EndGroup();
     if (!sessionTips_.empty()) {
         ImGui::Dummy(ImVec2(0, 4));
         divider();
@@ -807,7 +837,7 @@ void GuiApp::drawFlashcards() {
 
         textIn(fonts.title, col::Ink, "Start a session");
         ImGui::Dummy(ImVec2(0, 4));
-        Icon ic[3] = {Icon::Bolt, Icon::Target, Icon::List};
+        const Icon ic[3] = {Icon::Bolt, Icon::Target, Icon::List};
         struct Opt { const char* title; std::string desc; std::string badge; size_t count; bool learning; };
         Opt opts[3] = {
             {"Quick 20", "Twenty cards, your weakest words first.", "20 cards", 20, false},
@@ -818,7 +848,7 @@ void GuiApp::drawFlashcards() {
         for (int i = 0; i < 3; ++i) {
             SubjectCard c;
             c.tint = i == 0 ? 2 : i == 1 ? 0 : 1;
-            c.icon = &ic[i];
+            c.icon = ic[i];
             c.title = opts[i].title;
             c.desc = opts[i].desc;
             c.badge = opts[i].badge;
@@ -938,7 +968,9 @@ void GuiApp::drawProgress() {
         const bool focus = s.id == focusSid;
         const ImVec2 p = ImGui::GetCursorScreenPos();
         ImGui::Dummy(ImVec2(w, rowH - 12));
-        iconTile(dl, p + ImVec2(0, 6), 44, tint(subjectIndex(s.id)), styleFor(s.id).glyph);
+        Icon rowIcon = styleFor(s.id).icon;
+        iconTile(dl, p + ImVec2(0, 6), 44, tint(subjectIndex(s.id)), styleFor(s.id).glyph,
+                 styleFor(s.id).glyph ? nullptr : &rowIcon);
         dl->AddText(fonts.strong, fontPx(fonts.strong), p + ImVec2(60, 8), u32(col::Ink), s.name.c_str());
         std::string sub = has ? fmt("%s  \xC2\xB7  %.0f sec/question", plural(it->second.sessions, "session").c_str(),
                                     it->second.avgSecondsPerQuestion())
@@ -1022,8 +1054,8 @@ void GuiApp::startSubtest(const SubtestInfo& s, SessionMode mode) {
     screen_ = Screen::Quiz;
 }
 
-void GuiApp::startBattery() {
-    queue_ = registry_.inCategory("knowledge");
+void GuiApp::startBattery(const std::string& category) {
+    queue_ = registry_.inCategory(category);
     startNextInQueue();
 }
 
@@ -1135,6 +1167,10 @@ int GuiApp::subjectIndex(const std::string& id) const {
     if (id == "arithmetic_reasoning") return 2;
     if (id == "math_knowledge") return 3;
     if (id == "reading_comprehension") return 4;
+    if (id == "aviation_information") return 6;
+    if (id == "table_reading") return 7;
+    if (id == "instrument_comprehension") return 8;
+    if (id == "block_counting") return 9;
     const auto& all = registry_.all();
     for (size_t i = 0; i < all.size(); ++i)
         if (all[i].id == id) return static_cast<int>(i);

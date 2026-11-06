@@ -74,6 +74,9 @@ std::string signedTerm(int v) { return v < 0 ? std::string(kMinus) + " " + std::
 std::string pi(int k) { return (k == 1 ? "" : std::to_string(k)) + "\xCF\x80"; }  // "16π"
 const char* kRoot = "\xE2\x88\x9A";  // √
 
+std::string fmt(const char* f, ...);
+std::string plural(int n, const char* word);
+
 std::string fmt(const char* f, ...) {
     char buf[600];
     va_list args;
@@ -82,6 +85,8 @@ std::string fmt(const char* f, ...) {
     va_end(args);
     return buf;
 }
+
+std::string plural(int n, const char* word) { return fmt("%d %s%s", n, word, n == 1 ? "" : "s"); }
 
 // Builds a question: the correct answer plus the first four distinct wrong
 // answers from `wrong`. Returns false if there aren't four usable ones, and the
@@ -490,22 +495,209 @@ bool arClock(Rng& rng, Question& q) {
                      clock12(end).c_str()));
 }
 
+
+// ================================================================ Table Reading
+
+const std::string TR = "table_reading";
+
+// "+4", "0", "−9": the sign is always shown, like on the test
+std::string signedNum(int v) { return v > 0 ? "+" + std::to_string(v) : v == 0 ? "0" : kMinus + std::to_string(-v); }
+
+std::vector<Question> tableReading(size_t count, Rng& rng) {
+    // One table for the whole set, like the real test. Values rise to the
+    // right and upward with a little noise, so nearby cells look alike.
+    const int R = 10, N = 2 * R + 1;
+    const int a = ri(rng, 1, 2), b = ri(rng, 1, 2), base = ri(rng, 42, 56);  // stays within 10 to 99
+    std::vector<int> cells(static_cast<size_t>(N * N));
+    for (int row = 0; row < N; ++row)
+        for (int c = 0; c < N; ++c) {
+            int x = c - R, y = R - row;
+            cells[static_cast<size_t>(row * N + c)] = std::clamp(base + a * x + b * y + ri(rng, -3, 3), 10, 99);
+        }
+    auto at = [&](int x, int y) { return cells[static_cast<size_t>((R - y) * N + (x + R))]; };
+    auto inRange = [&](int v) { return v >= -R && v <= R; };
+
+    Visual vis;
+    vis.kind = VisualKind::Table;
+    vis.data.push_back(R);
+    vis.data.insert(vis.data.end(), cells.begin(), cells.end());
+
+    std::vector<Question> out;
+    for (size_t i = 0; out.size() < count && i < count * 10; ++i) {
+        int x = ri(rng, -R, R), y = ri(rng, -R, R);
+        if (x == y) continue;  // keep the swapped-axes trap meaningful
+        const int correct = at(x, y);
+        std::vector<std::string> w;
+        const bool swapOk = inRange(y) && inRange(x) && at(y, x) != correct;
+        if (swapOk) w.push_back(num(at(y, x)));
+        const int dx[] = {1, -1, 0, 0, 1, -1, 1, -1, 2, -2, 0, 0};
+        const int dy[] = {0, 0, 1, -1, 1, -1, -1, 1, 0, 0, 2, -2};
+        for (int k = 0; k < 12; ++k)
+            if (inRange(x + dx[k]) && inRange(y + dy[k])) w.push_back(num(at(x + dx[k], y + dy[k])));
+        for (int k = 1; k <= 4; ++k) w.push_back(num(std::clamp(correct + k * (k % 2 ? 1 : -1) * 2, 10, 99)));
+
+        std::string expl = fmt("Go across the top to the column X = %s, then down to the row Y = %s. They meet at %d.",
+                               signedNum(x).c_str(), signedNum(y).c_str(), correct);
+        if (swapOk)
+            expl += fmt(" Reading the axes the wrong way (X = %s, Y = %s) gives %d, a common trap.",
+                        signedNum(y).c_str(), signedNum(x).c_str(), at(y, x));
+        Question q;
+        if (build(q, TR, "TR-cell", fmt("What value is at X = %s, Y = %s?", signedNum(x).c_str(), signedNum(y).c_str()),
+                  num(correct), w, expl)) {
+            q.visual = vis;
+            out.push_back(std::move(q));
+        }
+    }
+    return out;
+}
+
+// ================================================================ Instrument Comprehension
+
+const std::string IC = "instrument_comprehension";
+
+const char* direction(int heading) {
+    static const char* names[] = {"north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest"};
+    return names[((heading % 360 + 360) % 360) / 45];
+}
+
+std::string attitude(int pitch, int bank, int heading) {
+    std::string p = pitch > 0 ? "Climbing" : pitch < 0 ? "Diving" : "Level flight";
+    std::string b = bank > 0 ? "banking right" : bank < 0 ? "banking left" : "wings level";
+    return p + ", " + b + ", heading " + direction(heading);
+}
+
+bool icQuestion(Rng& rng, Question& q) {
+    const int bank = pick(rng, std::vector<int>{-45, -30, -15, 0, 15, 30, 45});
+    const int pitch = pick(rng, std::vector<int>{-10, 0, 10});
+    const int heading = ri(rng, 0, 7) * 45;
+
+    // Each wrong answer gets one part wrong (sometimes two)
+    std::vector<std::string> w;
+    if (bank != 0) w.push_back(attitude(pitch, -bank, heading));
+    if (pitch != 0) w.push_back(attitude(-pitch, bank, heading));
+    w.push_back(attitude(pitch, bank, heading + 180));
+    if (bank == 0) { w.push_back(attitude(pitch, 30, heading)); w.push_back(attitude(pitch, -30, heading)); }
+    if (pitch == 0) { w.push_back(attitude(10, bank, heading)); w.push_back(attitude(-10, bank, heading)); }
+    w.push_back(attitude(pitch, bank, heading + 90));
+    w.push_back(attitude(-pitch, -bank, heading));
+    w.push_back(attitude(pitch, bank, heading - 45));
+    w.push_back(attitude(pitch, -bank, heading + 180));
+
+    std::string expl;
+    if (bank > 0) expl = "The horizon line is higher on the right, so the right wing is down: the aircraft is banking right. ";
+    else if (bank < 0) expl = "The horizon line is higher on the left, so the left wing is down: the aircraft is banking left. ";
+    else expl = "The horizon line is level, so the wings are level. ";
+    if (pitch > 0) expl += "The horizon sits below the center, with more sky showing, so the nose is up: climbing. ";
+    else if (pitch < 0) expl += "The horizon sits above the center, with more ground showing, so the nose is down: diving. ";
+    else expl += "The horizon crosses the center, so the nose is level. ";
+    expl += std::string("The compass arrow points ") + direction(heading) + ".";
+
+    if (!build(q, IC, "IC-att", "Which statement describes the aircraft?", attitude(pitch, bank, heading), w, expl))
+        return false;
+    q.visual.kind = VisualKind::Instruments;
+    q.visual.data = {bank, pitch, heading};
+    return true;
+}
+
+// ================================================================ Block Counting
+
+const std::string BC = "block_counting";
+
+struct Block { int x, y, z, sx, sy, sz, label; };
+
+// Blocks touch when they share part of a face (not just an edge).
+std::vector<int> touching(const std::vector<Block>& blocks, int idx) {
+    std::set<int> found;
+    const Block& a = blocks[static_cast<size_t>(idx)];
+    for (size_t j = 0; j < blocks.size(); ++j) {
+        if (static_cast<int>(j) == idx) continue;
+        const Block& b = blocks[j];
+        // overlap length on each axis (negative = gap, 0 = just meeting)
+        int ox = std::min(a.x + a.sx, b.x + b.sx) - std::max(a.x, b.x);
+        int oy = std::min(a.y + a.sy, b.y + b.sy) - std::max(a.y, b.y);
+        int oz = std::min(a.z + a.sz, b.z + b.sz) - std::max(a.z, b.z);
+        int zeros = (ox == 0) + (oy == 0) + (oz == 0);
+        bool apart = ox < 0 || oy < 0 || oz < 0;
+        if (!apart && zeros == 1) found.insert(static_cast<int>(j));  // meet on exactly one face
+    }
+    return {found.begin(), found.end()};
+}
+
+std::vector<Question> blockCounting(size_t count, Rng& rng) {
+    std::vector<Question> out;
+    while (out.size() < count) {
+        // A stack of layers, three long blocks each, crossing direction every
+        // layer (like a log pile). Only the top layer may have gaps, so every
+        // block's position can be seen or worked out.
+        const int layers = ri(rng, 2, 4);
+        std::vector<Block> blocks;
+        for (int z = 0; z < layers; ++z) {
+            for (int i = 0; i < 3; ++i) {
+                if (z == layers - 1 && layers > 1 && ri(rng, 0, 2) == 0) continue;  // gap in the top layer
+                if (z % 2 == 0) blocks.push_back({0, i, z, 3, 1, 1, 0});  // runs left-right
+                else blocks.push_back({i, 0, z, 1, 3, 1, 0});            // runs front-back
+            }
+        }
+        if (blocks.size() < 4) continue;
+
+        // Label up to five blocks, then ask about each one
+        std::vector<int> order(blocks.size());
+        std::iota(order.begin(), order.end(), 0);
+        std::shuffle(order.begin(), order.end(), rng);
+        const int labels = std::min<int>(5, static_cast<int>(blocks.size()));
+        for (int k = 0; k < labels; ++k) blocks[static_cast<size_t>(order[k])].label = k + 1;
+
+        Visual vis;
+        vis.kind = VisualKind::Blocks;
+        vis.data.push_back(static_cast<int>(blocks.size()));
+        for (const auto& b : blocks) vis.data.insert(vis.data.end(), {b.x, b.y, b.z, b.sx, b.sy, b.sz, b.label});
+
+        for (int k = 0; k < labels && out.size() < count; ++k) {
+            const int idx = order[k];
+            const Block& me = blocks[static_cast<size_t>(idx)];
+            const auto t = touching(blocks, idx);
+            int same = 0, above = 0, below = 0;
+            for (int j : t) {
+                int dz = blocks[static_cast<size_t>(j)].z - me.z;
+                (dz == 0 ? same : dz > 0 ? above : below)++;
+            }
+            const int n = static_cast<int>(t.size());
+            std::vector<std::string> w;
+            for (int d : {1, -1, 2, -2, 3, -3, 4})
+                if (n + d >= 0) w.push_back(num(n + d));
+            std::string expl = fmt("Block %d touches %s beside it in its own layer, %s in the layer above, and %s in the "
+                                   "layer below: %d in all. Blocks in crossing layers touch wherever they cross.",
+                                   me.label, plural(same, "block").c_str(), plural(above, "block").c_str(),
+                                   plural(below, "block").c_str(), n);
+            Question q;
+            if (build(q, BC, "BC-touch", fmt("How many blocks touch block %d?", me.label), num(n), w, expl)) {
+                q.visual = vis;
+                out.push_back(std::move(q));
+            }
+        }
+    }
+    return out;
+}
+
 const std::vector<Template>& templatesFor(const std::string& subtest) {
     static const std::vector<Template> mk{mkLinear, mkEvaluate, mkRectangle, mkCircle, mkPythagoras, mkExponents,
                                           mkSlope, mkPercent, mkPolygon, mkSystem, mkMean, mkRoot};
     static const std::vector<Template> ar{arDistance, arDiscountTax, arWorkRate, arAverage, arRatio, arInterest,
                                           arFuel, arPercentChange, arProportion, arOpposite, arOvertime, arClock};
+    static const std::vector<Template> ic{icQuestion};
     static const std::vector<Template> none;
-    return subtest == MK ? mk : subtest == AR ? ar : none;
+    return subtest == MK ? mk : subtest == AR ? ar : subtest == IC ? ic : none;
 }
 
 }  // namespace
 
 bool QuestionGenerator::supports(const std::string& subtestId) {
-    return !templatesFor(subtestId).empty();
+    return subtestId == TR || subtestId == BC || !templatesFor(subtestId).empty();
 }
 
 std::vector<Question> QuestionGenerator::generate(const std::string& subtestId, size_t count, Rng& rng) {
+    if (subtestId == TR) return tableReading(count, rng);   // one shared table
+    if (subtestId == BC) return blockCounting(count, rng);  // a few questions per figure
     const auto& templates = templatesFor(subtestId);
     std::vector<Question> out;
     if (templates.empty()) return out;

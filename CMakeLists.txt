@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(AFOQTStudy VERSION 0.3 LANGUAGES C CXX)
+project(AFOQTStudy VERSION 0.5 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -59,7 +59,12 @@ add_executable(afoqt src/main.cpp src/ConsoleUI.cpp)
 target_link_libraries(afoqt PRIVATE afoqt_core)
 
 # --- GUI app (on macOS, a double-clickable "AFOQT Study.app") ---
-add_executable(afoqt_gui MACOSX_BUNDLE src/gui_main.cpp src/GuiApp.cpp src/Widgets.cpp src/Sound.cpp)
+# The app icon (the F-22 logo), copied into the app's Resources folder on macOS
+set(APP_ICON "${CMAKE_SOURCE_DIR}/assets/AppIcon.icns")
+set_source_files_properties(${APP_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+
+add_executable(afoqt_gui MACOSX_BUNDLE src/gui_main.cpp src/GuiApp.cpp src/Widgets.cpp src/Visuals.cpp src/Sound.cpp
+               ${APP_ICON})
 target_link_libraries(afoqt_gui PRIVATE afoqt_core imgui)
 target_include_directories(afoqt_gui PRIVATE ${miniaudio_SOURCE_DIR})
 if(APPLE)
@@ -75,7 +80,8 @@ if(APPLE)
         MACOSX_BUNDLE_BUNDLE_NAME "AFOQT Study"
         MACOSX_BUNDLE_GUI_IDENTIFIER "com.renzo.afoqtstudy"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
-        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}")
+        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_ICON_FILE "AppIcon.icns")
 
     # Copy the question files into the app, so it keeps working after you move
     # it to Applications. Runs on every build, so edited questions are picked up.
