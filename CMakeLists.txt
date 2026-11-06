@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(AFOQTStudy VERSION 0.5 LANGUAGES C CXX)
+project(CadetPrep VERSION 0.5 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -59,7 +59,7 @@ target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="${CMAKE_SOURCE_DIR}
 add_executable(afoqt src/main.cpp src/ConsoleUI.cpp)
 target_link_libraries(afoqt PRIVATE afoqt_core)
 
-# --- GUI app (on macOS, a double-clickable "AFOQT Study.app") ---
+# --- GUI app (on macOS, a double-clickable "Cadet Prep.app") ---
 # The app icon (the F-22 logo), copied into the app's Resources folder on macOS
 set(APP_ICON "${CMAKE_SOURCE_DIR}/assets/AppIcon.icns")
 set_source_files_properties(${APP_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
@@ -76,10 +76,10 @@ endif()
 
 if(APPLE)
     set_target_properties(afoqt_gui PROPERTIES
-        OUTPUT_NAME "AFOQT Study"
+        OUTPUT_NAME "Cadet Prep"
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/Info.plist.in"
-        MACOSX_BUNDLE_BUNDLE_NAME "AFOQT Study"
-        MACOSX_BUNDLE_GUI_IDENTIFIER "com.renzo.afoqtstudy"
+        MACOSX_BUNDLE_BUNDLE_NAME "Cadet Prep"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "com.renzo.cadetprep"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
         MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
         MACOSX_BUNDLE_ICON_FILE "AppIcon.icns")

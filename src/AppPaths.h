@@ -18,15 +18,16 @@ namespace apppaths {
 namespace fs = std::filesystem;
 
 // Where progress files live:
-//   macOS:  ~/Library/Application Support/AFOQT Study
-//   other:  ~/.afoqt-study
-inline fs::path userDataDir() {
+//   macOS:  ~/Library/Application Support/Cadet Prep
+//   other:  ~/.cadet-prep
+// `oldName` gives the folder used before the app was renamed from "AFOQT Study".
+inline fs::path userDataDir(bool oldName = false) {
     const char* home = std::getenv("HOME");
     fs::path base = home ? fs::path(home) : fs::current_path();
 #ifdef __APPLE__
-    return base / "Library" / "Application Support" / "AFOQT Study";
+    return base / "Library" / "Application Support" / (oldName ? "AFOQT Study" : "Cadet Prep");
 #else
-    return base / ".afoqt-study";
+    return base / (oldName ? ".afoqt-study" : ".cadet-prep");
 #endif
 }
 
@@ -36,6 +37,9 @@ inline fs::path userDataDir() {
 inline void useUserDataDir() {
     std::error_code ec;
     const fs::path dir = userDataDir();
+    // Renamed app: move the old progress folder over, the first time only
+    const fs::path old = userDataDir(true);
+    if (!fs::exists(dir, ec) && fs::exists(old, ec)) fs::rename(old, dir, ec);
     fs::create_directories(dir, ec);
 
     const fs::path projectDir = fs::path(AFOQT_DATA_DIR).parent_path();
@@ -48,7 +52,7 @@ inline void useUserDataDir() {
 
 // Finds the question folder, in this order:
 //   1. a folder given on the command line
-//   2. the copy inside the .app bundle (AFOQT Study.app/Contents/Resources/data)
+//   2. the copy inside the .app bundle (Cadet Prep.app/Contents/Resources/data)
 //   3. the project's data/ folder
 // Returns an absolute path, since useUserDataDir() changes the working directory.
 inline std::string findDataDir(int argc, char* argv[]) {

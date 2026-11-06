@@ -1,4 +1,6 @@
-# AFOQT Study (C++)
+# Cadet Prep
+
+AFOQT prep for AFROTC cadets, written in C++.
 
 A study app for the AFOQT, with a Mac window version and a console version. It covers
 the knowledge sections (Word Knowledge, Math Knowledge, Arithmetic Reasoning, Verbal
@@ -17,15 +19,20 @@ The JSON library (nlohmann/json) downloads automatically the first time you conf
 ```bash
 cmake -S . -B build
 cmake --build build
-./build/afoqt_gui        # window version
-./build/afoqt            # console version
+open "build/Cadet Prep.app"   # window version (macOS)
+./build/afoqt                 # console version
 ```
+
+On Linux and Windows the window version is `build/afoqt_gui`. On a Mac you can also
+double-click `Cadet Prep.app` in the `build` folder, or drag it to Applications.
 
 The app reads questions from the project's `data/` folder, so you can edit question
 files and rerun without rebuilding. To use a different folder: `./build/afoqt path/to/data`.
 
 Progress is saved to `afoqt_progress.json` (tests) and `afoqt_flashcards.json` (flashcards)
-in the folder you run it from.
+in `~/Library/Application Support/Cadet Prep` on a Mac, or `~/.cadet-prep` elsewhere.
+Progress from before the app was renamed (saved under "AFOQT Study") moves there
+automatically the first time you open it.
 
 ## Features
 

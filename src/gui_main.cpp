@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    GLFWwindow* window = glfwCreateWindow(1380, 900, "AFOQT Study", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(1380, 900, "Cadet Prep", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         return 1;

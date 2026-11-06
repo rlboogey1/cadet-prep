@@ -213,7 +213,7 @@ void GuiApp::draw() {
     ImGui::SetNextWindowPos(vp->WorkPos);
     ImGui::SetNextWindowSize(vp->WorkSize);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-    ImGui::Begin("AFOQT Study", nullptr,
+    ImGui::Begin("Cadet Prep", nullptr,
                  ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings |
                      ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse |
                      ImGuiWindowFlags_NoBringToFrontOnFocus);
@@ -265,8 +265,8 @@ void GuiApp::drawSidebar(float height) {
     // Brand: gradient "A" tile, name, and tagline
     const ImVec2 p = ImGui::GetCursorScreenPos();
     drawLogo(dl, p + ImVec2(25, 25), 26.0f);
-    dl->AddText(fonts.heading, fontPx(fonts.heading), p + ImVec2(62, -2), u32(col::White), "AFOQT");
-    dl->AddText(fonts.heading, fontPx(fonts.heading), p + ImVec2(62, 22), u32(col::White), "Study Lab");
+    dl->AddText(fonts.heading, fontPx(fonts.heading), p + ImVec2(62, -2), u32(col::White), "Cadet");
+    dl->AddText(fonts.heading, fontPx(fonts.heading), p + ImVec2(62, 22), u32(col::White), "Prep");
     ImGui::SetCursorScreenPos(p + ImVec2(62, 52));
     spacedLabel("PREPARE WITH PURPOSE", col::SidebarMuted, 1.8f);
     ImGui::SetCursorScreenPos(ImVec2(p.x, ImGui::GetCursorScreenPos().y + 6));
