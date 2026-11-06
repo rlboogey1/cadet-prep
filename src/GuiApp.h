@@ -27,13 +27,14 @@ public:
     void draw();
 
 private:
-    enum class Screen { Dashboard, Practice, Review, Flashcards, Progress, Quiz, Results };
+    enum class Screen { Home, Dashboard, Practice, Review, Flashcards, Progress, Quiz, Results };
 
     // Frame pieces
     void drawSidebar(float height);
     void drawHeader(const std::string& label);  // small CAPS label + chips on the right
 
     // Pages
+    void drawHome();       // main menu: pick a prep section
     void drawDashboard();
     void drawPractice();
     void drawReview();
@@ -62,7 +63,8 @@ private:
 
     // Stats helpers
     struct Overall { int correct = 0, total = 0, sessions = 0; };
-    Overall overall() const;
+    Overall overall() const;  // current prep section
+    Overall overallFor(const std::string& track) const;
     std::string weakestId() const;  // lowest accuracy
     std::string focusId() const;    // pinned section, or the weakest if none is pinned
     void setFocus(const std::string& id);  // "" = automatic
@@ -70,7 +72,8 @@ private:
     // Prep sections ("tracks"): AFOQT Prep, Warrior Knowledge, ...
     // Every page shows only the current track's sections.
     std::vector<SubtestInfo> trackSections() const { return registry_.inTrack(track_); }
-    bool inTrack(const std::string& subtestId) const;  // also true for this track's warm-ups
+    bool inTrack(const std::string& subtestId) const { return inTrackOf(subtestId, track_); }
+    bool inTrackOf(const std::string& subtestId, const std::string& track) const;  // also true for its warm-ups
     void switchTrack(const std::string& track);
     std::map<std::string, int> missedBySubtest() const;
 
@@ -85,7 +88,7 @@ private:
     Sound sound_;
     std::mt19937 rng_{std::random_device{}()};
 
-    Screen screen_ = Screen::Dashboard;
+    Screen screen_ = Screen::Home;  // the app opens on the main menu
     Screen lastScreen_ = Screen::Dashboard;
     std::vector<SubtestInfo> queue_;  // remaining sections in a full battery
     std::string sessionName_;
@@ -102,7 +105,10 @@ private:
     double feedbackTime_ = -1.0;
 
     // Flashcards
-    FlashcardDeck deck_;
+    FlashcardDeck deck_;     // AFOQT: Word Knowledge vocabulary
+    FlashcardDeck memDeck_;  // Warrior Knowledge: memorize cards (creeds, oaths, lists)
+    FlashcardDeck& activeDeck() { return track_ == "afoqt" ? deck_ : memDeck_; }
+    const FlashcardDeck& activeDeck() const { return track_ == "afoqt" ? deck_ : memDeck_; }
     bool flashActive_ = false;
     bool cardFlipped_ = false;
     bool definitionFirst_ = false;

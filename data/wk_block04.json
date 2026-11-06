@@ -1,0 +1,184 @@
+{
+  "questions": [
+    {
+      "id": "WK04-001",
+      "prompt": "What is USAF pay grade E-1?",
+      "choices": [
+        "Airman",
+        "Airman Basic",
+        "Airman First Class",
+        "Specialist 1"
+      ],
+      "answer": 1,
+      "explanation": "USAF enlisted ranks: E1 Airman Basic, E2 Airman, E3 Airman First Class, E4 Senior Airman, E5 Staff Sergeant, E6 Technical Sergeant, E7 Master Sergeant, E8 Senior Master Sergeant, E9 Chief Master Sergeant."
+    },
+    {
+      "id": "WK04-002",
+      "prompt": "What is USAF pay grade E-3?",
+      "choices": [
+        "Airman",
+        "Senior Airman",
+        "Airman First Class",
+        "Staff Sergeant"
+      ],
+      "answer": 2,
+      "explanation": "E-3 is Airman First Class (A1C)."
+    },
+    {
+      "id": "WK04-003",
+      "prompt": "What is USAF pay grade E-4?",
+      "choices": [
+        "Senior Airman",
+        "Staff Sergeant",
+        "Airman First Class",
+        "Specialist 4"
+      ],
+      "answer": 0,
+      "explanation": "E-4 in the Air Force is Senior Airman (SrA). In the Space Force, E-4 is Specialist 4."
+    },
+    {
+      "id": "WK04-004",
+      "prompt": "What is USAF pay grade E-6?",
+      "choices": [
+        "Staff Sergeant",
+        "Master Sergeant",
+        "Technical Sergeant",
+        "Senior Master Sergeant"
+      ],
+      "answer": 2,
+      "explanation": "E-6 is Technical Sergeant (TSgt)."
+    },
+    {
+      "id": "WK04-005",
+      "prompt": "What is USAF pay grade E-8?",
+      "choices": [
+        "Master Sergeant",
+        "Chief Master Sergeant",
+        "Senior Master Sergeant",
+        "Technical Sergeant"
+      ],
+      "answer": 2,
+      "explanation": "E-8 is Senior Master Sergeant (SMSgt)."
+    },
+    {
+      "id": "WK04-006",
+      "prompt": "What is USSF pay grade E-1?",
+      "choices": [
+        "Specialist 1",
+        "Airman Basic",
+        "Guardian 1",
+        "Private"
+      ],
+      "answer": 0,
+      "explanation": "USSF enlisted ranks: E1 Specialist 1, E2 Specialist 2, E3 Specialist 3, E4 Specialist 4, E5 Sergeant, E6 Technical Sergeant, E7 Master Sergeant, E8 Senior Master Sergeant, E9 Chief Master Sergeant, plus the Chief Master Sergeant of the Space Force."
+    },
+    {
+      "id": "WK04-007",
+      "prompt": "What is USSF pay grade E-4?",
+      "choices": [
+        "Senior Airman",
+        "Specialist 4",
+        "Sergeant",
+        "Specialist 3"
+      ],
+      "answer": 1,
+      "explanation": "E-4 in the Space Force is Specialist 4."
+    },
+    {
+      "id": "WK04-008",
+      "prompt": "What is USSF pay grade E-5?",
+      "choices": [
+        "Staff Sergeant",
+        "Sergeant",
+        "Specialist 5",
+        "Technical Sergeant"
+      ],
+      "answer": 1,
+      "explanation": "In the Space Force, E-5 is Sergeant. In the Air Force, E-5 is Staff Sergeant."
+    },
+    {
+      "id": "WK04-009",
+      "prompt": "Which USSF ranks make up the Specialist tier?",
+      "choices": [
+        "E-1 to E-4",
+        "E-1 to E-3",
+        "E-1 to E-5",
+        "E-2 to E-4"
+      ],
+      "answer": 0,
+      "explanation": "Specialist tier: Specialist 1 to 4 (E-1 to E-4). NCO tier: Sergeant and Technical Sergeant (E-5, E-6). Senior NCO tier: E-7 to E-9."
+    },
+    {
+      "id": "WK04-010",
+      "prompt": "Who holds the special E-9 position at the top of the Space Force enlisted ranks?",
+      "choices": [
+        "Chief Master Sergeant of the Space Force",
+        "Command Chief of the Space Force",
+        "Chief of Space Operations",
+        "Senior Enlisted Advisor"
+      ],
+      "answer": 0,
+      "explanation": "The Chief Master Sergeant of the Space Force (CMSSF) is the senior enlisted Guardian."
+    },
+    {
+      "id": "WK04-011",
+      "prompt": "What is the Det 105/CC Mission?",
+      "choices": [
+        "Develop exceptional leaders for tomorrow's Air and Space Force.",
+        "Cultivating confident, resilient leaders who pursue excellence and raise the standard.",
+        "Develop Air Force and Space Force leaders of character whom we expect to fight and win our nation's wars.",
+        "We build leaders."
+      ],
+      "answer": 0,
+      "explanation": "Det 105/CC Mission: Develop exceptional leaders for tomorrow's Air and Space Force."
+    },
+    {
+      "id": "WK04-012",
+      "prompt": "What is the Det 105/CC Vision?",
+      "choices": [
+        "Forge confident, connected warriors: grounded in humility, fierce in mission, trusted to lead.",
+        "A culture defined by wingmanship, where every cadet strengthens and elevates those around them.",
+        "The World's Greatest Air Force–Powered by Airmen, Fueled by Innovation.",
+        "Forge confident, resilient leaders who raise the standard."
+      ],
+      "answer": 0,
+      "explanation": "Det 105/CC Vision: Forge confident, connected warriors: grounded in humility, fierce in mission, trusted to lead."
+    },
+    {
+      "id": "WK04-013",
+      "prompt": "Complete the Det 105/CC Vision: \"Forge confident, connected warriors: grounded in humility, ...\"",
+      "choices": [
+        "fierce in mission, trusted to lead.",
+        "faithful to a proud heritage.",
+        "ready to fight and win.",
+        "strengthening those around them."
+      ],
+      "answer": 0,
+      "explanation": "\"Forge confident, connected warriors: grounded in humility, fierce in mission, trusted to lead.\""
+    },
+    {
+      "id": "WK04-014",
+      "prompt": "What are the Five Cs of Mission Command?",
+      "choices": [
+        "Competence, Character, Communication, Connection, Commitment.",
+        "Competence, Courage, Communication, Connection, Commitment.",
+        "Character, Connection, Commitment, Courage, Control.",
+        "Command, Control, Communication, Competence, Character."
+      ],
+      "answer": 0,
+      "explanation": "Five Cs of Mission Command: Competence, Character, Communication, Connection, Commitment. (Basic Cadet Leader Knowledge, Block 4.)"
+    },
+    {
+      "id": "WK04-015",
+      "prompt": "Which is NOT one of the Five Cs of Mission Command?",
+      "choices": [
+        "Competence",
+        "Courage",
+        "Communication",
+        "Connection"
+      ],
+      "answer": 1,
+      "explanation": "Courage is a Space Force core value, not one of the Five Cs: Competence, Character, Communication, Connection, Commitment."
+    }
+  ]
+}

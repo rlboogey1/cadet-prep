@@ -1,0 +1,232 @@
+{
+  "questions": [
+    {
+      "id": "WK05-001",
+      "prompt": "Who is the President in your chain of command?",
+      "choices": [
+        "Honorable Donald J. Trump",
+        "Honorable Pete B. Hegseth",
+        "Lt Gen Clark J. Quinn",
+        "Col Michael G. Fleming"
+      ],
+      "answer": 0,
+      "explanation": "President: Honorable Donald J. Trump. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-002",
+      "prompt": "Who is the Secretary of Defense in your chain of command?",
+      "choices": [
+        "Honorable Pete B. Hegseth",
+        "Honorable Troy E. Meink",
+        "Maj Gen Nathan L. Owendoff",
+        "Col Sandra J. Coble"
+      ],
+      "answer": 0,
+      "explanation": "Secretary of Defense: Honorable Pete B. Hegseth. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-003",
+      "prompt": "Who is the Secretary of the Air Force in your chain of command?",
+      "choices": [
+        "Honorable Troy E. Meink",
+        "Gen Kenneth S. Wilsbach",
+        "Brig Gen Joseph L. Sheffield",
+        "Col Rebecca S. Lange"
+      ],
+      "answer": 0,
+      "explanation": "Secretary of the Air Force: Honorable Troy E. Meink. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-004",
+      "prompt": "Who is the Chief of Staff of the Air Force in your chain of command?",
+      "choices": [
+        "Gen Kenneth S. Wilsbach",
+        "Lt Gen Clark J. Quinn",
+        "Col Michael G. Fleming",
+        "Honorable Donald J. Trump"
+      ],
+      "answer": 0,
+      "explanation": "Chief of Staff of the Air Force: Gen Kenneth S. Wilsbach. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-005",
+      "prompt": "Who is the AETC/CC in your chain of command?",
+      "choices": [
+        "Lt Gen Clark J. Quinn",
+        "Maj Gen Nathan L. Owendoff",
+        "Col Sandra J. Coble",
+        "Honorable Pete B. Hegseth"
+      ],
+      "answer": 0,
+      "explanation": "AETC/CC: Lt Gen Clark J. Quinn. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-006",
+      "prompt": "Who is the AU/CC in your chain of command?",
+      "choices": [
+        "Maj Gen Nathan L. Owendoff",
+        "Brig Gen Joseph L. Sheffield",
+        "Col Rebecca S. Lange",
+        "Honorable Troy E. Meink"
+      ],
+      "answer": 0,
+      "explanation": "AU/CC: Maj Gen Nathan L. Owendoff. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-007",
+      "prompt": "Who is the Holm Center/CC in your chain of command?",
+      "choices": [
+        "Brig Gen Joseph L. Sheffield",
+        "Col Michael G. Fleming",
+        "Honorable Donald J. Trump",
+        "Gen Kenneth S. Wilsbach"
+      ],
+      "answer": 0,
+      "explanation": "Holm Center/CC: Brig Gen Joseph L. Sheffield. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-008",
+      "prompt": "Who is the AFROTC/CC in your chain of command?",
+      "choices": [
+        "Col Michael G. Fleming",
+        "Col Sandra J. Coble",
+        "Honorable Pete B. Hegseth",
+        "Lt Gen Clark J. Quinn"
+      ],
+      "answer": 0,
+      "explanation": "AFROTC/CC: Col Michael G. Fleming. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-009",
+      "prompt": "Who is the NWR/CC in your chain of command?",
+      "choices": [
+        "Col Sandra J. Coble",
+        "Col Rebecca S. Lange",
+        "Honorable Troy E. Meink",
+        "Maj Gen Nathan L. Owendoff"
+      ],
+      "answer": 0,
+      "explanation": "NWR/CC: Col Sandra J. Coble. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-010",
+      "prompt": "Who is the Det 105/CC in your chain of command?",
+      "choices": [
+        "Col Rebecca S. Lange",
+        "Honorable Donald J. Trump",
+        "Gen Kenneth S. Wilsbach",
+        "Brig Gen Joseph L. Sheffield"
+      ],
+      "answer": 0,
+      "explanation": "Det 105/CC: Col Rebecca S. Lange. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-011",
+      "prompt": "What position does Col Rebecca S. Lange hold?",
+      "choices": [
+        "Det 105/CC",
+        "NWR/CC",
+        "AFROTC/CC",
+        "Holm Center/CC"
+      ],
+      "answer": 0,
+      "explanation": "Col Rebecca S. Lange is the Det 105 Commander (Det 105/CC). (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-012",
+      "prompt": "In the chain of command, who comes directly above the Det 105/CC?",
+      "choices": [
+        "AFROTC/CC",
+        "NWR/CC",
+        "Holm Center/CC",
+        "AU/CC"
+      ],
+      "answer": 1,
+      "explanation": "Det 105/CC reports to the Northwest Region commander (NWR/CC), Col Sandra J. Coble. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-013",
+      "prompt": "Put these in chain-of-command order, from the top:",
+      "choices": [
+        "AETC/CC, AU/CC, Holm Center/CC, AFROTC/CC",
+        "AU/CC, AETC/CC, AFROTC/CC, Holm Center/CC",
+        "Holm Center/CC, AU/CC, AETC/CC, AFROTC/CC",
+        "AETC/CC, Holm Center/CC, AU/CC, AFROTC/CC"
+      ],
+      "answer": 0,
+      "explanation": "AETC/CC, then AU/CC, then Holm Center/CC, then AFROTC/CC, then NWR/CC, then Det 105/CC."
+    },
+    {
+      "id": "WK05-014",
+      "prompt": "Who is the Chief of Space Operations?",
+      "choices": [
+        "Lt Gen Douglas Schiess",
+        "Gen Kenneth S. Wilsbach",
+        "John F. Bentivegna",
+        "Lt Gen Clark J. Quinn"
+      ],
+      "answer": 0,
+      "explanation": "Chief of Space Operations: Lt Gen Douglas Schiess. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-015",
+      "prompt": "Who is the Chief Master Sergeant of the Air Force (CMSAF)?",
+      "choices": [
+        "David R. Wolfe",
+        "John F. Bentivegna",
+        "Joseph L. Sheffield",
+        "Michael G. Fleming"
+      ],
+      "answer": 0,
+      "explanation": "CMSAF: David R. Wolfe. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-016",
+      "prompt": "Who is the Chief Master Sergeant of the Space Force (CMSSF)?",
+      "choices": [
+        "John F. Bentivegna",
+        "David R. Wolfe",
+        "Douglas Schiess",
+        "Nathan L. Owendoff"
+      ],
+      "answer": 0,
+      "explanation": "CMSSF: John F. Bentivegna. (Det 105 Warrior Knowledge handbook.)"
+    },
+    {
+      "id": "WK05-017",
+      "prompt": "When was AFROTC Detachment 105 founded?",
+      "choices": [
+        "July 1st, 1951",
+        "September 18th, 1947",
+        "July 1st, 1946",
+        "June 1st, 1951"
+      ],
+      "answer": 0,
+      "explanation": "Det 105 was founded July 1st, 1951, when Robert L. Stearns was university president."
+    },
+    {
+      "id": "WK05-018",
+      "prompt": "Who was the university president when Det 105 was founded?",
+      "choices": [
+        "Robert L. Stearns",
+        "Robert L. Stevens",
+        "Joseph L. Sheffield",
+        "Michael G. Fleming"
+      ],
+      "answer": 0,
+      "explanation": "Robert L. Stearns was university president when Det 105 was founded on July 1st, 1951."
+    },
+    {
+      "id": "WK05-019",
+      "prompt": "What are the three parts of Executing Mission Command?",
+      "choices": [
+        "Centralized Command (CC), Distributed Control (DC), Decentralized Command (DC).",
+        "Centralized Control, Decentralized Execution, Distributed Command.",
+        "Command, Control, Communication.",
+        "Centralized Command, Centralized Control, Decentralized Execution."
+      ],
+      "answer": 0,
+      "explanation": "Executing Mission Command: Centralized Command (CC), Distributed Control (DC), Decentralized Command (DC). (Basic Cadet Leader Knowledge, Block 5.)"
+    }
+  ]
+}

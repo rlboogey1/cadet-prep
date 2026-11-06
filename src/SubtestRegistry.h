@@ -15,6 +15,8 @@ struct SubtestInfo {
     int timeLimitSeconds = 0;  // timed-test limit (0 = untimed)
     int questionCount = 0;     // questions per timed test (0 = all)
     std::string tips;          // short strategy note shown before starting
+    std::string description;   // optional one-line card description (window version)
+    std::string icon;          // optional card icon name, e.g. "Star" (window version)
 };
 
 class SubtestRegistry {

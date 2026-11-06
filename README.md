@@ -1,17 +1,17 @@
 # Cadet Prep
 
 Prep for AFROTC cadets, written in C++, with a Mac window version and a console version.
-The app is split into prep sections, which you switch between at the top of the sidebar:
+The app is split into prep sections, which you pick from the main menu or the sidebar:
 
 - **AFOQT Prep**: the AFOQT knowledge sections (Word Knowledge, Math Knowledge,
   Arithmetic Reasoning, Verbal Analogies, Reading Comprehension) and pilot sections
   (Table Reading, Instrument Comprehension, Aviation Information, Block Counting), with
   flashcards and estimated composite scores.
-- **Warrior Knowledge**: ranks and insignia, heritage and core values, aircraft,
-  customs and courtesies, and Air Force and AFROTC organization.
+- **Warrior Knowledge**: Blocks 1 to 11 of the Det 105 Warrior Knowledge handbook,
+  with memorize cards for the creed, oaths, and Code of Conduct.
 
-Each prep section has its own dashboard, practice tests, review list, progress, and
-focus area.
+The app opens on a main menu where you pick a prep section. Each prep section has its
+own dashboard, practice tests, review list, cards, progress, and focus area.
 
 > This project was built with [Claude Code](https://claude.com/claude-code), Anthropic's
 > AI coding assistant.
@@ -97,19 +97,30 @@ Everything is randomized:
   there and list it in `templatesFor()` to add more. Generated questions don't
   go into "Review missed", since they aren't saved anywhere.
 
-**Warrior Knowledge** (practice, or 15 questions in 5 minutes per topic)
+**Warrior Knowledge**: Blocks 1 to 11 of the Det 105 Warrior Knowledge handbook
 
-| Topic | Questions |
-|---|---|
-| Ranks & Insignia | 20 |
-| Heritage & Core Values | 17 |
-| Aircraft | 16 |
-| Customs & Courtesies | 16 |
-| Organization & AFROTC | 14 |
+| Block | Covers | Questions |
+|---|---|---|
+| 1 | Core values, Honor Code, missions and vision, seven basic responses | 12 |
+| 2 | Fall 2026 Det 105 mission and vision, Field Training mission | 7 |
+| 3 | Cadet and officer ranks, AFROTC mission, Det 105/CC priorities, foundational competencies | 16 |
+| 4 | USAF and USSF enlisted ranks, Det 105/CC mission and vision, Five Cs | 15 |
+| 5 | Chain of command, additional personnel, Det 105 founding, executing mission command | 19 |
+| 6 | USAF major commands, USSF commands, Air Force Core Functions | 19 |
+| 7 | Code of Conduct, Articles I to III | 7 |
+| 8 | Code of Conduct, Articles IV to VI | 7 |
+| 9 | Fallen alumni, phonetic alphabet, Schwarzkopf quote | 16 |
+| 10 | Airman's Creed | 8 |
+| 11 | Officer and Enlisted Oaths of Office | 8 |
 
-Detachments often expect cadets to know their current chain of command by name. Those
-names change, so the app doesn't include them; add your own questions to
-`data/wk_organization.json`.
+Warrior Knowledge also has **memorize cards** (`data/warrior_cards.json`, 42 cards):
+the title on the front and the full text on the back, for everything you need word
+for word. They use the same spaced repetition as the vocabulary cards.
+
+Not included: the Air Force Song and Space Force Song lyrics (Block 2), and details
+for the fallen alumnus you choose (Block 9). Add them as cards in
+`data/warrior_cards.json` if you'd like to drill them. When the chain of command
+changes, update `data/wk_block05.json` and the "Chain of Command" card.
 
 ## Adding flashcards
 

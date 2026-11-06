@@ -1,0 +1,88 @@
+{
+  "questions": [
+    {
+      "id": "WK02-001",
+      "prompt": "What is the Fall 2026 Detachment 105 Mission?",
+      "choices": [
+        "Cultivating confident, resilient leaders who pursue excellence and raise the standard.",
+        "Develop exceptional leaders for tomorrow's Air and Space Force.",
+        "Train and evaluate cadets in AF institutional competencies preparing them for the professional officer course.",
+        "Develop leaders of character for the Air and Space Force."
+      ],
+      "answer": 0,
+      "explanation": "Fall 2026 Det 105 Mission: Cultivating confident, resilient leaders who pursue excellence and raise the standard."
+    },
+    {
+      "id": "WK02-002",
+      "prompt": "What is the Fall 2026 Detachment 105 Vision?",
+      "choices": [
+        "A culture defined by wingmanship, where every cadet strengthens and elevates those around them.",
+        "Forge confident, connected warriors: grounded in humility, fierce in mission, trusted to lead.",
+        "The World's Greatest Air Force–Powered by Airmen, Fueled by Innovation.",
+        "A culture of excellence, where every cadet raises the standard."
+      ],
+      "answer": 0,
+      "explanation": "Fall 2026 Det 105 Vision: A culture defined by wingmanship, where every cadet strengthens and elevates those around them."
+    },
+    {
+      "id": "WK02-003",
+      "prompt": "Complete the Fall 2026 Det 105 Mission: \"Cultivating confident, resilient leaders who ...\"",
+      "choices": [
+        "pursue excellence and raise the standard.",
+        "fly, fight, and win.",
+        "strengthen and elevate those around them.",
+        "are trusted to lead."
+      ],
+      "answer": 0,
+      "explanation": "\"Cultivating confident, resilient leaders who pursue excellence and raise the standard.\""
+    },
+    {
+      "id": "WK02-004",
+      "prompt": "Complete the Fall 2026 Det 105 Vision: \"A culture defined by wingmanship, where every cadet ...\"",
+      "choices": [
+        "strengthens and elevates those around them.",
+        "pursues excellence and raises the standard.",
+        "is grounded in humility.",
+        "answers the nation's call."
+      ],
+      "answer": 0,
+      "explanation": "\"A culture defined by wingmanship, where every cadet strengthens and elevates those around them.\""
+    },
+    {
+      "id": "WK02-005",
+      "prompt": "What is the AFROTC Field Training Mission?",
+      "choices": [
+        "Train and evaluate cadets in AF institutional competencies preparing them for the professional officer course.",
+        "Train cadets to fly, fight, and win.",
+        "Develop Air Force and Space Force leaders of character whom we expect to fight and win our nation's wars.",
+        "Cultivating confident, resilient leaders who pursue excellence and raise the standard."
+      ],
+      "answer": 0,
+      "explanation": "AFROTC Field Training Mission: Train and evaluate cadets in AF institutional competencies preparing them for the professional officer course."
+    },
+    {
+      "id": "WK02-006",
+      "prompt": "According to its mission, Field Training prepares cadets for what?",
+      "choices": [
+        "The professional officer course",
+        "Commissioning",
+        "Pilot training",
+        "The general military course"
+      ],
+      "answer": 0,
+      "explanation": "Field Training trains and evaluates cadets in AF institutional competencies, preparing them for the professional officer course (POC)."
+    },
+    {
+      "id": "WK02-007",
+      "prompt": "Which two songs does Block 2 cover?",
+      "choices": [
+        "The Air Force Song and the Space Force Song",
+        "The National Anthem and the Air Force Song",
+        "The Air Force Song and the Army Song",
+        "Taps and the Air Force Song"
+      ],
+      "answer": 0,
+      "explanation": "Block 2 is the first verse of the Air Force Song and the Space Force Song. Practice them from your handbook."
+    }
+  ]
+}

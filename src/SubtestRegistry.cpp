@@ -23,6 +23,8 @@ void SubtestRegistry::load(const std::string& path) {
         info.timeLimitSeconds = s.value("time_limit_seconds", 0);
         info.questionCount = s.value("question_count", 0);
         info.tips = s.value("tips", "");
+        info.description = s.value("description", "");
+        info.icon = s.value("icon", "");
         subtests_.push_back(std::move(info));
     }
 }

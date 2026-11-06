@@ -1,0 +1,148 @@
+{
+  "questions": [
+    {
+      "id": "WK01-001",
+      "prompt": "What are the Air Force Core Values?",
+      "choices": [
+        "Integrity first; Service before self; Excellence in all we do.",
+        "Character; Connection; Commitment; Courage.",
+        "Honor; Courage; Commitment.",
+        "Loyalty; Duty; Respect; Selfless Service."
+      ],
+      "answer": 0,
+      "explanation": "Air Force Core Values: Integrity first; Service before self; Excellence in all we do. Character, Connection, Commitment, and Courage are the Space Force's."
+    },
+    {
+      "id": "WK01-002",
+      "prompt": "What are the Space Force Core Values?",
+      "choices": [
+        "Integrity first; Service before self; Excellence in all we do.",
+        "Character; Connection; Commitment; Courage.",
+        "Honor; Courage; Commitment.",
+        "Character; Competence; Courage; Commitment."
+      ],
+      "answer": 1,
+      "explanation": "Space Force Core Values: Character; Connection; Commitment; Courage."
+    },
+    {
+      "id": "WK01-003",
+      "prompt": "Complete the Honor Code: \"We will not lie, steal, or cheat, ...\"",
+      "choices": [
+        "nor tolerate among us anyone who does.",
+        "and will report anyone who does.",
+        "so help me God.",
+        "nor allow others to do so."
+      ],
+      "answer": 0,
+      "explanation": "Honor Code: We will not lie, steal, or cheat, nor tolerate among us anyone who does."
+    },
+    {
+      "id": "WK01-004",
+      "prompt": "What is the Air Force Mission?",
+      "choices": [
+        "To fly, fight, and win... Airpower anytime, anywhere.",
+        "Secure our Nation's interests in, from, and to space.",
+        "We build leaders.",
+        "Aim High... Fly-Fight-Win."
+      ],
+      "answer": 0,
+      "explanation": "Air Force Mission: To fly, fight, and win... Airpower anytime, anywhere."
+    },
+    {
+      "id": "WK01-005",
+      "prompt": "What is the Air Force Vision?",
+      "choices": [
+        "The World's Greatest Air Force–Powered by Airmen, Fueled by Innovation.",
+        "To fly, fight, and win... Airpower anytime, anywhere.",
+        "The World's Greatest Air Force–Powered by Innovation, Fueled by Airmen.",
+        "Forge confident, connected warriors: grounded in humility, fierce in mission, trusted to lead."
+      ],
+      "answer": 0,
+      "explanation": "Air Force Vision: The World's Greatest Air Force–Powered by Airmen, Fueled by Innovation. Watch the order: powered by Airmen, fueled by innovation."
+    },
+    {
+      "id": "WK01-006",
+      "prompt": "What is the United States Space Force (USSF) Mission?",
+      "choices": [
+        "Secure our Nation's interests in, from, and to space.",
+        "To fly, fight, and win... Airpower anytime, anywhere.",
+        "Secure our Nation's interests in space.",
+        "Guardians beyond the blue."
+      ],
+      "answer": 0,
+      "explanation": "USSF Mission: Secure our Nation's interests in, from, and to space. Remember all three: in, from, and to space."
+    },
+    {
+      "id": "WK01-007",
+      "prompt": "What is the Holm Center Mission?",
+      "choices": [
+        "We build leaders.",
+        "Develop exceptional leaders for tomorrow's Air and Space Force.",
+        "We develop warriors.",
+        "Develop Air Force and Space Force leaders of character whom we expect to fight and win our nation's wars."
+      ],
+      "answer": 0,
+      "explanation": "Holm Center Mission: We build leaders."
+    },
+    {
+      "id": "WK01-008",
+      "prompt": "How many basic responses are there?",
+      "choices": [
+        "Five",
+        "Six",
+        "Seven",
+        "Eight"
+      ],
+      "answer": 2,
+      "explanation": "There are seven basic responses: Yes, sir/ma'am. No, sir/ma'am. No excuse, sir/ma'am. Sir/ma'am, may I ask a question? Sir/ma'am, may I make a statement? Sir/ma'am, I do not know. Sir/ma'am, I do not understand."
+    },
+    {
+      "id": "WK01-009",
+      "prompt": "Which of these is NOT one of the seven basic responses?",
+      "choices": [
+        "No excuse, sir/ma'am.",
+        "Sir/ma'am, I will find out.",
+        "Sir/ma'am, I do not know.",
+        "Sir/ma'am, may I make a statement?"
+      ],
+      "answer": 1,
+      "explanation": "\"I will find out\" isn't one of them. The seven are: Yes, sir/ma'am. No, sir/ma'am. No excuse, sir/ma'am. Sir/ma'am, may I ask a question? Sir/ma'am, may I make a statement? Sir/ma'am, I do not know. Sir/ma'am, I do not understand."
+    },
+    {
+      "id": "WK01-010",
+      "prompt": "An instructor asks a question you can't answer. Which basic response fits?",
+      "choices": [
+        "No excuse, sir/ma'am.",
+        "Sir/ma'am, I do not know.",
+        "Sir/ma'am, I do not understand.",
+        "No, sir/ma'am."
+      ],
+      "answer": 1,
+      "explanation": "\"Sir/ma'am, I do not know.\" Use \"I do not understand\" when you don't understand the question itself."
+    },
+    {
+      "id": "WK01-011",
+      "prompt": "How do you excuse a flight or detail?",
+      "choices": [
+        "\"Sir/Ma'am, please pardon my flight/detail.\"",
+        "\"Sir/Ma'am, excuse my flight/detail.\"",
+        "\"By your leave, sir/ma'am.\"",
+        "\"Sir/Ma'am, flight, dismissed.\""
+      ],
+      "answer": 0,
+      "explanation": "\"Sir/Ma'am, please pardon my flight/detail.\" (Basic Cadet Leader Knowledge, Block 1.)"
+    },
+    {
+      "id": "WK01-012",
+      "prompt": "While in flight formation, who greets higher-ranking personnel?",
+      "choices": [
+        "Every cadet in the flight",
+        "Only the Flight Commander",
+        "The first cadet to see them",
+        "The guide"
+      ],
+      "answer": 1,
+      "explanation": "Only the Flight Commander greets higher-ranking personnel while the flight is in formation."
+    }
+  ]
+}

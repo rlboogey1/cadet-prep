@@ -1,0 +1,94 @@
+{
+  "questions": [
+    {
+      "id": "WK07-001",
+      "prompt": "Which article of the Code of Conduct begins: \"I am an American, fighting in the forces which guard my country and our way of life.\"?",
+      "choices": [
+        "Article I",
+        "Article II",
+        "Article III",
+        "Article IV",
+        "Article V",
+        "Article VI"
+      ],
+      "answer": 0,
+      "explanation": "First Article: I am an American, fighting in the forces which guard my country and our way of life. I am prepared to give my life in their defense."
+    },
+    {
+      "id": "WK07-002",
+      "prompt": "Which article of the Code of Conduct begins: \"I will never surrender of my own free will.\"?",
+      "choices": [
+        "Article I",
+        "Article II",
+        "Article III",
+        "Article IV",
+        "Article V",
+        "Article VI"
+      ],
+      "answer": 1,
+      "explanation": "Second Article: I will never surrender of my own free will. If in command, I will never surrender the members of my command while they still have the means to resist."
+    },
+    {
+      "id": "WK07-003",
+      "prompt": "Which article of the Code of Conduct begins: \"If I am captured, I will continue to resist by all means available.\"?",
+      "choices": [
+        "Article I",
+        "Article II",
+        "Article III",
+        "Article IV",
+        "Article V",
+        "Article VI"
+      ],
+      "answer": 2,
+      "explanation": "Third Article: If I am captured, I will continue to resist by all means available. I will make every effort to escape and aid others to escape. I will accept neither parole nor special favors from the enemy."
+    },
+    {
+      "id": "WK07-004",
+      "prompt": "Complete Article I: \"I am an American, fighting in the forces which guard my country and our way of life. I am prepared ...\"",
+      "choices": [
+        "to give my life in their defense.",
+        "to defend it with my life.",
+        "to fight and win.",
+        "to never surrender."
+      ],
+      "answer": 0,
+      "explanation": "Article I: I am an American, fighting in the forces which guard my country and our way of life. I am prepared to give my life in their defense."
+    },
+    {
+      "id": "WK07-005",
+      "prompt": "Complete Article II: \"I will never surrender of my own free will. If in command, I will never surrender the members of my command ...\"",
+      "choices": [
+        "while they still have the means to resist.",
+        "under any circumstances.",
+        "without orders from higher command.",
+        "unless captured."
+      ],
+      "answer": 0,
+      "explanation": "Article II: I will never surrender of my own free will. If in command, I will never surrender the members of my command while they still have the means to resist."
+    },
+    {
+      "id": "WK07-006",
+      "prompt": "Under Article III, what will a captured service member accept from the enemy?",
+      "choices": [
+        "Neither parole nor special favors",
+        "Parole, but no special favors",
+        "Medical care only",
+        "Only what the senior prisoner approves"
+      ],
+      "answer": 0,
+      "explanation": "Article III: If I am captured, I will continue to resist by all means available. I will make every effort to escape and aid others to escape. I will accept neither parole nor special favors from the enemy."
+    },
+    {
+      "id": "WK07-007",
+      "prompt": "According to Article III, if captured you will make every effort to:",
+      "choices": [
+        "Escape and aid others to escape",
+        "Take command",
+        "Give only name and rank",
+        "Keep faith with fellow prisoners"
+      ],
+      "answer": 0,
+      "explanation": "Article III: If I am captured, I will continue to resist by all means available. I will make every effort to escape and aid others to escape. I will accept neither parole nor special favors from the enemy."
+    }
+  ]
+}
