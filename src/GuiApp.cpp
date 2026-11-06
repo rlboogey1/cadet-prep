@@ -404,27 +404,12 @@ void GuiApp::drawHeader(const std::string& label) {
     ImGui::SetCursorPosY(y + 9);
     spacedLabel(label.c_str(), col::Muted, 2.2f);
 
-    // Chips on the right: sessions, then the sound toggle
+    // Chip on the right: sessions in this prep section (sound is changed on the Settings page)
     const Overall ov = overall();
     std::string sessions = plural(ov.sessions, "session");
-    Icon spk = sound_.enabled ? Icon::SpeakerOn : Icon::SpeakerOff;
-    const char* soundText = sound_.enabled ? "Sound on" : "Sound off";
-    float w1 = textSize(fonts.strong, soundText).x + 30 + 22;
-    float w2 = textSize(fonts.strong, sessions.c_str()).x + 30;
-    alignRight(w1 + 10 + w2);
+    alignRight(textSize(fonts.strong, sessions.c_str()).x + 30);
     ImGui::SetCursorPosY(y);
     chip("sess", sessions.c_str(), col::Card, col::Ink);
-    ImGui::SameLine(0, 10);
-    ImGui::SetCursorPosY(y);
-    if (chip("sound", soundText, col::Card, sound_.enabled ? col::Accent : col::Muted, true, true, &spk)) {
-        sound_.enabled = !sound_.enabled;
-        saveSettings();
-    }
-    if (ImGui::IsItemHovered()) {
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10, 8));
-        ImGui::SetTooltip("Play a chime for correct answers");
-        ImGui::PopStyleVar();
-    }
     ImGui::Dummy(ImVec2(0, 10));
 }
 
@@ -781,19 +766,11 @@ void GuiApp::drawQuiz() {
     spacedLabel((sessionTag_ + "  \xC2\xB7  " + upper(sessionName_)).c_str(), col::Muted, 2.0f);
     const int left = engine_.secondsLeft();
     std::string timer = left >= 0 ? mmss(left) + " left" : "Untimed";
-    Icon clock = Icon::Clock, spk = sound_.enabled ? Icon::SpeakerOn : Icon::SpeakerOff;
-    const char* soundText = sound_.enabled ? "Sound on" : "Sound off";
-    float w1 = textSize(fonts.strong, timer.c_str()).x + 52, w2 = textSize(fonts.strong, soundText).x + 52;
-    alignRight(w1 + 10 + w2);
+    Icon clock = Icon::Clock;
+    alignRight(textSize(fonts.strong, timer.c_str()).x + 52);
     ImGui::SetCursorPosY(y0);
     const bool urgent = left >= 0 && left <= 30;
     chip("timer", timer.c_str(), urgent ? col::BadSoft : col::Card, urgent ? col::Bad : col::Ink, false, true, &clock);
-    ImGui::SameLine(0, 10);
-    ImGui::SetCursorPosY(y0);
-    if (chip("sound", soundText, col::Card, sound_.enabled ? col::Accent : col::Muted, true, true, &spk)) {
-        sound_.enabled = !sound_.enabled;
-        saveSettings();
-    }
     ImGui::Dummy(ImVec2(0, 6));
 
     // ---- Title and quit
