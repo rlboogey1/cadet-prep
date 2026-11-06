@@ -49,7 +49,6 @@ int main(int argc, char* argv[]) {
     ImGui_ImplOpenGL3_Init("#version 150");
 
     // Main loop: draw a frame, show it, repeat.
-    const ImVec4 bg = ui::col::Bg;
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         ImGui_ImplOpenGL3_NewFrame();
@@ -62,6 +61,7 @@ int main(int argc, char* argv[]) {
         int w, h;
         glfwGetFramebufferSize(window, &w, &h);
         glViewport(0, 0, w, h);
+        const ImVec4 bg = ui::col::Bg;  // read every frame: it changes with dark mode
         glClearColor(bg.x, bg.y, bg.z, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

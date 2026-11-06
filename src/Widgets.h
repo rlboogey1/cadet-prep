@@ -20,25 +20,32 @@ inline const ImVec4 SidebarText(0.835f, 0.867f, 0.937f, 1.0f);
 inline const ImVec4 SidebarMuted(0.580f, 0.635f, 0.761f, 1.0f);
 inline const ImVec4 SidebarCard(0.106f, 0.161f, 0.302f, 1.0f);
 inline const ImVec4 SidebarLine(1.0f, 1.0f, 1.0f, 0.09f);
-// Main area (light)
-inline const ImVec4 Bg(0.953f, 0.961f, 0.980f, 1.0f);
-inline const ImVec4 Card(1.0f, 1.0f, 1.0f, 1.0f);
-inline const ImVec4 CardBorder(0.882f, 0.902f, 0.941f, 1.0f);
-inline const ImVec4 Ink(0.094f, 0.129f, 0.231f, 1.0f);        // main text
-inline const ImVec4 InkSoft(0.275f, 0.325f, 0.443f, 1.0f);
-inline const ImVec4 Muted(0.420f, 0.471f, 0.580f, 1.0f);
-inline const ImVec4 Track(0.890f, 0.910f, 0.949f, 1.0f);      // empty part of bars
-inline const ImVec4 Accent(0.247f, 0.373f, 0.855f, 1.0f);     // blue
-inline const ImVec4 AccentHover(0.196f, 0.318f, 0.780f, 1.0f);
-inline const ImVec4 AccentSoft(0.910f, 0.929f, 0.992f, 1.0f);
-inline const ImVec4 HeroA(0.106f, 0.192f, 0.392f, 1.0f);      // banner gradient
-inline const ImVec4 HeroB(0.282f, 0.427f, 0.875f, 1.0f);
-inline const ImVec4 Good(0.153f, 0.620f, 0.365f, 1.0f);
-inline const ImVec4 GoodSoft(0.906f, 0.973f, 0.929f, 1.0f);
-inline const ImVec4 Bad(0.851f, 0.239f, 0.275f, 1.0f);
-inline const ImVec4 BadSoft(0.992f, 0.925f, 0.929f, 1.0f);
-inline const ImVec4 Gold(0.961f, 0.690f, 0.180f, 1.0f);
-inline const ImVec4 White(1.0f, 1.0f, 1.0f, 1.0f);
+// Main area. These change with the theme: setDarkMode() swaps in the dark values.
+inline ImVec4 Bg(0.953f, 0.961f, 0.980f, 1.0f);
+inline ImVec4 Card(1.0f, 1.0f, 1.0f, 1.0f);
+inline ImVec4 CardBorder(0.882f, 0.902f, 0.941f, 1.0f);
+inline ImVec4 Ink(0.094f, 0.129f, 0.231f, 1.0f);        // main text
+inline ImVec4 InkSoft(0.275f, 0.325f, 0.443f, 1.0f);
+inline ImVec4 Muted(0.420f, 0.471f, 0.580f, 1.0f);
+inline ImVec4 Track(0.890f, 0.910f, 0.949f, 1.0f);      // empty part of bars
+inline ImVec4 Accent(0.247f, 0.373f, 0.855f, 1.0f);     // blue
+inline ImVec4 AccentHover(0.196f, 0.318f, 0.780f, 1.0f);
+inline ImVec4 AccentSoft(0.910f, 0.929f, 0.992f, 1.0f);
+inline ImVec4 HeroA(0.106f, 0.192f, 0.392f, 1.0f);      // banner gradient
+inline ImVec4 HeroB(0.282f, 0.427f, 0.875f, 1.0f);
+inline ImVec4 Good(0.153f, 0.620f, 0.365f, 1.0f);
+inline ImVec4 GoodSoft(0.906f, 0.973f, 0.929f, 1.0f);
+inline ImVec4 Bad(0.851f, 0.239f, 0.275f, 1.0f);
+inline ImVec4 BadSoft(0.992f, 0.925f, 0.929f, 1.0f);
+inline ImVec4 Gold(0.961f, 0.690f, 0.180f, 1.0f);
+inline ImVec4 White(1.0f, 1.0f, 1.0f, 1.0f);
+// Smaller details that also change with the theme
+inline ImVec4 Ring(0.80f, 0.835f, 0.902f, 1.0f);        // outlines on badges, buttons, toggles
+inline ImVec4 TagSoft(0.996f, 0.933f, 0.878f, 1.0f);    // orange tag (FOCUS, LAST USED)
+inline ImVec4 TagStrong(0.851f, 0.451f, 0.094f, 1.0f);
+inline ImVec4 Footer(0.30f, 0.37f, 0.58f, 1.0f);        // footer text on subject cards
+inline ImVec4 CalloutEdge(0.75f, 0.80f, 0.89f, 1.0f);   // edge of the passage box
+inline ImVec4 Shadow(0.086f, 0.122f, 0.235f, 1.0f);     // card shadows (alpha set where used)
 }  // namespace col
 
 // Pastel tile + strong color pairs for subject icons
@@ -61,12 +68,14 @@ extern FontSet fonts;
 
 void loadFonts(ImGuiIO& io, float scale);  // scale = screen pixel density (2 on Retina)
 void applyTheme();
+void setDarkMode(bool dark);  // switches every color above and re-applies the theme
+bool darkMode();
 float fontPx(ImFont* f);
 ImVec2 textSize(ImFont* font, const char* text, float wrap = -1.0f);
 
 // ---------------------------------------------------------------- icons
 enum class Icon { Home, Target, Clock, Review, Cards, Chart, List, Check, Cross, Sparkle, SpeakerOn, SpeakerOff, Bolt,
-                  Jet, Table, Gauge, Cube, Shield, Star, Book, Flag, Org };
+                  Jet, Table, Gauge, Cube, Shield, Star, Book, Flag, Org, Gear, Moon };
 void drawIcon(ImDrawList* dl, Icon icon, ImVec2 center, float size, ImU32 color);
 
 // ---------------------------------------------------------------- text

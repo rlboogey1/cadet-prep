@@ -27,7 +27,7 @@ public:
     void draw();
 
 private:
-    enum class Screen { Home, Dashboard, Practice, Review, Flashcards, Progress, Quiz, Results };
+    enum class Screen { Home, Settings, Dashboard, Practice, Review, Flashcards, Progress, Quiz, Results };
 
     // Frame pieces
     void drawSidebar(float height);
@@ -35,6 +35,7 @@ private:
 
     // Pages
     void drawHome();       // main menu: pick a prep section
+    void drawSettings();   // sound, dark mode, flashcard options
     void drawDashboard();
     void drawPractice();
     void drawReview();
@@ -100,6 +101,8 @@ private:
     std::string pinnedFocus_;  // subtest id chosen by the user for the current track; empty = automatic
     std::map<std::string, std::string> pinnedByTrack_;  // the same, for every track
     std::string track_ = "afoqt";
+    bool darkMode_ = false;        // saved setting
+    bool themeApplied_ = false;    // the saved theme is applied on the first frame (needs ImGui running)
 
     // Answer animation: when the current feedback started (ImGui time), or -1
     double feedbackTime_ = -1.0;

@@ -152,7 +152,7 @@ int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
         bx = a.x - 8;
     };
     badge(c.badge, col::AccentSoft, col::Accent);
-    badge(c.tag, ImVec4(0.996f, 0.933f, 0.878f, 1.0f), ImVec4(0.851f, 0.451f, 0.094f, 1.0f));
+    badge(c.tag, col::TagSoft, col::TagStrong);
 
     float y = q.y + pad + 50 + 18;
     dl->AddText(fonts.heading, fontPx(fonts.heading), ImVec2(q.x + pad, y), u32(col::Ink, fade), c.title.c_str());
@@ -172,7 +172,7 @@ int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
     // Footer: stats text on the left, buttons on the right
     const float rowY = q.y + size.y - pad - 40;
     dl->AddText(fonts.label, fontPx(fonts.label), ImVec2(q.x + pad, rowY + 20 - fontPx(fonts.label) * 0.5f),
-                u32(ImVec4(0.30f, 0.37f, 0.58f, 1.0f), fade), c.footer.c_str());
+                u32(col::Footer, fade), c.footer.c_str());
 
     int clicked = 0;
     if (!c.disabled) {
@@ -250,6 +250,10 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
 }
 
 void GuiApp::draw() {
+    if (!themeApplied_) {
+        setDarkMode(darkMode_);
+        themeApplied_ = true;
+    }
     const ImGuiViewport* vp = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(vp->WorkPos);
     ImGui::SetNextWindowSize(vp->WorkSize);
@@ -283,6 +287,7 @@ void GuiApp::draw() {
     }
     switch (screen_) {
         case Screen::Home: drawHome(); break;
+        case Screen::Settings: drawSettings(); break;
         case Screen::Dashboard: drawDashboard(); break;
         case Screen::Practice: drawPractice(); break;
         case Screen::Review: drawReview(); break;
@@ -317,9 +322,10 @@ void GuiApp::drawSidebar(float height) {
 
     // Main menu, then the prep sections: switching changes what every page below shows
     const bool inSession = screen_ == Screen::Quiz;
-    const bool home = screen_ == Screen::Home;
+    const bool home = screen_ == Screen::Home || screen_ == Screen::Settings;
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 6));
-    if (navItem("n_home", "Main menu", Icon::List, home, w) && !inSession) goTo(Screen::Home);
+    if (navItem("n_home", "Main menu", Icon::List, screen_ == Screen::Home, w) && !inSession) goTo(Screen::Home);
+    if (navItem("n_set", "Settings", Icon::Gear, screen_ == Screen::Settings, w) && !inSession) goTo(Screen::Settings);
     ImGui::PopStyleVar();
     ImGui::Dummy(ImVec2(0, 4));
     spacedLabel("PREP SECTIONS", col::SidebarMuted, 2.0f);
@@ -455,20 +461,19 @@ void GuiApp::drawHome() {
     drawLogo(dl, ImVec2(b.x - 150, a.y + 135), 70.0f);
     const float pad = 42.0f;
     ImGui::SetCursorScreenPos(a + ImVec2(pad, 38));
-    spacedLabel("CADET PREP  \xC2\xB7  MAIN MENU", ImVec4(1, 1, 1, 0.85f), 2.2f);
+    spacedLabel("CADET PREP", ImVec4(1, 1, 1, 0.85f), 2.2f);
     float y = ImGui::GetCursorScreenPos().y + 6;
-    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), "Welcome, Cadet.");
+    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), "Let's get some");
     y += fontPx(fonts.hero) + 2;
-    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), "What are you prepping today?");
+    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), "reps in.");
     y += fontPx(fonts.hero) + 16;
-    const char* blurb = "Pick a prep section to open its dashboard, practice tests, review list, cards, and progress. "
-                        "You can switch any time from the sidebar.";
+    const char* blurb = "AFOQT practice or Warrior Knowledge for the next LLAB. Pick one below. Your progress saves as you go.";
     dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(a.x + pad, y), u32(col::White, 0.88f), blurb, nullptr,
                 std::min(620.0f, w * 0.6f));
     ImGui::SetCursorScreenPos(ImVec2(a.x, b.y + 28));
 
     // ---- One card per prep section
-    textIn(fonts.title, col::Ink, "Prep sections");
+    textIn(fonts.title, col::Ink, "Pick a section");
     ImGui::Dummy(ImVec2(0, 6));
     Grid grid(2);
     const ImVec2 size(grid.cardW, 262);
@@ -834,7 +839,7 @@ void GuiApp::drawQuiz() {
         ImGui::PushTextWrapPos(ImGui::GetContentRegionAvail().x + ImGui::GetCursorPosX() - 24);
         textIn(fonts.body, col::InkSoft, q.passage.c_str());
         ImGui::PopTextWrapPos();
-        endCallout(col::Bg, ImVec4(0.75f, 0.80f, 0.89f, 1.0f));
+        endCallout(col::Bg, col::CalloutEdge);
         ImGui::Dummy(ImVec2(0, 4));
     }
     wrappedIn(fonts.prompt, col::Ink, q.prompt.c_str());
@@ -1021,7 +1026,7 @@ void GuiApp::drawFlashcards() {
         ImGui::SetCursorScreenPos(p + ImVec2(24, 22));
         textIn(fonts.strong, col::InkSoft, "Definition first");
         ImGui::SetCursorScreenPos(p + ImVec2(24, 58));
-        toggle("deffirst", &definitionFirst_);
+        if (toggle("deffirst", &definitionFirst_)) saveSettings();
         ImGui::SetCursorScreenPos(p + ImVec2(24, 100));
         textIn(fonts.small, col::Muted, "Guess the word from its meaning");
         ImGui::EndGroup();
@@ -1203,31 +1208,14 @@ void GuiApp::drawProgress() {
     }
     endCard();
 
-    // ---- Right: settings
+    // ---- Right: focus area (sound, theme, and card options live on the Settings page)
     ImGui::SameLine(0, kGap);
     beginCard("settings", ImVec2(0, listH));
-    spacedLabel("SETTINGS", col::Muted, 1.8f);
+    spacedLabel("FOCUS AREA", col::Muted, 1.8f);
     ImGui::Dummy(ImVec2(0, 4));
-
-    auto toggleRow = [&](const char* id, const char* title, const char* sub, bool* v) {
-        const float y = ImGui::GetCursorPosY();
-        textIn(fonts.strong, col::Ink, title);
-        alignRight(46);
-        ImGui::SetCursorPosY(y);
-        bool changed = toggle(id, v);
-        ImGui::SetCursorPosY(y + 26);
-        wrappedIn(fonts.small, col::Muted, sub);
-        divider();
-        return changed;
-    };
-    if (toggleRow("snd", "Sound effects", "A chime when you answer correctly.", &sound_.enabled)) {
-        saveSettings();
-        if (sound_.enabled) sound_.correct();  // let them hear it
-    }
-    if (track_ == "afoqt")  // flashcards are AFOQT only
-        toggleRow("def", "Definition first", "Flashcards show the meaning; you guess the word.", &definitionFirst_);
-
-    textIn(fonts.strong, col::Ink, "Focus area");
+    wrappedIn(fonts.small, col::Muted, "The section highlighted across the app. Automatic picks your lowest accuracy.");
+    ImGui::Dummy(ImVec2(0, 4));
+    textIn(fonts.strong, col::Ink, "Current focus");
     const SubtestInfo* fi = registry_.find(focusSid);
     textIn(fonts.small, col::Muted, fi ? (fi->name + (pinnedFocus_.empty() ? "  (automatic)" : "  (pinned)")).c_str()
                                        : "Not set yet");
@@ -1237,6 +1225,95 @@ void GuiApp::drawProgress() {
         focusMenuItems();
         ImGui::EndPopup();
     }
+    ImGui::Dummy(ImVec2(0, 6));
+    divider();
+    wrappedIn(fonts.small, col::Muted, "Sound, dark mode, and flashcard options are on the Settings page.");
+    if (button("Open settings", ButtonStyle::Outline)) goTo(Screen::Settings);
+    endCard();
+}
+
+// ================================================================ settings
+
+void GuiApp::drawSettings() {
+    drawHeader("SETTINGS");
+    pageTitle("Settings", "Changes save right away.");
+
+    // One card per group, each row: title and description on the left, a switch on the right
+    auto row = [&](const char* id, const char* title, const char* sub, bool* v) {
+        const float y = ImGui::GetCursorPosY();
+        textIn(fonts.strong, col::Ink, title);
+        alignRight(46);
+        ImGui::SetCursorPosY(y + 2);
+        const bool changed = toggle(id, v);
+        ImGui::SetCursorPosY(y + 28);
+        wrappedIn(fonts.small, col::Muted, sub);
+        return changed;
+    };
+    const float w = ImGui::GetContentRegionAvail().x;
+    const float colW = (w - kGap) / 2;
+
+    // ---- Sound
+    beginCard("set_sound", ImVec2(colW, 220));
+    spacedLabel("SOUND", col::Muted, 1.8f);
+    ImGui::Dummy(ImVec2(0, 4));
+    if (row("snd", "Sound effects", "A chime when you get an answer right, and a low tone when you miss.", &sound_.enabled)) {
+        saveSettings();
+        if (sound_.enabled) sound_.correct();  // let them hear it
+    }
+    ImGui::Dummy(ImVec2(0, 10));
+    if (button("Play the correct sound", ButtonStyle::Outline) && sound_.enabled) sound_.correct();
+    ImGui::SameLine(0, 10);
+    if (button("Play the wrong sound", ButtonStyle::Outline) && sound_.enabled) sound_.wrong();
+    endCard();
+
+    // ---- Appearance: two swatches to pick from
+    ImGui::SameLine(0, kGap);
+    beginCard("set_look", ImVec2(0, 220));
+    spacedLabel("APPEARANCE", col::Muted, 1.8f);
+    ImGui::Dummy(ImVec2(0, 4));
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    const float tw = (ImGui::GetContentRegionAvail().x - 14) / 2, th = 128;
+    for (int i = 0; i < 2; ++i) {
+        const bool dark = i == 1, picked = darkMode_ == dark;
+        if (i) ImGui::SameLine(0, 14);
+        const ImVec2 p = ImGui::GetCursorScreenPos();
+        ImGui::PushID(i);
+        const bool clicked = ImGui::InvisibleButton("theme", ImVec2(tw, th));
+        const bool hov = ImGui::IsItemHovered();
+        ImGui::PopID();
+        if (hov) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+        // Mini preview of the app in that theme: sidebar, background, and a card
+        const ImU32 bg = dark ? IM_COL32(16, 21, 34, 255) : IM_COL32(243, 245, 250, 255);
+        const ImU32 card = dark ? IM_COL32(26, 33, 50, 255) : IM_COL32(255, 255, 255, 255);
+        const ImU32 line = dark ? IM_COL32(60, 72, 100, 255) : IM_COL32(220, 226, 238, 255);
+        const ImVec2 pa = p + ImVec2(10, 10), pb = p + ImVec2(tw - 10, th - 40);
+        dl->AddRectFilled(p, p + ImVec2(tw, th), u32(picked ? col::AccentSoft : col::Bg), 12.0f);
+        dl->AddRectFilled(pa, pb, bg, 6.0f);
+        dl->AddRectFilled(pa, ImVec2(pa.x + 28, pb.y), u32(col::Sidebar), 6.0f, ImDrawFlags_RoundCornersLeft);
+        dl->AddRectFilled(pa + ImVec2(38, 10), ImVec2(pb.x - 10, pa.y + 46), card, 4.0f);
+        dl->AddRectFilled(pa + ImVec2(48, 20), pa + ImVec2(110, 26), IM_COL32(63, 95, 218, 255), 2.0f);
+        dl->AddRectFilled(pa + ImVec2(48, 32), pa + ImVec2(140, 36), line, 2.0f);
+        dl->AddRect(p, p + ImVec2(tw, th), u32(picked ? col::Accent : hov ? col::Ring : col::CardBorder), 12.0f, 0, picked ? 2.0f : 1.2f);
+        const char* label = dark ? "Dark" : "Light";
+        Icon ic = dark ? Icon::Moon : Icon::Sparkle;
+        drawIcon(dl, ic, p + ImVec2(22, th - 20), 14, u32(picked ? col::Accent : col::InkSoft));
+        dl->AddText(fonts.strong, fontPx(fonts.strong), p + ImVec2(38, th - 30), u32(picked ? col::Accent : col::Ink), label);
+        if (picked) drawIcon(dl, Icon::Check, p + ImVec2(tw - 22, th - 20), 16, u32(col::Accent));
+        if (clicked && !picked) {
+            darkMode_ = dark;
+            setDarkMode(darkMode_);
+            saveSettings();
+        }
+    }
+    endCard();
+    ImGui::Dummy(ImVec2(0, kGap - 12));
+
+    // ---- Flashcards
+    beginCard("set_cards", ImVec2(colW, 150));
+    spacedLabel("VOCABULARY CARDS", col::Muted, 1.8f);
+    ImGui::Dummy(ImVec2(0, 4));
+    if (row("def", "Definition first", "AFOQT vocabulary cards show the meaning, and you guess the word.", &definitionFirst_))
+        saveSettings();
     endCard();
 }
 
@@ -1499,6 +1576,8 @@ void GuiApp::loadSettings() {
         if (j.contains("focus_by_track"))
             for (auto& [t, id] : j["focus_by_track"].items()) pinnedByTrack_[t] = id.get<std::string>();
         sound_.enabled = j.value("sound", true);
+        darkMode_ = j.value("dark", false);
+        definitionFirst_ = j.value("definition_first", false);
         track_ = j.value("track", "afoqt");
         if (track_ != trackInfo(track_).id) track_ = "afoqt";  // unknown track
     } catch (...) {
@@ -1515,6 +1594,8 @@ void GuiApp::saveSettings() const {
     j["focus"] = pins["afoqt"];
     j["focus_by_track"] = pins;
     j["sound"] = sound_.enabled;
+    j["dark"] = darkMode_;
+    j["definition_first"] = definitionFirst_;
     j["track"] = track_;
     std::ofstream("afoqt_settings.json") << j.dump(2);
 }

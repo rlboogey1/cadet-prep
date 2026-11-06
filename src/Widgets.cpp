@@ -68,6 +68,41 @@ ImVec2 textSize(ImFont* font, const char* text, float wrap) {
     return font->CalcTextSizeA(fontPx(font), FLT_MAX, wrap > 0 ? wrap : 0.0f, text);
 }
 
+namespace {
+bool gDark = false;
+ImVec4 mix(ImVec4 a, ImVec4 b, float t) {
+    return ImVec4(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, 1.0f);
+}
+}  // namespace
+
+bool darkMode() { return gDark; }
+
+void setDarkMode(bool dark) {
+    gDark = dark;
+    auto set = [](ImVec4& c, ImVec4 light, ImVec4 darkC) { c = gDark ? darkC : light; };
+    set(col::Bg, {0.953f, 0.961f, 0.980f, 1}, {0.063f, 0.082f, 0.133f, 1});
+    set(col::Card, {1.0f, 1.0f, 1.0f, 1}, {0.102f, 0.129f, 0.196f, 1});
+    set(col::CardBorder, {0.882f, 0.902f, 0.941f, 1}, {0.176f, 0.212f, 0.298f, 1});
+    set(col::Ink, {0.094f, 0.129f, 0.231f, 1}, {0.914f, 0.933f, 0.969f, 1});
+    set(col::InkSoft, {0.275f, 0.325f, 0.443f, 1}, {0.749f, 0.788f, 0.863f, 1});
+    set(col::Muted, {0.420f, 0.471f, 0.580f, 1}, {0.557f, 0.604f, 0.694f, 1});
+    set(col::Track, {0.890f, 0.910f, 0.949f, 1}, {0.176f, 0.208f, 0.286f, 1});
+    set(col::Accent, {0.247f, 0.373f, 0.855f, 1}, {0.400f, 0.541f, 0.980f, 1});
+    set(col::AccentHover, {0.196f, 0.318f, 0.780f, 1}, {0.475f, 0.604f, 1.0f, 1});
+    set(col::AccentSoft, {0.910f, 0.929f, 0.992f, 1}, {0.133f, 0.180f, 0.329f, 1});
+    set(col::Good, {0.153f, 0.620f, 0.365f, 1}, {0.271f, 0.765f, 0.490f, 1});
+    set(col::GoodSoft, {0.906f, 0.973f, 0.929f, 1}, {0.086f, 0.196f, 0.149f, 1});
+    set(col::Bad, {0.851f, 0.239f, 0.275f, 1}, {0.957f, 0.408f, 0.427f, 1});
+    set(col::BadSoft, {0.992f, 0.925f, 0.929f, 1}, {0.247f, 0.110f, 0.129f, 1});
+    set(col::Ring, {0.80f, 0.835f, 0.902f, 1}, {0.298f, 0.345f, 0.455f, 1});
+    set(col::TagSoft, {0.996f, 0.933f, 0.878f, 1}, {0.271f, 0.180f, 0.086f, 1});
+    set(col::TagStrong, {0.851f, 0.451f, 0.094f, 1}, {0.984f, 0.627f, 0.310f, 1});
+    set(col::Footer, {0.30f, 0.37f, 0.58f, 1}, {0.627f, 0.682f, 0.800f, 1});
+    set(col::CalloutEdge, {0.75f, 0.80f, 0.89f, 1}, {0.345f, 0.420f, 0.580f, 1});
+    set(col::Shadow, {0.086f, 0.122f, 0.235f, 1}, {0.0f, 0.0f, 0.0f, 1});
+    applyTheme();
+}
+
 Tint tint(int i) {
     static const Tint t[] = {
         {{0.910f, 0.922f, 0.996f, 1}, {0.286f, 0.345f, 0.792f, 1}},  // indigo
@@ -81,7 +116,10 @@ Tint tint(int i) {
         {{0.871f, 0.957f, 0.980f, 1}, {0.035f, 0.494f, 0.620f, 1}},  // cyan
         {{0.918f, 0.929f, 0.957f, 1}, {0.278f, 0.333f, 0.459f, 1}},  // slate
     };
-    return t[((i % 10) + 10) % 10];
+    const Tint& light = t[((i % 10) + 10) % 10];
+    if (!gDark) return light;
+    // Dark theme: a deep tile tinted with the color, and a brighter icon
+    return {mix(col::Card, light.strong, 0.26f), mix(light.strong, ImVec4(1, 1, 1, 1), 0.28f)};
 }
 
 void loadFonts(ImGuiIO& io, float scale) {
@@ -144,7 +182,8 @@ void loadFonts(ImGuiIO& io, float scale) {
 
 void applyTheme() {
     ImGuiStyle& s = ImGui::GetStyle();
-    ImGui::StyleColorsLight(&s);
+    if (gDark) ImGui::StyleColorsDark(&s);
+    else ImGui::StyleColorsLight(&s);
     s.WindowPadding = ImVec2(0, 0);
     s.ItemSpacing = ImVec2(12, 12);
     s.FramePadding = ImVec2(12, 8);
@@ -166,11 +205,11 @@ void applyTheme() {
     c[ImGuiCol_Border] = col::CardBorder;
     c[ImGuiCol_Separator] = col::CardBorder;
     c[ImGuiCol_Header] = col::AccentSoft;  // selected menu row
-    c[ImGuiCol_HeaderHovered] = ImVec4(0.855f, 0.886f, 0.984f, 1.0f);
-    c[ImGuiCol_HeaderActive] = ImVec4(0.800f, 0.843f, 0.976f, 1.0f);
+    c[ImGuiCol_HeaderHovered] = mix(col::AccentSoft, col::Accent, 0.12f);
+    c[ImGuiCol_HeaderActive] = mix(col::AccentSoft, col::Accent, 0.22f);
     c[ImGuiCol_ScrollbarBg] = ImVec4(0, 0, 0, 0);
-    c[ImGuiCol_ScrollbarGrab] = ImVec4(0.70f, 0.74f, 0.82f, 0.7f);
-    c[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.60f, 0.65f, 0.75f, 0.9f);
+    c[ImGuiCol_ScrollbarGrab] = ImVec4(col::Ring.x, col::Ring.y, col::Ring.z, 0.8f);
+    c[ImGuiCol_ScrollbarGrabHovered] = col::Muted;
     c[ImGuiCol_ScrollbarGrabActive] = col::Accent;
 }
 
@@ -321,6 +360,27 @@ void drawIcon(ImDrawList* dl, Icon icon, ImVec2 c, float size, ImU32 color) {
             dl->AddLine(P(-0.65f, 0.0f), P(-0.65f, 0.4f), color, t);
             dl->AddLine(P(0.65f, 0.0f), P(0.65f, 0.4f), color, t);
             break;
+        case Icon::Gear: {  // eight teeth around a ring
+            for (int i = 0; i < 8; ++i) {
+                float a = kPi / 4.0f * static_cast<float>(i);
+                ImVec2 d(std::cos(a), std::sin(a));
+                dl->AddLine(c + d * (h * 0.55f), c + d * (h * 0.92f), color, t * 1.7f);
+            }
+            dl->AddCircle(c, h * 0.58f, color, 0, t * 1.2f);
+            dl->AddCircle(c, h * 0.22f, color, 0, t);
+            break;
+        }
+        case Icon::Moon: {  // crescent: a big arc on the left, closed by a smaller arc
+            const float R = h * 0.85f, a0 = 0.35f * kPi, a1 = 1.65f * kPi;
+            const float ex = std::cos(a0) * R, ey = std::sin(a0) * R;  // the two tips are (ex, +ey) and (ex, -ey)
+            const float d = R * 0.3f, r2 = std::sqrt(d * d + ey * ey);
+            const ImVec2 c2(c.x + ex + d, c.y);
+            const float b = std::atan2(ey, -d);  // angle of the lower tip as seen from c2
+            dl->PathArcTo(c, R, a0, a1, 24);
+            dl->PathArcTo(c2, r2, -b, -2.0f * kPi + b, 16);
+            dl->PathStroke(color, ImDrawFlags_Closed, t);
+            break;
+        }
         case Icon::Bolt:  // lightning: two overlapping triangles
             dl->AddTriangleFilled(P(0.3f, -0.95f), P(-0.55f, 0.15f), P(0.15f, 0.0f), color);
             dl->AddTriangleFilled(P(-0.3f, 0.95f), P(0.55f, -0.15f), P(-0.15f, 0.0f), color);
@@ -371,7 +431,8 @@ void spacedLabel(const char* text, ImVec4 color, float spacing, ImFont* font) {
 void cardShape(ImDrawList* dl, ImVec2 p, ImVec2 size, float rounding, bool lifted, ImVec4 border,
                float borderWidth) {
     // Soft shadow: a few faint, slightly larger rounded rectangles below the card
-    const ImVec4 shadow(0.086f, 0.122f, 0.235f, lifted ? 0.05f : 0.028f);
+    ImVec4 shadow = col::Shadow;
+    shadow.w = (lifted ? 0.05f : 0.028f) * (gDark ? 4.0f : 1.0f);
     for (int i = 1; i <= 4; ++i) {
         float g = 1.5f * static_cast<float>(i);
         float drop = (lifted ? 3.0f : 1.5f) * static_cast<float>(i);
@@ -429,7 +490,7 @@ bool button(const char* label, ButtonStyle style, ImVec2 size, ImFont* font) {
             break;
         case ButtonStyle::Outline:
             dl->AddRectFilled(p, p + size, u32(hov ? col::AccentSoft : col::Card), r);
-            dl->AddRect(p, p + size, u32(hov ? col::Accent : ImVec4(0.80f, 0.835f, 0.902f, 1.0f)), r, 0, 1.3f);
+            dl->AddRect(p, p + size, u32(hov ? col::Accent : col::Ring), r, 0, 1.3f);
             textCol = u32(hov ? col::Accent : col::Ink);
             break;
         case ButtonStyle::White:
@@ -566,7 +627,7 @@ bool answerCard(const char* id, char letter, const char* text, AnswerState state
         textCentered(dl, fonts.label, bc, u32(col::White), l);
     } else {
         dl->AddCircleFilled(bc, r, u32(col::Bg));
-        dl->AddCircle(bc, r, u32(ImVec4(0.80f, 0.835f, 0.902f, 1.0f)), 0, 1.3f);
+        dl->AddCircle(bc, r, u32(col::Ring), 0, 1.3f);
         textCentered(dl, fonts.label, bc, u32(state == AnswerState::Dimmed ? col::Muted : col::InkSoft), l);
     }
     textAt(dl, fonts.body, ImVec2(p.x + 64, p.y + (size.y - ts.y) * 0.5f), u32(textCol), text, nullptr, wrap);
@@ -623,7 +684,7 @@ bool pictureAnswerCard(const char* id, char letter, AnswerState state, ImVec2 si
         drawIcon(dl, state == AnswerState::Correct ? Icon::Check : Icon::Cross, bc, r * 1.1f, u32(col::White));
     } else {
         dl->AddCircleFilled(bc, r, u32(hov ? col::Accent : col::White));
-        dl->AddCircle(bc, r, u32(hov ? col::Accent : ImVec4(0.80f, 0.835f, 0.902f, 1.0f)), 0, 1.3f);
+        dl->AddCircle(bc, r, u32(hov ? col::Accent : col::Ring), 0, 1.3f);
         textCentered(dl, fonts.label, bc, u32(hov ? col::White : state == AnswerState::Dimmed ? col::Muted : col::InkSoft), l);
     }
     if (animating && state == AnswerState::Correct) celebrate(ImGui::GetForegroundDrawList(), bc, anim);
@@ -670,7 +731,7 @@ bool toggle(const char* id, bool* value) {
     if (clicked) *value = !*value;
     ImDrawList* dl = ImGui::GetWindowDrawList();
     const float r = size.y * 0.5f;
-    dl->AddRectFilled(p, p + size, u32(*value ? col::Accent : ImVec4(0.80f, 0.835f, 0.902f, 1.0f)), r);
+    dl->AddRectFilled(p, p + size, u32(*value ? col::Accent : col::Ring), r);
     ImVec2 knob(*value ? p.x + size.x - r : p.x + r, p.y + r);
     dl->AddCircleFilled(knob + ImVec2(0, 1), r - 3, IM_COL32(0, 0, 0, 30));
     dl->AddCircleFilled(knob, r - 3, u32(col::White));

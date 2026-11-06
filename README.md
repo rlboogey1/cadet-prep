@@ -46,6 +46,9 @@ automatically the first time you open it.
 - **Full battery**: all knowledge sections, or all pilot sections, back to back, timed
 - **Review missed**: re-asks every question you've gotten wrong until you get it right
 - **Progress**: accuracy and seconds per question by section, plus your weakest area
+- **Settings**: sound effects on or off (with test buttons), light or dark mode, and
+  the vocabulary card direction. Saved between launches.
+- **Main menu**: the app opens here; pick AFOQT Prep or Warrior Knowledge.
 - **Estimated composite scores**: Pilot, CSO, ABM, Academic Aptitude, Verbal, and
   Quantitative, each the average of your accuracy on the sections that make it up,
   with the weakest section and any you haven't practiced yet. The real AFOQT reports
