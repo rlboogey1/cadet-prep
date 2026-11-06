@@ -1,8 +1,10 @@
 # AFOQT Study (C++)
 
-A console study app for the AFOQT knowledge sections: Word Knowledge, Math Knowledge,
-Arithmetic Reasoning, Verbal Analogies, and Reading Comprehension. It's built so pilot
-sections can be added later without restructuring.
+A study app for the AFOQT, with a Mac window version and a console version. It covers
+the knowledge sections (Word Knowledge, Math Knowledge, Arithmetic Reasoning, Verbal
+Analogies, Reading Comprehension) and the pilot sections (Table Reading, Instrument
+Comprehension, Aviation Information, Block Counting), with practice, timed tests,
+flashcards, and progress tracking.
 
 > This project was built with [Claude Code](https://claude.com/claude-code), Anthropic's
 > AI coding assistant.
@@ -29,7 +31,7 @@ in the folder you run it from.
 
 - **Practice mode**: untimed, explanation after every question
 - **Timed test**: countdown per section, review of misses at the end
-- **Full battery**: all knowledge sections back to back, timed
+- **Full battery**: all knowledge sections, or all pilot sections, back to back, timed
 - **Review missed**: re-asks every question you've gotten wrong until you get it right
 - **Progress**: accuracy and seconds per question by section, plus your weakest area
 - **Word Knowledge flashcards**: 161 words with definitions, synonyms, and example
@@ -116,9 +118,9 @@ src/
   main.cpp                   menus
 ```
 
-`TestSession` only talks to the `UI` interface, never to `std::cout` directly. When you
-want a graphical version, write an `ImGuiUI` or `QtUI` class that implements `UI` and
-the rest of the code stays the same.
+The console version runs tests through `TestSession`, which only talks to the `UI`
+interface, never to `std::cout` directly. The window version uses `QuizEngine` instead,
+which steps through a quiz one question at a time so the GUI can draw each frame.
 
 ## Adding questions
 
@@ -138,19 +140,24 @@ Add an object to the relevant file in `data/`:
 Write your own questions or use openly licensed material. Don't copy from commercial
 prep books, especially if you'll share the app.
 
-## Adding pilot sections later
+## Adding more sections
 
-**Multiple-choice pilot sections** (Instrument Comprehension, Aviation Information,
-etc.): add an entry to `data/subtests.json` with `"category": "pilot"` and create its
-question file. No code changes needed. For Instrument Comprehension, you'll add an
-`"image"` field to `Question` and display it once you move to a GUI.
+**Multiple-choice sections** (like Aviation Information): add an entry to
+`data/subtests.json` with its `"category"` (`"knowledge"` or `"pilot"`) and create its
+question file. No code changes needed.
 
-**Generated sections** (Table Reading, arithmetic drills): write a class that builds
-`Question` objects in code instead of loading them from JSON, and hand them to
-`TestSession` the same way. You get unlimited fresh questions.
+**Sections with pictures** (like Instrument Comprehension): set `"visual": true` in
+`subtests.json`, fill in the question's `visual` field (see `Visual` in `Question.h`),
+and add a drawing function for the new `VisualKind` in `Visuals.cpp`. These sections
+only show up in the window version.
+
+**Generated sections** (like Table Reading and Block Counting): add a generator in
+`QuestionGenerator.cpp` that builds `Question` objects in code, and hook it up in
+`supports()` and `generate()`. You get unlimited fresh questions.
 
 ## Time limits
 
-The limits in `subtests.json` are practice pacing, not official values. Check the
+The pilot sections use the official question counts and time limits. The knowledge
+section limits in `subtests.json` are practice pacing, not official values. Check the
 current official AFOQT study guide and adjust `time_limit_seconds` and
 `question_count` to match.
