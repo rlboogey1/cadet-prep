@@ -8,7 +8,8 @@
 struct SubtestInfo {
     std::string id;            // "word_knowledge"
     std::string name;          // "Word Knowledge"
-    std::string category;      // "knowledge" or "pilot"
+    std::string track;         // prep section it belongs to: "afoqt" or "warrior"
+    std::string category;      // group within the track, e.g. "knowledge" or "pilot"
     std::string file;          // question file, relative to data dir ("" = generated only)
     bool visual = false;       // questions need pictures (GUI only, not the console)
     int timeLimitSeconds = 0;  // timed-test limit (0 = untimed)
@@ -21,6 +22,7 @@ public:
     void load(const std::string& path);
     const std::vector<SubtestInfo>& all() const { return subtests_; }
     std::vector<SubtestInfo> inCategory(const std::string& category) const;
+    std::vector<SubtestInfo> inTrack(const std::string& track) const;
     const SubtestInfo* find(const std::string& id) const;
 
 private:

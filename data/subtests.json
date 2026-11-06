@@ -81,6 +81,56 @@
       "time_limit_seconds": 300,
       "question_count": 30,
       "tips": "Count blocks beside it in its layer, then every block it crosses in the layers directly above and below."
+    },
+    {
+      "id": "wk_ranks",
+      "name": "Ranks & Insignia",
+      "track": "warrior",
+      "category": "warrior",
+      "file": "wk_ranks.json",
+      "time_limit_seconds": 300,
+      "question_count": 15,
+      "tips": "Learn officer ranks in pairs: gold then silver bar, gold then silver oak leaf. For enlisted, count stripes up from Airman."
+    },
+    {
+      "id": "wk_heritage",
+      "name": "Heritage & Core Values",
+      "track": "warrior",
+      "category": "warrior",
+      "file": "wk_heritage.json",
+      "time_limit_seconds": 300,
+      "question_count": 15,
+      "tips": "Anchor dates to events: 1903 first flight, 1907 first Army air unit, 1947 independent Air Force, 2019 Space Force."
+    },
+    {
+      "id": "wk_aircraft",
+      "name": "Aircraft",
+      "track": "warrior",
+      "category": "warrior",
+      "file": "wk_aircraft.json",
+      "time_limit_seconds": 300,
+      "question_count": 15,
+      "tips": "Read the designation letters first: F fighter, B bomber, C cargo, K tanker, T trainer, Q unmanned."
+    },
+    {
+      "id": "wk_customs",
+      "name": "Customs & Courtesies",
+      "track": "warrior",
+      "category": "warrior",
+      "file": "wk_customs.json",
+      "time_limit_seconds": 300,
+      "question_count": 15,
+      "tips": "When in doubt, the junior member acts first: salutes first, gets in the car first, walks on the left."
+    },
+    {
+      "id": "wk_organization",
+      "name": "Organization & AFROTC",
+      "track": "warrior",
+      "category": "warrior",
+      "file": "wk_organization.json",
+      "time_limit_seconds": 300,
+      "question_count": 15,
+      "tips": "Picture the chain from the President down to your flight, and know the AFROTC terms: PAS, GMC, POC, LLAB."
     }
   ]
 }

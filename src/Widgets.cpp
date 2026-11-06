@@ -282,6 +282,45 @@ void drawIcon(ImDrawList* dl, Icon icon, ImVec2 c, float size, ImU32 color) {
             dl->AddLine(r, rb, color, t); dl->AddLine(lb, b, color, t); dl->AddLine(rb, b, color, t);
             break;
         }
+        case Icon::Shield: {
+            ImVec2 pts[] = {P(0.0f, -0.95f), P(0.8f, -0.62f), P(0.72f, 0.15f), P(0.0f, 0.95f), P(-0.72f, 0.15f), P(-0.8f, -0.62f)};
+            dl->AddPolyline(pts, 6, color, ImDrawFlags_Closed, t);
+            dl->AddLine(P(-0.32f, 0.0f), P(-0.05f, 0.3f), color, t);
+            dl->AddLine(P(-0.05f, 0.3f), P(0.38f, -0.28f), color, t);
+            break;
+        }
+        case Icon::Star: {  // five-pointed outline
+            ImVec2 pts[10];
+            for (int i = 0; i < 10; ++i) {
+                float a = kPi / 5.0f * static_cast<float>(i) - kPi / 2.0f;
+                float r = (i % 2 == 0) ? h * 0.95f : h * 0.4f;
+                pts[i] = ImVec2(c.x + std::cos(a) * r, c.y + std::sin(a) * r + h * 0.06f);
+            }
+            dl->AddPolyline(pts, 10, color, ImDrawFlags_Closed, t);
+            break;
+        }
+        case Icon::Book:
+            dl->AddRect(P(-0.9f, -0.75f), P(0.0f, 0.75f), color, 2.0f, 0, t);
+            dl->AddRect(P(0.0f, -0.75f), P(0.9f, 0.75f), color, 2.0f, 0, t);
+            dl->AddLine(P(-0.65f, -0.3f), P(-0.25f, -0.3f), color, t * 0.8f);
+            dl->AddLine(P(0.25f, -0.3f), P(0.65f, -0.3f), color, t * 0.8f);
+            dl->AddLine(P(-0.65f, 0.15f), P(-0.25f, 0.15f), color, t * 0.8f);
+            dl->AddLine(P(0.25f, 0.15f), P(0.65f, 0.15f), color, t * 0.8f);
+            break;
+        case Icon::Flag:
+            dl->AddLine(P(-0.7f, -0.9f), P(-0.7f, 0.95f), color, t);
+            dl->AddRect(P(-0.7f, -0.85f), P(0.85f, 0.15f), color, 2.0f, 0, t);
+            dl->AddLine(P(-0.7f, -0.35f), P(0.85f, -0.35f), color, t * 0.8f);
+            break;
+        case Icon::Org:
+            dl->AddRect(P(-0.3f, -0.9f), P(0.3f, -0.4f), color, 2.0f, 0, t);
+            dl->AddRect(P(-0.95f, 0.4f), P(-0.35f, 0.9f), color, 2.0f, 0, t);
+            dl->AddRect(P(0.35f, 0.4f), P(0.95f, 0.9f), color, 2.0f, 0, t);
+            dl->AddLine(P(0.0f, -0.4f), P(0.0f, 0.0f), color, t);
+            dl->AddLine(P(-0.65f, 0.0f), P(0.65f, 0.0f), color, t);
+            dl->AddLine(P(-0.65f, 0.0f), P(-0.65f, 0.4f), color, t);
+            dl->AddLine(P(0.65f, 0.0f), P(0.65f, 0.4f), color, t);
+            break;
         case Icon::Bolt:  // lightning: two overlapping triangles
             dl->AddTriangleFilled(P(0.3f, -0.95f), P(-0.55f, 0.15f), P(0.15f, 0.0f), color);
             dl->AddTriangleFilled(P(-0.3f, 0.95f), P(0.55f, -0.15f), P(-0.15f, 0.0f), color);

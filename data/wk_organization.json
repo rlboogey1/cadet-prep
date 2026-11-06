@@ -1,0 +1,172 @@
+{
+  "questions": [
+    {
+      "id": "WKO-001",
+      "prompt": "Who is the Commander in Chief of the US armed forces?",
+      "choices": [
+        "The Secretary of Defense",
+        "The Chairman of the Joint Chiefs of Staff",
+        "The President",
+        "The Vice President"
+      ],
+      "answer": 2,
+      "explanation": "The Constitution makes the President the Commander in Chief. The chain of command then runs through the Secretary of Defense."
+    },
+    {
+      "id": "WKO-002",
+      "prompt": "Which of these is a civilian leader rather than a uniformed officer?",
+      "choices": [
+        "Chief of Staff of the Air Force",
+        "Secretary of the Air Force",
+        "Vice Chief of Staff of the Air Force",
+        "Chief of Space Operations"
+      ],
+      "answer": 1,
+      "explanation": "The Secretary of the Air Force is a civilian who leads the Department of the Air Force. The Chief of Staff of the Air Force is the senior uniformed officer of the Air Force."
+    },
+    {
+      "id": "WKO-003",
+      "prompt": "Which military services are in the Department of the Air Force?",
+      "choices": [
+        "The Air Force only",
+        "The Air Force and Space Force",
+        "The Air Force and Air National Guard only",
+        "The Air Force and Coast Guard"
+      ],
+      "answer": 1,
+      "explanation": "The Department of the Air Force includes both the US Air Force and the US Space Force."
+    },
+    {
+      "id": "WKO-004",
+      "prompt": "Who is the senior uniformed leader of the Space Force?",
+      "choices": [
+        "The Chief of Space Operations",
+        "The Space Force Chief of Staff",
+        "The Commander of Space Command",
+        "The Secretary of the Space Force"
+      ],
+      "answer": 0,
+      "explanation": "The Chief of Space Operations is the Space Force's senior uniformed leader, alongside the Chief of Staff of the Air Force on the Joint Chiefs of Staff."
+    },
+    {
+      "id": "WKO-005",
+      "prompt": "Which list puts Air Force units in order from smallest to largest?",
+      "choices": [
+        "Squadron, flight, wing, group",
+        "Flight, squadron, group, wing",
+        "Flight, group, squadron, wing",
+        "Squadron, group, flight, wing"
+      ],
+      "answer": 1,
+      "explanation": "Flight, squadron, group, wing. Above the wing come the numbered air force and the major command (MAJCOM)."
+    },
+    {
+      "id": "WKO-006",
+      "prompt": "What is called the basic unit of the Air Force?",
+      "choices": [
+        "Flight",
+        "Squadron",
+        "Group",
+        "Wing"
+      ],
+      "answer": 1,
+      "explanation": "The squadron is the basic unit of the Air Force, usually commanded by a Lieutenant Colonel or Major."
+    },
+    {
+      "id": "WKO-007",
+      "prompt": "Which major command (MAJCOM) is responsible for recruiting, training, and education, including Air University?",
+      "choices": [
+        "Air Combat Command",
+        "Air Mobility Command",
+        "Air Education and Training Command",
+        "Air Force Materiel Command"
+      ],
+      "answer": 2,
+      "explanation": "Air Education and Training Command (AETC) handles recruiting, training, and education. Air University, which includes AFROTC, is part of AETC."
+    },
+    {
+      "id": "WKO-008",
+      "prompt": "Where is the headquarters of Air Force ROTC?",
+      "choices": [
+        "The Air Force Academy, Colorado",
+        "Maxwell AFB, Alabama",
+        "Joint Base San Antonio-Randolph, Texas",
+        "The Pentagon"
+      ],
+      "answer": 1,
+      "explanation": "AFROTC is run by the Jeanne M. Holm Center for Officer Accessions and Citizen Development at Maxwell AFB, Alabama, part of Air University."
+    },
+    {
+      "id": "WKO-009",
+      "prompt": "What title does the commander of an AFROTC detachment hold?",
+      "choices": [
+        "Commandant of Cadets",
+        "Professor of Aerospace Studies (PAS)",
+        "Dean of Air Science",
+        "Cadet Wing Commander"
+      ],
+      "answer": 1,
+      "explanation": "The detachment commander is the Professor of Aerospace Studies (PAS), an active-duty officer, usually a Lieutenant Colonel or Colonel."
+    },
+    {
+      "id": "WKO-010",
+      "prompt": "In AFROTC, the first two years of Aerospace Studies (AS100 and AS200) are called:",
+      "choices": [
+        "The Professional Officer Course",
+        "The General Military Course",
+        "Leadership Laboratory",
+        "Officer Training School"
+      ],
+      "answer": 1,
+      "explanation": "AS100 and AS200 make up the General Military Course (GMC). AS300 and AS400 make up the Professional Officer Course (POC)."
+    },
+    {
+      "id": "WKO-011",
+      "prompt": "What must cadets usually complete to move from the General Military Course into the Professional Officer Course?",
+      "choices": [
+        "Basic Military Training",
+        "Field Training",
+        "Officer Training School",
+        "Squadron Officer School"
+      ],
+      "answer": 1,
+      "explanation": "Cadets attend Field Training, usually the summer after their AS200 year, before entering the POC."
+    },
+    {
+      "id": "WKO-012",
+      "prompt": "What is AFROTC's hands-on leadership training, held alongside academic classes, called?",
+      "choices": [
+        "Leadership Laboratory (LLAB)",
+        "Field Training",
+        "Physical Training only",
+        "Cadet Orientation"
+      ],
+      "answer": 0,
+      "explanation": "Leadership Laboratory (LLAB) is where cadets practice drill, customs and courtesies, and leadership, and where POC cadets lead the cadet wing."
+    },
+    {
+      "id": "WKO-013",
+      "prompt": "Who leads the cadet wing in an AFROTC detachment?",
+      "choices": [
+        "The Professor of Aerospace Studies",
+        "A cadet wing commander, usually an AS400 cadet",
+        "An enlisted NCO",
+        "The university president"
+      ],
+      "answer": 1,
+      "explanation": "The cadet wing is led by cadets. The cadet wing commander is usually a senior (AS400) cadet, with POC cadets filling the cadet staff."
+    },
+    {
+      "id": "WKO-014",
+      "prompt": "Which of these AFOQT composite scores matters most for a pilot slot?",
+      "choices": [
+        "Verbal",
+        "Pilot",
+        "Quantitative",
+        "Academic Aptitude"
+      ],
+      "answer": 1,
+      "explanation": "Rated boards look closely at the Pilot composite, which is combined with flying hours and other factors into a pilot candidate score. Check current AFROTC guidance for minimums."
+    }
+  ]
+}

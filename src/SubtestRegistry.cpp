@@ -16,6 +16,7 @@ void SubtestRegistry::load(const std::string& path) {
         SubtestInfo info;
         info.id = s.at("id").get<std::string>();
         info.name = s.at("name").get<std::string>();
+        info.track = s.value("track", "afoqt");
         info.category = s.value("category", "knowledge");
         info.file = s.value("file", "");
         info.visual = s.value("visual", false);
@@ -30,6 +31,13 @@ std::vector<SubtestInfo> SubtestRegistry::inCategory(const std::string& category
     std::vector<SubtestInfo> out;
     for (const auto& s : subtests_)
         if (s.category == category) out.push_back(s);
+    return out;
+}
+
+std::vector<SubtestInfo> SubtestRegistry::inTrack(const std::string& track) const {
+    std::vector<SubtestInfo> out;
+    for (const auto& s : subtests_)
+        if (s.track == track) out.push_back(s);
     return out;
 }
 

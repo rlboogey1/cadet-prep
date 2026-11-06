@@ -1,0 +1,196 @@
+{
+  "questions": [
+    {
+      "id": "WKA-001",
+      "prompt": "What is the main mission of the F-22 Raptor?",
+      "choices": [
+        "Close air support",
+        "Air superiority",
+        "Aerial refueling",
+        "Strategic airlift"
+      ],
+      "answer": 1,
+      "explanation": "The F-22 Raptor is a fifth-generation stealth fighter built mainly for air superiority, defeating enemy aircraft."
+    },
+    {
+      "id": "WKA-002",
+      "prompt": "Which aircraft is nicknamed the \"Warthog\" and is built for close air support?",
+      "choices": [
+        "F-15E Strike Eagle",
+        "A-10 Thunderbolt II",
+        "F-16 Fighting Falcon",
+        "AC-130J Ghostrider"
+      ],
+      "answer": 1,
+      "explanation": "The A-10 Thunderbolt II, the \"Warthog,\" is built around its 30 mm GAU-8 cannon to support troops on the ground."
+    },
+    {
+      "id": "WKA-003",
+      "prompt": "What is the B-2 Spirit?",
+      "choices": [
+        "A stealth bomber",
+        "A tanker",
+        "A trainer",
+        "A reconnaissance drone"
+      ],
+      "answer": 0,
+      "explanation": "The B-2 Spirit is a flying-wing stealth bomber. The B-21 Raider is the newer stealth bomber being built to eventually take over its role."
+    },
+    {
+      "id": "WKA-004",
+      "prompt": "Which bomber, first flown in the 1950s, is called the Stratofortress?",
+      "choices": [
+        "B-1B",
+        "B-2",
+        "B-52",
+        "B-21"
+      ],
+      "answer": 2,
+      "explanation": "The B-52 Stratofortress first flew in 1952 and is expected to keep flying for decades more after upgrades."
+    },
+    {
+      "id": "WKA-005",
+      "prompt": "What is the KC-135 Stratotanker used for?",
+      "choices": [
+        "Aerial refueling",
+        "Air superiority",
+        "Search and rescue",
+        "Airborne early warning"
+      ],
+      "answer": 0,
+      "explanation": "The KC-135 refuels other aircraft in flight. The \"K\" in its designation means tanker. The KC-46 Pegasus is its newer replacement."
+    },
+    {
+      "id": "WKA-006",
+      "prompt": "Which aircraft is the Air Force's largest airlifter?",
+      "choices": [
+        "C-130J Super Hercules",
+        "C-17 Globemaster III",
+        "C-5M Super Galaxy",
+        "KC-10 Extender"
+      ],
+      "answer": 2,
+      "explanation": "The C-5M Super Galaxy is the Air Force's largest airlifter. The C-17 is smaller but can land on shorter, rougher runways."
+    },
+    {
+      "id": "WKA-007",
+      "prompt": "Which tactical airlifter, in service since the 1950s, can operate from short, unpaved airstrips?",
+      "choices": [
+        "C-5",
+        "C-130 Hercules",
+        "C-17",
+        "KC-46"
+      ],
+      "answer": 1,
+      "explanation": "The C-130 Hercules is a four-engine turboprop airlifter known for operating from short, rough fields."
+    },
+    {
+      "id": "WKA-008",
+      "prompt": "What does the letter \"Q\" mean in an aircraft designation such as MQ-9?",
+      "choices": [
+        "Quick reaction",
+        "Unmanned (remotely piloted)",
+        "Quiet",
+        "Special test"
+      ],
+      "answer": 1,
+      "explanation": "\"Q\" means unmanned. In MQ-9 Reaper, \"M\" means multi-mission and \"Q\" means remotely piloted."
+    },
+    {
+      "id": "WKA-009",
+      "prompt": "What does the letter \"C\" mean in a designation such as C-17?",
+      "choices": [
+        "Combat",
+        "Cargo or transport",
+        "Command",
+        "Coastal patrol"
+      ],
+      "answer": 1,
+      "explanation": "\"C\" means cargo or transport. Others: F = fighter, B = bomber, A = attack, T = trainer, K = tanker."
+    },
+    {
+      "id": "WKA-010",
+      "prompt": "What does the letter \"T\" mean in a designation such as T-38?",
+      "choices": [
+        "Tactical",
+        "Tanker",
+        "Trainer",
+        "Transport"
+      ],
+      "answer": 2,
+      "explanation": "\"T\" means trainer. The T-38 Talon is a supersonic jet trainer, and the T-7A Red Hawk is its replacement."
+    },
+    {
+      "id": "WKA-011",
+      "prompt": "Which aircraft do most Air Force student pilots fly first in primary pilot training?",
+      "choices": [
+        "T-38C Talon",
+        "T-6A Texan II",
+        "F-16",
+        "C-130"
+      ],
+      "answer": 1,
+      "explanation": "The T-6A Texan II, a turboprop, is the primary trainer used early in pilot training."
+    },
+    {
+      "id": "WKA-012",
+      "prompt": "What is the E-3 Sentry, with the large rotating dome on its back?",
+      "choices": [
+        "An airborne warning and control system (AWACS) aircraft",
+        "A tanker",
+        "A weather aircraft",
+        "A gunship"
+      ],
+      "answer": 0,
+      "explanation": "The E-3 Sentry is the AWACS aircraft. Its radar dome tracks aircraft over a wide area. \"E\" means special electronic mission."
+    },
+    {
+      "id": "WKA-013",
+      "prompt": "Which single-engine multirole fighter is nicknamed the \"Viper\"?",
+      "choices": [
+        "F-22 Raptor",
+        "F-15C Eagle",
+        "F-16 Fighting Falcon",
+        "A-10 Thunderbolt II"
+      ],
+      "answer": 2,
+      "explanation": "The F-16 Fighting Falcon is called the \"Viper\" by its pilots. It's a lightweight, single-engine multirole fighter."
+    },
+    {
+      "id": "WKA-014",
+      "prompt": "Which high-altitude reconnaissance aircraft is nicknamed the \"Dragon Lady\"?",
+      "choices": [
+        "SR-71",
+        "U-2",
+        "RQ-4",
+        "RC-135"
+      ],
+      "answer": 1,
+      "explanation": "The U-2 \"Dragon Lady\" has flown high-altitude reconnaissance since the 1950s. The SR-71 \"Blackbird\" is retired."
+    },
+    {
+      "id": "WKA-015",
+      "prompt": "Which fifth-generation stealth fighter is flown by the Air Force, Navy, and Marine Corps in different versions?",
+      "choices": [
+        "F-22",
+        "F-35",
+        "F-15EX",
+        "F-117"
+      ],
+      "answer": 1,
+      "explanation": "The F-35 Lightning II comes in A (Air Force), B (short takeoff and vertical landing), and C (carrier) versions."
+    },
+    {
+      "id": "WKA-016",
+      "prompt": "What is the F-15E Strike Eagle mainly designed for?",
+      "choices": [
+        "Strategic airlift",
+        "Dual-role fighter: air-to-air and deep strike",
+        "Aerial refueling",
+        "Pilot training"
+      ],
+      "answer": 1,
+      "explanation": "The two-seat F-15E Strike Eagle can fight other aircraft and strike ground targets deep in enemy territory."
+    }
+  ]
+}

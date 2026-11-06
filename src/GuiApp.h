@@ -66,6 +66,12 @@ private:
     std::string weakestId() const;  // lowest accuracy
     std::string focusId() const;    // pinned section, or the weakest if none is pinned
     void setFocus(const std::string& id);  // "" = automatic
+
+    // Prep sections ("tracks"): AFOQT Prep, Warrior Knowledge, ...
+    // Every page shows only the current track's sections.
+    std::vector<SubtestInfo> trackSections() const { return registry_.inTrack(track_); }
+    bool inTrack(const std::string& subtestId) const;  // also true for this track's warm-ups
+    void switchTrack(const std::string& track);
     std::map<std::string, int> missedBySubtest() const;
 
     // Settings saved between launches (afoqt_settings.json)
@@ -88,7 +94,9 @@ private:
     int sessionTimeLimit_ = 0;
     bool isReview_ = false;
     std::string message_;
-    std::string pinnedFocus_;  // subtest id chosen by the user; empty = automatic
+    std::string pinnedFocus_;  // subtest id chosen by the user for the current track; empty = automatic
+    std::map<std::string, std::string> pinnedByTrack_;  // the same, for every track
+    std::string track_ = "afoqt";
 
     // Answer animation: when the current feedback started (ImGui time), or -1
     double feedbackTime_ = -1.0;

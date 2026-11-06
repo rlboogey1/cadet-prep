@@ -1,12 +1,17 @@
 # Cadet Prep
 
-AFOQT prep for AFROTC cadets, written in C++.
+Prep for AFROTC cadets, written in C++, with a Mac window version and a console version.
+The app is split into prep sections, which you switch between at the top of the sidebar:
 
-A study app for the AFOQT, with a Mac window version and a console version. It covers
-the knowledge sections (Word Knowledge, Math Knowledge, Arithmetic Reasoning, Verbal
-Analogies, Reading Comprehension) and the pilot sections (Table Reading, Instrument
-Comprehension, Aviation Information, Block Counting), with practice, timed tests,
-flashcards, and progress tracking.
+- **AFOQT Prep**: the AFOQT knowledge sections (Word Knowledge, Math Knowledge,
+  Arithmetic Reasoning, Verbal Analogies, Reading Comprehension) and pilot sections
+  (Table Reading, Instrument Comprehension, Aviation Information, Block Counting), with
+  flashcards and estimated composite scores.
+- **Warrior Knowledge**: ranks and insignia, heritage and core values, aircraft,
+  customs and courtesies, and Air Force and AFROTC organization.
+
+Each prep section has its own dashboard, practice tests, review list, progress, and
+focus area.
 
 > This project was built with [Claude Code](https://claude.com/claude-code), Anthropic's
 > AI coding assistant.
@@ -92,6 +97,20 @@ Everything is randomized:
   there and list it in `templatesFor()` to add more. Generated questions don't
   go into "Review missed", since they aren't saved anywhere.
 
+**Warrior Knowledge** (practice, or 15 questions in 5 minutes per topic)
+
+| Topic | Questions |
+|---|---|
+| Ranks & Insignia | 20 |
+| Heritage & Core Values | 17 |
+| Aircraft | 16 |
+| Customs & Courtesies | 16 |
+| Organization & AFROTC | 14 |
+
+Detachments often expect cadets to know their current chain of command by name. Those
+names change, so the app doesn't include them; add your own questions to
+`data/wk_organization.json`.
+
 ## Adding flashcards
 
 Add an entry to `data/flashcards.json`:
@@ -157,8 +176,12 @@ prep books, especially if you'll share the app.
 ## Adding more sections
 
 **Multiple-choice sections** (like Aviation Information): add an entry to
-`data/subtests.json` with its `"category"` (`"knowledge"` or `"pilot"`) and create its
-question file. No code changes needed.
+`data/subtests.json` with its `"track"` (the prep section: `"afoqt"` or `"warrior"`) and
+`"category"` (in AFOQT Prep, `"knowledge"` or `"pilot"`), and create its question file.
+No code changes needed.
+
+**A new prep section** (like Fitness): add it to `tracks()` near the top of
+`src/GuiApp.cpp`, then give its sections that `"track"` in `subtests.json`.
 
 **Sections with pictures** (like Instrument Comprehension): set `"visual": true` in
 `subtests.json`, fill in the question's `visual` field (see `Visual` in `Question.h`),

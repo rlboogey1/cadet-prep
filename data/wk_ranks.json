@@ -1,0 +1,244 @@
+{
+  "questions": [
+    {
+      "id": "WKR-001",
+      "prompt": "What is the officer pay grade O-1?",
+      "choices": [
+        "Second Lieutenant",
+        "First Lieutenant",
+        "Captain",
+        "Ensign"
+      ],
+      "answer": 0,
+      "explanation": "O-1 is Second Lieutenant (2d Lt), the rank most AFROTC cadets commission into. Ensign is the Navy's O-1."
+    },
+    {
+      "id": "WKR-002",
+      "prompt": "What insignia does a Second Lieutenant wear?",
+      "choices": [
+        "One silver bar",
+        "One gold bar",
+        "Two silver bars",
+        "A gold oak leaf"
+      ],
+      "answer": 1,
+      "explanation": "A Second Lieutenant wears one gold bar. A First Lieutenant wears one silver bar."
+    },
+    {
+      "id": "WKR-003",
+      "prompt": "What insignia does a First Lieutenant (O-2) wear?",
+      "choices": [
+        "One gold bar",
+        "Two gold bars",
+        "One silver bar",
+        "Two silver bars"
+      ],
+      "answer": 2,
+      "explanation": "A First Lieutenant wears one silver bar. In US officer insignia, silver outranks gold."
+    },
+    {
+      "id": "WKR-004",
+      "prompt": "What insignia does a Captain (O-3) wear?",
+      "choices": [
+        "Two silver bars",
+        "One silver bar",
+        "A silver oak leaf",
+        "Two gold bars"
+      ],
+      "answer": 0,
+      "explanation": "A Captain wears two connected silver bars, sometimes called \"railroad tracks.\""
+    },
+    {
+      "id": "WKR-005",
+      "prompt": "A gold oak leaf is the insignia of which rank?",
+      "choices": [
+        "Lieutenant Colonel",
+        "Major",
+        "Captain",
+        "Colonel"
+      ],
+      "answer": 1,
+      "explanation": "Major (O-4) wears a gold oak leaf. Lieutenant Colonel (O-5) wears a silver oak leaf."
+    },
+    {
+      "id": "WKR-006",
+      "prompt": "A silver oak leaf is the insignia of which rank?",
+      "choices": [
+        "Major",
+        "Colonel",
+        "Lieutenant Colonel",
+        "Brigadier General"
+      ],
+      "answer": 2,
+      "explanation": "Lieutenant Colonel (O-5) wears a silver oak leaf. Again, silver outranks gold."
+    },
+    {
+      "id": "WKR-007",
+      "prompt": "What insignia does a Colonel (O-6) wear?",
+      "choices": [
+        "A silver eagle",
+        "A silver oak leaf",
+        "One silver star",
+        "A gold eagle"
+      ],
+      "answer": 0,
+      "explanation": "A Colonel wears a silver eagle, which is why colonels are sometimes called \"full bird\" colonels."
+    },
+    {
+      "id": "WKR-008",
+      "prompt": "How many stars does a Major General wear?",
+      "choices": [
+        "One",
+        "Two",
+        "Three",
+        "Four"
+      ],
+      "answer": 1,
+      "explanation": "Brigadier General (O-7) wears one star, Major General (O-8) two, Lieutenant General (O-9) three, and General (O-10) four."
+    },
+    {
+      "id": "WKR-009",
+      "prompt": "What is the pay grade of a Lieutenant General?",
+      "choices": [
+        "O-7",
+        "O-8",
+        "O-9",
+        "O-10"
+      ],
+      "answer": 2,
+      "explanation": "Lieutenant General is O-9 and wears three stars. Note that a Lieutenant General outranks a Major General."
+    },
+    {
+      "id": "WKR-010",
+      "prompt": "How do you correctly address a Lieutenant Colonel in conversation?",
+      "choices": [
+        "\"Lieutenant\"",
+        "\"Colonel\"",
+        "\"Lieutenant Colonel\"",
+        "\"Sir\" only; never by rank"
+      ],
+      "answer": 1,
+      "explanation": "Lieutenant Colonels are addressed as \"Colonel.\" Likewise, First and Second Lieutenants are both \"Lieutenant,\" and all generals are \"General.\""
+    },
+    {
+      "id": "WKR-011",
+      "prompt": "How do you address a Brigadier General in conversation?",
+      "choices": [
+        "\"Brigadier\"",
+        "\"Brigadier General\"",
+        "\"General\"",
+        "\"Commander\""
+      ],
+      "answer": 2,
+      "explanation": "All general officers, from one star to four, are addressed as \"General.\""
+    },
+    {
+      "id": "WKR-012",
+      "prompt": "What is the Air Force rank at pay grade E-1?",
+      "choices": [
+        "Airman",
+        "Airman Basic",
+        "Airman First Class",
+        "Private"
+      ],
+      "answer": 1,
+      "explanation": "E-1 is Airman Basic, which has no insignia. E-2 is Airman, and E-3 is Airman First Class."
+    },
+    {
+      "id": "WKR-013",
+      "prompt": "What is the Air Force rank at pay grade E-4?",
+      "choices": [
+        "Airman First Class",
+        "Staff Sergeant",
+        "Senior Airman",
+        "Sergeant"
+      ],
+      "answer": 2,
+      "explanation": "E-4 is Senior Airman (SrA). The Air Force no longer uses the rank of Sergeant at E-4."
+    },
+    {
+      "id": "WKR-014",
+      "prompt": "Which is the first Air Force enlisted rank in the noncommissioned officer (NCO) tier?",
+      "choices": [
+        "Senior Airman",
+        "Staff Sergeant",
+        "Technical Sergeant",
+        "Master Sergeant"
+      ],
+      "answer": 1,
+      "explanation": "Staff Sergeant (E-5) is the first NCO rank. Master Sergeant (E-7) is the first senior NCO (SNCO) rank."
+    },
+    {
+      "id": "WKR-015",
+      "prompt": "What is the pay grade of a Technical Sergeant?",
+      "choices": [
+        "E-5",
+        "E-6",
+        "E-7",
+        "E-8"
+      ],
+      "answer": 1,
+      "explanation": "Technical Sergeant (TSgt) is E-6. Staff Sergeant is E-5 and Master Sergeant is E-7."
+    },
+    {
+      "id": "WKR-016",
+      "prompt": "Which enlisted ranks are senior noncommissioned officers (SNCOs)?",
+      "choices": [
+        "SSgt, TSgt, MSgt",
+        "TSgt, MSgt, SMSgt",
+        "MSgt, SMSgt, CMSgt",
+        "SrA, SSgt, TSgt"
+      ],
+      "answer": 2,
+      "explanation": "The senior NCO tier is Master Sergeant (E-7), Senior Master Sergeant (E-8), and Chief Master Sergeant (E-9)."
+    },
+    {
+      "id": "WKR-017",
+      "prompt": "What is the correct Air Force abbreviation for Second Lieutenant?",
+      "choices": [
+        "2LT",
+        "2nd Lt",
+        "2d Lt",
+        "SLt"
+      ],
+      "answer": 2,
+      "explanation": "The Air Force writes \"2d Lt\" and \"1st Lt.\" \"2LT\" is the Army's style."
+    },
+    {
+      "id": "WKR-018",
+      "prompt": "What is the abbreviation for Senior Master Sergeant?",
+      "choices": [
+        "SMSgt",
+        "SrMSgt",
+        "SMS",
+        "SMSG"
+      ],
+      "answer": 0,
+      "explanation": "Senior Master Sergeant is SMSgt. Similar patterns: MSgt, CMSgt, TSgt, SSgt."
+    },
+    {
+      "id": "WKR-019",
+      "prompt": "Who is the only person ever to hold the five-star rank of General of the Air Force?",
+      "choices": [
+        "Carl Spaatz",
+        "Henry \"Hap\" Arnold",
+        "Curtis LeMay",
+        "Billy Mitchell"
+      ],
+      "answer": 1,
+      "explanation": "Henry \"Hap\" Arnold was made General of the Army in 1944 and General of the Air Force in 1949, the only person to hold that rank."
+    },
+    {
+      "id": "WKR-020",
+      "prompt": "Who is the senior enlisted advisor to the Chief of Staff of the Air Force?",
+      "choices": [
+        "Command Chief Master Sergeant",
+        "Chief Master Sergeant of the Air Force",
+        "First Sergeant",
+        "Senior Enlisted Leader of the Joint Staff"
+      ],
+      "answer": 1,
+      "explanation": "The Chief Master Sergeant of the Air Force (CMSAF) is the Air Force's top enlisted leader and advises the Chief of Staff and Secretary of the Air Force."
+    }
+  ]
+}

@@ -48,6 +48,33 @@ void alignRight(float itemWidth) {
     ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - itemWidth);
 }
 
+// The prep sections shown at the top of the sidebar. A section's entries in
+// data/subtests.json set "track" to one of these ids.
+struct TrackInfo {
+    const char* id;
+    const char* name;
+    Icon icon;
+    const char* label;     // CAPS label on the dashboard
+    const char* headline;  // second line of the banner headline
+    const char* blurb;
+};
+const std::vector<TrackInfo>& tracks() {
+    static const std::vector<TrackInfo> list = {
+        {"afoqt", "AFOQT Prep", Icon::Jet, "AFOQT PREP", "Test with confidence.",
+         "Every AFOQT knowledge and pilot section, explanations that actually teach, flashcards for "
+         "vocabulary, and timed drills when you're ready."},
+        {"warrior", "Warrior Knowledge", Icon::Shield, "WARRIOR KNOWLEDGE", "Know it cold.",
+         "Ranks, heritage, aircraft, customs and courtesies, and how the Air Force and AFROTC are "
+         "organized: the knowledge cadets are expected to have down before Field Training."},
+    };
+    return list;
+}
+const TrackInfo& trackInfo(const std::string& id) {
+    for (const auto& t : tracks())
+        if (id == t.id) return t;
+    return tracks().front();
+}
+
 // Per-subject look: icon glyph and a one-line description
 struct SubjectStyle {
     const char* glyph;  // short text for the icon tile, or nullptr to draw `icon`
@@ -64,6 +91,11 @@ SubjectStyle styleFor(const std::string& id) {
     if (id == "instrument_comprehension") return {nullptr, Icon::Gauge, "Read the artificial horizon and compass to find the aircraft's position."};
     if (id == "aviation_information") return {nullptr, Icon::Jet, "Aerodynamics, flight controls, instruments, and airports."};
     if (id == "block_counting") return {nullptr, Icon::Cube, "Count how many blocks touch a numbered block in a 3D stack."};
+    if (id == "wk_ranks") return {nullptr, Icon::Star, "Officer and enlisted ranks, pay grades, insignia, and how to address each."};
+    if (id == "wk_heritage") return {nullptr, Icon::Book, "Core values, key dates, and the people and missions that shaped the Air Force."};
+    if (id == "wk_aircraft") return {nullptr, Icon::Jet, "Today's aircraft by name and mission, and what the letters in a designation mean."};
+    if (id == "wk_customs") return {nullptr, Icon::Flag, "Saluting, reporting, honors to the flag, military time, and the phonetic alphabet."};
+    if (id == "wk_organization") return {nullptr, Icon::Org, "Chain of command, unit structure, and how AFROTC is set up."};
     return {"?", Icon::Home, ""};
 }
 
@@ -272,6 +304,20 @@ void GuiApp::drawSidebar(float height) {
     ImGui::SetCursorScreenPos(ImVec2(p.x, ImGui::GetCursorScreenPos().y + 6));
     divider(col::SidebarLine);
     ImGui::Dummy(ImVec2(0, 4));
+
+    // Prep sections: switching changes what every page below shows
+    const bool inSession = screen_ == Screen::Quiz;
+    spacedLabel("PREP SECTIONS", col::SidebarMuted, 2.0f);
+    ImGui::Dummy(ImVec2(0, 2));
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 6));
+    for (const auto& t : tracks()) {
+        if (navItem((std::string("t_") + t.id).c_str(), t.name, t.icon, track_ == t.id, w) && !inSession && track_ != t.id)
+            switchTrack(t.id);
+    }
+    ImGui::PopStyleVar();
+    ImGui::Dummy(ImVec2(0, 4));
+    divider(col::SidebarLine);
+    ImGui::Dummy(ImVec2(0, 4));
     spacedLabel("WORKSPACE", col::SidebarMuted, 2.0f);
     ImGui::Dummy(ImVec2(0, 2));
 
@@ -287,7 +333,9 @@ void GuiApp::drawSidebar(float height) {
     if (navItem("n_dash", "Dashboard", Icon::Home, section == Screen::Dashboard, w)) goTo(Screen::Dashboard);
     if (navItem("n_prac", "Practice tests", Icon::Target, section == Screen::Practice, w)) goTo(Screen::Practice);
     if (navItem("n_rev", "Review missed", Icon::Review, section == Screen::Review, w, badge.c_str())) goTo(Screen::Review);
-    if (navItem("n_vocab", "Vocabulary cards", Icon::Cards, section == Screen::Flashcards, w)) goTo(Screen::Flashcards);
+    if (track_ == "afoqt" &&  // the vocabulary deck is Word Knowledge, so AFOQT only
+        navItem("n_vocab", "Vocabulary cards", Icon::Cards, section == Screen::Flashcards, w))
+        goTo(Screen::Flashcards);
     if (navItem("n_prog", "My progress", Icon::Chart, section == Screen::Progress, w)) goTo(Screen::Progress);
     ImGui::PopStyleVar();
 
@@ -375,7 +423,8 @@ void GuiApp::drawStatRow() {
 }
 
 void GuiApp::drawDashboard() {
-    drawHeader("TRAINING DASHBOARD");
+    const TrackInfo& ti = trackInfo(track_);
+    drawHeader(std::string(ti.label) + "  \xC2\xB7  DASHBOARD");
 
     // ---- Hero banner
     ImDrawList* dl = ImGui::GetWindowDrawList();
@@ -396,10 +445,9 @@ void GuiApp::drawDashboard() {
     float y = ImGui::GetCursorScreenPos().y + 6;
     dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), "Train smarter.");
     y += fontPx(fonts.hero) + 2;
-    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), "Test with confidence.");
+    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), ti.headline);
     y += fontPx(fonts.hero) + 16;
-    const char* blurb = "Five AFOQT knowledge sections, explanations that actually teach, flashcards for "
-                        "vocabulary, and timed drills when you're ready.";
+    const char* blurb = ti.blurb;
     dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(a.x + pad, y), u32(col::White, 0.88f), blurb, nullptr,
                 std::min(560.0f, w * 0.6f));
     y += textSize(fonts.body, blurb, std::min(560.0f, w * 0.6f)).y + 24;
@@ -425,6 +473,11 @@ void GuiApp::drawDashboard() {
     textIn(fonts.body, col::Muted, note);
     ImGui::Dummy(ImVec2(0, 6));
 
+    if (track_ != "afoqt") {
+        spacedLabel("TOPICS", col::Muted, 2.0f);
+        drawSectionGrid(trackSections(), false, false);
+        return;
+    }
     spacedLabel("KNOWLEDGE SECTIONS", col::Muted, 2.0f);
     drawSectionGrid(registry_.inCategory("knowledge"), false, true);
     const auto pilot = registry_.inCategory("pilot");
@@ -507,6 +560,28 @@ void GuiApp::drawPractice() {
     ImDrawList* dl = ImGui::GetWindowDrawList();
     const float w = ImGui::GetContentRegionAvail().x;
     const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, 118);
+    if (track_ != "afoqt") {
+        // One battery: every topic in this prep section, back to back
+        const auto secs = trackSections();
+        int total = 0;
+        for (const auto& s : secs) total += s.timeLimitSeconds;
+        gradientRect(dl, a, b, col::HeroA, col::HeroB, 18.0f);
+        dl->AddText(fonts.heading, fontPx(fonts.heading), a + ImVec2(32, 30), u32(col::White), "Full knowledge check");
+        std::string sub = fmt("Every topic, timed and back to back. About %d min.", total / 60);
+        dl->AddText(fonts.body, fontPx(fonts.body), a + ImVec2(32, 64), u32(col::White, 0.85f), sub.c_str(), nullptr, w - 320);
+        const char* bl = "Start  \xE2\x86\x92";
+        const float bw = textSize(fonts.strong, bl).x + 40;
+        ImGui::SetCursorScreenPos(ImVec2(b.x - 32 - bw, a.y + 35));
+        if (button(bl, ButtonStyle::White, ImVec2(bw, 48))) {
+            queue_ = secs;
+            startNextInQueue();
+            return;
+        }
+        ImGui::SetCursorScreenPos(ImVec2(a.x, b.y + 24));
+        spacedLabel("TOPICS", col::Muted, 2.0f);
+        drawSectionGrid(secs, true, false);
+        return;
+    }
     gradientRect(dl, a, b, col::HeroA, col::HeroB, 18.0f);
     dl->PushClipRect(a, b, true);
     dl->AddCircle(ImVec2(b.x - 260, a.y + 10), 120, u32(col::White, 0.08f), 64, 1.5f);
@@ -582,7 +657,7 @@ void GuiApp::drawReview() {
 
     Grid grid(2);
     const ImVec2 size(grid.cardW, 236);
-    for (const auto& s : registry_.all()) {
+    for (const auto& s : trackSections()) {
         if (bank_.size(s.id) == 0) continue;  // generated sections have nothing saved to review
         const int n = missed.count(s.id) ? missed.at(s.id) : 0;
         SubjectCard c;
@@ -973,8 +1048,10 @@ void GuiApp::drawProgress() {
     pageTitle("My progress", "Accuracy and pace for each section. Your focus area is highlighted.");
     drawStatRow();
     ImGui::Dummy(ImVec2(0, 10));
-    drawComposites();
-    ImGui::Dummy(ImVec2(0, 10));
+    if (track_ == "afoqt") {  // composites are an AFOQT idea
+        drawComposites();
+        ImGui::Dummy(ImVec2(0, 10));
+    }
 
     const auto stats = progress_.stats();
     const std::string focusSid = focusId();
@@ -982,13 +1059,14 @@ void GuiApp::drawProgress() {
 
     // ---- Left: accuracy by section
     const float rowH = 84.0f;
-    const float listH = 70 + rowH * registry_.all().size();
+    const auto sections = trackSections();
+    const float listH = std::max(470.0f, 70 + rowH * sections.size());
     beginCard("bysection", ImVec2(listW, listH));
     spacedLabel("ACCURACY BY SECTION", col::Muted, 1.8f);
     ImGui::Dummy(ImVec2(0, 4));
     ImDrawList* dl = ImGui::GetWindowDrawList();
     const float w = ImGui::GetContentRegionAvail().x;
-    for (const auto& s : registry_.all()) {
+    for (const auto& s : sections) {
         auto it = stats.find(s.id);
         const bool has = it != stats.end();
         const bool focus = s.id == focusSid;
@@ -1037,7 +1115,8 @@ void GuiApp::drawProgress() {
         saveSettings();
         if (sound_.enabled) sound_.correct();  // let them hear it
     }
-    toggleRow("def", "Definition first", "Flashcards show the meaning; you guess the word.", &definitionFirst_);
+    if (track_ == "afoqt")  // flashcards are AFOQT only
+        toggleRow("def", "Definition first", "Flashcards show the meaning; you guess the word.", &definitionFirst_);
 
     textIn(fonts.strong, col::Ink, "Focus area");
     const SubtestInfo* fi = registry_.find(focusSid);
@@ -1163,9 +1242,9 @@ void GuiApp::startNextInQueue() {
 }
 
 void GuiApp::startWarmup() {
-    // Two questions from each knowledge section, mixed together
+    // Two questions from each section, mixed together (AFOQT: the knowledge sections)
     std::vector<Question> questions;
-    for (const auto& s : registry_.inCategory("knowledge")) {
+    for (const auto& s : track_ == "afoqt" ? registry_.inCategory("knowledge") : trackSections()) {
         auto two = bank_.draw(s.id, 2, rng_);
         questions.insert(questions.end(), two.begin(), two.end());
     }
@@ -1178,12 +1257,15 @@ void GuiApp::startWarmup() {
     sessionTimeLimit_ = 0;
     isReview_ = false;
     feedbackTime_ = -1.0;
-    engine_.start("warmup", std::move(questions), SessionMode::Practice, 0);
+    engine_.start(track_ == "afoqt" ? "warmup" : "warmup_" + track_, std::move(questions), SessionMode::Practice, 0);
     screen_ = Screen::Quiz;
 }
 
 void GuiApp::startReview(const std::string& subtestId) {
     auto questions = bank_.drawByIds(progress_.missedQuestionIds(), rng_);
+    questions.erase(std::remove_if(questions.begin(), questions.end(),
+                                   [&](const Question& q) { return !inTrack(q.subtest); }),
+                    questions.end());
     if (!subtestId.empty()) {
         questions.erase(std::remove_if(questions.begin(), questions.end(),
                                        [&](const Question& q) { return q.subtest != subtestId; }),
@@ -1232,7 +1314,7 @@ void GuiApp::focusMenuItems() {
     std::string autoLabel = w ? "Automatic  (now: " + w->name + ")" : "Automatic  (lowest accuracy)";
     if (ImGui::Selectable(autoLabel.c_str(), pinnedFocus_.empty(), 0, row)) setFocus("");
     ImGui::Separator();
-    for (const auto& s : registry_.all())
+    for (const auto& s : trackSections())
         if (ImGui::Selectable(s.name.c_str(), pinnedFocus_ == s.id, 0, row)) setFocus(s.id);
 }
 
@@ -1264,6 +1346,11 @@ int GuiApp::subjectIndex(const std::string& id) const {
     if (id == "table_reading") return 7;
     if (id == "instrument_comprehension") return 8;
     if (id == "block_counting") return 9;
+    if (id == "wk_ranks") return 3;
+    if (id == "wk_heritage") return 4;
+    if (id == "wk_aircraft") return 7;
+    if (id == "wk_customs") return 0;
+    if (id == "wk_organization") return 2;
     const auto& all = registry_.all();
     for (size_t i = 0; i < all.size(); ++i)
         if (all[i].id == id) return static_cast<int>(i);
@@ -1271,13 +1358,27 @@ int GuiApp::subjectIndex(const std::string& id) const {
 }
 
 std::string GuiApp::focusId() const {
-    if (!pinnedFocus_.empty() && registry_.find(pinnedFocus_)) return pinnedFocus_;
+    if (!pinnedFocus_.empty() && inTrack(pinnedFocus_)) return pinnedFocus_;
     return weakestId();
 }
 
 void GuiApp::setFocus(const std::string& id) {
     pinnedFocus_ = id;
+    pinnedByTrack_[track_] = id;
     saveSettings();
+}
+
+bool GuiApp::inTrack(const std::string& subtestId) const {
+    if (subtestId == (track_ == "afoqt" ? std::string("warmup") : "warmup_" + track_)) return true;
+    const SubtestInfo* s = registry_.find(subtestId);
+    return s && s->track == track_;
+}
+
+void GuiApp::switchTrack(const std::string& track) {
+    track_ = track;
+    pinnedFocus_ = pinnedByTrack_[track_];
+    saveSettings();
+    goTo(Screen::Dashboard);
 }
 
 void GuiApp::loadSettings() {
@@ -1286,17 +1387,27 @@ void GuiApp::loadSettings() {
     try {
         nlohmann::json j;
         in >> j;
-        pinnedFocus_ = j.value("focus", "");
+        pinnedByTrack_["afoqt"] = j.value("focus", "");  // older files only had the AFOQT focus
+        if (j.contains("focus_by_track"))
+            for (auto& [t, id] : j["focus_by_track"].items()) pinnedByTrack_[t] = id.get<std::string>();
         sound_.enabled = j.value("sound", true);
+        track_ = j.value("track", "afoqt");
+        if (track_ != trackInfo(track_).id) track_ = "afoqt";  // unknown track
     } catch (...) {
-        pinnedFocus_.clear();  // unreadable file: use defaults
+        pinnedByTrack_.clear();  // unreadable file: use defaults
+        track_ = "afoqt";
     }
+    pinnedFocus_ = pinnedByTrack_[track_];
 }
 
 void GuiApp::saveSettings() const {
     nlohmann::json j;
-    j["focus"] = pinnedFocus_;
+    auto pins = pinnedByTrack_;
+    pins[track_] = pinnedFocus_;
+    j["focus"] = pins["afoqt"];
+    j["focus_by_track"] = pins;
     j["sound"] = sound_.enabled;
+    j["track"] = track_;
     std::ofstream("afoqt_settings.json") << j.dump(2);
 }
 
@@ -1305,6 +1416,7 @@ void GuiApp::saveSettings() const {
 GuiApp::Overall GuiApp::overall() const {
     Overall o;
     for (const auto& [id, st] : progress_.stats()) {
+        if (!inTrack(id)) continue;
         o.correct += st.correct;
         o.total += st.total;
         o.sessions += st.sessions;
@@ -1316,7 +1428,7 @@ std::string GuiApp::weakestId() const {
     std::string id;
     double worst = 101.0;
     for (const auto& [sid, st] : progress_.stats()) {
-        if (!registry_.find(sid)) continue;  // skip warm-ups and other mixed sessions
+        if (!registry_.find(sid) || !inTrack(sid)) continue;  // skip warm-ups and other tracks
         if (st.total > 0 && st.accuracy() < worst) {
             worst = st.accuracy();
             id = sid;
@@ -1327,6 +1439,7 @@ std::string GuiApp::weakestId() const {
 
 std::map<std::string, int> GuiApp::missedBySubtest() const {
     std::map<std::string, int> out;
-    for (const auto& q : bank_.byIds(progress_.missedQuestionIds())) out[q.subtest]++;
+    for (const auto& q : bank_.byIds(progress_.missedQuestionIds()))
+        if (inTrack(q.subtest)) out[q.subtest]++;
     return out;
 }
