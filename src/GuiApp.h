@@ -1,4 +1,5 @@
 #pragma once
+#include "AppPaths.h"
 #include "FlashcardDeck.h"
 #include "ProgressStore.h"
 #include "QuestionBank.h"
@@ -84,7 +85,7 @@ private:
 
     SubtestRegistry registry_;
     QuestionBank bank_;
-    ProgressStore progress_{"afoqt_progress.json"};
+    ProgressStore progress_{apppaths::userFile("afoqt_progress.json")};
     QuizEngine engine_;
     Sound sound_;
     std::mt19937 rng_{std::random_device{}()};

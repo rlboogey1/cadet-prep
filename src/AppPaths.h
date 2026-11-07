@@ -50,6 +50,11 @@ inline void useUserDataDir() {
     fs::current_path(dir, ec);
 }
 
+// Full path of a file in the progress folder. Always use this for files the app
+// saves: some libraries change the working directory (GLFW on macOS moves it into
+// the .app's Resources folder), so a bare file name could end up anywhere.
+inline std::string userFile(const std::string& name) { return (userDataDir() / name).string(); }
+
 // Finds the question folder, in this order:
 //   1. a folder given on the command line
 //   2. the copy inside the .app bundle (Cadet Prep.app/Contents/Resources/data)

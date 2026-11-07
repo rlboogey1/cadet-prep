@@ -24,7 +24,7 @@ struct App {
     ConsoleUI ui;
     SubtestRegistry registry;
     QuestionBank bank;
-    ProgressStore progress{"afoqt_progress.json"};
+    ProgressStore progress{apppaths::userFile("afoqt_progress.json")};
     FlashcardDeck deck;
     std::mt19937 rng{std::random_device{}()};
 
@@ -219,7 +219,7 @@ int main(int argc, char* argv[]) {
         for (const auto& s : app.registry.all())
             if (!s.file.empty()) app.bank.loadFile(dataDir + "/" + s.file, s.id);
         app.deck.load(dataDir + "/flashcards.json");
-        app.deck.loadProgress("afoqt_flashcards.json");
+        app.deck.loadProgress(apppaths::userFile("afoqt_flashcards.json"));
     } catch (const std::exception& e) {
         std::cerr << "Startup error: " << e.what() << "\n"
                   << "Usage: afoqt [path/to/data]\n";

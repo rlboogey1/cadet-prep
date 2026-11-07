@@ -238,9 +238,9 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
         for (const auto& s : registry_.all())
             if (!s.file.empty()) bank_.loadFile(dataDir + "/" + s.file, s.id);
         deck_.load(dataDir + "/flashcards.json");
-        deck_.loadProgress("afoqt_flashcards.json");
+        deck_.loadProgress(apppaths::userFile("afoqt_flashcards.json"));
         memDeck_.load(dataDir + "/warrior_cards.json");
-        memDeck_.loadProgress("warrior_cards_progress.json");
+        memDeck_.loadProgress(apppaths::userFile("warrior_cards_progress.json"));
     } catch (const std::exception& e) {
         error = e.what();
         return false;
@@ -1541,7 +1541,7 @@ void GuiApp::switchTrack(const std::string& track) {
 }
 
 void GuiApp::loadSettings() {
-    std::ifstream in("afoqt_settings.json");
+    std::ifstream in(apppaths::userFile("afoqt_settings.json"));
     if (!in) return;  // first run
     try {
         nlohmann::json j;
@@ -1571,7 +1571,7 @@ void GuiApp::saveSettings() const {
     j["dark"] = darkMode_;
     j["definition_first"] = definitionFirst_;
     j["track"] = track_;
-    std::ofstream("afoqt_settings.json") << j.dump(2);
+    std::ofstream(apppaths::userFile("afoqt_settings.json")) << j.dump(2);
 }
 
 // ================================================================ stats

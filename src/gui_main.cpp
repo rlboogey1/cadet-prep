@@ -22,6 +22,9 @@ int main(int argc, char* argv[]) {
     }
 
     // Create the window. macOS requires OpenGL 3.2 core profile.
+    // On macOS, GLFW normally moves the working directory into the .app's
+    // Resources folder. Keep it where we put it (the progress folder).
+    glfwInitHint(GLFW_COCOA_CHDIR_RESOURCES, GLFW_FALSE);
     if (!glfwInit()) return 1;
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
