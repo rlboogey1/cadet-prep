@@ -373,14 +373,12 @@ void GuiApp::drawSidebar(float height) {
     ImDrawList* dl = ImGui::GetWindowDrawList();
     const float w = ImGui::GetContentRegionAvail().x;
 
-    // Brand: gradient "A" tile, name, and tagline
+    // Brand: gradient "A" tile and name
     const ImVec2 p = ImGui::GetCursorScreenPos();
     drawLogo(dl, p + ImVec2(25, 25), 26.0f);
     dl->AddText(fonts.heading, fontPx(fonts.heading), p + ImVec2(62, -2), u32(col::White), "Cadet");
     dl->AddText(fonts.heading, fontPx(fonts.heading), p + ImVec2(62, 22), u32(col::White), "Prep");
-    ImGui::SetCursorScreenPos(p + ImVec2(62, 52));
-    spacedLabel("PREPARE WITH PURPOSE", col::SidebarMuted, 1.8f);
-    ImGui::SetCursorScreenPos(ImVec2(p.x, ImGui::GetCursorScreenPos().y + 6));
+    ImGui::SetCursorScreenPos(p + ImVec2(0, 62));
     divider(col::SidebarLine);
     ImGui::Dummy(ImVec2(0, 4));
 
