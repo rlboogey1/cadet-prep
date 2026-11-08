@@ -54,6 +54,26 @@ Your progress, streaks, and review list are kept, as long as you don't delete th
 If you skip a week, the icon stays but the app won't open until you press Run again from
 the Mac.
 
+### Without opening Xcode
+
+Plug in the iPhone or iPad and unlock it, then run these from the project folder. Use
+your device's identifier from the first command in the last one. The project already
+has your team (`-DCADET_TEAM_ID=...` when it was set up).
+
+```bash
+xcrun devicectl list devices
+```
+
+```bash
+xcodebuild -project build-ios/CadetPrep.xcodeproj -scheme cadet_mobile -configuration Release -destination 'generic/platform=iOS' -derivedDataPath build-ios/dd -allowProvisioningUpdates build
+```
+
+```bash
+xcrun devicectl device install app --device <identifier> build-ios/Release-iphoneos/CadetPrep.app
+```
+
+Developer Mode has to stay on for the app to open.
+
 ## Progress
 
 The phone or iPad keeps its own progress, separate from the Mac app. Deleting the app
