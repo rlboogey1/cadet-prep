@@ -462,6 +462,1224 @@
       ],
       "answer": 0,
       "explanation": "Pilots are trained to trust their instruments 'even when the instruments seem wrong.'"
+    },
+    {
+      "id": "RC-034",
+      "passage": "In 1941 the U.S. Army Air Corps began training Black pilots at a segregated airfield near Tuskegee, Alabama. Many officials at the time doubted that the program would succeed, and its graduates faced discrimination both on and off base. The airmen answered those doubts in combat. Flying with the 332nd Fighter Group over Europe, they escorted American bombers on long missions, and their aircraft became known as \"Red Tails\" for their painted tail sections. Their record helped persuade military leaders that segregation wasted talent, and in 1948 President Truman ordered the armed forces to be integrated. Today the Tuskegee Airmen are remembered both for their skill as aviators and for the part they played in changing the military.",
+      "prompt": "The passage suggests that the Tuskegee Airmen's combat record",
+      "choices": [
+        "had little effect on military policy",
+        "helped lead to the integration of the armed forces",
+        "was kept secret until after the war",
+        "was mainly earned in the Pacific",
+        "convinced the Army to close the Tuskegee airfield"
+      ],
+      "answer": 1,
+      "explanation": "The passage says their record helped persuade leaders that segregation wasted talent, and integration was ordered in 1948."
+    },
+    {
+      "id": "RC-035",
+      "passage": "In 1941 the U.S. Army Air Corps began training Black pilots at a segregated airfield near Tuskegee, Alabama. Many officials at the time doubted that the program would succeed, and its graduates faced discrimination both on and off base. The airmen answered those doubts in combat. Flying with the 332nd Fighter Group over Europe, they escorted American bombers on long missions, and their aircraft became known as \"Red Tails\" for their painted tail sections. Their record helped persuade military leaders that segregation wasted talent, and in 1948 President Truman ordered the armed forces to be integrated. Today the Tuskegee Airmen are remembered both for their skill as aviators and for the part they played in changing the military.",
+      "prompt": "According to the passage, the name \"Red Tails\" came from",
+      "choices": [
+        "the color of their uniforms",
+        "the region where they trained",
+        "the painted tail sections of their aircraft",
+        "the type of bomber they escorted",
+        "a nickname given by enemy pilots"
+      ],
+      "answer": 2,
+      "explanation": "The passage states the aircraft were known as Red Tails \"for their painted tail sections.\""
+    },
+    {
+      "id": "RC-036",
+      "passage": "In 1941 the U.S. Army Air Corps began training Black pilots at a segregated airfield near Tuskegee, Alabama. Many officials at the time doubted that the program would succeed, and its graduates faced discrimination both on and off base. The airmen answered those doubts in combat. Flying with the 332nd Fighter Group over Europe, they escorted American bombers on long missions, and their aircraft became known as \"Red Tails\" for their painted tail sections. Their record helped persuade military leaders that segregation wasted talent, and in 1948 President Truman ordered the armed forces to be integrated. Today the Tuskegee Airmen are remembered both for their skill as aviators and for the part they played in changing the military.",
+      "prompt": "Which statement best describes the organization of the passage?",
+      "choices": [
+        "It compares two fighter groups.",
+        "It lists the steps of pilot training.",
+        "It argues against a modern policy.",
+        "It describes doubts, a response to them, and the lasting result.",
+        "It explains how bombers were designed."
+      ],
+      "answer": 3,
+      "explanation": "The passage moves from early doubts, to the airmen's combat performance, to the integration that followed."
+    },
+    {
+      "id": "RC-037",
+      "passage": "Most leaves look green because they contain chlorophyll, the pigment plants use to capture sunlight. Leaves also contain yellow and orange pigments, but during the growing season there is so much chlorophyll that these colors are hidden. As autumn days grow shorter and cooler, many trees stop making chlorophyll, and the green fades away to reveal the yellows and oranges that were there all along. Some trees also produce new red pigments in the fall, especially when days are sunny and nights are cool but not freezing. This is why the brightest autumn colors tend to follow a stretch of clear, crisp weather.",
+      "prompt": "According to the passage, the yellow and orange colors of autumn leaves",
+      "choices": [
+        "are produced only after the first frost",
+        "are present all summer but hidden by chlorophyll",
+        "come from the soil",
+        "appear only in rainy years",
+        "are made from chlorophyll"
+      ],
+      "answer": 1,
+      "explanation": "The passage says leaves already contain yellow and orange pigments that chlorophyll hides until it fades."
+    },
+    {
+      "id": "RC-038",
+      "passage": "Most leaves look green because they contain chlorophyll, the pigment plants use to capture sunlight. Leaves also contain yellow and orange pigments, but during the growing season there is so much chlorophyll that these colors are hidden. As autumn days grow shorter and cooler, many trees stop making chlorophyll, and the green fades away to reveal the yellows and oranges that were there all along. Some trees also produce new red pigments in the fall, especially when days are sunny and nights are cool but not freezing. This is why the brightest autumn colors tend to follow a stretch of clear, crisp weather.",
+      "prompt": "Based on the passage, which fall weather would most likely produce the brightest red leaves?",
+      "choices": [
+        "Cloudy days and freezing nights",
+        "Rainy days and warm nights",
+        "Sunny days and cool, above-freezing nights",
+        "Constant fog",
+        "Hot days and hot nights"
+      ],
+      "answer": 2,
+      "explanation": "Red pigments form \"especially when days are sunny and nights are cool but not freezing.\""
+    },
+    {
+      "id": "RC-039",
+      "passage": "Most leaves look green because they contain chlorophyll, the pigment plants use to capture sunlight. Leaves also contain yellow and orange pigments, but during the growing season there is so much chlorophyll that these colors are hidden. As autumn days grow shorter and cooler, many trees stop making chlorophyll, and the green fades away to reveal the yellows and oranges that were there all along. Some trees also produce new red pigments in the fall, especially when days are sunny and nights are cool but not freezing. This is why the brightest autumn colors tend to follow a stretch of clear, crisp weather.",
+      "prompt": "As used in the passage, \"reveal\" most nearly means",
+      "choices": [
+        "destroy",
+        "uncover",
+        "create",
+        "darken",
+        "absorb"
+      ],
+      "answer": 1,
+      "explanation": "As the green fades, the hidden colors are uncovered."
+    },
+    {
+      "id": "RC-040",
+      "passage": "Many students cut back on sleep before a big exam so they can study longer. Research on memory suggests this trade is often a poor one. During sleep, especially deep sleep early in the night, the brain replays and strengthens information learned during the day, moving it into longer-lasting memory. People who sleep after learning a list of words or a new skill usually remember it better the next day than people who stay awake for the same number of hours. Sleep loss also weakens attention, so a tired student may read the same page several times without absorbing it. An extra hour of study can be worth less than the hour of sleep it replaces.",
+      "prompt": "The author's main point is that",
+      "choices": [
+        "deep sleep happens only late at night",
+        "students should never study at night",
+        "giving up sleep to study can hurt learning",
+        "memory cannot be improved",
+        "word lists are the best way to study"
+      ],
+      "answer": 2,
+      "explanation": "The passage argues that cutting sleep to study is \"often a poor\" trade because sleep strengthens memory."
+    },
+    {
+      "id": "RC-041",
+      "passage": "Many students cut back on sleep before a big exam so they can study longer. Research on memory suggests this trade is often a poor one. During sleep, especially deep sleep early in the night, the brain replays and strengthens information learned during the day, moving it into longer-lasting memory. People who sleep after learning a list of words or a new skill usually remember it better the next day than people who stay awake for the same number of hours. Sleep loss also weakens attention, so a tired student may read the same page several times without absorbing it. An extra hour of study can be worth less than the hour of sleep it replaces.",
+      "prompt": "According to the passage, what happens to newly learned information during sleep?",
+      "choices": [
+        "It is erased to make room for new memories.",
+        "It is strengthened and moved into longer-lasting memory.",
+        "It becomes harder to recall.",
+        "It is replaced by dreams.",
+        "Nothing happens to it."
+      ],
+      "answer": 1,
+      "explanation": "The passage says the brain \"replays and strengthens\" information and moves it into longer-lasting memory."
+    },
+    {
+      "id": "RC-042",
+      "passage": "Many students cut back on sleep before a big exam so they can study longer. Research on memory suggests this trade is often a poor one. During sleep, especially deep sleep early in the night, the brain replays and strengthens information learned during the day, moving it into longer-lasting memory. People who sleep after learning a list of words or a new skill usually remember it better the next day than people who stay awake for the same number of hours. Sleep loss also weakens attention, so a tired student may read the same page several times without absorbing it. An extra hour of study can be worth less than the hour of sleep it replaces.",
+      "prompt": "The example of reading the same page several times is used to show that",
+      "choices": [
+        "textbooks are poorly written",
+        "sleep loss weakens attention",
+        "reading is slower than listening",
+        "students study too much",
+        "memory improves with repetition"
+      ],
+      "answer": 1,
+      "explanation": "The sentence about rereading directly follows the statement that sleep loss weakens attention."
+    },
+    {
+      "id": "RC-043",
+      "passage": "In June 1948 the Soviet Union cut off all road, rail, and canal routes into West Berlin, a city of over two million people deep inside Soviet-controlled East Germany. Rather than abandon the city or force the routes open, the United States and Britain decided to supply it entirely by air. Cargo planes landed around the clock, at times every few minutes, carrying food, coal, and medicine. Over about fifteen months the airlift delivered more than two million tons of supplies. One American pilot, Gail Halvorsen, became famous for dropping candy to children on tiny parachutes. In May 1949 the Soviets lifted the blockade, and the airlift came to be seen as an early victory of the Cold War achieved without firing a shot.",
+      "prompt": "According to the passage, the Western powers chose to supply Berlin by air in order to",
+      "choices": [
+        "test new cargo aircraft",
+        "avoid both abandoning the city and forcing the routes open",
+        "punish the Soviet Union",
+        "evacuate the city's population",
+        "deliver weapons to West German forces"
+      ],
+      "answer": 1,
+      "explanation": "The passage says they acted \"rather than abandon the city or force the routes open.\""
+    },
+    {
+      "id": "RC-044",
+      "passage": "In June 1948 the Soviet Union cut off all road, rail, and canal routes into West Berlin, a city of over two million people deep inside Soviet-controlled East Germany. Rather than abandon the city or force the routes open, the United States and Britain decided to supply it entirely by air. Cargo planes landed around the clock, at times every few minutes, carrying food, coal, and medicine. Over about fifteen months the airlift delivered more than two million tons of supplies. One American pilot, Gail Halvorsen, became famous for dropping candy to children on tiny parachutes. In May 1949 the Soviets lifted the blockade, and the airlift came to be seen as an early victory of the Cold War achieved without firing a shot.",
+      "prompt": "The story of Gail Halvorsen is included mainly to",
+      "choices": [
+        "show the human side of the airlift",
+        "explain how cargo was loaded",
+        "criticize the Soviet blockade",
+        "describe the route the planes flew",
+        "prove that the airlift was too expensive"
+      ],
+      "answer": 0,
+      "explanation": "The candy drops are a personal detail that shows the airlift's human side, not a fact about logistics."
+    },
+    {
+      "id": "RC-045",
+      "passage": "In June 1948 the Soviet Union cut off all road, rail, and canal routes into West Berlin, a city of over two million people deep inside Soviet-controlled East Germany. Rather than abandon the city or force the routes open, the United States and Britain decided to supply it entirely by air. Cargo planes landed around the clock, at times every few minutes, carrying food, coal, and medicine. Over about fifteen months the airlift delivered more than two million tons of supplies. One American pilot, Gail Halvorsen, became famous for dropping candy to children on tiny parachutes. In May 1949 the Soviets lifted the blockade, and the airlift came to be seen as an early victory of the Cold War achieved without firing a shot.",
+      "prompt": "The phrase \"without firing a shot\" suggests that the airlift",
+      "choices": [
+        "failed to achieve its goal",
+        "was a success won by peaceful means",
+        "led directly to a war",
+        "was carried out by unarmed civilians only",
+        "was kept secret"
+      ],
+      "answer": 1,
+      "explanation": "It was called a victory, and \"without firing a shot\" stresses that it was won without fighting."
+    },
+    {
+      "id": "RC-046",
+      "passage": "The Global Positioning System (GPS) uses a group of satellites, operated today by the U.S. Space Force, that constantly broadcast signals stating their position and the exact time the signal was sent. A receiver on the ground compares the time each signal was sent with the time it arrived. Because radio signals travel at a known speed, the delay tells the receiver how far away each satellite is. With distances to several satellites, the receiver can work out where it is. Timing must be extremely precise: an error of one millionth of a second would throw the position off by about 300 meters. For this reason each satellite carries highly accurate atomic clocks.",
+      "prompt": "According to the passage, a GPS receiver determines its distance from a satellite by",
+      "choices": [
+        "measuring the strength of the signal",
+        "using a map stored in its memory",
+        "measuring how long the signal took to arrive",
+        "asking a ground station",
+        "counting the satellites in view"
+      ],
+      "answer": 2,
+      "explanation": "The delay between when the signal was sent and when it arrived gives the distance, since the signal's speed is known."
+    },
+    {
+      "id": "RC-047",
+      "passage": "The Global Positioning System (GPS) uses a group of satellites, operated today by the U.S. Space Force, that constantly broadcast signals stating their position and the exact time the signal was sent. A receiver on the ground compares the time each signal was sent with the time it arrived. Because radio signals travel at a known speed, the delay tells the receiver how far away each satellite is. With distances to several satellites, the receiver can work out where it is. Timing must be extremely precise: an error of one millionth of a second would throw the position off by about 300 meters. For this reason each satellite carries highly accurate atomic clocks.",
+      "prompt": "Why do GPS satellites carry atomic clocks?",
+      "choices": [
+        "To save power",
+        "Because tiny timing errors cause large position errors",
+        "To communicate with each other",
+        "To track the Earth's rotation",
+        "Because they are cheaper than other clocks"
+      ],
+      "answer": 1,
+      "explanation": "The passage explains that an error of a millionth of a second shifts the position by about 300 meters."
+    },
+    {
+      "id": "RC-048",
+      "passage": "The Global Positioning System (GPS) uses a group of satellites, operated today by the U.S. Space Force, that constantly broadcast signals stating their position and the exact time the signal was sent. A receiver on the ground compares the time each signal was sent with the time it arrived. Because radio signals travel at a known speed, the delay tells the receiver how far away each satellite is. With distances to several satellites, the receiver can work out where it is. Timing must be extremely precise: an error of one millionth of a second would throw the position off by about 300 meters. For this reason each satellite carries highly accurate atomic clocks.",
+      "prompt": "Which of the following can be inferred from the passage?",
+      "choices": [
+        "A receiver needs signals from more than one satellite to find its position.",
+        "GPS works only during the day.",
+        "The Space Force invented radio.",
+        "GPS receivers send signals to the satellites.",
+        "Atomic clocks are used in every wristwatch."
+      ],
+      "answer": 0,
+      "explanation": "The passage says the receiver works out its position \"with distances to several satellites,\" so one is not enough."
+    },
+    {
+      "id": "RC-049",
+      "passage": "By the 1940s, pilots diving fighter planes at high speed sometimes found their controls shaking violently or locking up as they neared the speed of sound. Some engineers believed this \"sound barrier\" could never be safely crossed. On October 14, 1947, Air Force Captain Chuck Yeager tested that belief in the Bell X-1, a rocket-powered plane shaped like a .50-caliber bullet, a shape known to stay stable at supersonic speed. The X-1 was carried aloft under a B-29 bomber and released, then fired its rockets. Yeager reached about 700 miles per hour, faster than sound at that altitude, and landed safely. The flight proved that the barrier was a problem of design, not a limit of nature.",
+      "prompt": "Why was the X-1 shaped like a bullet?",
+      "choices": [
+        "To reduce its weight",
+        "To carry more fuel",
+        "Because that shape was known to stay stable at supersonic speed",
+        "So it could fit inside a B-29",
+        "To make it harder to see on radar"
+      ],
+      "answer": 2,
+      "explanation": "The passage says the bullet shape was \"known to stay stable at supersonic speed.\""
+    },
+    {
+      "id": "RC-050",
+      "passage": "By the 1940s, pilots diving fighter planes at high speed sometimes found their controls shaking violently or locking up as they neared the speed of sound. Some engineers believed this \"sound barrier\" could never be safely crossed. On October 14, 1947, Air Force Captain Chuck Yeager tested that belief in the Bell X-1, a rocket-powered plane shaped like a .50-caliber bullet, a shape known to stay stable at supersonic speed. The X-1 was carried aloft under a B-29 bomber and released, then fired its rockets. Yeager reached about 700 miles per hour, faster than sound at that altitude, and landed safely. The flight proved that the barrier was a problem of design, not a limit of nature.",
+      "prompt": "The last sentence of the passage suggests that",
+      "choices": [
+        "supersonic flight will always be dangerous",
+        "the sound barrier could be overcome with the right design",
+        "Yeager's flight was a failure",
+        "nature makes faster flight impossible",
+        "engineers stopped studying high-speed flight"
+      ],
+      "answer": 1,
+      "explanation": "Calling it \"a problem of design, not a limit of nature\" means good design could overcome it."
+    },
+    {
+      "id": "RC-051",
+      "passage": "By the 1940s, pilots diving fighter planes at high speed sometimes found their controls shaking violently or locking up as they neared the speed of sound. Some engineers believed this \"sound barrier\" could never be safely crossed. On October 14, 1947, Air Force Captain Chuck Yeager tested that belief in the Bell X-1, a rocket-powered plane shaped like a .50-caliber bullet, a shape known to stay stable at supersonic speed. The X-1 was carried aloft under a B-29 bomber and released, then fired its rockets. Yeager reached about 700 miles per hour, faster than sound at that altitude, and landed safely. The flight proved that the barrier was a problem of design, not a limit of nature.",
+      "prompt": "According to the passage, how did the X-1 begin its flight?",
+      "choices": [
+        "It took off from a long runway.",
+        "It was launched from a ship.",
+        "It was released from under a B-29.",
+        "It was towed by a glider.",
+        "It was launched straight up like a missile."
+      ],
+      "answer": 2,
+      "explanation": "The X-1 \"was carried aloft under a B-29 bomber and released.\""
+    },
+    {
+      "id": "RC-052",
+      "passage": "Coral reefs look like rock, but they are built by colonies of tiny animals. Many corals depend on algae that live inside their tissues. The algae use sunlight to make food, sharing much of it with the coral, and they give the coral much of its color. When ocean water stays unusually warm for weeks, this partnership breaks down and the coral expels the algae. Without them the coral turns white, an event called bleaching. Bleached coral is not dead, and it can recover if temperatures return to normal soon enough. If the heat lasts too long, however, the coral starves. Because reefs shelter about a quarter of all ocean fish species, the loss of a reef affects far more than the coral itself.",
+      "prompt": "According to the passage, coral bleaching is caused by",
+      "choices": [
+        "pollution from ships",
+        "the coral expelling its algae during long periods of warm water",
+        "too much sunlight at night",
+        "fish eating the coral",
+        "cold winter storms"
+      ],
+      "answer": 1,
+      "explanation": "The passage says unusually warm water for weeks makes the coral expel the algae, which turns it white."
+    },
+    {
+      "id": "RC-053",
+      "passage": "Coral reefs look like rock, but they are built by colonies of tiny animals. Many corals depend on algae that live inside their tissues. The algae use sunlight to make food, sharing much of it with the coral, and they give the coral much of its color. When ocean water stays unusually warm for weeks, this partnership breaks down and the coral expels the algae. Without them the coral turns white, an event called bleaching. Bleached coral is not dead, and it can recover if temperatures return to normal soon enough. If the heat lasts too long, however, the coral starves. Because reefs shelter about a quarter of all ocean fish species, the loss of a reef affects far more than the coral itself.",
+      "prompt": "Which statement about bleached coral is supported by the passage?",
+      "choices": [
+        "It is always dead.",
+        "It can recover if the water cools soon enough.",
+        "It grows faster than healthy coral.",
+        "It produces more food.",
+        "It is a different species."
+      ],
+      "answer": 1,
+      "explanation": "\"Bleached coral is not dead, and it can recover if temperatures return to normal soon enough.\""
+    },
+    {
+      "id": "RC-054",
+      "passage": "Coral reefs look like rock, but they are built by colonies of tiny animals. Many corals depend on algae that live inside their tissues. The algae use sunlight to make food, sharing much of it with the coral, and they give the coral much of its color. When ocean water stays unusually warm for weeks, this partnership breaks down and the coral expels the algae. Without them the coral turns white, an event called bleaching. Bleached coral is not dead, and it can recover if temperatures return to normal soon enough. If the heat lasts too long, however, the coral starves. Because reefs shelter about a quarter of all ocean fish species, the loss of a reef affects far more than the coral itself.",
+      "prompt": "The author mentions that reefs shelter about a quarter of ocean fish species in order to",
+      "choices": [
+        "show that reefs are crowded",
+        "explain why bleaching matters beyond the coral itself",
+        "argue that fishing should be banned",
+        "describe how algae make food",
+        "compare reefs to forests"
+      ],
+      "answer": 1,
+      "explanation": "The final sentence ties the fish fact to how losing a reef \"affects far more than the coral itself.\""
+    },
+    {
+      "id": "RC-055",
+      "passage": "Some leaders see their main job as giving orders and making sure they are followed. Others take a different view: they see their job as making it possible for their people to succeed. A leader of this second kind asks what the team needs, removes obstacles, shares credit, and takes responsibility when things go wrong. This does not mean avoiding hard decisions or lowering standards. In fact, people who trust that their leader is looking out for them are often more willing to accept demanding goals and honest criticism. In military units, the old saying \"officers eat last\" captures this idea: the leader's own comfort comes after the needs of those being led.",
+      "prompt": "The passage is mainly about",
+      "choices": [
+        "how to give clear orders",
+        "a leadership style focused on helping the team succeed",
+        "why standards should be lowered",
+        "the history of military meals",
+        "how to avoid making hard decisions"
+      ],
+      "answer": 1,
+      "explanation": "The passage describes leaders who see their job as \"making it possible for their people to succeed.\""
+    },
+    {
+      "id": "RC-056",
+      "passage": "Some leaders see their main job as giving orders and making sure they are followed. Others take a different view: they see their job as making it possible for their people to succeed. A leader of this second kind asks what the team needs, removes obstacles, shares credit, and takes responsibility when things go wrong. This does not mean avoiding hard decisions or lowering standards. In fact, people who trust that their leader is looking out for them are often more willing to accept demanding goals and honest criticism. In military units, the old saying \"officers eat last\" captures this idea: the leader's own comfort comes after the needs of those being led.",
+      "prompt": "According to the passage, this kind of leader",
+      "choices": [
+        "avoids criticizing team members",
+        "lowers standards to keep people happy",
+        "takes responsibility when things go wrong",
+        "lets the team make every decision",
+        "puts personal comfort first"
+      ],
+      "answer": 2,
+      "explanation": "The passage lists taking responsibility when things go wrong; it also says this does not mean lowering standards."
+    },
+    {
+      "id": "RC-057",
+      "passage": "Some leaders see their main job as giving orders and making sure they are followed. Others take a different view: they see their job as making it possible for their people to succeed. A leader of this second kind asks what the team needs, removes obstacles, shares credit, and takes responsibility when things go wrong. This does not mean avoiding hard decisions or lowering standards. In fact, people who trust that their leader is looking out for them are often more willing to accept demanding goals and honest criticism. In military units, the old saying \"officers eat last\" captures this idea: the leader's own comfort comes after the needs of those being led.",
+      "prompt": "The saying \"officers eat last\" is used to illustrate",
+      "choices": [
+        "poor planning in military units",
+        "that officers dislike food",
+        "that a leader puts the needs of the team before personal comfort",
+        "that rank has no privileges",
+        "a rule found only in the Navy"
+      ],
+      "answer": 2,
+      "explanation": "The passage explains that the saying means the leader's comfort comes after the needs of those being led."
+    },
+    {
+      "id": "RC-058",
+      "passage": "The body cools itself mainly by sweating; as sweat evaporates, it carries heat away from the skin. In humid air, sweat evaporates slowly, so this cooling works poorly even when the temperature does not seem extreme. A person exercising hard in hot, humid weather can lose more than a liter of fluid an hour. If that fluid is not replaced, the heart must work harder, performance drops, and the risk of heat illness rises. Heat stroke, the most serious form, can cause confusion and collapse and is a medical emergency. Thirst is a late signal, so people training in the heat are taught to drink on a schedule rather than waiting until they feel thirsty.",
+      "prompt": "According to the passage, why is humid weather especially risky for exercise?",
+      "choices": [
+        "Humid air contains less oxygen.",
+        "Sweat evaporates slowly, so the body cools poorly.",
+        "People sweat less in humid air.",
+        "Humidity raises the air temperature.",
+        "Humid air makes people less thirsty."
+      ],
+      "answer": 1,
+      "explanation": "The passage says sweat evaporates slowly in humid air, so cooling \"works poorly.\""
+    },
+    {
+      "id": "RC-059",
+      "passage": "The body cools itself mainly by sweating; as sweat evaporates, it carries heat away from the skin. In humid air, sweat evaporates slowly, so this cooling works poorly even when the temperature does not seem extreme. A person exercising hard in hot, humid weather can lose more than a liter of fluid an hour. If that fluid is not replaced, the heart must work harder, performance drops, and the risk of heat illness rises. Heat stroke, the most serious form, can cause confusion and collapse and is a medical emergency. Thirst is a late signal, so people training in the heat are taught to drink on a schedule rather than waiting until they feel thirsty.",
+      "prompt": "The passage recommends drinking on a schedule because",
+      "choices": [
+        "water tastes better cold",
+        "thirst appears only after the body already needs fluid",
+        "schedules build discipline",
+        "too much water is harmful",
+        "it prevents sweating"
+      ],
+      "answer": 1,
+      "explanation": "\"Thirst is a late signal,\" so waiting for it means drinking too late."
+    },
+    {
+      "id": "RC-060",
+      "passage": "The body cools itself mainly by sweating; as sweat evaporates, it carries heat away from the skin. In humid air, sweat evaporates slowly, so this cooling works poorly even when the temperature does not seem extreme. A person exercising hard in hot, humid weather can lose more than a liter of fluid an hour. If that fluid is not replaced, the heart must work harder, performance drops, and the risk of heat illness rises. Heat stroke, the most serious form, can cause confusion and collapse and is a medical emergency. Thirst is a late signal, so people training in the heat are taught to drink on a schedule rather than waiting until they feel thirsty.",
+      "prompt": "As used in the passage, \"extreme\" most nearly means",
+      "choices": [
+        "very severe",
+        "pleasant",
+        "average",
+        "dry",
+        "dangerous to plants"
+      ],
+      "answer": 0,
+      "explanation": "The passage says humidity is risky \"even when the temperature does not seem\" very severe."
+    },
+    {
+      "id": "RC-061",
+      "passage": "On June 24, 1982, a British Airways 747 flying at night over Indonesia suddenly lost power in all four engines. The crew saw an eerie glow on the windshield and smelled smoke, but their weather radar showed nothing ahead. Unknown to them, they had flown into a cloud of ash from an erupting volcano. The fine ash had melted inside the hot engines and choked them. As the airplane glided down into cleaner air, the crew kept trying to restart the engines, and the melted ash cooled and broke loose. One by one the engines came back to life, and the airplane landed safely in Jakarta. The incident led to a worldwide system for warning pilots about volcanic ash.",
+      "prompt": "According to the passage, why did the engines fail?",
+      "choices": [
+        "They ran out of fuel.",
+        "They were struck by lightning.",
+        "Volcanic ash melted inside them.",
+        "The crew shut them down by mistake.",
+        "Ice formed on the wings."
+      ],
+      "answer": 2,
+      "explanation": "The passage says the ash \"had melted inside the hot engines and choked them.\""
+    },
+    {
+      "id": "RC-062",
+      "passage": "On June 24, 1982, a British Airways 747 flying at night over Indonesia suddenly lost power in all four engines. The crew saw an eerie glow on the windshield and smelled smoke, but their weather radar showed nothing ahead. Unknown to them, they had flown into a cloud of ash from an erupting volcano. The fine ash had melted inside the hot engines and choked them. As the airplane glided down into cleaner air, the crew kept trying to restart the engines, and the melted ash cooled and broke loose. One by one the engines came back to life, and the airplane landed safely in Jakarta. The incident led to a worldwide system for warning pilots about volcanic ash.",
+      "prompt": "It can be inferred from the passage that the crew's weather radar",
+      "choices": [
+        "was broken",
+        "could not detect the volcanic ash",
+        "showed the volcano clearly",
+        "caused the engine failure",
+        "was turned off"
+      ],
+      "answer": 1,
+      "explanation": "The radar \"showed nothing ahead\" even though the airplane was flying into an ash cloud."
+    },
+    {
+      "id": "RC-063",
+      "passage": "On June 24, 1982, a British Airways 747 flying at night over Indonesia suddenly lost power in all four engines. The crew saw an eerie glow on the windshield and smelled smoke, but their weather radar showed nothing ahead. Unknown to them, they had flown into a cloud of ash from an erupting volcano. The fine ash had melted inside the hot engines and choked them. As the airplane glided down into cleaner air, the crew kept trying to restart the engines, and the melted ash cooled and broke loose. One by one the engines came back to life, and the airplane landed safely in Jakarta. The incident led to a worldwide system for warning pilots about volcanic ash.",
+      "prompt": "What was a lasting result of this incident?",
+      "choices": [
+        "Four-engine airplanes were banned.",
+        "Flights over Indonesia stopped permanently.",
+        "A worldwide system was created to warn pilots about volcanic ash.",
+        "All engines were redesigned to burn ash.",
+        "Night flying was outlawed."
+      ],
+      "answer": 2,
+      "explanation": "The last sentence says it \"led to a worldwide system for warning pilots about volcanic ash.\""
+    },
+    {
+      "id": "RC-064",
+      "passage": "Each fall, monarch butterflies from the eastern United States and Canada fly as far as 3,000 miles to a few mountain forests in central Mexico, where millions cluster on the same fir trees year after year. What makes this journey remarkable is that no single butterfly makes the round trip. The monarchs that fly south have never been to Mexico; their great-grandparents were the last to make the trip. In spring they fly north and lay eggs, and the next several generations, which live only a few weeks each, continue the trip northward. Scientists believe the butterflies find their way using the position of the sun along with an internal clock, though how they locate the exact forests remains partly a mystery.",
+      "prompt": "What does the author find most remarkable about the monarch migration?",
+      "choices": [
+        "Its great distance",
+        "That the butterflies flying south have never made the trip before",
+        "That monarchs live for many years",
+        "That they travel only at night",
+        "That they eat fir trees"
+      ],
+      "answer": 1,
+      "explanation": "The passage says \"what makes this journey remarkable is that no single butterfly makes the round trip.\""
+    },
+    {
+      "id": "RC-065",
+      "passage": "Each fall, monarch butterflies from the eastern United States and Canada fly as far as 3,000 miles to a few mountain forests in central Mexico, where millions cluster on the same fir trees year after year. What makes this journey remarkable is that no single butterfly makes the round trip. The monarchs that fly south have never been to Mexico; their great-grandparents were the last to make the trip. In spring they fly north and lay eggs, and the next several generations, which live only a few weeks each, continue the trip northward. Scientists believe the butterflies find their way using the position of the sun along with an internal clock, though how they locate the exact forests remains partly a mystery.",
+      "prompt": "According to the passage, monarchs are thought to navigate using",
+      "choices": [
+        "the Earth's magnetic field only",
+        "landmarks they remember",
+        "the sun's position and an internal clock",
+        "the scent of the fir trees",
+        "following other species of birds"
+      ],
+      "answer": 2,
+      "explanation": "Scientists believe they use \"the position of the sun along with an internal clock.\""
+    },
+    {
+      "id": "RC-066",
+      "passage": "Each fall, monarch butterflies from the eastern United States and Canada fly as far as 3,000 miles to a few mountain forests in central Mexico, where millions cluster on the same fir trees year after year. What makes this journey remarkable is that no single butterfly makes the round trip. The monarchs that fly south have never been to Mexico; their great-grandparents were the last to make the trip. In spring they fly north and lay eggs, and the next several generations, which live only a few weeks each, continue the trip northward. Scientists believe the butterflies find their way using the position of the sun along with an internal clock, though how they locate the exact forests remains partly a mystery.",
+      "prompt": "Which statement is supported by the passage?",
+      "choices": [
+        "Scientists fully understand how monarchs find their winter forests.",
+        "Monarchs that fly north in spring live only a few weeks each.",
+        "Monarchs winter in Canada.",
+        "Each monarch lives for three years.",
+        "Monarchs choose new forests every year."
+      ],
+      "answer": 1,
+      "explanation": "The next several generations \"live only a few weeks each\"; the passage says the exact navigation is \"partly a mystery.\""
+    },
+    {
+      "id": "RC-067",
+      "passage": "During World War II, more than a thousand women joined the Women Airforce Service Pilots, or WASP. They did not fly in combat. Instead, they ferried new aircraft from factories to bases, towed targets for gunnery practice, and test-flew repaired planes, freeing male pilots for duty overseas. Thirty-eight WASP died in service. Because the women were classified as civilians, their families received no military benefits, and when the program ended in 1944 their records were sealed. It was not until 1977 that Congress granted them veteran status, and in 2009 the surviving WASP received the Congressional Gold Medal.",
+      "prompt": "According to the passage, the WASP program allowed",
+      "choices": [
+        "women to fly combat missions",
+        "male pilots to be freed for duty overseas",
+        "factories to build planes faster",
+        "civilians to join the Navy",
+        "pilots to train without aircraft"
+      ],
+      "answer": 1,
+      "explanation": "By ferrying, towing, and testing aircraft, the WASP freed male pilots \"for duty overseas.\""
+    },
+    {
+      "id": "RC-068",
+      "passage": "During World War II, more than a thousand women joined the Women Airforce Service Pilots, or WASP. They did not fly in combat. Instead, they ferried new aircraft from factories to bases, towed targets for gunnery practice, and test-flew repaired planes, freeing male pilots for duty overseas. Thirty-eight WASP died in service. Because the women were classified as civilians, their families received no military benefits, and when the program ended in 1944 their records were sealed. It was not until 1977 that Congress granted them veteran status, and in 2009 the surviving WASP received the Congressional Gold Medal.",
+      "prompt": "Why did families of WASP who died receive no military benefits?",
+      "choices": [
+        "The deaths were not reported.",
+        "The women were classified as civilians.",
+        "The program was secret.",
+        "The women had not finished training.",
+        "Congress had not yet been formed."
+      ],
+      "answer": 1,
+      "explanation": "The passage says \"because the women were classified as civilians, their families received no military benefits.\""
+    },
+    {
+      "id": "RC-069",
+      "passage": "During World War II, more than a thousand women joined the Women Airforce Service Pilots, or WASP. They did not fly in combat. Instead, they ferried new aircraft from factories to bases, towed targets for gunnery practice, and test-flew repaired planes, freeing male pilots for duty overseas. Thirty-eight WASP died in service. Because the women were classified as civilians, their families received no military benefits, and when the program ended in 1944 their records were sealed. It was not until 1977 that Congress granted them veteran status, and in 2009 the surviving WASP received the Congressional Gold Medal.",
+      "prompt": "The author's tone toward the WASP is best described as",
+      "choices": [
+        "dismissive",
+        "respectful",
+        "humorous",
+        "angry",
+        "uncertain"
+      ],
+      "answer": 1,
+      "explanation": "The passage describes their service and recognition in a respectful, factual way."
+    },
+    {
+      "id": "RC-070",
+      "passage": "Ships crossing the Panama Canal do not travel at sea level the whole way. The canal climbs over the hills of Panama by means of locks, huge chambers with gates at each end. A ship enters a lock, the gates close behind it, and water flows in from above until the ship has risen to the level of the next chamber. After several such steps the ship reaches Gatun Lake, about 85 feet above the sea, crosses it, and is lowered through another set of locks on the far side. The system needs no pumps: water flows downhill from the lake into the locks by gravity alone. Because each passage uses millions of gallons of fresh water, droughts that lower the lake can force the canal to limit traffic.",
+      "prompt": "According to the passage, how is a ship raised in a lock?",
+      "choices": [
+        "By a crane",
+        "By pumps that push water up",
+        "By water flowing in from above",
+        "By towing it up a ramp",
+        "By draining water from the lock"
+      ],
+      "answer": 2,
+      "explanation": "\"Water flows in from above until the ship has risen.\" The passage says the system needs no pumps."
+    },
+    {
+      "id": "RC-071",
+      "passage": "Ships crossing the Panama Canal do not travel at sea level the whole way. The canal climbs over the hills of Panama by means of locks, huge chambers with gates at each end. A ship enters a lock, the gates close behind it, and water flows in from above until the ship has risen to the level of the next chamber. After several such steps the ship reaches Gatun Lake, about 85 feet above the sea, crosses it, and is lowered through another set of locks on the far side. The system needs no pumps: water flows downhill from the lake into the locks by gravity alone. Because each passage uses millions of gallons of fresh water, droughts that lower the lake can force the canal to limit traffic.",
+      "prompt": "It can be inferred that a drought affects the canal because",
+      "choices": [
+        "ships cannot sail in hot weather",
+        "the locks need water from the lake to operate",
+        "the gates rust in dry weather",
+        "the sea level falls",
+        "pumps need rain to run"
+      ],
+      "answer": 1,
+      "explanation": "The locks are filled from the lake, so a lower lake means less water to move ships through."
+    },
+    {
+      "id": "RC-072",
+      "passage": "Ships crossing the Panama Canal do not travel at sea level the whole way. The canal climbs over the hills of Panama by means of locks, huge chambers with gates at each end. A ship enters a lock, the gates close behind it, and water flows in from above until the ship has risen to the level of the next chamber. After several such steps the ship reaches Gatun Lake, about 85 feet above the sea, crosses it, and is lowered through another set of locks on the far side. The system needs no pumps: water flows downhill from the lake into the locks by gravity alone. Because each passage uses millions of gallons of fresh water, droughts that lower the lake can force the canal to limit traffic.",
+      "prompt": "The main purpose of the passage is to",
+      "choices": [
+        "argue that the canal should be expanded",
+        "explain how locks carry ships over high ground",
+        "describe the history of Panama",
+        "compare the canal to other canals",
+        "warn about the dangers of shipping"
+      ],
+      "answer": 1,
+      "explanation": "Most of the passage explains step by step how locks raise and lower ships."
+    },
+    {
+      "id": "RC-073",
+      "passage": "In World War II, American air power was part of the Army, as the Army Air Forces. Many of its leaders argued that air power had become so important that it deserved to be a separate service, equal to the Army and Navy, with its own budget and its own chain of command. They pointed to the long bombing campaigns of the war and to the new atomic weapons, which at the time could only be delivered by aircraft. In 1947 Congress passed the National Security Act, which reorganized the military and created the United States Air Force as an independent branch. Its birthday, September 18, 1947, is still celebrated each year.",
+      "prompt": "According to the passage, before 1947 American air power was",
+      "choices": [
+        "part of the Navy",
+        "an independent service",
+        "part of the Army",
+        "run by civilians",
+        "part of the Marine Corps"
+      ],
+      "answer": 2,
+      "explanation": "During World War II it was \"part of the Army, as the Army Air Forces.\""
+    },
+    {
+      "id": "RC-074",
+      "passage": "In World War II, American air power was part of the Army, as the Army Air Forces. Many of its leaders argued that air power had become so important that it deserved to be a separate service, equal to the Army and Navy, with its own budget and its own chain of command. They pointed to the long bombing campaigns of the war and to the new atomic weapons, which at the time could only be delivered by aircraft. In 1947 Congress passed the National Security Act, which reorganized the military and created the United States Air Force as an independent branch. Its birthday, September 18, 1947, is still celebrated each year.",
+      "prompt": "The passage mentions atomic weapons in order to",
+      "choices": [
+        "show why air power was seen as important enough for its own service",
+        "criticize their use",
+        "describe how they were built",
+        "explain the Navy's role",
+        "argue that they should be banned"
+      ],
+      "answer": 0,
+      "explanation": "Leaders \"pointed to\" atomic weapons, which only aircraft could deliver, to argue for a separate service."
+    },
+    {
+      "id": "RC-075",
+      "passage": "In World War II, American air power was part of the Army, as the Army Air Forces. Many of its leaders argued that air power had become so important that it deserved to be a separate service, equal to the Army and Navy, with its own budget and its own chain of command. They pointed to the long bombing campaigns of the war and to the new atomic weapons, which at the time could only be delivered by aircraft. In 1947 Congress passed the National Security Act, which reorganized the military and created the United States Air Force as an independent branch. Its birthday, September 18, 1947, is still celebrated each year.",
+      "prompt": "What did the National Security Act of 1947 do, according to the passage?",
+      "choices": [
+        "Ended World War II",
+        "Created the Air Force as an independent branch",
+        "Merged the Army and Navy",
+        "Created the Space Force",
+        "Ended the bombing campaigns"
+      ],
+      "answer": 1,
+      "explanation": "The Act \"created the United States Air Force as an independent branch.\""
+    },
+    {
+      "id": "RC-076",
+      "passage": "Procrastination is often blamed on laziness or poor time management, but psychologists who study it describe something different. People usually put off tasks that make them feel bad: tasks that are boring, confusing, or that might expose them to failure. Delaying the task brings quick relief from that feeling, which makes delay more likely the next time. Seen this way, procrastination is less a problem of scheduling than a way of avoiding unpleasant emotions. That is why advice such as \"just start for five minutes\" often works better than a new planner. Starting shrinks the task's unpleasantness, and once people begin, they usually find it easier to continue.",
+      "prompt": "According to the passage, psychologists see procrastination mainly as",
+      "choices": [
+        "laziness",
+        "a scheduling problem",
+        "a way of avoiding unpleasant feelings",
+        "a sign of low intelligence",
+        "a result of having too much free time"
+      ],
+      "answer": 2,
+      "explanation": "The passage says procrastination is \"less a problem of scheduling than a way of avoiding unpleasant emotions.\""
+    },
+    {
+      "id": "RC-077",
+      "passage": "Procrastination is often blamed on laziness or poor time management, but psychologists who study it describe something different. People usually put off tasks that make them feel bad: tasks that are boring, confusing, or that might expose them to failure. Delaying the task brings quick relief from that feeling, which makes delay more likely the next time. Seen this way, procrastination is less a problem of scheduling than a way of avoiding unpleasant emotions. That is why advice such as \"just start for five minutes\" often works better than a new planner. Starting shrinks the task's unpleasantness, and once people begin, they usually find it easier to continue.",
+      "prompt": "Why does delaying a task make future delay more likely?",
+      "choices": [
+        "It wastes time.",
+        "It brings quick relief, which rewards the habit.",
+        "It makes the task larger.",
+        "It makes people tired.",
+        "It causes people to forget the task."
+      ],
+      "answer": 1,
+      "explanation": "Delay \"brings quick relief from that feeling, which makes delay more likely the next time.\""
+    },
+    {
+      "id": "RC-078",
+      "passage": "Procrastination is often blamed on laziness or poor time management, but psychologists who study it describe something different. People usually put off tasks that make them feel bad: tasks that are boring, confusing, or that might expose them to failure. Delaying the task brings quick relief from that feeling, which makes delay more likely the next time. Seen this way, procrastination is less a problem of scheduling than a way of avoiding unpleasant emotions. That is why advice such as \"just start for five minutes\" often works better than a new planner. Starting shrinks the task's unpleasantness, and once people begin, they usually find it easier to continue.",
+      "prompt": "The author would most likely agree that",
+      "choices": [
+        "buying a planner is the best cure for procrastination",
+        "starting a task for a few minutes can make it easier to keep going",
+        "boring tasks should be skipped",
+        "procrastination cannot be changed",
+        "people procrastinate only on easy tasks"
+      ],
+      "answer": 1,
+      "explanation": "The passage says starting for five minutes \"often works better than a new planner.\""
+    },
+    {
+      "id": "RC-079",
+      "passage": "Antibiotics kill bacteria, but not always every one. In any large group of bacteria, a few may carry chance genetic differences that help them survive a particular drug. When the drug kills off the rest, these survivors face less competition and multiply, and soon most of the population is resistant. Bacteria can also pass resistance genes directly to one another. Taking antibiotics for illnesses they cannot treat, such as colds caused by viruses, or stopping a prescribed course early, gives resistant bacteria more chances to spread. Doctors warn that if resistance keeps growing, some common infections could once again become hard to treat.",
+      "prompt": "According to the passage, how does a population of bacteria become resistant?",
+      "choices": [
+        "The drug changes the bacteria's genes directly.",
+        "Resistant survivors multiply after the drug kills the others.",
+        "The bacteria grow larger.",
+        "Viruses teach the bacteria to resist.",
+        "Doctors use stronger drugs."
+      ],
+      "answer": 1,
+      "explanation": "Survivors with helpful differences face less competition and multiply until most are resistant."
+    },
+    {
+      "id": "RC-080",
+      "passage": "Antibiotics kill bacteria, but not always every one. In any large group of bacteria, a few may carry chance genetic differences that help them survive a particular drug. When the drug kills off the rest, these survivors face less competition and multiply, and soon most of the population is resistant. Bacteria can also pass resistance genes directly to one another. Taking antibiotics for illnesses they cannot treat, such as colds caused by viruses, or stopping a prescribed course early, gives resistant bacteria more chances to spread. Doctors warn that if resistance keeps growing, some common infections could once again become hard to treat.",
+      "prompt": "The passage suggests that taking antibiotics for a cold is unwise because",
+      "choices": [
+        "antibiotics make colds worse",
+        "colds are caused by viruses, which antibiotics cannot treat",
+        "colds go away faster without rest",
+        "antibiotics are too expensive",
+        "colds are caused by resistant bacteria"
+      ],
+      "answer": 1,
+      "explanation": "The passage calls colds \"illnesses they cannot treat\" because they are caused by viruses."
+    },
+    {
+      "id": "RC-081",
+      "passage": "Antibiotics kill bacteria, but not always every one. In any large group of bacteria, a few may carry chance genetic differences that help them survive a particular drug. When the drug kills off the rest, these survivors face less competition and multiply, and soon most of the population is resistant. Bacteria can also pass resistance genes directly to one another. Taking antibiotics for illnesses they cannot treat, such as colds caused by viruses, or stopping a prescribed course early, gives resistant bacteria more chances to spread. Doctors warn that if resistance keeps growing, some common infections could once again become hard to treat.",
+      "prompt": "As used in the passage, \"course\" most nearly means",
+      "choices": [
+        "a class at school",
+        "a path for a race",
+        "a full series of doses",
+        "a part of a meal",
+        "a direction of travel"
+      ],
+      "answer": 2,
+      "explanation": "\"Stopping a prescribed course early\" refers to the full set of doses a doctor prescribes."
+    },
+    {
+      "id": "RC-082",
+      "passage": "Before electronic navigation, lighthouses were a sailor's most important guide along dangerous coasts. Early lighthouses burned wood or candles, and much of their light was wasted, scattering upward or into the land. In 1822 the French engineer Augustin Fresnel designed a new kind of lens made of rings of glass prisms arranged around the lamp. The prisms bent light that would have escaped and gathered it into a single powerful beam. A Fresnel lens could be seen more than 20 miles out to sea, far beyond the reach of earlier lights. Each lighthouse was also given its own pattern of flashes, so that sailors could tell which light they were seeing and thus where they were.",
+      "prompt": "According to the passage, the Fresnel lens improved lighthouses by",
+      "choices": [
+        "using a brighter fuel",
+        "gathering light that would have been wasted into one beam",
+        "making the tower taller",
+        "adding colored glass",
+        "turning the light off during the day"
+      ],
+      "answer": 1,
+      "explanation": "The prisms \"bent light that would have escaped and gathered it into a single powerful beam.\""
+    },
+    {
+      "id": "RC-083",
+      "passage": "Before electronic navigation, lighthouses were a sailor's most important guide along dangerous coasts. Early lighthouses burned wood or candles, and much of their light was wasted, scattering upward or into the land. In 1822 the French engineer Augustin Fresnel designed a new kind of lens made of rings of glass prisms arranged around the lamp. The prisms bent light that would have escaped and gathered it into a single powerful beam. A Fresnel lens could be seen more than 20 miles out to sea, far beyond the reach of earlier lights. Each lighthouse was also given its own pattern of flashes, so that sailors could tell which light they were seeing and thus where they were.",
+      "prompt": "Why did each lighthouse have its own pattern of flashes?",
+      "choices": [
+        "To save fuel",
+        "To warn of storms",
+        "So sailors could identify which lighthouse they were seeing",
+        "To signal other lighthouses",
+        "Because each used a different lens maker"
+      ],
+      "answer": 2,
+      "explanation": "The pattern let sailors \"tell which light they were seeing and thus where they were.\""
+    },
+    {
+      "id": "RC-084",
+      "passage": "Before electronic navigation, lighthouses were a sailor's most important guide along dangerous coasts. Early lighthouses burned wood or candles, and much of their light was wasted, scattering upward or into the land. In 1822 the French engineer Augustin Fresnel designed a new kind of lens made of rings of glass prisms arranged around the lamp. The prisms bent light that would have escaped and gathered it into a single powerful beam. A Fresnel lens could be seen more than 20 miles out to sea, far beyond the reach of earlier lights. Each lighthouse was also given its own pattern of flashes, so that sailors could tell which light they were seeing and thus where they were.",
+      "prompt": "It can be inferred that, compared with earlier lighthouses, those with Fresnel lenses",
+      "choices": [
+        "used more fuel",
+        "could be seen from much farther away",
+        "were cheaper to build",
+        "were used only in France",
+        "needed no keepers"
+      ],
+      "answer": 1,
+      "explanation": "A Fresnel light could be seen more than 20 miles out, \"far beyond the reach of earlier lights.\""
+    },
+    {
+      "id": "RC-085",
+      "passage": "On December 20, 2019, the United States Space Force became the sixth branch of the armed forces and the first new one since the Air Force was created in 1947. Its creation reflected how much modern life and military operations depend on satellites, which are used for navigation, communication, weather forecasting, and missile warning. Much of the Space Force was formed from units that had belonged to Air Force Space Command, and it remains part of the Department of the Air Force, much as the Marine Corps is part of the Department of the Navy. Its members, called Guardians, operate satellites and track thousands of objects in orbit, rather than flying into space themselves.",
+      "prompt": "According to the passage, the Space Force was created mainly because",
+      "choices": [
+        "the Air Force had too many members",
+        "modern life and military operations depend heavily on satellites",
+        "astronauts needed protection",
+        "the Navy requested it",
+        "space travel had become cheap"
+      ],
+      "answer": 1,
+      "explanation": "The passage says its creation \"reflected how much modern life and military operations depend on satellites.\""
+    },
+    {
+      "id": "RC-086",
+      "passage": "On December 20, 2019, the United States Space Force became the sixth branch of the armed forces and the first new one since the Air Force was created in 1947. Its creation reflected how much modern life and military operations depend on satellites, which are used for navigation, communication, weather forecasting, and missile warning. Much of the Space Force was formed from units that had belonged to Air Force Space Command, and it remains part of the Department of the Air Force, much as the Marine Corps is part of the Department of the Navy. Its members, called Guardians, operate satellites and track thousands of objects in orbit, rather than flying into space themselves.",
+      "prompt": "The comparison to the Marine Corps is used to show that the Space Force",
+      "choices": [
+        "fights on the ground",
+        "is a separate branch within a larger military department",
+        "is larger than the Air Force",
+        "was formed from Navy units",
+        "has no members of its own"
+      ],
+      "answer": 1,
+      "explanation": "Like the Marines within the Department of the Navy, the Space Force is a branch within the Department of the Air Force."
+    },
+    {
+      "id": "RC-087",
+      "passage": "On December 20, 2019, the United States Space Force became the sixth branch of the armed forces and the first new one since the Air Force was created in 1947. Its creation reflected how much modern life and military operations depend on satellites, which are used for navigation, communication, weather forecasting, and missile warning. Much of the Space Force was formed from units that had belonged to Air Force Space Command, and it remains part of the Department of the Air Force, much as the Marine Corps is part of the Department of the Navy. Its members, called Guardians, operate satellites and track thousands of objects in orbit, rather than flying into space themselves.",
+      "prompt": "According to the passage, most Guardians",
+      "choices": [
+        "are astronauts",
+        "fly fighter jets",
+        "operate satellites and track objects in orbit",
+        "serve aboard ships",
+        "build rockets"
+      ],
+      "answer": 2,
+      "explanation": "Guardians \"operate satellites and track thousands of objects in orbit, rather than flying into space.\""
+    },
+    {
+      "id": "RC-088",
+      "passage": "In April 1970, two days into the Apollo 13 mission to the Moon, an oxygen tank in the service module exploded. The landing was canceled, and the crew moved into the small lunar module, using it as a lifeboat. A new danger soon appeared: carbon dioxide from the astronauts' breath was building up. The lunar module's air filters could not handle three men for so long, and the spare filters from the command module were square, while the lunar module's openings were round. Engineers on the ground worked out a fix using only items the crew had aboard, including plastic bags, cardboard, and tape, and read the instructions up to the spacecraft. The improvised adapter worked, and the crew returned safely to Earth.",
+      "prompt": "According to the passage, the carbon dioxide problem arose partly because",
+      "choices": [
+        "the oxygen tank leaked carbon dioxide",
+        "the spare filters did not fit the lunar module's openings",
+        "the astronauts forgot to bring filters",
+        "the lunar module had no air supply",
+        "engineers designed the filters incorrectly on purpose"
+      ],
+      "answer": 1,
+      "explanation": "The spare filters were square, \"while the lunar module's openings were round.\""
+    },
+    {
+      "id": "RC-089",
+      "passage": "In April 1970, two days into the Apollo 13 mission to the Moon, an oxygen tank in the service module exploded. The landing was canceled, and the crew moved into the small lunar module, using it as a lifeboat. A new danger soon appeared: carbon dioxide from the astronauts' breath was building up. The lunar module's air filters could not handle three men for so long, and the spare filters from the command module were square, while the lunar module's openings were round. Engineers on the ground worked out a fix using only items the crew had aboard, including plastic bags, cardboard, and tape, and read the instructions up to the spacecraft. The improvised adapter worked, and the crew returned safely to Earth.",
+      "prompt": "The passage most strongly emphasizes",
+      "choices": [
+        "the cost of the Apollo program",
+        "problem-solving under pressure with limited resources",
+        "the scientific results of the mission",
+        "how the Moon landing was performed",
+        "the design of the oxygen tank"
+      ],
+      "answer": 1,
+      "explanation": "Most of the passage describes the engineers improvising a fix from only what the crew had aboard."
+    },
+    {
+      "id": "RC-090",
+      "passage": "In April 1970, two days into the Apollo 13 mission to the Moon, an oxygen tank in the service module exploded. The landing was canceled, and the crew moved into the small lunar module, using it as a lifeboat. A new danger soon appeared: carbon dioxide from the astronauts' breath was building up. The lunar module's air filters could not handle three men for so long, and the spare filters from the command module were square, while the lunar module's openings were round. Engineers on the ground worked out a fix using only items the crew had aboard, including plastic bags, cardboard, and tape, and read the instructions up to the spacecraft. The improvised adapter worked, and the crew returned safely to Earth.",
+      "prompt": "As used in the passage, \"improvised\" most nearly means",
+      "choices": [
+        "carefully planned years in advance",
+        "made quickly from what was available",
+        "purchased from a supplier",
+        "broken",
+        "unnecessary"
+      ],
+      "answer": 1,
+      "explanation": "The adapter was built from bags, cardboard, and tape, made on the spot from what was on hand."
+    },
+    {
+      "id": "RC-091",
+      "passage": "Many of our daily actions are not decisions at all but habits. Researchers describe a habit as a loop with three parts: a cue that triggers the behavior, the routine itself, and a reward that makes the brain want to repeat it. The cue might be a time of day, a place, or a feeling; the reward might be relief, energy, or simple pleasure. Because the cue and reward hold the loop together, trying to stop a habit by willpower alone often fails. A more reliable approach is to keep the cue and the reward but change the routine. A person who snacks out of boredom every afternoon, for example, might take a short walk at that time instead.",
+      "prompt": "According to the passage, the three parts of a habit loop are",
+      "choices": [
+        "thought, action, and memory",
+        "cue, routine, and reward",
+        "goal, plan, and result",
+        "time, place, and feeling",
+        "decision, willpower, and success"
+      ],
+      "answer": 1,
+      "explanation": "The passage names \"a cue,\" \"the routine itself,\" and \"a reward.\""
+    },
+    {
+      "id": "RC-092",
+      "passage": "Many of our daily actions are not decisions at all but habits. Researchers describe a habit as a loop with three parts: a cue that triggers the behavior, the routine itself, and a reward that makes the brain want to repeat it. The cue might be a time of day, a place, or a feeling; the reward might be relief, energy, or simple pleasure. Because the cue and reward hold the loop together, trying to stop a habit by willpower alone often fails. A more reliable approach is to keep the cue and the reward but change the routine. A person who snacks out of boredom every afternoon, for example, might take a short walk at that time instead.",
+      "prompt": "The example of the afternoon walk shows",
+      "choices": [
+        "that boredom causes hunger",
+        "how to replace a routine while keeping the cue and reward",
+        "that walking is better exercise than running",
+        "why willpower always works",
+        "how habits form in children"
+      ],
+      "answer": 1,
+      "explanation": "The walk replaces the snacking routine at the same time (cue) while still easing boredom (reward)."
+    },
+    {
+      "id": "RC-093",
+      "passage": "Many of our daily actions are not decisions at all but habits. Researchers describe a habit as a loop with three parts: a cue that triggers the behavior, the routine itself, and a reward that makes the brain want to repeat it. The cue might be a time of day, a place, or a feeling; the reward might be relief, energy, or simple pleasure. Because the cue and reward hold the loop together, trying to stop a habit by willpower alone often fails. A more reliable approach is to keep the cue and the reward but change the routine. A person who snacks out of boredom every afternoon, for example, might take a short walk at that time instead.",
+      "prompt": "The author suggests that using willpower alone to stop a habit",
+      "choices": [
+        "is the most reliable approach",
+        "often fails because the cue and reward still hold the loop together",
+        "works only for good habits",
+        "is required by researchers",
+        "makes the reward stronger"
+      ],
+      "answer": 1,
+      "explanation": "\"Because the cue and reward hold the loop together, trying to stop a habit by willpower alone often fails.\""
+    },
+    {
+      "id": "RC-094",
+      "passage": "Airliners carry two \"black boxes\": a flight data recorder, which logs hundreds of measurements such as altitude, speed, and control positions, and a cockpit voice recorder, which captures the pilots' conversations and other sounds. Despite the nickname, the boxes are painted bright orange so searchers can spot them in wreckage. They are built to survive extreme impacts, intense fire, and deep water, and each carries a beacon that sends out signals underwater for about a month to help divers locate it. Investigators use the recordings to piece together what happened in an accident, and their findings often lead to changes in aircraft design, training, and procedures that make future flights safer.",
+      "prompt": "According to the passage, why are black boxes painted orange?",
+      "choices": [
+        "Orange paint resists fire.",
+        "To make them easier to spot in wreckage",
+        "It is the airline's color.",
+        "To show they contain recordings",
+        "Orange is cheaper than black."
+      ],
+      "answer": 1,
+      "explanation": "They are painted bright orange \"so searchers can spot them in wreckage.\""
+    },
+    {
+      "id": "RC-095",
+      "passage": "Airliners carry two \"black boxes\": a flight data recorder, which logs hundreds of measurements such as altitude, speed, and control positions, and a cockpit voice recorder, which captures the pilots' conversations and other sounds. Despite the nickname, the boxes are painted bright orange so searchers can spot them in wreckage. They are built to survive extreme impacts, intense fire, and deep water, and each carries a beacon that sends out signals underwater for about a month to help divers locate it. Investigators use the recordings to piece together what happened in an accident, and their findings often lead to changes in aircraft design, training, and procedures that make future flights safer.",
+      "prompt": "Which of the following would a cockpit voice recorder capture?",
+      "choices": [
+        "The airplane's altitude",
+        "The engine temperature",
+        "The pilots' conversation",
+        "The position of the rudder",
+        "The amount of fuel"
+      ],
+      "answer": 2,
+      "explanation": "The voice recorder \"captures the pilots' conversations and other sounds\"; the others are flight data."
+    },
+    {
+      "id": "RC-096",
+      "passage": "Airliners carry two \"black boxes\": a flight data recorder, which logs hundreds of measurements such as altitude, speed, and control positions, and a cockpit voice recorder, which captures the pilots' conversations and other sounds. Despite the nickname, the boxes are painted bright orange so searchers can spot them in wreckage. They are built to survive extreme impacts, intense fire, and deep water, and each carries a beacon that sends out signals underwater for about a month to help divers locate it. Investigators use the recordings to piece together what happened in an accident, and their findings often lead to changes in aircraft design, training, and procedures that make future flights safer.",
+      "prompt": "The author's main point in the last sentence is that",
+      "choices": [
+        "accidents cannot be prevented",
+        "black boxes are expensive",
+        "lessons from accident investigations improve future safety",
+        "investigators often disagree",
+        "training is more important than design"
+      ],
+      "answer": 2,
+      "explanation": "The findings \"often lead to changes... that make future flights safer.\""
+    },
+    {
+      "id": "RC-097",
+      "passage": "Sunlight looks white, but it is made of all the colors of the rainbow, each with a different wavelength. As sunlight passes through the atmosphere, it strikes tiny gas molecules that scatter it in every direction. These molecules scatter short wavelengths, such as blue, much more strongly than long wavelengths, such as red. So when you look at any part of the sky away from the sun, you see blue light that has been bounced toward you. At sunrise and sunset, sunlight must travel through much more air to reach your eyes. By then most of the blue has been scattered away, leaving the reds and oranges that color the sky at the start and end of the day.",
+      "prompt": "According to the passage, the sky appears blue because",
+      "choices": [
+        "the ocean reflects onto it",
+        "blue light is scattered more strongly by gas molecules",
+        "the sun gives off only blue light",
+        "clouds absorb red light",
+        "blue has the longest wavelength"
+      ],
+      "answer": 1,
+      "explanation": "Molecules \"scatter short wavelengths, such as blue, much more strongly.\""
+    },
+    {
+      "id": "RC-098",
+      "passage": "Sunlight looks white, but it is made of all the colors of the rainbow, each with a different wavelength. As sunlight passes through the atmosphere, it strikes tiny gas molecules that scatter it in every direction. These molecules scatter short wavelengths, such as blue, much more strongly than long wavelengths, such as red. So when you look at any part of the sky away from the sun, you see blue light that has been bounced toward you. At sunrise and sunset, sunlight must travel through much more air to reach your eyes. By then most of the blue has been scattered away, leaving the reds and oranges that color the sky at the start and end of the day.",
+      "prompt": "Why are sunsets often red and orange?",
+      "choices": [
+        "The sun cools in the evening.",
+        "The light passes through more air, scattering away most of the blue.",
+        "Dust blocks all light except red.",
+        "The sun is closer to Earth in the evening.",
+        "Red light travels faster at night."
+      ],
+      "answer": 1,
+      "explanation": "At sunset light travels through much more air, and \"most of the blue has been scattered away.\""
+    },
+    {
+      "id": "RC-099",
+      "passage": "Sunlight looks white, but it is made of all the colors of the rainbow, each with a different wavelength. As sunlight passes through the atmosphere, it strikes tiny gas molecules that scatter it in every direction. These molecules scatter short wavelengths, such as blue, much more strongly than long wavelengths, such as red. So when you look at any part of the sky away from the sun, you see blue light that has been bounced toward you. At sunrise and sunset, sunlight must travel through much more air to reach your eyes. By then most of the blue has been scattered away, leaving the reds and oranges that color the sky at the start and end of the day.",
+      "prompt": "Which statement is supported by the passage?",
+      "choices": [
+        "Red light has a shorter wavelength than blue light.",
+        "Sunlight contains many colors.",
+        "Gas molecules absorb all blue light.",
+        "The sky is blue only at noon.",
+        "White light has a single wavelength."
+      ],
+      "answer": 1,
+      "explanation": "The passage opens by saying sunlight \"is made of all the colors of the rainbow.\" Red has a longer wavelength than blue."
+    },
+    {
+      "id": "RC-100",
+      "passage": "After a training exercise or mission, many military units hold an after-action review. The team gathers and answers a few simple questions: What was supposed to happen? What actually happened? Why was there a difference? What will we sustain, and what will we improve next time? The review is not meant to assign blame. Leaders often begin by pointing out their own mistakes, which encourages others to speak honestly, and rank is set aside so that the most junior member's observations count as much as anyone's. Because these reviews happen right away, while memories are fresh, lessons are captured before they are lost and can be applied on the very next mission.",
+      "prompt": "According to the passage, the main purpose of an after-action review is to",
+      "choices": [
+        "punish those who made mistakes",
+        "learn from what happened and improve",
+        "award medals",
+        "write official history",
+        "rank team members by performance"
+      ],
+      "answer": 1,
+      "explanation": "The review asks what to sustain and improve, and \"is not meant to assign blame.\""
+    },
+    {
+      "id": "RC-101",
+      "passage": "After a training exercise or mission, many military units hold an after-action review. The team gathers and answers a few simple questions: What was supposed to happen? What actually happened? Why was there a difference? What will we sustain, and what will we improve next time? The review is not meant to assign blame. Leaders often begin by pointing out their own mistakes, which encourages others to speak honestly, and rank is set aside so that the most junior member's observations count as much as anyone's. Because these reviews happen right away, while memories are fresh, lessons are captured before they are lost and can be applied on the very next mission.",
+      "prompt": "Why do leaders often begin by pointing out their own mistakes?",
+      "choices": [
+        "To show that they are in charge",
+        "To end the meeting quickly",
+        "To encourage others to speak honestly",
+        "Because they are required to by law",
+        "To avoid discussing the mission"
+      ],
+      "answer": 2,
+      "explanation": "Leaders admitting mistakes first \"encourages others to speak honestly.\""
+    },
+    {
+      "id": "RC-102",
+      "passage": "After a training exercise or mission, many military units hold an after-action review. The team gathers and answers a few simple questions: What was supposed to happen? What actually happened? Why was there a difference? What will we sustain, and what will we improve next time? The review is not meant to assign blame. Leaders often begin by pointing out their own mistakes, which encourages others to speak honestly, and rank is set aside so that the most junior member's observations count as much as anyone's. Because these reviews happen right away, while memories are fresh, lessons are captured before they are lost and can be applied on the very next mission.",
+      "prompt": "The passage suggests that holding the review right away is important because",
+      "choices": [
+        "schedules are busy later",
+        "memories are fresh and lessons are not yet lost",
+        "leaders may be transferred",
+        "the equipment must be returned",
+        "it is required before eating"
+      ],
+      "answer": 1,
+      "explanation": "Reviews happen right away \"while memories are fresh,\" so lessons are \"captured before they are lost.\""
+    },
+    {
+      "id": "RC-103",
+      "passage": "A common belief holds that camels store water in their humps. In fact, a camel's hump is mostly fat. Storing fat in one place, rather than spreading it under the skin, lets heat escape more easily from the rest of the body, and the fat can be used for energy when food is scarce. Camels survive without water in other ways. Their bodies can tolerate a rise in temperature during the day that would be dangerous for most mammals, so they sweat less. They lose very little water in their waste, and when they do find water they can drink a remarkable amount in just a few minutes. Together these traits allow a camel to go for many days without drinking.",
+      "prompt": "The author's main purpose is to",
+      "choices": [
+        "describe camel racing",
+        "correct a common belief and explain how camels survive without water",
+        "argue that camels are the strongest animals",
+        "compare camels with horses",
+        "explain how deserts form"
+      ],
+      "answer": 1,
+      "explanation": "The passage corrects the belief about humps and then explains the real ways camels save water."
+    },
+    {
+      "id": "RC-104",
+      "passage": "A common belief holds that camels store water in their humps. In fact, a camel's hump is mostly fat. Storing fat in one place, rather than spreading it under the skin, lets heat escape more easily from the rest of the body, and the fat can be used for energy when food is scarce. Camels survive without water in other ways. Their bodies can tolerate a rise in temperature during the day that would be dangerous for most mammals, so they sweat less. They lose very little water in their waste, and when they do find water they can drink a remarkable amount in just a few minutes. Together these traits allow a camel to go for many days without drinking.",
+      "prompt": "According to the passage, a camel's hump",
+      "choices": [
+        "holds water",
+        "is mostly fat",
+        "keeps the camel warm at night",
+        "is used to carry riders",
+        "is filled with air"
+      ],
+      "answer": 1,
+      "explanation": "\"In fact, a camel's hump is mostly fat.\""
+    },
+    {
+      "id": "RC-105",
+      "passage": "A common belief holds that camels store water in their humps. In fact, a camel's hump is mostly fat. Storing fat in one place, rather than spreading it under the skin, lets heat escape more easily from the rest of the body, and the fat can be used for energy when food is scarce. Camels survive without water in other ways. Their bodies can tolerate a rise in temperature during the day that would be dangerous for most mammals, so they sweat less. They lose very little water in their waste, and when they do find water they can drink a remarkable amount in just a few minutes. Together these traits allow a camel to go for many days without drinking.",
+      "prompt": "Which of the following is NOT mentioned as a way camels survive without water?",
+      "choices": [
+        "Tolerating higher body temperatures",
+        "Losing little water in waste",
+        "Drinking large amounts quickly",
+        "Storing water in the hump",
+        "Sweating less"
+      ],
+      "answer": 3,
+      "explanation": "The passage says the hump holds fat, not water; the other traits are all listed."
+    },
+    {
+      "id": "RC-106",
+      "passage": "Before the 1450s, books in Europe were copied by hand, a slow process that made them rare and expensive. Around 1450 Johannes Gutenberg developed a printing press that used movable metal letters, which could be arranged into pages, inked, printed, and then rearranged for the next job. A single press could produce thousands of pages a day. Within fifty years, millions of books were in circulation. As books became cheaper, more people learned to read, and new ideas in science, religion, and politics spread far more quickly than before. Historians often rank the printing press among the most important inventions in history because of how widely it changed the way knowledge was shared.",
+      "prompt": "According to the passage, an advantage of movable type was that",
+      "choices": [
+        "letters could be rearranged for new pages",
+        "it required no ink",
+        "it was used only for religious books",
+        "it made books more expensive",
+        "it replaced paper with metal"
+      ],
+      "answer": 0,
+      "explanation": "Letters \"could be arranged into pages... and then rearranged for the next job.\""
+    },
+    {
+      "id": "RC-107",
+      "passage": "Before the 1450s, books in Europe were copied by hand, a slow process that made them rare and expensive. Around 1450 Johannes Gutenberg developed a printing press that used movable metal letters, which could be arranged into pages, inked, printed, and then rearranged for the next job. A single press could produce thousands of pages a day. Within fifty years, millions of books were in circulation. As books became cheaper, more people learned to read, and new ideas in science, religion, and politics spread far more quickly than before. Historians often rank the printing press among the most important inventions in history because of how widely it changed the way knowledge was shared.",
+      "prompt": "Which sequence of events is described in the passage?",
+      "choices": [
+        "More readers led to cheaper books, which led to the press.",
+        "The press made books cheaper, more people read, and ideas spread faster.",
+        "Ideas spread, then the press was invented, then books became rare.",
+        "Hand copying increased after the press.",
+        "Books became rare after 1450."
+      ],
+      "answer": 1,
+      "explanation": "Cheaper books meant more readers, and ideas \"spread far more quickly than before.\""
+    },
+    {
+      "id": "RC-108",
+      "passage": "Before the 1450s, books in Europe were copied by hand, a slow process that made them rare and expensive. Around 1450 Johannes Gutenberg developed a printing press that used movable metal letters, which could be arranged into pages, inked, printed, and then rearranged for the next job. A single press could produce thousands of pages a day. Within fifty years, millions of books were in circulation. As books became cheaper, more people learned to read, and new ideas in science, religion, and politics spread far more quickly than before. Historians often rank the printing press among the most important inventions in history because of how widely it changed the way knowledge was shared.",
+      "prompt": "As used in the passage, \"in circulation\" most nearly means",
+      "choices": [
+        "being repaired",
+        "being shared and used by people",
+        "moving in a circle",
+        "being destroyed",
+        "kept in storage"
+      ],
+      "answer": 1,
+      "explanation": "Millions of books being \"in circulation\" means they were out among readers."
+    },
+    {
+      "id": "RC-109",
+      "passage": "Jet lag happens when travel across time zones puts the body's internal clock out of step with the local day. This clock, controlled by a small region of the brain, regulates when we feel sleepy and alert, along with body temperature and hunger. It adjusts only gradually, about an hour or so per day. Light is the strongest signal for resetting it. Flying east is usually harder than flying west, because it requires the body to fall asleep earlier than it is ready to, while flying west only asks it to stay up later. Travelers can speed the adjustment by getting outdoor light at the right times and by eating and sleeping on the new local schedule as soon as possible.",
+      "prompt": "According to the passage, the strongest signal for resetting the body's clock is",
+      "choices": [
+        "food",
+        "exercise",
+        "light",
+        "caffeine",
+        "temperature"
+      ],
+      "answer": 2,
+      "explanation": "\"Light is the strongest signal for resetting it.\""
+    },
+    {
+      "id": "RC-110",
+      "passage": "Jet lag happens when travel across time zones puts the body's internal clock out of step with the local day. This clock, controlled by a small region of the brain, regulates when we feel sleepy and alert, along with body temperature and hunger. It adjusts only gradually, about an hour or so per day. Light is the strongest signal for resetting it. Flying east is usually harder than flying west, because it requires the body to fall asleep earlier than it is ready to, while flying west only asks it to stay up later. Travelers can speed the adjustment by getting outdoor light at the right times and by eating and sleeping on the new local schedule as soon as possible.",
+      "prompt": "Why is flying east usually harder than flying west?",
+      "choices": [
+        "Eastbound flights are longer.",
+        "It requires falling asleep earlier than the body is ready to.",
+        "The air is thinner flying east.",
+        "The body clock moves backward.",
+        "There is less daylight in the east."
+      ],
+      "answer": 1,
+      "explanation": "Flying east \"requires the body to fall asleep earlier than it is ready to.\""
+    },
+    {
+      "id": "RC-111",
+      "passage": "Jet lag happens when travel across time zones puts the body's internal clock out of step with the local day. This clock, controlled by a small region of the brain, regulates when we feel sleepy and alert, along with body temperature and hunger. It adjusts only gradually, about an hour or so per day. Light is the strongest signal for resetting it. Flying east is usually harder than flying west, because it requires the body to fall asleep earlier than it is ready to, while flying west only asks it to stay up later. Travelers can speed the adjustment by getting outdoor light at the right times and by eating and sleeping on the new local schedule as soon as possible.",
+      "prompt": "Which advice is consistent with the passage?",
+      "choices": [
+        "Keep eating on your home schedule.",
+        "Avoid all light after a long flight.",
+        "Switch to the local schedule for meals and sleep as soon as possible.",
+        "Sleep as much as possible during the first day.",
+        "Fly only at night."
+      ],
+      "answer": 2,
+      "explanation": "Travelers can speed adjustment \"by eating and sleeping on the new local schedule as soon as possible.\""
+    },
+    {
+      "id": "RC-112",
+      "passage": "Four months after the attack on Pearl Harbor, the United States had suffered a string of defeats in the Pacific and wanted to strike back. Army bombers had the range to reach Japan, but no airfield was close enough, and they were not designed to fly from ships. Lieutenant Colonel James Doolittle led the effort to change that. On April 18, 1942, sixteen B-25 bombers took off from the deck of the aircraft carrier USS Hornet, something never before attempted with planes that large. They bombed targets in Japan and then flew on toward China, since they could not land back aboard the carrier. The raid did little physical damage, but it lifted American morale and forced Japan to keep more forces at home for defense.",
+      "prompt": "Why could the bombers not return to the Hornet after the raid?",
+      "choices": [
+        "They had run out of bombs.",
+        "They could not land back aboard the carrier.",
+        "The Hornet had been sunk.",
+        "They were ordered to stay in Japan.",
+        "The weather was too poor."
+      ],
+      "answer": 1,
+      "explanation": "They flew on to China \"since they could not land back aboard the carrier.\""
+    },
+    {
+      "id": "RC-113",
+      "passage": "Four months after the attack on Pearl Harbor, the United States had suffered a string of defeats in the Pacific and wanted to strike back. Army bombers had the range to reach Japan, but no airfield was close enough, and they were not designed to fly from ships. Lieutenant Colonel James Doolittle led the effort to change that. On April 18, 1942, sixteen B-25 bombers took off from the deck of the aircraft carrier USS Hornet, something never before attempted with planes that large. They bombed targets in Japan and then flew on toward China, since they could not land back aboard the carrier. The raid did little physical damage, but it lifted American morale and forced Japan to keep more forces at home for defense.",
+      "prompt": "According to the passage, the raid's greatest effect was",
+      "choices": [
+        "destroying Japan's navy",
+        "ending the war in the Pacific",
+        "raising American morale and forcing Japan to hold forces at home",
+        "capturing new airfields",
+        "damaging Japanese factories heavily"
+      ],
+      "answer": 2,
+      "explanation": "\"The raid did little physical damage, but it lifted American morale and forced Japan to keep more forces at home.\""
+    },
+    {
+      "id": "RC-114",
+      "passage": "Four months after the attack on Pearl Harbor, the United States had suffered a string of defeats in the Pacific and wanted to strike back. Army bombers had the range to reach Japan, but no airfield was close enough, and they were not designed to fly from ships. Lieutenant Colonel James Doolittle led the effort to change that. On April 18, 1942, sixteen B-25 bombers took off from the deck of the aircraft carrier USS Hornet, something never before attempted with planes that large. They bombed targets in Japan and then flew on toward China, since they could not land back aboard the carrier. The raid did little physical damage, but it lifted American morale and forced Japan to keep more forces at home for defense.",
+      "prompt": "What made the raid unusual, according to the passage?",
+      "choices": [
+        "It was flown at night.",
+        "Large Army bombers took off from an aircraft carrier.",
+        "It used jet aircraft.",
+        "It was launched from China.",
+        "The bombers flew from Pearl Harbor."
+      ],
+      "answer": 1,
+      "explanation": "Taking off from a carrier was \"something never before attempted with planes that large.\""
+    },
+    {
+      "id": "RC-115",
+      "passage": "In 1919 a young Army officer named Dwight Eisenhower joined a convoy of military trucks crossing the United States. The trip took 62 days, slowed by mud, broken bridges, and roads that were often little more than dirt tracks. During World War II, Eisenhower saw Germany's highways and was impressed by how quickly they moved troops and supplies. As president, he signed the Federal-Aid Highway Act of 1956, which funded the Interstate Highway System. Its supporters argued that good roads were needed both for commerce and for national defense, including moving troops and evacuating cities in an emergency. The interstates went on to change where Americans lived, worked, and traveled.",
+      "prompt": "According to the passage, which experiences influenced Eisenhower's support for highways?",
+      "choices": [
+        "A trip to Japan and a book about roads",
+        "The slow 1919 convoy and Germany's highways in World War II",
+        "A car accident and a speech",
+        "Railroad strikes",
+        "His time as a truck driver"
+      ],
+      "answer": 1,
+      "explanation": "The passage describes the 62-day convoy and his being impressed by Germany's highways."
+    },
+    {
+      "id": "RC-116",
+      "passage": "In 1919 a young Army officer named Dwight Eisenhower joined a convoy of military trucks crossing the United States. The trip took 62 days, slowed by mud, broken bridges, and roads that were often little more than dirt tracks. During World War II, Eisenhower saw Germany's highways and was impressed by how quickly they moved troops and supplies. As president, he signed the Federal-Aid Highway Act of 1956, which funded the Interstate Highway System. Its supporters argued that good roads were needed both for commerce and for national defense, including moving troops and evacuating cities in an emergency. The interstates went on to change where Americans lived, worked, and traveled.",
+      "prompt": "Supporters of the interstates argued they were needed for",
+      "choices": [
+        "tourism only",
+        "commerce and national defense",
+        "reducing the number of cars",
+        "replacing railroads entirely",
+        "building new cities"
+      ],
+      "answer": 1,
+      "explanation": "\"Good roads were needed both for commerce and for national defense.\""
+    },
+    {
+      "id": "RC-117",
+      "passage": "In 1919 a young Army officer named Dwight Eisenhower joined a convoy of military trucks crossing the United States. The trip took 62 days, slowed by mud, broken bridges, and roads that were often little more than dirt tracks. During World War II, Eisenhower saw Germany's highways and was impressed by how quickly they moved troops and supplies. As president, he signed the Federal-Aid Highway Act of 1956, which funded the Interstate Highway System. Its supporters argued that good roads were needed both for commerce and for national defense, including moving troops and evacuating cities in an emergency. The interstates went on to change where Americans lived, worked, and traveled.",
+      "prompt": "The details about mud and broken bridges are included to show",
+      "choices": [
+        "how poor American roads were in 1919",
+        "that the Army lacked trucks",
+        "that Eisenhower disliked travel",
+        "how bridges are built",
+        "that the convoy was cancelled"
+      ],
+      "answer": 0,
+      "explanation": "They explain why the trip took 62 days on roads that were \"often little more than dirt tracks.\""
+    },
+    {
+      "id": "RC-118",
+      "passage": "During World War II, the U.S. Marine Corps faced a problem in the Pacific: Japanese forces were skilled at breaking codes, and coded radio messages took a long time to send and decode by machine. The solution came from the Navajo language, which was unwritten, complex, and spoken by almost no one outside the Navajo Nation. About 400 Navajo Marines, known as Code Talkers, built a code on top of their language, using Navajo words for military terms; a tank, for example, was a \"tortoise.\" They could send a message in minutes that took machines far longer, and the code was never broken. Their work stayed classified for decades, and they were not widely honored until long after the war.",
+      "prompt": "According to the passage, the Navajo language was a good basis for a code because it was",
+      "choices": [
+        "easy to learn",
+        "written in a secret alphabet",
+        "unwritten, complex, and spoken by few outsiders",
+        "similar to Japanese",
+        "used by machines"
+      ],
+      "answer": 2,
+      "explanation": "The passage lists these three traits directly."
+    },
+    {
+      "id": "RC-119",
+      "passage": "During World War II, the U.S. Marine Corps faced a problem in the Pacific: Japanese forces were skilled at breaking codes, and coded radio messages took a long time to send and decode by machine. The solution came from the Navajo language, which was unwritten, complex, and spoken by almost no one outside the Navajo Nation. About 400 Navajo Marines, known as Code Talkers, built a code on top of their language, using Navajo words for military terms; a tank, for example, was a \"tortoise.\" They could send a message in minutes that took machines far longer, and the code was never broken. Their work stayed classified for decades, and they were not widely honored until long after the war.",
+      "prompt": "Calling a tank a \"tortoise\" is an example of",
+      "choices": [
+        "a code word drawn from everyday Navajo vocabulary",
+        "a mistake in translation",
+        "a Japanese term",
+        "a machine code",
+        "a joke between Marines"
+      ],
+      "answer": 0,
+      "explanation": "The Code Talkers used \"Navajo words for military terms\"; a tortoise, like a tank, is armored and slow."
+    },
+    {
+      "id": "RC-120",
+      "passage": "During World War II, the U.S. Marine Corps faced a problem in the Pacific: Japanese forces were skilled at breaking codes, and coded radio messages took a long time to send and decode by machine. The solution came from the Navajo language, which was unwritten, complex, and spoken by almost no one outside the Navajo Nation. About 400 Navajo Marines, known as Code Talkers, built a code on top of their language, using Navajo words for military terms; a tank, for example, was a \"tortoise.\" They could send a message in minutes that took machines far longer, and the code was never broken. Their work stayed classified for decades, and they were not widely honored until long after the war.",
+      "prompt": "Which statement is supported by the passage?",
+      "choices": [
+        "The code was broken late in the war.",
+        "The Code Talkers were honored immediately after the war.",
+        "The Code Talkers could send messages faster than coding machines.",
+        "The code was used mainly in Europe.",
+        "The Navy, not the Marines, used the Code Talkers."
+      ],
+      "answer": 2,
+      "explanation": "They \"could send a message in minutes that took machines far longer.\""
     }
   ]
 }

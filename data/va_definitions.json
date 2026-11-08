@@ -2129,6 +2129,3421 @@
       "word": "musician",
       "pos": "noun",
       "definition": "A person who plays or composes music."
+    },
+    {
+      "word": "air force",
+      "pos": "noun",
+      "definition": "The branch of the military that fights and operates in the air."
+    },
+    {
+      "word": "wind speed",
+      "pos": "noun",
+      "definition": "How fast the air is moving."
+    },
+    {
+      "word": "air pressure",
+      "pos": "noun",
+      "definition": "The force of the air pressing down on a surface; it drops as you climb higher."
+    },
+    {
+      "word": "steering wheel",
+      "pos": "noun",
+      "definition": "The wheel a driver turns to steer a vehicle."
+    },
+    {
+      "word": "rain gauge",
+      "pos": "noun",
+      "definition": "A container that measures how much rain has fallen."
+    },
+    {
+      "word": "telescope",
+      "pos": "noun",
+      "definition": "An instrument that makes distant objects, like stars, look closer."
+    },
+    {
+      "word": "astronomer",
+      "pos": "noun",
+      "definition": "A scientist who studies stars, planets, and space."
+    },
+    {
+      "word": "lens",
+      "pos": "noun",
+      "definition": "A curved piece of glass that bends light to focus or magnify."
+    },
+    {
+      "word": "camera",
+      "pos": "noun",
+      "definition": "A device for taking photographs or video."
+    },
+    {
+      "word": "microscope",
+      "pos": "noun",
+      "definition": "An instrument that makes very small things look large enough to see."
+    },
+    {
+      "word": "biologist",
+      "pos": "noun",
+      "definition": "A scientist who studies living things."
+    },
+    {
+      "word": "glasses",
+      "pos": "noun",
+      "definition": "A pair of lenses in a frame, worn to help a person see."
+    },
+    {
+      "word": "eyes",
+      "pos": "noun",
+      "definition": "The organs used for seeing."
+    },
+    {
+      "word": "laboratory",
+      "pos": "noun",
+      "definition": "A room or building equipped for scientific experiments."
+    },
+    {
+      "word": "scientist",
+      "pos": "noun",
+      "definition": "A person who studies the natural world through observation and experiment."
+    },
+    {
+      "word": "fleet",
+      "pos": "noun",
+      "definition": "A group of ships, aircraft, or vehicles operating together."
+    },
+    {
+      "word": "constellation",
+      "pos": "noun",
+      "definition": "A group of stars that forms a recognizable pattern in the sky."
+    },
+    {
+      "word": "planets",
+      "pos": "noun",
+      "definition": "Large bodies, such as Earth or Mars, that orbit a star."
+    },
+    {
+      "word": "lieutenant",
+      "pos": "noun",
+      "definition": "A junior officer rank; in the Air Force, the rank below captain."
+    },
+    {
+      "word": "colonel",
+      "pos": "noun",
+      "definition": "A senior officer rank, above lieutenant colonel and below brigadier general."
+    },
+    {
+      "word": "major",
+      "pos": "noun",
+      "definition": "An officer rank above captain and below lieutenant colonel."
+    },
+    {
+      "word": "sergeant",
+      "pos": "noun",
+      "definition": "An enlisted rank for a noncommissioned officer."
+    },
+    {
+      "word": "private",
+      "pos": "noun",
+      "definition": "The lowest enlisted rank in the Army or Marine Corps."
+    },
+    {
+      "word": "airman",
+      "pos": "noun",
+      "definition": "A member of the Air Force; also an enlisted rank."
+    },
+    {
+      "word": "sailor",
+      "pos": "noun",
+      "definition": "A member of a ship's crew or of the Navy."
+    },
+    {
+      "word": "navy",
+      "pos": "noun",
+      "definition": "The branch of the military that fights at sea."
+    },
+    {
+      "word": "marine",
+      "pos": "noun",
+      "definition": "A member of the Marine Corps, a military branch that fights from the sea onto land."
+    },
+    {
+      "word": "helmet",
+      "pos": "noun",
+      "definition": "A hard hat worn to protect the head."
+    },
+    {
+      "word": "head",
+      "pos": "noun",
+      "definition": "The top part of the body, holding the brain, eyes, and mouth."
+    },
+    {
+      "word": "thimble",
+      "pos": "noun",
+      "definition": "A small metal or plastic cap worn on a finger to push a needle when sewing."
+    },
+    {
+      "word": "needle",
+      "pos": "noun",
+      "definition": "A thin, pointed tool with a hole for thread, used for sewing."
+    },
+    {
+      "word": "sewing",
+      "pos": "noun",
+      "definition": "Joining or mending cloth with a needle and thread."
+    },
+    {
+      "word": "thread",
+      "pos": "noun",
+      "definition": "A long, thin strand of cotton or other fiber used in sewing."
+    },
+    {
+      "word": "archipelago",
+      "pos": "noun",
+      "definition": "A chain or group of islands."
+    },
+    {
+      "word": "range",
+      "pos": "noun",
+      "definition": "A line or chain of mountains; also the distance something can reach."
+    },
+    {
+      "word": "valley",
+      "pos": "noun",
+      "definition": "Low land between hills or mountains."
+    },
+    {
+      "word": "mountains",
+      "pos": "noun",
+      "definition": "Very high, steep areas of land."
+    },
+    {
+      "word": "peak",
+      "pos": "noun",
+      "definition": "The pointed top of a mountain."
+    },
+    {
+      "word": "distance",
+      "pos": "noun",
+      "definition": "The amount of space between two points."
+    },
+    {
+      "word": "plains",
+      "pos": "noun",
+      "definition": "Large areas of flat land with few trees."
+    },
+    {
+      "word": "feeble",
+      "pos": "adj",
+      "definition": "Very weak, especially from age or illness."
+    },
+    {
+      "word": "weak",
+      "pos": "adj",
+      "definition": "Lacking strength."
+    },
+    {
+      "word": "frail",
+      "pos": "adj",
+      "definition": "Weak and easily hurt or broken."
+    },
+    {
+      "word": "small",
+      "pos": "adj",
+      "definition": "Little in size or amount."
+    },
+    {
+      "word": "mighty",
+      "pos": "adj",
+      "definition": "Very strong and powerful."
+    },
+    {
+      "word": "elated",
+      "pos": "adj",
+      "definition": "Extremely happy and excited."
+    },
+    {
+      "word": "miserable",
+      "pos": "adj",
+      "definition": "Very unhappy."
+    },
+    {
+      "word": "calm",
+      "pos": "adj",
+      "definition": "Peaceful and not upset or excited."
+    },
+    {
+      "word": "peaceful",
+      "pos": "adj",
+      "definition": "Quiet and free from conflict."
+    },
+    {
+      "word": "quiet",
+      "pos": "adj",
+      "definition": "Making little or no noise."
+    },
+    {
+      "word": "agitated",
+      "pos": "adj",
+      "definition": "Nervous, upset, and unable to stay calm."
+    },
+    {
+      "word": "sleepy",
+      "pos": "adj",
+      "definition": "Tired and ready to sleep."
+    },
+    {
+      "word": "still",
+      "pos": "adj",
+      "definition": "Not moving."
+    },
+    {
+      "word": "whisper",
+      "pos": "verb",
+      "definition": "To speak very softly, using breath instead of voice."
+    },
+    {
+      "word": "shout",
+      "pos": "verb",
+      "definition": "To say something very loudly."
+    },
+    {
+      "word": "tap",
+      "pos": "verb",
+      "definition": "To hit something lightly."
+    },
+    {
+      "word": "knock",
+      "pos": "verb",
+      "definition": "To hit a door or surface to get attention."
+    },
+    {
+      "word": "chuckle",
+      "pos": "verb",
+      "definition": "To laugh quietly."
+    },
+    {
+      "word": "guffaw",
+      "pos": "verb",
+      "definition": "To laugh loudly and heartily."
+    },
+    {
+      "word": "sip",
+      "pos": "verb",
+      "definition": "To drink a small amount at a time."
+    },
+    {
+      "word": "cup",
+      "pos": "noun",
+      "definition": "A small container used for drinking."
+    },
+    {
+      "word": "taste",
+      "pos": "verb",
+      "definition": "To sense the flavor of something with the tongue."
+    },
+    {
+      "word": "gulp",
+      "pos": "verb",
+      "definition": "To swallow quickly and in large amounts."
+    },
+    {
+      "word": "thirst",
+      "pos": "noun",
+      "definition": "The feeling of needing to drink."
+    },
+    {
+      "word": "ornithologist",
+      "pos": "noun",
+      "definition": "A scientist who studies birds."
+    },
+    {
+      "word": "entomologist",
+      "pos": "noun",
+      "definition": "A scientist who studies insects."
+    },
+    {
+      "word": "fossils",
+      "pos": "noun",
+      "definition": "Remains or traces of ancient plants or animals preserved in rock."
+    },
+    {
+      "word": "cartographer",
+      "pos": "noun",
+      "definition": "A person who makes maps."
+    },
+    {
+      "word": "lexicographer",
+      "pos": "noun",
+      "definition": "A person who writes or edits dictionaries."
+    },
+    {
+      "word": "charts",
+      "pos": "noun",
+      "definition": "Maps, especially for sea or air navigation, or diagrams showing information."
+    },
+    {
+      "word": "letters",
+      "pos": "noun",
+      "definition": "Written messages sent to someone; also the symbols of the alphabet."
+    },
+    {
+      "word": "photographs",
+      "pos": "noun",
+      "definition": "Pictures taken with a camera."
+    },
+    {
+      "word": "dictionaries",
+      "pos": "noun",
+      "definition": "Books that list words in order and give their meanings."
+    },
+    {
+      "word": "baker",
+      "pos": "noun",
+      "definition": "A person who makes bread and cakes."
+    },
+    {
+      "word": "bread",
+      "pos": "noun",
+      "definition": "A food made from flour, water, and yeast and baked."
+    },
+    {
+      "word": "cobbler",
+      "pos": "noun",
+      "definition": "A person who makes or repairs shoes; also a baked fruit dessert."
+    },
+    {
+      "word": "pie",
+      "pos": "noun",
+      "definition": "A baked dish with a crust and a filling."
+    },
+    {
+      "word": "leather",
+      "pos": "noun",
+      "definition": "Material made from the skin of an animal."
+    },
+    {
+      "word": "store",
+      "pos": "noun",
+      "definition": "A shop where goods are sold."
+    },
+    {
+      "word": "playwright",
+      "pos": "noun",
+      "definition": "A person who writes plays."
+    },
+    {
+      "word": "play",
+      "pos": "noun",
+      "definition": "A story written to be performed on a stage by actors."
+    },
+    {
+      "word": "actor",
+      "pos": "noun",
+      "definition": "A person who performs a role in a play or film."
+    },
+    {
+      "word": "stage",
+      "pos": "noun",
+      "definition": "A raised platform where actors perform."
+    },
+    {
+      "word": "theater",
+      "pos": "noun",
+      "definition": "A building where plays or films are shown."
+    },
+    {
+      "word": "bark",
+      "pos": "noun",
+      "definition": "The tough outer covering of a tree; also the sound a dog makes."
+    },
+    {
+      "word": "rind",
+      "pos": "noun",
+      "definition": "The tough outer skin of a fruit such as a melon or orange."
+    },
+    {
+      "word": "seed",
+      "pos": "noun",
+      "definition": "The small part of a plant from which a new plant grows."
+    },
+    {
+      "word": "juice",
+      "pos": "noun",
+      "definition": "The liquid that comes from fruit or vegetables."
+    },
+    {
+      "word": "vine",
+      "pos": "noun",
+      "definition": "A plant with a long stem that climbs or trails along the ground."
+    },
+    {
+      "word": "melon",
+      "pos": "noun",
+      "definition": "A large, round fruit with a hard rind and sweet, juicy inside."
+    },
+    {
+      "word": "slice",
+      "pos": "noun",
+      "definition": "A thin, flat piece cut from something."
+    },
+    {
+      "word": "scene",
+      "pos": "noun",
+      "definition": "One part of a play or film that happens in a single place and time."
+    },
+    {
+      "word": "curtain",
+      "pos": "noun",
+      "definition": "A hanging cloth, such as the one that opens and closes in front of a stage."
+    },
+    {
+      "word": "oven",
+      "pos": "noun",
+      "definition": "An enclosed space that is heated to bake or roast food."
+    },
+    {
+      "word": "bake",
+      "pos": "verb",
+      "definition": "To cook food with dry heat in an oven."
+    },
+    {
+      "word": "freezer",
+      "pos": "noun",
+      "definition": "An appliance that keeps food frozen."
+    },
+    {
+      "word": "ice",
+      "pos": "noun",
+      "definition": "Frozen water."
+    },
+    {
+      "word": "refrigerator",
+      "pos": "noun",
+      "definition": "An appliance that keeps food cold but not frozen."
+    },
+    {
+      "word": "freeze",
+      "pos": "verb",
+      "definition": "To turn solid from cold."
+    },
+    {
+      "word": "anemometer",
+      "pos": "noun",
+      "definition": "An instrument that measures wind speed."
+    },
+    {
+      "word": "barometer",
+      "pos": "noun",
+      "definition": "An instrument that measures air pressure."
+    },
+    {
+      "word": "rainfall",
+      "pos": "noun",
+      "definition": "The amount of rain that falls in a place."
+    },
+    {
+      "word": "humidity",
+      "pos": "noun",
+      "definition": "The amount of moisture in the air."
+    },
+    {
+      "word": "propeller",
+      "pos": "noun",
+      "definition": "Spinning blades that push an aircraft or boat forward."
+    },
+    {
+      "word": "oar",
+      "pos": "noun",
+      "definition": "A long pole with a flat blade, used to row a boat."
+    },
+    {
+      "word": "rowboat",
+      "pos": "noun",
+      "definition": "A small boat moved by oars."
+    },
+    {
+      "word": "sail",
+      "pos": "noun",
+      "definition": "A large sheet of cloth that catches the wind to move a boat."
+    },
+    {
+      "word": "lift",
+      "pos": "noun",
+      "definition": "The upward force that holds an aircraft in the air."
+    },
+    {
+      "word": "drag",
+      "pos": "noun",
+      "definition": "The force of the air that slows an aircraft as it moves."
+    },
+    {
+      "word": "thrust",
+      "pos": "noun",
+      "definition": "The forward force produced by an engine or propeller."
+    },
+    {
+      "word": "nose",
+      "pos": "noun",
+      "definition": "The part of the face used for smelling and breathing."
+    },
+    {
+      "word": "smell",
+      "pos": "noun",
+      "definition": "The sense of detecting odors through the nose."
+    },
+    {
+      "word": "tongue",
+      "pos": "noun",
+      "definition": "The muscle in the mouth used for tasting and speaking."
+    },
+    {
+      "word": "mouth",
+      "pos": "noun",
+      "definition": "The opening in the face used for eating and speaking."
+    },
+    {
+      "word": "teeth",
+      "pos": "noun",
+      "definition": "The hard, white structures in the mouth used for biting and chewing."
+    },
+    {
+      "word": "lick",
+      "pos": "verb",
+      "definition": "To pass the tongue over something."
+    },
+    {
+      "word": "radar",
+      "pos": "noun",
+      "definition": "A system that uses radio waves to detect the position and speed of objects such as aircraft."
+    },
+    {
+      "word": "detect",
+      "pos": "verb",
+      "definition": "To discover or notice something."
+    },
+    {
+      "word": "radio",
+      "pos": "noun",
+      "definition": "A device that sends or receives sound by electromagnetic waves."
+    },
+    {
+      "word": "antenna",
+      "pos": "noun",
+      "definition": "A rod or wire that sends or receives radio signals."
+    },
+    {
+      "word": "signal",
+      "pos": "noun",
+      "definition": "A sound, light, or message that gives information or a warning."
+    },
+    {
+      "word": "tower",
+      "pos": "noun",
+      "definition": "A tall, narrow building; at an airport, where controllers direct traffic."
+    },
+    {
+      "word": "communicate",
+      "pos": "verb",
+      "definition": "To share information with others."
+    },
+    {
+      "word": "galley",
+      "pos": "noun",
+      "definition": "The kitchen on a ship or aircraft."
+    },
+    {
+      "word": "barracks",
+      "pos": "noun",
+      "definition": "A building where soldiers live."
+    },
+    {
+      "word": "dormitory",
+      "pos": "noun",
+      "definition": "A building where students live at a college or school."
+    },
+    {
+      "word": "college",
+      "pos": "noun",
+      "definition": "A school of higher learning after high school."
+    },
+    {
+      "word": "beds",
+      "pos": "noun",
+      "definition": "Pieces of furniture for sleeping."
+    },
+    {
+      "word": "campus",
+      "pos": "noun",
+      "definition": "The grounds and buildings of a college or school."
+    },
+    {
+      "word": "salute",
+      "pos": "noun",
+      "definition": "A formal gesture, such as raising the hand to the brow, that shows respect."
+    },
+    {
+      "word": "respect",
+      "pos": "noun",
+      "definition": "A feeling of admiration or regard for someone."
+    },
+    {
+      "word": "nod",
+      "pos": "noun",
+      "definition": "A quick down-and-up movement of the head, often meaning yes."
+    },
+    {
+      "word": "question",
+      "pos": "noun",
+      "definition": "A sentence that asks for information."
+    },
+    {
+      "word": "agreement",
+      "pos": "noun",
+      "definition": "Having the same opinion or accepting something."
+    },
+    {
+      "word": "anger",
+      "pos": "noun",
+      "definition": "A strong feeling of being upset or annoyed."
+    },
+    {
+      "word": "herd",
+      "pos": "noun",
+      "definition": "A large group of animals, such as cattle, that live and move together."
+    },
+    {
+      "word": "cattle",
+      "pos": "noun",
+      "definition": "Cows and bulls raised for meat or milk."
+    },
+    {
+      "word": "pride",
+      "pos": "noun",
+      "definition": "A group of lions; also a feeling of satisfaction in oneself."
+    },
+    {
+      "word": "wolves",
+      "pos": "noun",
+      "definition": "Wild animals related to dogs that live and hunt in packs."
+    },
+    {
+      "word": "lions",
+      "pos": "noun",
+      "definition": "Large wild cats that live in groups called prides."
+    },
+    {
+      "word": "geese",
+      "pos": "noun",
+      "definition": "Large water birds with long necks."
+    },
+    {
+      "word": "ants",
+      "pos": "noun",
+      "definition": "Small insects that live in large, organized colonies."
+    },
+    {
+      "word": "colony",
+      "pos": "noun",
+      "definition": "A group of animals of the same kind living together, such as ants."
+    },
+    {
+      "word": "pod",
+      "pos": "noun",
+      "definition": "A group of whales or dolphins; also the case that holds a plant's seeds."
+    },
+    {
+      "word": "horses",
+      "pos": "noun",
+      "definition": "Large animals with hooves, used for riding and pulling loads."
+    },
+    {
+      "word": "whales",
+      "pos": "noun",
+      "definition": "Very large sea mammals that breathe air."
+    },
+    {
+      "word": "puppy",
+      "pos": "noun",
+      "definition": "A young dog."
+    },
+    {
+      "word": "dog",
+      "pos": "noun",
+      "definition": "A domesticated animal often kept as a pet."
+    },
+    {
+      "word": "foal",
+      "pos": "noun",
+      "definition": "A young horse."
+    },
+    {
+      "word": "cow",
+      "pos": "noun",
+      "definition": "A large farm animal raised for milk or meat."
+    },
+    {
+      "word": "horse",
+      "pos": "noun",
+      "definition": "A large animal with hooves, used for riding and pulling loads."
+    },
+    {
+      "word": "goat",
+      "pos": "noun",
+      "definition": "A farm animal with horns, kept for milk and meat."
+    },
+    {
+      "word": "deer",
+      "pos": "noun",
+      "definition": "A wild animal with hooves; males usually have antlers."
+    },
+    {
+      "word": "bear",
+      "pos": "noun",
+      "definition": "A large, heavy wild animal with thick fur."
+    },
+    {
+      "word": "kid",
+      "pos": "noun",
+      "definition": "A young goat; also an informal word for a child."
+    },
+    {
+      "word": "child",
+      "pos": "noun",
+      "definition": "A young person."
+    },
+    {
+      "word": "calf",
+      "pos": "noun",
+      "definition": "A young cow."
+    },
+    {
+      "word": "lamb",
+      "pos": "noun",
+      "definition": "A young sheep."
+    },
+    {
+      "word": "acorn",
+      "pos": "noun",
+      "definition": "The nut of an oak tree, from which a new oak grows."
+    },
+    {
+      "word": "oak",
+      "pos": "noun",
+      "definition": "A large tree that grows from an acorn."
+    },
+    {
+      "word": "bulb",
+      "pos": "noun",
+      "definition": "A rounded underground part from which some plants grow; also the glass part of a lamp."
+    },
+    {
+      "word": "lamp",
+      "pos": "noun",
+      "definition": "A device that gives light."
+    },
+    {
+      "word": "light",
+      "pos": "noun",
+      "definition": "The brightness that lets us see."
+    },
+    {
+      "word": "root",
+      "pos": "noun",
+      "definition": "The part of a plant that grows underground and takes in water."
+    },
+    {
+      "word": "tulip",
+      "pos": "noun",
+      "definition": "A brightly colored flower that grows from a bulb."
+    },
+    {
+      "word": "garden",
+      "pos": "noun",
+      "definition": "A piece of land where flowers or vegetables are grown."
+    },
+    {
+      "word": "kilogram",
+      "pos": "noun",
+      "definition": "A metric unit of weight equal to 1,000 grams."
+    },
+    {
+      "word": "milliliter",
+      "pos": "noun",
+      "definition": "A metric unit of volume equal to one thousandth of a liter."
+    },
+    {
+      "word": "gallon",
+      "pos": "noun",
+      "definition": "A unit of liquid volume equal to four quarts."
+    },
+    {
+      "word": "liter",
+      "pos": "noun",
+      "definition": "A metric unit of volume equal to 1,000 milliliters."
+    },
+    {
+      "word": "decade",
+      "pos": "noun",
+      "definition": "A period of ten years."
+    },
+    {
+      "word": "century",
+      "pos": "noun",
+      "definition": "A period of one hundred years."
+    },
+    {
+      "word": "year",
+      "pos": "noun",
+      "definition": "A period of twelve months."
+    },
+    {
+      "word": "era",
+      "pos": "noun",
+      "definition": "A long period of history."
+    },
+    {
+      "word": "age",
+      "pos": "noun",
+      "definition": "How long someone or something has existed; also a period of history."
+    },
+    {
+      "word": "millennium",
+      "pos": "noun",
+      "definition": "A period of one thousand years."
+    },
+    {
+      "word": "quart",
+      "pos": "noun",
+      "definition": "A unit of liquid volume equal to one fourth of a gallon."
+    },
+    {
+      "word": "quarter",
+      "pos": "noun",
+      "definition": "One of four equal parts; also a coin worth 25 cents."
+    },
+    {
+      "word": "dime",
+      "pos": "noun",
+      "definition": "A coin worth ten cents."
+    },
+    {
+      "word": "cent",
+      "pos": "noun",
+      "definition": "A coin or unit equal to one hundredth of a dollar."
+    },
+    {
+      "word": "dollar",
+      "pos": "noun",
+      "definition": "The basic unit of U.S. money, equal to 100 cents."
+    },
+    {
+      "word": "coin",
+      "pos": "noun",
+      "definition": "A flat, round piece of metal used as money."
+    },
+    {
+      "word": "money",
+      "pos": "noun",
+      "definition": "Coins and bills used to buy things."
+    },
+    {
+      "word": "transparent",
+      "pos": "adj",
+      "definition": "Clear enough to see through."
+    },
+    {
+      "word": "opaque",
+      "pos": "adj",
+      "definition": "Not letting light through; not see-through."
+    },
+    {
+      "word": "smooth",
+      "pos": "adj",
+      "definition": "Having an even surface with no bumps."
+    },
+    {
+      "word": "rough",
+      "pos": "adj",
+      "definition": "Having an uneven or bumpy surface."
+    },
+    {
+      "word": "soft",
+      "pos": "adj",
+      "definition": "Easy to press or bend; not hard."
+    },
+    {
+      "word": "glassy",
+      "pos": "adj",
+      "definition": "Smooth and shiny like glass."
+    },
+    {
+      "word": "flat",
+      "pos": "adj",
+      "definition": "Level and even, with no raised parts."
+    },
+    {
+      "word": "polished",
+      "pos": "adj",
+      "definition": "Rubbed until smooth and shiny."
+    },
+    {
+      "word": "permanent",
+      "pos": "adj",
+      "definition": "Lasting forever or for a very long time."
+    },
+    {
+      "word": "scarce",
+      "pos": "adj",
+      "definition": "In short supply; hard to find."
+    },
+    {
+      "word": "few",
+      "pos": "adj",
+      "definition": "A small number of."
+    },
+    {
+      "word": "plentiful",
+      "pos": "adj",
+      "definition": "Existing in large amounts; more than enough."
+    },
+    {
+      "word": "malevolent",
+      "pos": "adj",
+      "definition": "Wishing to do harm to others."
+    },
+    {
+      "word": "cruel",
+      "pos": "adj",
+      "definition": "Causing pain or suffering on purpose."
+    },
+    {
+      "word": "gentle",
+      "pos": "adj",
+      "definition": "Kind, mild, and careful."
+    },
+    {
+      "word": "gloomy",
+      "pos": "adj",
+      "definition": "Dark or sad; without hope."
+    },
+    {
+      "word": "cloudy",
+      "pos": "adj",
+      "definition": "Covered with clouds."
+    },
+    {
+      "word": "dark",
+      "pos": "adj",
+      "definition": "With little or no light."
+    },
+    {
+      "word": "cheerful",
+      "pos": "adj",
+      "definition": "Happy and in good spirits."
+    },
+    {
+      "word": "foe",
+      "pos": "noun",
+      "definition": "An enemy."
+    },
+    {
+      "word": "ally",
+      "pos": "noun",
+      "definition": "A person or nation that supports another, especially in war."
+    },
+    {
+      "word": "enemy",
+      "pos": "noun",
+      "definition": "A person or group that is hostile to or fights against another."
+    },
+    {
+      "word": "rival",
+      "pos": "noun",
+      "definition": "Someone competing for the same thing as another."
+    },
+    {
+      "word": "partner",
+      "pos": "noun",
+      "definition": "A person who shares in an activity with another."
+    },
+    {
+      "word": "conceal",
+      "pos": "verb",
+      "definition": "To hide or keep out of sight."
+    },
+    {
+      "word": "hide",
+      "pos": "verb",
+      "definition": "To put or keep out of sight."
+    },
+    {
+      "word": "reveal",
+      "pos": "verb",
+      "definition": "To make known or show something hidden."
+    },
+    {
+      "word": "expose",
+      "pos": "verb",
+      "definition": "To uncover or make visible."
+    },
+    {
+      "word": "secret",
+      "pos": "noun",
+      "definition": "Something kept hidden from others."
+    },
+    {
+      "word": "bury",
+      "pos": "verb",
+      "definition": "To put something in the ground and cover it."
+    },
+    {
+      "word": "mask",
+      "pos": "noun",
+      "definition": "A covering worn over the face to hide or protect it."
+    },
+    {
+      "word": "rapid",
+      "pos": "adj",
+      "definition": "Very fast."
+    },
+    {
+      "word": "slow",
+      "pos": "adj",
+      "definition": "Not fast; taking a long time."
+    },
+    {
+      "word": "river",
+      "pos": "noun",
+      "definition": "A large, natural stream of water flowing to the sea or a lake."
+    },
+    {
+      "word": "steady",
+      "pos": "adj",
+      "definition": "Firm and not shaking; also regular and even."
+    },
+    {
+      "word": "swift",
+      "pos": "adj",
+      "definition": "Moving very fast."
+    },
+    {
+      "word": "late",
+      "pos": "adj",
+      "definition": "Arriving after the expected time."
+    },
+    {
+      "word": "graphite",
+      "pos": "noun",
+      "definition": "A soft, gray form of carbon used in pencils."
+    },
+    {
+      "word": "pencil",
+      "pos": "noun",
+      "definition": "A writing tool with a core of graphite."
+    },
+    {
+      "word": "eraser",
+      "pos": "noun",
+      "definition": "A piece of rubber used to remove pencil marks."
+    },
+    {
+      "word": "metal",
+      "pos": "noun",
+      "definition": "A hard, shiny material such as iron, steel, or gold."
+    },
+    {
+      "word": "drawing",
+      "pos": "noun",
+      "definition": "A picture made with a pencil, pen, or crayon."
+    },
+    {
+      "word": "stomach",
+      "pos": "noun",
+      "definition": "The organ in the body where food is digested."
+    },
+    {
+      "word": "energy",
+      "pos": "noun",
+      "definition": "The strength or power needed to do work or be active."
+    },
+    {
+      "word": "vaccine",
+      "pos": "noun",
+      "definition": "A substance given to protect the body against a disease."
+    },
+    {
+      "word": "disease",
+      "pos": "noun",
+      "definition": "An illness that affects the body."
+    },
+    {
+      "word": "seatbelt",
+      "pos": "noun",
+      "definition": "A strap that holds a person in a seat to prevent injury in a crash."
+    },
+    {
+      "word": "crash",
+      "pos": "noun",
+      "definition": "A collision of a vehicle with something."
+    },
+    {
+      "word": "injury",
+      "pos": "noun",
+      "definition": "Harm or damage to the body."
+    },
+    {
+      "word": "buckle",
+      "pos": "noun",
+      "definition": "A clasp used to fasten a belt or strap."
+    },
+    {
+      "word": "sponge",
+      "pos": "noun",
+      "definition": "A soft, porous object that soaks up liquid."
+    },
+    {
+      "word": "absorb",
+      "pos": "verb",
+      "definition": "To soak up a liquid."
+    },
+    {
+      "word": "magnet",
+      "pos": "noun",
+      "definition": "An object that pulls iron and steel toward it."
+    },
+    {
+      "word": "attract",
+      "pos": "verb",
+      "definition": "To pull toward."
+    },
+    {
+      "word": "iron",
+      "pos": "noun",
+      "definition": "A strong, hard metal."
+    },
+    {
+      "word": "north",
+      "pos": "noun",
+      "definition": "The direction toward the North Pole."
+    },
+    {
+      "word": "scissors",
+      "pos": "noun",
+      "definition": "A cutting tool with two blades joined in the middle."
+    },
+    {
+      "word": "cloth",
+      "pos": "noun",
+      "definition": "Material made by weaving or knitting fibers."
+    },
+    {
+      "word": "sew",
+      "pos": "verb",
+      "definition": "To join cloth with a needle and thread."
+    },
+    {
+      "word": "point",
+      "pos": "noun",
+      "definition": "The sharp end of something."
+    },
+    {
+      "word": "ladder",
+      "pos": "noun",
+      "definition": "A set of steps between two long sides, used for climbing."
+    },
+    {
+      "word": "bridge",
+      "pos": "noun",
+      "definition": "A structure built over a river or road so people can cross."
+    },
+    {
+      "word": "cross",
+      "pos": "verb",
+      "definition": "To go from one side to the other."
+    },
+    {
+      "word": "toll",
+      "pos": "noun",
+      "definition": "A fee paid to use a road or bridge."
+    },
+    {
+      "word": "crumb",
+      "pos": "noun",
+      "definition": "A tiny piece of bread or cake."
+    },
+    {
+      "word": "splinter",
+      "pos": "noun",
+      "definition": "A thin, sharp piece broken off from wood."
+    },
+    {
+      "word": "pain",
+      "pos": "noun",
+      "definition": "A feeling of hurting."
+    },
+    {
+      "word": "shard",
+      "pos": "noun",
+      "definition": "A sharp piece of broken glass or pottery."
+    },
+    {
+      "word": "flake",
+      "pos": "noun",
+      "definition": "A small, thin piece, such as a snowflake."
+    },
+    {
+      "word": "snow",
+      "pos": "noun",
+      "definition": "Frozen water falling from the sky as white flakes."
+    },
+    {
+      "word": "ski",
+      "pos": "verb",
+      "definition": "To glide over snow on long, narrow runners."
+    },
+    {
+      "word": "hoof",
+      "pos": "noun",
+      "definition": "The hard covering on the foot of a horse, cow, or deer."
+    },
+    {
+      "word": "talon",
+      "pos": "noun",
+      "definition": "The sharp, hooked claw of a bird of prey."
+    },
+    {
+      "word": "eagle",
+      "pos": "noun",
+      "definition": "A large bird of prey with sharp talons and excellent eyesight."
+    },
+    {
+      "word": "claw",
+      "pos": "noun",
+      "definition": "A sharp, curved nail on an animal's foot."
+    },
+    {
+      "word": "stable",
+      "pos": "noun",
+      "definition": "A building where horses are kept."
+    },
+    {
+      "word": "pig",
+      "pos": "noun",
+      "definition": "A farm animal with a flat snout, raised for meat."
+    },
+    {
+      "word": "farm",
+      "pos": "noun",
+      "definition": "Land used for growing crops or raising animals."
+    },
+    {
+      "word": "mud",
+      "pos": "noun",
+      "definition": "Soft, wet dirt."
+    },
+    {
+      "word": "bacon",
+      "pos": "noun",
+      "definition": "Salted or smoked meat from a pig."
+    },
+    {
+      "word": "sty",
+      "pos": "noun",
+      "definition": "A pen where pigs are kept."
+    },
+    {
+      "word": "piglet",
+      "pos": "noun",
+      "definition": "A young pig."
+    },
+    {
+      "word": "glacier",
+      "pos": "noun",
+      "definition": "A huge, slow-moving mass of ice."
+    },
+    {
+      "word": "dune",
+      "pos": "noun",
+      "definition": "A hill of sand formed by the wind."
+    },
+    {
+      "word": "hill",
+      "pos": "noun",
+      "definition": "A raised area of land, smaller than a mountain."
+    },
+    {
+      "word": "mountain",
+      "pos": "noun",
+      "definition": "A very high, steep area of land."
+    },
+    {
+      "word": "surf",
+      "pos": "noun",
+      "definition": "Waves breaking on the shore."
+    },
+    {
+      "word": "trough",
+      "pos": "noun",
+      "definition": "The low point between two waves; also a long container for animal food or water."
+    },
+    {
+      "word": "crest",
+      "pos": "noun",
+      "definition": "The top of a wave or hill."
+    },
+    {
+      "word": "coach",
+      "pos": "noun",
+      "definition": "A person who trains and leads a team or athlete."
+    },
+    {
+      "word": "ball",
+      "pos": "noun",
+      "definition": "A round object used in games."
+    },
+    {
+      "word": "stadium",
+      "pos": "noun",
+      "definition": "A large arena for sports, with seats for spectators."
+    },
+    {
+      "word": "game",
+      "pos": "noun",
+      "definition": "An activity or sport played by rules."
+    },
+    {
+      "word": "admiral",
+      "pos": "noun",
+      "definition": "A top-ranking officer in the Navy."
+    },
+    {
+      "word": "referee",
+      "pos": "noun",
+      "definition": "An official who makes sure a game is played by the rules."
+    },
+    {
+      "word": "prison",
+      "pos": "noun",
+      "definition": "A building where criminals are kept as punishment."
+    },
+    {
+      "word": "verdict",
+      "pos": "noun",
+      "definition": "The decision of a jury on whether someone is guilty."
+    },
+    {
+      "word": "trial",
+      "pos": "noun",
+      "definition": "A formal examination of evidence in court to decide a case."
+    },
+    {
+      "word": "jury",
+      "pos": "noun",
+      "definition": "A group of people chosen to decide the verdict in a trial."
+    },
+    {
+      "word": "diagnosis",
+      "pos": "noun",
+      "definition": "The identification of an illness by a doctor."
+    },
+    {
+      "word": "illness",
+      "pos": "noun",
+      "definition": "A disease or sickness."
+    },
+    {
+      "word": "poem",
+      "pos": "noun",
+      "definition": "A piece of writing arranged in lines, often with rhythm or rhyme."
+    },
+    {
+      "word": "poet",
+      "pos": "noun",
+      "definition": "A person who writes poems."
+    },
+    {
+      "word": "pedestal",
+      "pos": "noun",
+      "definition": "A base on which a statue stands."
+    },
+    {
+      "word": "mile",
+      "pos": "noun",
+      "definition": "A unit of distance equal to 5,280 feet."
+    },
+    {
+      "word": "heavy",
+      "pos": "adj",
+      "definition": "Having great weight."
+    },
+    {
+      "word": "knot",
+      "pos": "noun",
+      "definition": "A unit of speed equal to one nautical mile per hour; also a tied loop in rope."
+    },
+    {
+      "word": "fathom",
+      "pos": "noun",
+      "definition": "A unit for measuring water depth, equal to six feet."
+    },
+    {
+      "word": "depth",
+      "pos": "noun",
+      "definition": "How deep something is."
+    },
+    {
+      "word": "nadir",
+      "pos": "noun",
+      "definition": "The lowest point."
+    },
+    {
+      "word": "ceiling",
+      "pos": "noun",
+      "definition": "The upper surface of a room; in aviation, the height of the lowest cloud layer."
+    },
+    {
+      "word": "floor",
+      "pos": "noun",
+      "definition": "The lower surface of a room."
+    },
+    {
+      "word": "top",
+      "pos": "noun",
+      "definition": "The highest part of something."
+    },
+    {
+      "word": "takeoff",
+      "pos": "noun",
+      "definition": "The moment an aircraft leaves the ground."
+    },
+    {
+      "word": "landing",
+      "pos": "noun",
+      "definition": "Bringing an aircraft back down to the ground."
+    },
+    {
+      "word": "departure",
+      "pos": "noun",
+      "definition": "The act of leaving."
+    },
+    {
+      "word": "arrival",
+      "pos": "noun",
+      "definition": "The act of reaching a destination."
+    },
+    {
+      "word": "flight",
+      "pos": "noun",
+      "definition": "A trip by aircraft; also the act of flying."
+    },
+    {
+      "word": "gate",
+      "pos": "noun",
+      "definition": "The area in an airport where passengers board a plane."
+    },
+    {
+      "word": "ticket",
+      "pos": "noun",
+      "definition": "A paper or pass that lets a person travel or enter."
+    },
+    {
+      "word": "inhale",
+      "pos": "verb",
+      "definition": "To breathe in."
+    },
+    {
+      "word": "exhale",
+      "pos": "verb",
+      "definition": "To breathe out."
+    },
+    {
+      "word": "expand",
+      "pos": "verb",
+      "definition": "To grow larger."
+    },
+    {
+      "word": "grow",
+      "pos": "verb",
+      "definition": "To increase in size."
+    },
+    {
+      "word": "stretch",
+      "pos": "verb",
+      "definition": "To make longer or wider by pulling."
+    },
+    {
+      "word": "enlarge",
+      "pos": "verb",
+      "definition": "To make bigger."
+    },
+    {
+      "word": "contract",
+      "pos": "verb",
+      "definition": "To become smaller; also (noun) a written agreement."
+    },
+    {
+      "word": "humble",
+      "pos": "adj",
+      "definition": "Not proud; modest about one's own importance."
+    },
+    {
+      "word": "arrogant",
+      "pos": "adj",
+      "definition": "Having too high an opinion of oneself."
+    },
+    {
+      "word": "obedient",
+      "pos": "adj",
+      "definition": "Willing to follow orders or rules."
+    },
+    {
+      "word": "loyal",
+      "pos": "adj",
+      "definition": "Faithful to a person, group, or cause."
+    },
+    {
+      "word": "dutiful",
+      "pos": "adj",
+      "definition": "Doing what is expected out of a sense of duty."
+    },
+    {
+      "word": "defiant",
+      "pos": "adj",
+      "definition": "Openly refusing to obey."
+    },
+    {
+      "word": "polite",
+      "pos": "adj",
+      "definition": "Having good manners."
+    },
+    {
+      "word": "proficient",
+      "pos": "adj",
+      "definition": "Highly skilled."
+    },
+    {
+      "word": "skilled",
+      "pos": "adj",
+      "definition": "Having the ability to do something well."
+    },
+    {
+      "word": "difficult",
+      "pos": "adj",
+      "definition": "Hard to do or understand."
+    },
+    {
+      "word": "easy",
+      "pos": "adj",
+      "definition": "Not hard to do."
+    },
+    {
+      "word": "brief",
+      "pos": "adj",
+      "definition": "Short in time."
+    },
+    {
+      "word": "boring",
+      "pos": "adj",
+      "definition": "Dull and not interesting."
+    },
+    {
+      "word": "painful",
+      "pos": "adj",
+      "definition": "Causing pain."
+    },
+    {
+      "word": "haphazard",
+      "pos": "adj",
+      "definition": "Without order or plan; random."
+    },
+    {
+      "word": "orderly",
+      "pos": "adj",
+      "definition": "Neat and well organized."
+    },
+    {
+      "word": "vague",
+      "pos": "adj",
+      "definition": "Not clear or exact."
+    },
+    {
+      "word": "unclear",
+      "pos": "adj",
+      "definition": "Hard to understand or see."
+    },
+    {
+      "word": "foggy",
+      "pos": "adj",
+      "definition": "Full of fog; hard to see through."
+    },
+    {
+      "word": "wide",
+      "pos": "adj",
+      "definition": "Large from side to side."
+    },
+    {
+      "word": "precise",
+      "pos": "adj",
+      "definition": "Exact and accurate."
+    },
+    {
+      "word": "short",
+      "pos": "adj",
+      "definition": "Small in length or height."
+    },
+    {
+      "word": "loquacious",
+      "pos": "adj",
+      "definition": "Talking a great deal."
+    },
+    {
+      "word": "talkative",
+      "pos": "adj",
+      "definition": "Liking to talk a lot."
+    },
+    {
+      "word": "chatty",
+      "pos": "adj",
+      "definition": "Talkative in a friendly, casual way."
+    },
+    {
+      "word": "silent",
+      "pos": "adj",
+      "definition": "Making no sound; saying nothing."
+    },
+    {
+      "word": "angry",
+      "pos": "adj",
+      "definition": "Feeling strong displeasure."
+    },
+    {
+      "word": "tall",
+      "pos": "adj",
+      "definition": "Of great height."
+    },
+    {
+      "word": "smart",
+      "pos": "adj",
+      "definition": "Intelligent."
+    },
+    {
+      "word": "insomnia",
+      "pos": "noun",
+      "definition": "Trouble falling or staying asleep."
+    },
+    {
+      "word": "amnesia",
+      "pos": "noun",
+      "definition": "Loss of memory."
+    },
+    {
+      "word": "brain",
+      "pos": "noun",
+      "definition": "The organ inside the head that controls thought and the body."
+    },
+    {
+      "word": "forget",
+      "pos": "verb",
+      "definition": "To fail to remember."
+    },
+    {
+      "word": "memory",
+      "pos": "noun",
+      "definition": "The ability to remember; also something remembered."
+    },
+    {
+      "word": "sight",
+      "pos": "noun",
+      "definition": "The ability to see."
+    },
+    {
+      "word": "deaf",
+      "pos": "adj",
+      "definition": "Unable to hear."
+    },
+    {
+      "word": "ear",
+      "pos": "noun",
+      "definition": "The organ used for hearing."
+    },
+    {
+      "word": "sound",
+      "pos": "noun",
+      "definition": "Something that can be heard."
+    },
+    {
+      "word": "hearing",
+      "pos": "noun",
+      "definition": "The ability to hear."
+    },
+    {
+      "word": "virus",
+      "pos": "noun",
+      "definition": "A tiny germ that causes illness."
+    },
+    {
+      "word": "friction",
+      "pos": "noun",
+      "definition": "The resistance created when two surfaces rub together, which produces heat."
+    },
+    {
+      "word": "motion",
+      "pos": "noun",
+      "definition": "The act of moving."
+    },
+    {
+      "word": "rubbing",
+      "pos": "noun",
+      "definition": "Moving one surface back and forth against another."
+    },
+    {
+      "word": "instructor",
+      "pos": "noun",
+      "definition": "A person who teaches a skill."
+    },
+    {
+      "word": "trainee",
+      "pos": "noun",
+      "definition": "A person being trained."
+    },
+    {
+      "word": "whistle",
+      "pos": "noun",
+      "definition": "A small device that makes a high sound when blown."
+    },
+    {
+      "word": "athlete",
+      "pos": "noun",
+      "definition": "A person trained in sports."
+    },
+    {
+      "word": "sleeve",
+      "pos": "noun",
+      "definition": "The part of a garment that covers the arm."
+    },
+    {
+      "word": "arm",
+      "pos": "noun",
+      "definition": "The limb between the shoulder and the hand."
+    },
+    {
+      "word": "collar",
+      "pos": "noun",
+      "definition": "The part of a shirt or coat that goes around the neck."
+    },
+    {
+      "word": "shirt",
+      "pos": "noun",
+      "definition": "A piece of clothing for the upper body."
+    },
+    {
+      "word": "button",
+      "pos": "noun",
+      "definition": "A small disk sewn on clothing to fasten it."
+    },
+    {
+      "word": "tie",
+      "pos": "noun",
+      "definition": "A long strip of cloth worn around the neck under a shirt collar."
+    },
+    {
+      "word": "neck",
+      "pos": "noun",
+      "definition": "The part of the body that joins the head to the shoulders."
+    },
+    {
+      "word": "silk",
+      "pos": "noun",
+      "definition": "A smooth, shiny cloth made from threads spun by silkworms."
+    },
+    {
+      "word": "cotton",
+      "pos": "noun",
+      "definition": "A soft cloth made from the fibers of the cotton plant."
+    },
+    {
+      "word": "silkworm",
+      "pos": "noun",
+      "definition": "A caterpillar that spins silk to make its cocoon."
+    },
+    {
+      "word": "dress",
+      "pos": "noun",
+      "definition": "A one-piece garment with a skirt."
+    },
+    {
+      "word": "satin",
+      "pos": "noun",
+      "definition": "A smooth, shiny cloth."
+    },
+    {
+      "word": "heater",
+      "pos": "noun",
+      "definition": "A device that produces heat."
+    },
+    {
+      "word": "warmth",
+      "pos": "noun",
+      "definition": "A moderate amount of heat."
+    },
+    {
+      "word": "blade",
+      "pos": "noun",
+      "definition": "The flat, cutting part of a knife; also the flat part of a fan or propeller."
+    },
+    {
+      "word": "electricity",
+      "pos": "noun",
+      "definition": "A form of energy carried by wires that powers machines and lights."
+    },
+    {
+      "word": "flag",
+      "pos": "noun",
+      "definition": "A piece of cloth with a design, used as a symbol of a country or group."
+    },
+    {
+      "word": "pole",
+      "pos": "noun",
+      "definition": "A long, thin piece of wood or metal."
+    },
+    {
+      "word": "boat",
+      "pos": "noun",
+      "definition": "A small vessel for traveling on water."
+    },
+    {
+      "word": "mast",
+      "pos": "noun",
+      "definition": "A tall pole on a ship that holds the sails."
+    },
+    {
+      "word": "rifle",
+      "pos": "noun",
+      "definition": "A long gun fired from the shoulder."
+    },
+    {
+      "word": "marksman",
+      "pos": "noun",
+      "definition": "A person skilled at shooting accurately."
+    },
+    {
+      "word": "arrow",
+      "pos": "noun",
+      "definition": "A thin, pointed shaft shot from a bow."
+    },
+    {
+      "word": "archer",
+      "pos": "noun",
+      "definition": "A person who shoots with a bow and arrows."
+    },
+    {
+      "word": "target",
+      "pos": "noun",
+      "definition": "An object aimed at when shooting."
+    },
+    {
+      "word": "sheath",
+      "pos": "noun",
+      "definition": "A close-fitting case for a sword or knife."
+    },
+    {
+      "word": "pistol",
+      "pos": "noun",
+      "definition": "A small gun held in one hand."
+    },
+    {
+      "word": "bullet",
+      "pos": "noun",
+      "definition": "A small metal piece fired from a gun."
+    },
+    {
+      "word": "trigger",
+      "pos": "noun",
+      "definition": "The lever pulled to fire a gun."
+    },
+    {
+      "word": "belt",
+      "pos": "noun",
+      "definition": "A strap worn around the waist."
+    },
+    {
+      "word": "gun",
+      "pos": "noun",
+      "definition": "A weapon that fires bullets."
+    },
+    {
+      "word": "holster",
+      "pos": "noun",
+      "definition": "A holder for a pistol, worn on a belt or under the arm."
+    },
+    {
+      "word": "trophy",
+      "pos": "noun",
+      "definition": "A cup or prize awarded for a victory."
+    },
+    {
+      "word": "shelf",
+      "pos": "noun",
+      "definition": "A flat board fixed to a wall for holding things."
+    },
+    {
+      "word": "gold",
+      "pos": "noun",
+      "definition": "A valuable yellow metal."
+    },
+    {
+      "word": "loss",
+      "pos": "noun",
+      "definition": "Failing to win; also no longer having something."
+    },
+    {
+      "word": "promotion",
+      "pos": "noun",
+      "definition": "A move up to a higher rank or position."
+    },
+    {
+      "word": "rank",
+      "pos": "noun",
+      "definition": "A position in a military or organizational order."
+    },
+    {
+      "word": "raise",
+      "pos": "noun",
+      "definition": "An increase in pay."
+    },
+    {
+      "word": "salary",
+      "pos": "noun",
+      "definition": "A fixed amount of money paid for a job."
+    },
+    {
+      "word": "job",
+      "pos": "noun",
+      "definition": "Work done for pay."
+    },
+    {
+      "word": "boss",
+      "pos": "noun",
+      "definition": "A person in charge of workers."
+    },
+    {
+      "word": "hire",
+      "pos": "verb",
+      "definition": "To give someone a job."
+    },
+    {
+      "word": "bonus",
+      "pos": "noun",
+      "definition": "An extra payment beyond the usual pay."
+    },
+    {
+      "word": "retreat",
+      "pos": "verb",
+      "definition": "To move back or withdraw, especially from an enemy."
+    },
+    {
+      "word": "advance",
+      "pos": "verb",
+      "definition": "To move forward."
+    },
+    {
+      "word": "surrender",
+      "pos": "verb",
+      "definition": "To give up to an enemy."
+    },
+    {
+      "word": "quit",
+      "pos": "verb",
+      "definition": "To stop doing something."
+    },
+    {
+      "word": "resist",
+      "pos": "verb",
+      "definition": "To fight against or refuse to give in."
+    },
+    {
+      "word": "yield",
+      "pos": "verb",
+      "definition": "To give way or give up."
+    },
+    {
+      "word": "camouflage",
+      "pos": "noun",
+      "definition": "Colors or coverings that help something blend in and stay hidden."
+    },
+    {
+      "word": "beacon",
+      "pos": "noun",
+      "definition": "A light or radio signal used as a guide or warning."
+    },
+    {
+      "word": "silo",
+      "pos": "noun",
+      "definition": "A tall tower used to store grain."
+    },
+    {
+      "word": "reservoir",
+      "pos": "noun",
+      "definition": "A natural or artificial lake used to store water."
+    },
+    {
+      "word": "dam",
+      "pos": "noun",
+      "definition": "A wall built across a river to hold back water."
+    },
+    {
+      "word": "pipe",
+      "pos": "noun",
+      "definition": "A tube that carries water, gas, or other fluids."
+    },
+    {
+      "word": "quiver",
+      "pos": "noun",
+      "definition": "A case for carrying arrows; also (verb) to shake slightly."
+    },
+    {
+      "word": "arrows",
+      "pos": "noun",
+      "definition": "Thin, pointed shafts shot from a bow."
+    },
+    {
+      "word": "wallet",
+      "pos": "noun",
+      "definition": "A small, flat case for carrying money and cards."
+    },
+    {
+      "word": "purse",
+      "pos": "noun",
+      "definition": "A bag used to carry money and personal items."
+    },
+    {
+      "word": "pocket",
+      "pos": "noun",
+      "definition": "A small pouch sewn into clothing."
+    },
+    {
+      "word": "cash",
+      "pos": "noun",
+      "definition": "Money in the form of bills and coins."
+    },
+    {
+      "word": "bank",
+      "pos": "noun",
+      "definition": "A business that keeps money; also the land along the edge of a river."
+    },
+    {
+      "word": "sketch",
+      "pos": "noun",
+      "definition": "A quick, rough drawing."
+    },
+    {
+      "word": "painting",
+      "pos": "noun",
+      "definition": "A picture made with paint."
+    },
+    {
+      "word": "draft",
+      "pos": "noun",
+      "definition": "An early version of a piece of writing."
+    },
+    {
+      "word": "essay",
+      "pos": "noun",
+      "definition": "A short piece of writing on a single subject."
+    },
+    {
+      "word": "rehearsal",
+      "pos": "noun",
+      "definition": "A practice performance before the real one."
+    },
+    {
+      "word": "performance",
+      "pos": "noun",
+      "definition": "A presentation of a play, music, or other entertainment."
+    },
+    {
+      "word": "practice",
+      "pos": "noun",
+      "definition": "Repeated exercise to improve a skill."
+    },
+    {
+      "word": "drill",
+      "pos": "noun",
+      "definition": "A repeated exercise for training; also a tool for making holes."
+    },
+    {
+      "word": "win",
+      "pos": "verb",
+      "definition": "To finish first or be victorious."
+    },
+    {
+      "word": "apiary",
+      "pos": "noun",
+      "definition": "A place where bees are kept."
+    },
+    {
+      "word": "aviary",
+      "pos": "noun",
+      "definition": "A large enclosure where birds are kept."
+    },
+    {
+      "word": "apes",
+      "pos": "noun",
+      "definition": "Large primates such as gorillas and chimpanzees."
+    },
+    {
+      "word": "clue",
+      "pos": "noun",
+      "definition": "A piece of information that helps solve a problem or mystery."
+    },
+    {
+      "word": "mystery",
+      "pos": "noun",
+      "definition": "Something that is hard to explain or understand."
+    },
+    {
+      "word": "symptom",
+      "pos": "noun",
+      "definition": "A sign of an illness, such as a fever or cough."
+    },
+    {
+      "word": "fever",
+      "pos": "noun",
+      "definition": "A body temperature higher than normal, often a sign of illness."
+    },
+    {
+      "word": "evaporate",
+      "pos": "verb",
+      "definition": "To change from a liquid into a gas."
+    },
+    {
+      "word": "vapor",
+      "pos": "noun",
+      "definition": "A substance in the form of a gas, such as steam."
+    },
+    {
+      "word": "steam",
+      "pos": "noun",
+      "definition": "The vapor formed when water boils."
+    },
+    {
+      "word": "continent",
+      "pos": "noun",
+      "definition": "One of the seven large land masses of the Earth."
+    },
+    {
+      "word": "country",
+      "pos": "noun",
+      "definition": "A nation with its own government."
+    },
+    {
+      "word": "state",
+      "pos": "noun",
+      "definition": "One of the divisions of a country, such as Texas."
+    },
+    {
+      "word": "nation",
+      "pos": "noun",
+      "definition": "A country and its people."
+    },
+    {
+      "word": "border",
+      "pos": "noun",
+      "definition": "The line separating two countries or areas."
+    },
+    {
+      "word": "world",
+      "pos": "noun",
+      "definition": "The Earth and everything on it."
+    },
+    {
+      "word": "pedometer",
+      "pos": "noun",
+      "definition": "A device that counts the steps a person takes."
+    },
+    {
+      "word": "steps",
+      "pos": "noun",
+      "definition": "Movements made by lifting a foot and putting it down."
+    },
+    {
+      "word": "odometer",
+      "pos": "noun",
+      "definition": "An instrument that shows how many miles a vehicle has traveled."
+    },
+    {
+      "word": "miles",
+      "pos": "noun",
+      "definition": "Units of distance, each equal to 5,280 feet."
+    },
+    {
+      "word": "oil",
+      "pos": "noun",
+      "definition": "A thick liquid used as fuel or to make machines run smoothly."
+    },
+    {
+      "word": "seismograph",
+      "pos": "noun",
+      "definition": "An instrument that measures and records earthquakes."
+    },
+    {
+      "word": "earthquakes",
+      "pos": "noun",
+      "definition": "Sudden shakings of the ground caused by movement under the Earth's surface."
+    },
+    {
+      "word": "storms",
+      "pos": "noun",
+      "definition": "Periods of strong wind, rain, or snow."
+    },
+    {
+      "word": "bud",
+      "pos": "noun",
+      "definition": "A small growth on a plant that opens into a flower or leaf."
+    },
+    {
+      "word": "blossom",
+      "pos": "noun",
+      "definition": "A flower, especially on a fruit tree."
+    },
+    {
+      "word": "baby",
+      "pos": "noun",
+      "definition": "A very young child."
+    },
+    {
+      "word": "parent",
+      "pos": "noun",
+      "definition": "A mother or father."
+    },
+    {
+      "word": "toy",
+      "pos": "noun",
+      "definition": "An object for a child to play with."
+    },
+    {
+      "word": "adult",
+      "pos": "noun",
+      "definition": "A fully grown person."
+    },
+    {
+      "word": "optimist",
+      "pos": "noun",
+      "definition": "A person who expects good things to happen."
+    },
+    {
+      "word": "hopeful",
+      "pos": "adj",
+      "definition": "Feeling that what one wants is likely to happen."
+    },
+    {
+      "word": "pessimist",
+      "pos": "noun",
+      "definition": "A person who expects bad things to happen."
+    },
+    {
+      "word": "doubtful",
+      "pos": "adj",
+      "definition": "Feeling unsure; not expecting things to go well."
+    },
+    {
+      "word": "miser",
+      "pos": "noun",
+      "definition": "A person who hoards money and hates to spend it."
+    },
+    {
+      "word": "hoard",
+      "pos": "verb",
+      "definition": "To collect and hide away a large supply."
+    },
+    {
+      "word": "spendthrift",
+      "pos": "noun",
+      "definition": "A person who spends money carelessly."
+    },
+    {
+      "word": "squander",
+      "pos": "verb",
+      "definition": "To waste, especially money or time."
+    },
+    {
+      "word": "save",
+      "pos": "verb",
+      "definition": "To keep money instead of spending it."
+    },
+    {
+      "word": "invest",
+      "pos": "verb",
+      "definition": "To put money into something expecting to earn more later."
+    },
+    {
+      "word": "earn",
+      "pos": "verb",
+      "definition": "To receive money for work."
+    },
+    {
+      "word": "borrow",
+      "pos": "verb",
+      "definition": "To take something with the promise of returning it."
+    },
+    {
+      "word": "pacifist",
+      "pos": "noun",
+      "definition": "A person who believes war and violence are wrong."
+    },
+    {
+      "word": "violence",
+      "pos": "noun",
+      "definition": "Physical force used to hurt or damage."
+    },
+    {
+      "word": "vegetarian",
+      "pos": "noun",
+      "definition": "A person who does not eat meat."
+    },
+    {
+      "word": "vegetables",
+      "pos": "noun",
+      "definition": "Plants or parts of plants eaten as food."
+    },
+    {
+      "word": "salad",
+      "pos": "noun",
+      "definition": "A dish of raw vegetables."
+    },
+    {
+      "word": "health",
+      "pos": "noun",
+      "definition": "The condition of the body and mind."
+    },
+    {
+      "word": "meat",
+      "pos": "noun",
+      "definition": "The flesh of an animal eaten as food."
+    },
+    {
+      "word": "diet",
+      "pos": "noun",
+      "definition": "The kinds of food a person usually eats."
+    },
+    {
+      "word": "traitor",
+      "pos": "noun",
+      "definition": "A person who betrays their country, friends, or cause."
+    },
+    {
+      "word": "loyalty",
+      "pos": "noun",
+      "definition": "Faithfulness to a person, group, or cause."
+    },
+    {
+      "word": "liar",
+      "pos": "noun",
+      "definition": "A person who tells lies."
+    },
+    {
+      "word": "deception",
+      "pos": "noun",
+      "definition": "The act of tricking or misleading someone."
+    },
+    {
+      "word": "honesty",
+      "pos": "noun",
+      "definition": "The quality of telling the truth."
+    },
+    {
+      "word": "plumber",
+      "pos": "noun",
+      "definition": "A person who installs and repairs water pipes."
+    },
+    {
+      "word": "pipes",
+      "pos": "noun",
+      "definition": "Tubes that carry water or gas."
+    },
+    {
+      "word": "electrician",
+      "pos": "noun",
+      "definition": "A person who installs and repairs electrical wiring."
+    },
+    {
+      "word": "lightning",
+      "pos": "noun",
+      "definition": "A flash of light in the sky caused by electricity in a storm."
+    },
+    {
+      "word": "voltage",
+      "pos": "noun",
+      "definition": "The force of an electric current, measured in volts."
+    },
+    {
+      "word": "wiring",
+      "pos": "noun",
+      "definition": "The system of wires that carries electricity in a building."
+    },
+    {
+      "word": "tailor",
+      "pos": "noun",
+      "definition": "A person who makes or alters clothes."
+    },
+    {
+      "word": "suit",
+      "pos": "noun",
+      "definition": "A matching jacket and pants or skirt."
+    },
+    {
+      "word": "jeweler",
+      "pos": "noun",
+      "definition": "A person who makes or sells jewelry."
+    },
+    {
+      "word": "diamond",
+      "pos": "noun",
+      "definition": "A very hard, clear, valuable gemstone."
+    },
+    {
+      "word": "necklace",
+      "pos": "noun",
+      "definition": "A piece of jewelry worn around the neck."
+    },
+    {
+      "word": "wrist",
+      "pos": "noun",
+      "definition": "The joint between the hand and the arm."
+    },
+    {
+      "word": "geologist",
+      "pos": "noun",
+      "definition": "A scientist who studies rocks and the Earth's structure."
+    },
+    {
+      "word": "rocks",
+      "pos": "noun",
+      "definition": "Hard pieces of stone."
+    },
+    {
+      "word": "meteorologist",
+      "pos": "noun",
+      "definition": "A scientist who studies and forecasts the weather."
+    },
+    {
+      "word": "meteors",
+      "pos": "noun",
+      "definition": "Rocks from space that burn up as streaks of light in the sky."
+    },
+    {
+      "word": "pediatrician",
+      "pos": "noun",
+      "definition": "A doctor who treats children."
+    },
+    {
+      "word": "children",
+      "pos": "noun",
+      "definition": "Young people."
+    },
+    {
+      "word": "veterinarian",
+      "pos": "noun",
+      "definition": "A doctor who treats animals."
+    },
+    {
+      "word": "veterans",
+      "pos": "noun",
+      "definition": "People who have served in the armed forces."
+    },
+    {
+      "word": "plants",
+      "pos": "noun",
+      "definition": "Living things such as trees, grass, and flowers."
+    },
+    {
+      "word": "animals",
+      "pos": "noun",
+      "definition": "Living things that can move and eat, such as dogs and birds."
+    },
+    {
+      "word": "dentist",
+      "pos": "noun",
+      "definition": "A doctor who cares for teeth."
+    },
+    {
+      "word": "optometrist",
+      "pos": "noun",
+      "definition": "A professional who examines eyes and prescribes glasses."
+    },
+    {
+      "word": "feet",
+      "pos": "noun",
+      "definition": "The parts of the legs we stand on."
+    },
+    {
+      "word": "bones",
+      "pos": "noun",
+      "definition": "The hard parts that make up the skeleton."
+    },
+    {
+      "word": "skin",
+      "pos": "noun",
+      "definition": "The outer covering of the body."
+    },
+    {
+      "word": "mayor",
+      "pos": "noun",
+      "definition": "The elected leader of a city or town."
+    },
+    {
+      "word": "governor",
+      "pos": "noun",
+      "definition": "The elected leader of a state."
+    },
+    {
+      "word": "senate",
+      "pos": "noun",
+      "definition": "A lawmaking body, such as the upper house of Congress."
+    },
+    {
+      "word": "county",
+      "pos": "noun",
+      "definition": "A division of a state with its own local government."
+    },
+    {
+      "word": "abridge",
+      "pos": "verb",
+      "definition": "To shorten a book or text while keeping its meaning."
+    },
+    {
+      "word": "shorten",
+      "pos": "verb",
+      "definition": "To make shorter."
+    },
+    {
+      "word": "amplify",
+      "pos": "verb",
+      "definition": "To make louder or stronger."
+    },
+    {
+      "word": "shrink",
+      "pos": "verb",
+      "definition": "To become smaller."
+    },
+    {
+      "word": "intensify",
+      "pos": "verb",
+      "definition": "To make stronger or more extreme."
+    },
+    {
+      "word": "speaker",
+      "pos": "noun",
+      "definition": "A person who speaks; also a device that plays sound."
+    },
+    {
+      "word": "record",
+      "pos": "verb",
+      "definition": "To store sound or information to use later."
+    },
+    {
+      "word": "worsen",
+      "pos": "verb",
+      "definition": "To make or become worse."
+    },
+    {
+      "word": "accelerate",
+      "pos": "verb",
+      "definition": "To speed up."
+    },
+    {
+      "word": "hurry",
+      "pos": "verb",
+      "definition": "To move or act quickly."
+    },
+    {
+      "word": "drive",
+      "pos": "verb",
+      "definition": "To operate a vehicle."
+    },
+    {
+      "word": "race",
+      "pos": "noun",
+      "definition": "A competition of speed."
+    },
+    {
+      "word": "commence",
+      "pos": "verb",
+      "definition": "To begin."
+    },
+    {
+      "word": "begin",
+      "pos": "verb",
+      "definition": "To start."
+    },
+    {
+      "word": "cease",
+      "pos": "verb",
+      "definition": "To stop."
+    },
+    {
+      "word": "continue",
+      "pos": "verb",
+      "definition": "To keep going."
+    },
+    {
+      "word": "delay",
+      "pos": "verb",
+      "definition": "To put off until later."
+    },
+    {
+      "word": "stop",
+      "pos": "verb",
+      "definition": "To come to an end; to halt."
+    },
+    {
+      "word": "repeat",
+      "pos": "verb",
+      "definition": "To do or say again."
+    },
+    {
+      "word": "increase",
+      "pos": "verb",
+      "definition": "To become greater."
+    },
+    {
+      "word": "decrease",
+      "pos": "verb",
+      "definition": "To become smaller or fewer."
+    },
+    {
+      "word": "maintain",
+      "pos": "verb",
+      "definition": "To keep in good condition or at the same level."
+    },
+    {
+      "word": "rash",
+      "pos": "adj",
+      "definition": "Acting too quickly without thinking. (As a noun, a red, itchy patch on the skin.)"
+    },
+    {
+      "word": "itchy",
+      "pos": "adj",
+      "definition": "Making you want to scratch."
+    },
+    {
+      "word": "nocturnal",
+      "pos": "adj",
+      "definition": "Active at night."
+    },
+    {
+      "word": "diurnal",
+      "pos": "adj",
+      "definition": "Active during the day."
+    },
+    {
+      "word": "evening",
+      "pos": "noun",
+      "definition": "The end of the day, around sunset."
+    },
+    {
+      "word": "owl",
+      "pos": "noun",
+      "definition": "A bird of prey that hunts at night."
+    },
+    {
+      "word": "day",
+      "pos": "noun",
+      "definition": "The time between sunrise and sunset."
+    },
+    {
+      "word": "herbivore",
+      "pos": "noun",
+      "definition": "An animal that eats only plants."
+    },
+    {
+      "word": "carnivore",
+      "pos": "noun",
+      "definition": "An animal that eats meat."
+    },
+    {
+      "word": "carnival",
+      "pos": "noun",
+      "definition": "A traveling fair with rides and games."
+    },
+    {
+      "word": "grass",
+      "pos": "noun",
+      "definition": "A common green plant with thin leaves."
+    },
+    {
+      "word": "hunter",
+      "pos": "noun",
+      "definition": "A person or animal that hunts."
+    },
+    {
+      "word": "amphibian",
+      "pos": "noun",
+      "definition": "A cold-blooded animal, such as a frog, that lives both in water and on land."
+    },
+    {
+      "word": "reptile",
+      "pos": "noun",
+      "definition": "A cold-blooded animal with scales, such as a lizard or snake."
+    },
+    {
+      "word": "toad",
+      "pos": "noun",
+      "definition": "An amphibian like a frog, with dry, bumpy skin."
+    },
+    {
+      "word": "salamander",
+      "pos": "noun",
+      "definition": "An amphibian with a lizard-like body and moist skin."
+    },
+    {
+      "word": "lizard",
+      "pos": "noun",
+      "definition": "A reptile with four legs, scaly skin, and a long tail."
+    },
+    {
+      "word": "mammal",
+      "pos": "noun",
+      "definition": "A warm-blooded animal that feeds its young with milk."
+    },
+    {
+      "word": "whale",
+      "pos": "noun",
+      "definition": "A very large sea mammal that breathes air."
+    },
+    {
+      "word": "bat",
+      "pos": "noun",
+      "definition": "A flying mammal that is active at night."
+    },
+    {
+      "word": "penguin",
+      "pos": "noun",
+      "definition": "A black-and-white seabird that cannot fly but swims well."
+    },
+    {
+      "word": "fly",
+      "pos": "noun",
+      "definition": "A small flying insect; (verb) to move through the air."
+    },
+    {
+      "word": "kite",
+      "pos": "noun",
+      "definition": "A light frame covered with paper or cloth, flown in the wind on a string."
+    },
+    {
+      "word": "triangle",
+      "pos": "noun",
+      "definition": "A shape with three sides."
+    },
+    {
+      "word": "three",
+      "pos": "noun",
+      "definition": "The number 3."
+    },
+    {
+      "word": "hexagon",
+      "pos": "noun",
+      "definition": "A shape with six sides."
+    },
+    {
+      "word": "five",
+      "pos": "noun",
+      "definition": "The number 5."
+    },
+    {
+      "word": "eight",
+      "pos": "noun",
+      "definition": "The number 8."
+    },
+    {
+      "word": "seven",
+      "pos": "noun",
+      "definition": "The number 7."
+    },
+    {
+      "word": "four",
+      "pos": "noun",
+      "definition": "The number 4."
+    },
+    {
+      "word": "six",
+      "pos": "noun",
+      "definition": "The number 6."
+    },
+    {
+      "word": "circle",
+      "pos": "noun",
+      "definition": "A round, flat shape."
+    },
+    {
+      "word": "sphere",
+      "pos": "noun",
+      "definition": "A round, solid shape like a ball."
+    },
+    {
+      "word": "square",
+      "pos": "noun",
+      "definition": "A flat shape with four equal sides and four right angles."
+    },
+    {
+      "word": "rectangle",
+      "pos": "noun",
+      "definition": "A flat shape with four right angles and opposite sides equal."
+    },
+    {
+      "word": "pyramid",
+      "pos": "noun",
+      "definition": "A solid shape with a flat base and triangular sides meeting at a point."
+    },
+    {
+      "word": "cube",
+      "pos": "noun",
+      "definition": "A solid shape with six equal square faces."
+    },
+    {
+      "word": "angle",
+      "pos": "noun",
+      "definition": "The space between two lines that meet at a point."
+    },
+    {
+      "word": "line",
+      "pos": "noun",
+      "definition": "A long, thin mark; in a poem, one row of words."
+    },
+    {
+      "word": "addition",
+      "pos": "noun",
+      "definition": "Putting numbers together to find a total."
+    },
+    {
+      "word": "sum",
+      "pos": "noun",
+      "definition": "The result of adding numbers."
+    },
+    {
+      "word": "multiplication",
+      "pos": "noun",
+      "definition": "Adding a number to itself a certain number of times."
+    },
+    {
+      "word": "product",
+      "pos": "noun",
+      "definition": "The result of multiplying numbers; also something that is made."
+    },
+    {
+      "word": "quotient",
+      "pos": "noun",
+      "definition": "The result of dividing one number by another."
+    },
+    {
+      "word": "difference",
+      "pos": "noun",
+      "definition": "The result of subtracting one number from another."
+    },
+    {
+      "word": "total",
+      "pos": "noun",
+      "definition": "The whole amount."
+    },
+    {
+      "word": "number",
+      "pos": "noun",
+      "definition": "A word or symbol that shows an amount."
+    },
+    {
+      "word": "lane",
+      "pos": "noun",
+      "definition": "A narrow road, or one strip of a road for a single line of traffic."
+    },
+    {
+      "word": "shoulder",
+      "pos": "noun",
+      "definition": "The strip along the edge of a road; also the joint where the arm meets the body."
+    },
+    {
+      "word": "thermostat",
+      "pos": "noun",
+      "definition": "A device that controls the temperature of a room or machine."
+    },
+    {
+      "word": "dimmer",
+      "pos": "noun",
+      "definition": "A switch that controls the brightness of a light."
+    },
+    {
+      "word": "switch",
+      "pos": "noun",
+      "definition": "A device that turns electricity on or off."
+    },
+    {
+      "word": "brightness",
+      "pos": "noun",
+      "definition": "How bright something is."
+    },
+    {
+      "word": "pond",
+      "pos": "noun",
+      "definition": "A small body of still water."
+    },
+    {
+      "word": "lake",
+      "pos": "noun",
+      "definition": "A large body of water surrounded by land."
+    },
+    {
+      "word": "slope",
+      "pos": "noun",
+      "definition": "A surface where one end is higher than the other."
+    },
+    {
+      "word": "rock",
+      "pos": "noun",
+      "definition": "A hard piece of stone."
+    },
+    {
+      "word": "cliff",
+      "pos": "noun",
+      "definition": "A steep rock face, often at the edge of the sea."
+    },
+    {
+      "word": "branch",
+      "pos": "noun",
+      "definition": "A part of a tree that grows out from the trunk."
+    },
+    {
+      "word": "pebble",
+      "pos": "noun",
+      "definition": "A small, smooth stone."
+    },
+    {
+      "word": "path",
+      "pos": "noun",
+      "definition": "A narrow track for walking."
+    },
+    {
+      "word": "boulder",
+      "pos": "noun",
+      "definition": "A very large rock."
+    },
+    {
+      "word": "dust",
+      "pos": "noun",
+      "definition": "Fine, dry particles of dirt."
+    },
+    {
+      "word": "mansion",
+      "pos": "noun",
+      "definition": "A very large, grand house."
+    },
+    {
+      "word": "yacht",
+      "pos": "noun",
+      "definition": "A large, often luxurious boat used for pleasure."
+    },
+    {
+      "word": "canoe",
+      "pos": "noun",
+      "definition": "A light, narrow boat moved with paddles."
+    },
+    {
+      "word": "volcano",
+      "pos": "noun",
+      "definition": "A mountain with an opening through which lava, ash, and gas erupt."
+    },
+    {
+      "word": "crater",
+      "pos": "noun",
+      "definition": "A bowl-shaped hole, such as at the top of a volcano."
+    },
+    {
+      "word": "lava",
+      "pos": "noun",
+      "definition": "Hot, melted rock that flows from a volcano."
+    },
+    {
+      "word": "candle",
+      "pos": "noun",
+      "definition": "A stick of wax with a wick that is burned for light."
+    },
+    {
+      "word": "wax",
+      "pos": "noun",
+      "definition": "A soft substance that melts easily, used to make candles."
+    },
+    {
+      "word": "rubber",
+      "pos": "noun",
+      "definition": "A stretchy material used to make tires and erasers."
+    },
+    {
+      "word": "spare",
+      "pos": "noun",
+      "definition": "An extra item kept in case it is needed, such as a spare tire."
+    },
+    {
+      "word": "sow",
+      "pos": "verb",
+      "definition": "To plant seeds."
+    },
+    {
+      "word": "reap",
+      "pos": "verb",
+      "definition": "To cut and gather a crop; to receive a result."
+    },
+    {
+      "word": "spend",
+      "pos": "verb",
+      "definition": "To pay out money."
+    },
+    {
+      "word": "lose",
+      "pos": "verb",
+      "definition": "To fail to win; to no longer have."
+    },
+    {
+      "word": "risk",
+      "pos": "noun",
+      "definition": "The chance of loss or danger."
+    },
+    {
+      "word": "profit",
+      "pos": "noun",
+      "definition": "Money gained beyond what was spent."
+    },
+    {
+      "word": "excerpt",
+      "pos": "noun",
+      "definition": "A short passage taken from a book, film, or piece of music."
+    },
+    {
+      "word": "clip",
+      "pos": "noun",
+      "definition": "A short part taken from a film or video."
+    },
+    {
+      "word": "movie",
+      "pos": "noun",
+      "definition": "A story recorded as moving pictures; a film."
+    },
+    {
+      "word": "syllable",
+      "pos": "noun",
+      "definition": "A single unit of sound in a word."
+    },
+    {
+      "word": "note",
+      "pos": "noun",
+      "definition": "A single musical sound; also a short written message."
+    },
+    {
+      "word": "melody",
+      "pos": "noun",
+      "definition": "A series of musical notes that make a tune."
+    },
+    {
+      "word": "reminder",
+      "pos": "noun",
+      "definition": "Something that helps a person remember."
+    },
+    {
+      "word": "stanza",
+      "pos": "noun",
+      "definition": "A group of lines forming a section of a poem."
+    },
+    {
+      "word": "rhyme",
+      "pos": "noun",
+      "definition": "Words that end with the same sound."
+    },
+    {
+      "word": "atom",
+      "pos": "noun",
+      "definition": "The smallest unit of a chemical element."
+    },
+    {
+      "word": "molecule",
+      "pos": "noun",
+      "definition": "A group of atoms bonded together."
+    },
+    {
+      "word": "cell",
+      "pos": "noun",
+      "definition": "The smallest unit of a living thing."
+    },
+    {
+      "word": "nucleus",
+      "pos": "noun",
+      "definition": "The central part of a cell or atom."
+    },
+    {
+      "word": "tissue",
+      "pos": "noun",
+      "definition": "A group of similar cells that work together in the body."
+    },
+    {
+      "word": "biology",
+      "pos": "noun",
+      "definition": "The science of living things."
+    },
+    {
+      "word": "membrane",
+      "pos": "noun",
+      "definition": "A thin layer of tissue that covers or lines a cell or organ."
+    },
+    {
+      "word": "archive",
+      "pos": "noun",
+      "definition": "A place where historical records and documents are stored."
+    },
+    {
+      "word": "records",
+      "pos": "noun",
+      "definition": "Written accounts or documents kept for future use."
+    },
+    {
+      "word": "librarian",
+      "pos": "noun",
+      "definition": "A person who works in or manages a library."
+    },
+    {
+      "word": "pantry",
+      "pos": "noun",
+      "definition": "A small room or closet where food is stored."
+    },
+    {
+      "word": "file",
+      "pos": "noun",
+      "definition": "A folder or collection of papers or data."
+    },
+    {
+      "word": "folder",
+      "pos": "noun",
+      "definition": "A folded cover used to hold loose papers."
+    },
+    {
+      "word": "drawer",
+      "pos": "noun",
+      "definition": "A box-like container that slides in and out of furniture."
+    },
+    {
+      "word": "blizzard",
+      "pos": "noun",
+      "definition": "A severe snowstorm with strong winds."
+    },
+    {
+      "word": "sleet",
+      "pos": "noun",
+      "definition": "Rain that partly freezes as it falls."
+    },
+    {
+      "word": "sentry",
+      "pos": "noun",
+      "definition": "A soldier who stands guard."
+    },
+    {
+      "word": "guard",
+      "pos": "verb",
+      "definition": "To watch over and protect."
+    },
+    {
+      "word": "uniform",
+      "pos": "noun",
+      "definition": "Matching clothing worn by members of a group, such as soldiers."
+    },
+    {
+      "word": "fort",
+      "pos": "noun",
+      "definition": "A strong building used for military defense."
+    },
+    {
+      "word": "spy",
+      "pos": "noun",
+      "definition": "A person who secretly gathers information about an enemy."
+    },
+    {
+      "word": "scout",
+      "pos": "noun",
+      "definition": "A soldier sent ahead to gather information about the area or enemy."
+    },
+    {
+      "word": "explore",
+      "pos": "verb",
+      "definition": "To travel through an area to learn about it."
+    },
+    {
+      "word": "medic",
+      "pos": "noun",
+      "definition": "A person trained to give medical help, especially in the military."
+    },
+    {
+      "word": "bandage",
+      "pos": "noun",
+      "definition": "A strip of cloth used to cover a wound."
+    },
+    {
+      "word": "amateur",
+      "pos": "noun",
+      "definition": "A person who does something for enjoyment rather than pay; a beginner."
+    },
+    {
+      "word": "professional",
+      "pos": "noun",
+      "definition": "A person paid for skilled work; an expert."
+    },
+    {
+      "word": "apprentice",
+      "pos": "noun",
+      "definition": "A person learning a trade from a skilled worker."
+    },
+    {
+      "word": "master",
+      "pos": "noun",
+      "definition": "A highly skilled worker who teaches others."
+    },
+    {
+      "word": "worker",
+      "pos": "noun",
+      "definition": "A person who works."
+    },
+    {
+      "word": "factory",
+      "pos": "noun",
+      "definition": "A building where goods are made by machines."
+    },
+    {
+      "word": "soil",
+      "pos": "noun",
+      "definition": "The top layer of earth in which plants grow."
+    },
+    {
+      "word": "freezing",
+      "pos": "adj",
+      "definition": "Very cold; at or below the temperature at which water turns to ice."
+    },
+    {
+      "word": "wet",
+      "pos": "adj",
+      "definition": "Covered with water or liquid."
+    },
+    {
+      "word": "damp",
+      "pos": "adj",
+      "definition": "Slightly wet."
+    },
+    {
+      "word": "soaked",
+      "pos": "adj",
+      "definition": "Completely wet."
+    },
+    {
+      "word": "lifeguard",
+      "pos": "noun",
+      "definition": "A person who watches over swimmers and rescues them if needed."
+    },
+    {
+      "word": "swimmer",
+      "pos": "noun",
+      "definition": "A person who swims."
+    },
+    {
+      "word": "shepherd",
+      "pos": "noun",
+      "definition": "A person who takes care of sheep."
+    },
+    {
+      "word": "pool",
+      "pos": "noun",
+      "definition": "A tank of water for swimming."
+    },
+    {
+      "word": "fisherman",
+      "pos": "noun",
+      "definition": "A person who catches fish."
+    },
+    {
+      "word": "jungle",
+      "pos": "noun",
+      "definition": "A thick tropical forest."
+    },
+    {
+      "word": "rainforest",
+      "pos": "noun",
+      "definition": "A thick forest with heavy rainfall all year."
+    },
+    {
+      "word": "humid",
+      "pos": "adj",
+      "definition": "Having a lot of moisture in the air."
+    },
+    {
+      "word": "tundra",
+      "pos": "noun",
+      "definition": "A cold, treeless plain in the far north."
+    },
+    {
+      "word": "starve",
+      "pos": "verb",
+      "definition": "To suffer or die from lack of food."
+    },
+    {
+      "word": "suffocate",
+      "pos": "verb",
+      "definition": "To be unable to breathe; to die from lack of air."
+    },
+    {
+      "word": "breathe",
+      "pos": "verb",
+      "definition": "To take air into the lungs and let it out."
+    },
+    {
+      "word": "orchard",
+      "pos": "noun",
+      "definition": "A piece of land where fruit trees are grown."
+    },
+    {
+      "word": "fruit",
+      "pos": "noun",
+      "definition": "The sweet part of a plant that holds seeds, such as an apple."
+    },
+    {
+      "word": "shovel",
+      "pos": "noun",
+      "definition": "A tool with a broad blade for digging."
+    },
+    {
+      "word": "field",
+      "pos": "noun",
+      "definition": "An open area of land, often used for crops."
+    },
+    {
+      "word": "fence",
+      "pos": "noun",
+      "definition": "A barrier around an area of land."
+    },
+    {
+      "word": "barn",
+      "pos": "noun",
+      "definition": "A farm building for storing hay or housing animals."
+    },
+    {
+      "word": "hay",
+      "pos": "noun",
+      "definition": "Dried grass used as animal feed."
+    },
+    {
+      "word": "vineyard",
+      "pos": "noun",
+      "definition": "A farm where grapes are grown."
+    },
+    {
+      "word": "grapes",
+      "pos": "noun",
+      "definition": "Small, round fruits that grow in bunches on vines."
+    },
+    {
+      "word": "wheel",
+      "pos": "noun",
+      "definition": "A round frame that turns on an axle, as on a car or bicycle."
     }
   ]
 }

@@ -818,6 +818,1787 @@
       ],
       "answer": 1,
       "explanation": "A group and the people who make it up."
+    },
+    {
+      "id": "VA-064",
+      "prompt": "TELESCOPE is to ASTRONOMER as",
+      "choices": [
+        "lens is to camera",
+        "microscope is to biologist",
+        "star is to sky",
+        "glasses is to eyes",
+        "laboratory is to scientist"
+      ],
+      "answer": 1,
+      "explanation": "An astronomer studies with a telescope; a biologist studies with a microscope."
+    },
+    {
+      "id": "VA-065",
+      "prompt": "FLEET is to SHIPS as CONSTELLATION is to",
+      "choices": [
+        "sky",
+        "planets",
+        "night",
+        "telescope",
+        "stars"
+      ],
+      "answer": 4,
+      "explanation": "A fleet is a group of ships; a constellation is a group of stars."
+    },
+    {
+      "id": "VA-066",
+      "prompt": "LIEUTENANT is to CAPTAIN as CAPTAIN is to",
+      "choices": [
+        "colonel",
+        "general",
+        "major",
+        "sergeant",
+        "private"
+      ],
+      "answer": 2,
+      "explanation": "In the Air Force, each rank is the next one up: lieutenant, then captain, then major."
+    },
+    {
+      "id": "VA-067",
+      "prompt": "AIRMAN is to AIR FORCE as SAILOR is to",
+      "choices": [
+        "navy",
+        "ocean",
+        "ship",
+        "marine",
+        "captain"
+      ],
+      "answer": 0,
+      "explanation": "An airman serves in the Air Force; a sailor serves in the Navy."
+    },
+    {
+      "id": "VA-068",
+      "prompt": "HELMET is to HEAD as THIMBLE is to",
+      "choices": [
+        "needle",
+        "sewing",
+        "hand",
+        "finger",
+        "thread"
+      ],
+      "answer": 3,
+      "explanation": "A helmet protects the head; a thimble protects a finger."
+    },
+    {
+      "id": "VA-069",
+      "prompt": "ARCHIPELAGO is to ISLANDS as RANGE is to",
+      "choices": [
+        "valley",
+        "mountains",
+        "peak",
+        "distance",
+        "plains"
+      ],
+      "answer": 1,
+      "explanation": "An archipelago is a chain of islands; a range is a chain of mountains."
+    },
+    {
+      "id": "VA-070",
+      "prompt": "MEAGER is to ABUNDANT as FEEBLE is to",
+      "choices": [
+        "weak",
+        "frail",
+        "tired",
+        "small",
+        "mighty"
+      ],
+      "answer": 4,
+      "explanation": "Meager is the opposite of abundant; feeble is the opposite of mighty."
+    },
+    {
+      "id": "VA-071",
+      "prompt": "ELATED is to MISERABLE as CALM is to",
+      "choices": [
+        "peaceful",
+        "quiet",
+        "agitated",
+        "sleepy",
+        "still"
+      ],
+      "answer": 2,
+      "explanation": "The words in each pair are opposites. Calm is the opposite of agitated."
+    },
+    {
+      "id": "VA-072",
+      "prompt": "WHISPER is to SHOUT as TAP is to",
+      "choices": [
+        "pound",
+        "knock",
+        "door",
+        "finger",
+        "quiet"
+      ],
+      "answer": 0,
+      "explanation": "A shout is a much stronger whisper; a pound is a much stronger tap."
+    },
+    {
+      "id": "VA-073",
+      "prompt": "CHUCKLE is to GUFFAW as SIP is to",
+      "choices": [
+        "drink",
+        "cup",
+        "taste",
+        "gulp",
+        "thirst"
+      ],
+      "answer": 3,
+      "explanation": "A guffaw is a big, loud chuckle; a gulp is a big, fast sip."
+    },
+    {
+      "id": "VA-074",
+      "prompt": "ORNITHOLOGIST is to BIRDS as ENTOMOLOGIST is to",
+      "choices": [
+        "words",
+        "insects",
+        "fossils",
+        "stars",
+        "fish"
+      ],
+      "answer": 1,
+      "explanation": "An ornithologist studies birds; an entomologist studies insects. (Etymology, not entomology, is the study of words.)"
+    },
+    {
+      "id": "VA-075",
+      "prompt": "CARTOGRAPHER is to MAPS as LEXICOGRAPHER is to",
+      "choices": [
+        "charts",
+        "letters",
+        "photographs",
+        "novels",
+        "dictionaries"
+      ],
+      "answer": 4,
+      "explanation": "A cartographer makes maps; a lexicographer makes dictionaries."
+    },
+    {
+      "id": "VA-076",
+      "prompt": "BAKER is to BREAD as COBBLER is to",
+      "choices": [
+        "pie",
+        "leather",
+        "shoes",
+        "hammer",
+        "store"
+      ],
+      "answer": 2,
+      "explanation": "A baker makes bread; a cobbler makes and repairs shoes. Leather is a material, not the product."
+    },
+    {
+      "id": "VA-077",
+      "prompt": "AUTHOR is to NOVEL as PLAYWRIGHT is to",
+      "choices": [
+        "play",
+        "actor",
+        "stage",
+        "theater",
+        "audience"
+      ],
+      "answer": 0,
+      "explanation": "An author writes a novel; a playwright writes a play."
+    },
+    {
+      "id": "VA-078",
+      "prompt": "BARK is to TREE as RIND is to",
+      "choices": [
+        "seed",
+        "juice",
+        "vine",
+        "melon",
+        "slice"
+      ],
+      "answer": 3,
+      "explanation": "Bark is the tough outer covering of a tree; rind is the tough outer covering of a melon."
+    },
+    {
+      "id": "VA-079",
+      "prompt": "CHAPTER is to BOOK as SCENE is to",
+      "choices": [
+        "actor",
+        "play",
+        "stage",
+        "curtain",
+        "audience"
+      ],
+      "answer": 1,
+      "explanation": "A chapter is one section of a book; a scene is one section of a play."
+    },
+    {
+      "id": "VA-080",
+      "prompt": "OVEN is to BAKE as FREEZER is to",
+      "choices": [
+        "kitchen",
+        "cold",
+        "ice",
+        "refrigerator",
+        "freeze"
+      ],
+      "answer": 4,
+      "explanation": "An oven is used to bake; a freezer is used to freeze. Cold and ice describe it but are not the action."
+    },
+    {
+      "id": "VA-081",
+      "prompt": "ANEMOMETER is to WIND SPEED as BAROMETER is to",
+      "choices": [
+        "rainfall",
+        "temperature",
+        "air pressure",
+        "humidity",
+        "altitude"
+      ],
+      "answer": 2,
+      "explanation": "An anemometer measures wind speed; a barometer measures air pressure."
+    },
+    {
+      "id": "VA-082",
+      "prompt": "PROPELLER is to AIRPLANE as OAR is to",
+      "choices": [
+        "rowboat",
+        "sail",
+        "water",
+        "anchor",
+        "dock"
+      ],
+      "answer": 0,
+      "explanation": "A propeller moves an airplane forward; an oar moves a rowboat forward."
+    },
+    {
+      "id": "VA-083",
+      "prompt": "WING is to LIFT as ENGINE is to",
+      "choices": [
+        "fuel",
+        "drag",
+        "weight",
+        "thrust",
+        "speed"
+      ],
+      "answer": 3,
+      "explanation": "A wing produces lift; an engine produces thrust. Lift, thrust, drag, and weight are the four forces of flight."
+    },
+    {
+      "id": "VA-084",
+      "prompt": "NOSE is to SMELL as TONGUE is to",
+      "choices": [
+        "mouth",
+        "taste",
+        "teeth",
+        "speak",
+        "lick"
+      ],
+      "answer": 1,
+      "explanation": "The nose is the organ of smell; the tongue is the organ of taste."
+    },
+    {
+      "id": "VA-085",
+      "prompt": "RADAR is to DETECT as RADIO is to",
+      "choices": [
+        "antenna",
+        "music",
+        "signal",
+        "tower",
+        "communicate"
+      ],
+      "answer": 4,
+      "explanation": "Radar is used to detect; a radio is used to communicate."
+    },
+    {
+      "id": "VA-086",
+      "prompt": "COCKPIT is to PILOT as GALLEY is to",
+      "choices": [
+        "ship",
+        "kitchen",
+        "cook",
+        "food",
+        "sailor"
+      ],
+      "answer": 2,
+      "explanation": "A pilot works in the cockpit; a cook works in the galley (a ship's or aircraft's kitchen)."
+    },
+    {
+      "id": "VA-087",
+      "prompt": "BARRACKS is to SOLDIERS as DORMITORY is to",
+      "choices": [
+        "students",
+        "college",
+        "beds",
+        "teachers",
+        "campus"
+      ],
+      "answer": 0,
+      "explanation": "Soldiers live in barracks; students live in a dormitory."
+    },
+    {
+      "id": "VA-088",
+      "prompt": "SALUTE is to RESPECT as NOD is to",
+      "choices": [
+        "head",
+        "sleep",
+        "question",
+        "agreement",
+        "anger"
+      ],
+      "answer": 3,
+      "explanation": "A salute is a gesture that shows respect; a nod is a gesture that shows agreement."
+    },
+    {
+      "id": "VA-089",
+      "prompt": "HERD is to CATTLE as PRIDE is to",
+      "choices": [
+        "wolves",
+        "lions",
+        "geese",
+        "ants",
+        "fish"
+      ],
+      "answer": 1,
+      "explanation": "A group of cattle is a herd; a group of lions is a pride."
+    },
+    {
+      "id": "VA-090",
+      "prompt": "COLONY is to ANTS as POD is to",
+      "choices": [
+        "wolves",
+        "birds",
+        "horses",
+        "bees",
+        "whales"
+      ],
+      "answer": 4,
+      "explanation": "A group of ants is a colony; a group of whales is a pod."
+    },
+    {
+      "id": "VA-091",
+      "prompt": "PUPPY is to DOG as FOAL is to",
+      "choices": [
+        "cow",
+        "sheep",
+        "horse",
+        "goat",
+        "deer"
+      ],
+      "answer": 2,
+      "explanation": "A puppy is a young dog; a foal is a young horse."
+    },
+    {
+      "id": "VA-092",
+      "prompt": "CUB is to BEAR as KID is to",
+      "choices": [
+        "goat",
+        "child",
+        "sheep",
+        "calf",
+        "lamb"
+      ],
+      "answer": 0,
+      "explanation": "A cub is a young bear; a kid is a young goat."
+    },
+    {
+      "id": "VA-093",
+      "prompt": "ACORN is to OAK as BULB is to",
+      "choices": [
+        "lamp",
+        "light",
+        "root",
+        "tulip",
+        "garden"
+      ],
+      "answer": 3,
+      "explanation": "An oak grows from an acorn; a tulip grows from a bulb. Lamp and light use the other meaning of bulb."
+    },
+    {
+      "id": "VA-094",
+      "prompt": "GRAM is to KILOGRAM as MILLILITER is to",
+      "choices": [
+        "gallon",
+        "liter",
+        "ounce",
+        "meter",
+        "water"
+      ],
+      "answer": 1,
+      "explanation": "A kilogram is 1,000 grams; a liter is 1,000 milliliters."
+    },
+    {
+      "id": "VA-095",
+      "prompt": "DECADE is to CENTURY as CENTURY is to",
+      "choices": [
+        "year",
+        "decade",
+        "era",
+        "age",
+        "millennium"
+      ],
+      "answer": 4,
+      "explanation": "Ten decades make a century; ten centuries make a millennium."
+    },
+    {
+      "id": "VA-096",
+      "prompt": "QUART is to GALLON as QUARTER is to",
+      "choices": [
+        "dime",
+        "cent",
+        "dollar",
+        "coin",
+        "money"
+      ],
+      "answer": 2,
+      "explanation": "A quart is one fourth of a gallon; a quarter is one fourth of a dollar."
+    },
+    {
+      "id": "VA-097",
+      "prompt": "TRANSPARENT is to OPAQUE as SMOOTH is to",
+      "choices": [
+        "rough",
+        "soft",
+        "glassy",
+        "flat",
+        "polished"
+      ],
+      "answer": 0,
+      "explanation": "Transparent is the opposite of opaque; smooth is the opposite of rough."
+    },
+    {
+      "id": "VA-098",
+      "prompt": "EPHEMERAL is to PERMANENT as SCARCE is to",
+      "choices": [
+        "rare",
+        "few",
+        "small",
+        "plentiful",
+        "empty"
+      ],
+      "answer": 3,
+      "explanation": "Ephemeral (short-lived) is the opposite of permanent; scarce is the opposite of plentiful."
+    },
+    {
+      "id": "VA-099",
+      "prompt": "BENEVOLENT is to KIND as MALEVOLENT is to",
+      "choices": [
+        "generous",
+        "cruel",
+        "gentle",
+        "timid",
+        "tired"
+      ],
+      "answer": 1,
+      "explanation": "Benevolent means kind; malevolent means wishing harm, or cruel."
+    },
+    {
+      "id": "VA-100",
+      "prompt": "LETHARGIC is to ENERGETIC as GLOOMY is to",
+      "choices": [
+        "sad",
+        "cloudy",
+        "dark",
+        "quiet",
+        "cheerful"
+      ],
+      "answer": 4,
+      "explanation": "Lethargic is the opposite of energetic; gloomy is the opposite of cheerful."
+    },
+    {
+      "id": "VA-101",
+      "prompt": "ADVERSARY is to FOE as ALLY is to",
+      "choices": [
+        "enemy",
+        "rival",
+        "partner",
+        "battle",
+        "war"
+      ],
+      "answer": 2,
+      "explanation": "Adversary and foe mean the same thing; ally and partner mean the same thing."
+    },
+    {
+      "id": "VA-102",
+      "prompt": "CONCEAL is to HIDE as REVEAL is to",
+      "choices": [
+        "expose",
+        "cover",
+        "secret",
+        "bury",
+        "mask"
+      ],
+      "answer": 0,
+      "explanation": "Conceal means hide; reveal means expose."
+    },
+    {
+      "id": "VA-103",
+      "prompt": "ABUNDANT is to PLENTIFUL as RAPID is to",
+      "choices": [
+        "slow",
+        "river",
+        "steady",
+        "swift",
+        "late"
+      ],
+      "answer": 3,
+      "explanation": "Abundant and plentiful are synonyms; rapid and swift are synonyms."
+    },
+    {
+      "id": "VA-104",
+      "prompt": "INK is to PEN as GRAPHITE is to",
+      "choices": [
+        "paper",
+        "pencil",
+        "eraser",
+        "metal",
+        "drawing"
+      ],
+      "answer": 1,
+      "explanation": "A pen leaves a mark with ink; a pencil leaves a mark with graphite."
+    },
+    {
+      "id": "VA-105",
+      "prompt": "FUEL is to ENGINE as FOOD is to",
+      "choices": [
+        "hunger",
+        "stomach",
+        "kitchen",
+        "energy",
+        "body"
+      ],
+      "answer": 4,
+      "explanation": "Fuel powers an engine; food powers the body."
+    },
+    {
+      "id": "VA-106",
+      "prompt": "VACCINE is to DISEASE as SEATBELT is to",
+      "choices": [
+        "car",
+        "crash",
+        "injury",
+        "driver",
+        "buckle"
+      ],
+      "answer": 2,
+      "explanation": "A vaccine protects against disease; a seatbelt protects against injury. A seatbelt does not prevent the crash itself."
+    },
+    {
+      "id": "VA-107",
+      "prompt": "SPONGE is to ABSORB as MAGNET is to",
+      "choices": [
+        "attract",
+        "metal",
+        "iron",
+        "north",
+        "compass"
+      ],
+      "answer": 0,
+      "explanation": "A sponge's job is to absorb; a magnet's job is to attract."
+    },
+    {
+      "id": "VA-108",
+      "prompt": "SCISSORS is to CUT as NEEDLE is to",
+      "choices": [
+        "thread",
+        "sharp",
+        "cloth",
+        "sew",
+        "point"
+      ],
+      "answer": 3,
+      "explanation": "Scissors are used to cut; a needle is used to sew."
+    },
+    {
+      "id": "VA-109",
+      "prompt": "LADDER is to CLIMB as BRIDGE is to",
+      "choices": [
+        "river",
+        "cross",
+        "steel",
+        "build",
+        "toll"
+      ],
+      "answer": 1,
+      "explanation": "A ladder lets you climb; a bridge lets you cross."
+    },
+    {
+      "id": "VA-110",
+      "prompt": "CRUMB is to BREAD as SPLINTER is to",
+      "choices": [
+        "finger",
+        "tree",
+        "pain",
+        "saw",
+        "wood"
+      ],
+      "answer": 4,
+      "explanation": "A crumb is a tiny piece of bread; a splinter is a tiny piece of wood."
+    },
+    {
+      "id": "VA-111",
+      "prompt": "SHARD is to GLASS as FLAKE is to",
+      "choices": [
+        "winter",
+        "ice",
+        "snow",
+        "cold",
+        "ski"
+      ],
+      "answer": 2,
+      "explanation": "A shard is a small piece of glass; a flake is a small piece of snow."
+    },
+    {
+      "id": "VA-112",
+      "prompt": "HOOF is to HORSE as TALON is to",
+      "choices": [
+        "eagle",
+        "claw",
+        "feather",
+        "nest",
+        "sky"
+      ],
+      "answer": 0,
+      "explanation": "A horse has hooves on its feet; an eagle has talons on its feet."
+    },
+    {
+      "id": "VA-113",
+      "prompt": "HORSE is to STABLE as PIG is to",
+      "choices": [
+        "farm",
+        "mud",
+        "bacon",
+        "sty",
+        "piglet"
+      ],
+      "answer": 3,
+      "explanation": "A horse is kept in a stable; a pig is kept in a sty."
+    },
+    {
+      "id": "VA-114",
+      "prompt": "GLACIER is to ICE as DUNE is to",
+      "choices": [
+        "desert",
+        "sand",
+        "wind",
+        "hill",
+        "beach"
+      ],
+      "answer": 1,
+      "explanation": "A glacier is a huge mass of ice; a dune is a large mound of sand."
+    },
+    {
+      "id": "VA-115",
+      "prompt": "MOUNTAIN is to PEAK as WAVE is to",
+      "choices": [
+        "ocean",
+        "surf",
+        "trough",
+        "beach",
+        "crest"
+      ],
+      "answer": 4,
+      "explanation": "The peak is the top of a mountain; the crest is the top of a wave. The trough is the bottom."
+    },
+    {
+      "id": "VA-116",
+      "prompt": "CONDUCTOR is to ORCHESTRA as COACH is to",
+      "choices": [
+        "player",
+        "ball",
+        "team",
+        "stadium",
+        "game"
+      ],
+      "answer": 2,
+      "explanation": "A conductor leads an orchestra; a coach leads a team."
+    },
+    {
+      "id": "VA-117",
+      "prompt": "GENERAL is to ARMY as ADMIRAL is to",
+      "choices": [
+        "navy",
+        "ship",
+        "ocean",
+        "captain",
+        "sailor"
+      ],
+      "answer": 0,
+      "explanation": "A general is a top officer in the Army; an admiral is a top officer in the Navy."
+    },
+    {
+      "id": "VA-118",
+      "prompt": "REFEREE is to GAME as JUDGE is to",
+      "choices": [
+        "lawyer",
+        "prison",
+        "verdict",
+        "trial",
+        "jury"
+      ],
+      "answer": 3,
+      "explanation": "A referee oversees a game; a judge oversees a trial."
+    },
+    {
+      "id": "VA-119",
+      "prompt": "VERDICT is to JURY as DIAGNOSIS is to",
+      "choices": [
+        "patient",
+        "doctor",
+        "illness",
+        "hospital",
+        "medicine"
+      ],
+      "answer": 1,
+      "explanation": "A jury reaches a verdict; a doctor reaches a diagnosis."
+    },
+    {
+      "id": "VA-120",
+      "prompt": "POEM is to POET as STATUE is to",
+      "choices": [
+        "marble",
+        "museum",
+        "chisel",
+        "pedestal",
+        "sculptor"
+      ],
+      "answer": 4,
+      "explanation": "A poet creates a poem; a sculptor creates a statue."
+    },
+    {
+      "id": "VA-121",
+      "prompt": "MILE is to DISTANCE as POUND is to",
+      "choices": [
+        "ounce",
+        "scale",
+        "weight",
+        "heavy",
+        "kilogram"
+      ],
+      "answer": 2,
+      "explanation": "A mile is a unit of distance; a pound is a unit of weight."
+    },
+    {
+      "id": "VA-122",
+      "prompt": "KNOT is to SPEED as FATHOM is to",
+      "choices": [
+        "depth",
+        "sea",
+        "rope",
+        "sailor",
+        "mile"
+      ],
+      "answer": 0,
+      "explanation": "A knot is a nautical unit of speed; a fathom is a nautical unit of depth (6 feet)."
+    },
+    {
+      "id": "VA-123",
+      "prompt": "ZENITH is to NADIR as CEILING is to",
+      "choices": [
+        "roof",
+        "wall",
+        "sky",
+        "floor",
+        "top"
+      ],
+      "answer": 3,
+      "explanation": "The zenith is the highest point and the nadir the lowest; the ceiling is the top of a room and the floor the bottom."
+    },
+    {
+      "id": "VA-124",
+      "prompt": "TAKEOFF is to LANDING as DEPARTURE is to",
+      "choices": [
+        "airport",
+        "arrival",
+        "flight",
+        "gate",
+        "ticket"
+      ],
+      "answer": 1,
+      "explanation": "Takeoff starts a flight and landing ends it; departure starts a trip and arrival ends it."
+    },
+    {
+      "id": "VA-125",
+      "prompt": "INHALE is to EXHALE as EXPAND is to",
+      "choices": [
+        "grow",
+        "stretch",
+        "enlarge",
+        "build",
+        "contract"
+      ],
+      "answer": 4,
+      "explanation": "Inhale and exhale are opposites; expand and contract are opposites."
+    },
+    {
+      "id": "VA-126",
+      "prompt": "HUMBLE is to ARROGANT as OBEDIENT is to",
+      "choices": [
+        "loyal",
+        "dutiful",
+        "defiant",
+        "quiet",
+        "polite"
+      ],
+      "answer": 2,
+      "explanation": "Humble is the opposite of arrogant; obedient is the opposite of defiant."
+    },
+    {
+      "id": "VA-127",
+      "prompt": "PROFICIENT is to SKILLED as ARDUOUS is to",
+      "choices": [
+        "difficult",
+        "easy",
+        "brief",
+        "boring",
+        "painful"
+      ],
+      "answer": 0,
+      "explanation": "Proficient means skilled; arduous means difficult."
+    },
+    {
+      "id": "VA-128",
+      "prompt": "HAPHAZARD is to ORDERLY as VAGUE is to",
+      "choices": [
+        "unclear",
+        "foggy",
+        "wide",
+        "precise",
+        "short"
+      ],
+      "answer": 3,
+      "explanation": "Haphazard is the opposite of orderly; vague is the opposite of precise."
+    },
+    {
+      "id": "VA-129",
+      "prompt": "LOQUACIOUS is to TALKATIVE as TACITURN is to",
+      "choices": [
+        "chatty",
+        "silent",
+        "angry",
+        "tall",
+        "smart"
+      ],
+      "answer": 1,
+      "explanation": "Loquacious means talkative; taciturn means silent, or saying very little."
+    },
+    {
+      "id": "VA-130",
+      "prompt": "INSOMNIA is to SLEEP as AMNESIA is to",
+      "choices": [
+        "dream",
+        "brain",
+        "illness",
+        "forget",
+        "memory"
+      ],
+      "answer": 4,
+      "explanation": "Insomnia is a loss of sleep; amnesia is a loss of memory."
+    },
+    {
+      "id": "VA-131",
+      "prompt": "BLIND is to SIGHT as DEAF is to",
+      "choices": [
+        "ear",
+        "sound",
+        "hearing",
+        "loud",
+        "music"
+      ],
+      "answer": 2,
+      "explanation": "A blind person lacks sight; a deaf person lacks hearing."
+    },
+    {
+      "id": "VA-132",
+      "prompt": "VIRUS is to ILLNESS as FRICTION is to",
+      "choices": [
+        "heat",
+        "motion",
+        "rubbing",
+        "cold",
+        "metal"
+      ],
+      "answer": 0,
+      "explanation": "A virus causes illness; friction causes heat."
+    },
+    {
+      "id": "VA-133",
+      "prompt": "INSTRUCTOR is to TRAINEE as COACH is to",
+      "choices": [
+        "whistle",
+        "game",
+        "referee",
+        "athlete",
+        "stadium"
+      ],
+      "answer": 3,
+      "explanation": "An instructor teaches a trainee; a coach teaches an athlete."
+    },
+    {
+      "id": "VA-134",
+      "prompt": "RUDDER is to SHIP as STEERING WHEEL is to",
+      "choices": [
+        "road",
+        "car",
+        "driver",
+        "tire",
+        "engine"
+      ],
+      "answer": 1,
+      "explanation": "A ship is steered with a rudder; a car is steered with a steering wheel."
+    },
+    {
+      "id": "VA-135",
+      "prompt": "SLEEVE is to ARM as COLLAR is to",
+      "choices": [
+        "shirt",
+        "button",
+        "tie",
+        "hand",
+        "neck"
+      ],
+      "answer": 4,
+      "explanation": "A sleeve covers the arm; a collar goes around the neck."
+    },
+    {
+      "id": "VA-136",
+      "prompt": "WOOL is to SHEEP as SILK is to",
+      "choices": [
+        "cotton",
+        "cloth",
+        "silkworm",
+        "dress",
+        "satin"
+      ],
+      "answer": 2,
+      "explanation": "Wool comes from sheep; silk comes from silkworms."
+    },
+    {
+      "id": "VA-137",
+      "prompt": "HEATER is to WARMTH as FAN is to",
+      "choices": [
+        "breeze",
+        "blade",
+        "summer",
+        "electricity",
+        "heat"
+      ],
+      "answer": 0,
+      "explanation": "A heater produces warmth; a fan produces a breeze."
+    },
+    {
+      "id": "VA-138",
+      "prompt": "FLAG is to POLE as SAIL is to",
+      "choices": [
+        "wind",
+        "boat",
+        "ocean",
+        "mast",
+        "rope"
+      ],
+      "answer": 3,
+      "explanation": "A flag hangs from a pole; a sail hangs from a mast."
+    },
+    {
+      "id": "VA-139",
+      "prompt": "RIFLE is to MARKSMAN as BOW is to",
+      "choices": [
+        "arrow",
+        "archer",
+        "violin",
+        "target",
+        "knight"
+      ],
+      "answer": 1,
+      "explanation": "A marksman shoots a rifle; an archer shoots a bow. Violin uses the other meaning of bow."
+    },
+    {
+      "id": "VA-140",
+      "prompt": "SWORD is to SHEATH as PISTOL is to",
+      "choices": [
+        "bullet",
+        "trigger",
+        "belt",
+        "gun",
+        "holster"
+      ],
+      "answer": 4,
+      "explanation": "A sword is carried in a sheath; a pistol is carried in a holster."
+    },
+    {
+      "id": "VA-141",
+      "prompt": "MEDAL is to VALOR as TROPHY is to",
+      "choices": [
+        "shelf",
+        "gold",
+        "victory",
+        "team",
+        "loss"
+      ],
+      "answer": 2,
+      "explanation": "A medal is awarded for valor; a trophy is awarded for victory."
+    },
+    {
+      "id": "VA-142",
+      "prompt": "PROMOTION is to RANK as RAISE is to",
+      "choices": [
+        "salary",
+        "job",
+        "boss",
+        "hire",
+        "bonus"
+      ],
+      "answer": 0,
+      "explanation": "A promotion increases rank; a raise increases salary."
+    },
+    {
+      "id": "VA-143",
+      "prompt": "RETREAT is to ADVANCE as SURRENDER is to",
+      "choices": [
+        "quit",
+        "flag",
+        "war",
+        "resist",
+        "yield"
+      ],
+      "answer": 3,
+      "explanation": "Retreat is the opposite of advance; surrender is the opposite of resist."
+    },
+    {
+      "id": "VA-144",
+      "prompt": "CAMOUFLAGE is to CONCEAL as BEACON is to",
+      "choices": [
+        "hide",
+        "signal",
+        "tower",
+        "ship",
+        "darkness"
+      ],
+      "answer": 1,
+      "explanation": "Camouflage is used to conceal; a beacon is used to signal."
+    },
+    {
+      "id": "VA-145",
+      "prompt": "SILO is to GRAIN as RESERVOIR is to",
+      "choices": [
+        "dam",
+        "farm",
+        "pipe",
+        "fish",
+        "water"
+      ],
+      "answer": 4,
+      "explanation": "A silo stores grain; a reservoir stores water."
+    },
+    {
+      "id": "VA-146",
+      "prompt": "QUIVER is to ARROWS as WALLET is to",
+      "choices": [
+        "purse",
+        "pocket",
+        "cash",
+        "bank",
+        "leather"
+      ],
+      "answer": 2,
+      "explanation": "A quiver holds arrows; a wallet holds cash."
+    },
+    {
+      "id": "VA-147",
+      "prompt": "SKETCH is to PAINTING as DRAFT is to",
+      "choices": [
+        "essay",
+        "pencil",
+        "writer",
+        "grammar",
+        "eraser"
+      ],
+      "answer": 0,
+      "explanation": "A sketch is an early version of a painting; a draft is an early version of an essay."
+    },
+    {
+      "id": "VA-148",
+      "prompt": "REHEARSAL is to PERFORMANCE as PRACTICE is to",
+      "choices": [
+        "coach",
+        "team",
+        "drill",
+        "game",
+        "win"
+      ],
+      "answer": 3,
+      "explanation": "A rehearsal prepares for a performance; practice prepares for a game."
+    },
+    {
+      "id": "VA-149",
+      "prompt": "APIARY is to BEES as AVIARY is to",
+      "choices": [
+        "planes",
+        "birds",
+        "fish",
+        "apes",
+        "lions"
+      ],
+      "answer": 1,
+      "explanation": "An apiary is where bees are kept; an aviary is where birds are kept. Aviary looks like aviation but has nothing to do with planes."
+    },
+    {
+      "id": "VA-150",
+      "prompt": "CLUE is to MYSTERY as SYMPTOM is to",
+      "choices": [
+        "cure",
+        "nurse",
+        "fever",
+        "pill",
+        "disease"
+      ],
+      "answer": 4,
+      "explanation": "A clue helps solve a mystery; a symptom helps identify a disease. Fever is itself a symptom."
+    },
+    {
+      "id": "VA-151",
+      "prompt": "EVAPORATE is to VAPOR as FREEZE is to",
+      "choices": [
+        "cold",
+        "water",
+        "ice",
+        "winter",
+        "steam"
+      ],
+      "answer": 2,
+      "explanation": "Water that evaporates becomes vapor; water that freezes becomes ice."
+    },
+    {
+      "id": "VA-152",
+      "prompt": "CONTINENT is to COUNTRY as COUNTRY is to",
+      "choices": [
+        "state",
+        "nation",
+        "border",
+        "map",
+        "world"
+      ],
+      "answer": 0,
+      "explanation": "A continent is divided into countries; a country is divided into states."
+    },
+    {
+      "id": "VA-153",
+      "prompt": "PEDOMETER is to STEPS as ODOMETER is to",
+      "choices": [
+        "fuel",
+        "speed",
+        "time",
+        "miles",
+        "oil"
+      ],
+      "answer": 3,
+      "explanation": "A pedometer counts steps; an odometer counts miles traveled. A speedometer, not an odometer, shows speed."
+    },
+    {
+      "id": "VA-154",
+      "prompt": "SEISMOGRAPH is to EARTHQUAKES as RAIN GAUGE is to",
+      "choices": [
+        "clouds",
+        "rainfall",
+        "wind",
+        "temperature",
+        "storms"
+      ],
+      "answer": 1,
+      "explanation": "A seismograph measures earthquakes; a rain gauge measures rainfall."
+    },
+    {
+      "id": "VA-155",
+      "prompt": "BUD is to BLOSSOM as CHILD is to",
+      "choices": [
+        "baby",
+        "parent",
+        "school",
+        "toy",
+        "adult"
+      ],
+      "answer": 4,
+      "explanation": "A bud grows into a blossom; a child grows into an adult."
+    },
+    {
+      "id": "VA-156",
+      "prompt": "OPTIMIST is to HOPEFUL as PESSIMIST is to",
+      "choices": [
+        "happy",
+        "cheerful",
+        "doubtful",
+        "careful",
+        "honest"
+      ],
+      "answer": 2,
+      "explanation": "An optimist is hopeful; a pessimist is doubtful."
+    },
+    {
+      "id": "VA-157",
+      "prompt": "MISER is to HOARD as SPENDTHRIFT is to",
+      "choices": [
+        "squander",
+        "save",
+        "invest",
+        "earn",
+        "borrow"
+      ],
+      "answer": 0,
+      "explanation": "A miser hoards money; a spendthrift squanders it."
+    },
+    {
+      "id": "VA-158",
+      "prompt": "PACIFIST is to VIOLENCE as VEGETARIAN is to",
+      "choices": [
+        "vegetables",
+        "salad",
+        "health",
+        "meat",
+        "diet"
+      ],
+      "answer": 3,
+      "explanation": "A pacifist rejects violence; a vegetarian rejects meat."
+    },
+    {
+      "id": "VA-159",
+      "prompt": "TRAITOR is to LOYALTY as LIAR is to",
+      "choices": [
+        "deception",
+        "honesty",
+        "secret",
+        "crime",
+        "story"
+      ],
+      "answer": 1,
+      "explanation": "A traitor lacks loyalty; a liar lacks honesty."
+    },
+    {
+      "id": "VA-160",
+      "prompt": "PLUMBER is to PIPES as ELECTRICIAN is to",
+      "choices": [
+        "lightning",
+        "tools",
+        "house",
+        "voltage",
+        "wiring"
+      ],
+      "answer": 4,
+      "explanation": "A plumber installs and fixes pipes; an electrician installs and fixes wiring."
+    },
+    {
+      "id": "VA-161",
+      "prompt": "TAILOR is to SUIT as JEWELER is to",
+      "choices": [
+        "gold",
+        "diamond",
+        "necklace",
+        "store",
+        "wrist"
+      ],
+      "answer": 2,
+      "explanation": "A tailor makes a suit; a jeweler makes a necklace. Gold and diamond are materials, not the product."
+    },
+    {
+      "id": "VA-162",
+      "prompt": "GEOLOGIST is to ROCKS as METEOROLOGIST is to",
+      "choices": [
+        "weather",
+        "meteors",
+        "stars",
+        "maps",
+        "oceans"
+      ],
+      "answer": 0,
+      "explanation": "A geologist studies rocks; a meteorologist studies weather (not meteors, despite the name)."
+    },
+    {
+      "id": "VA-163",
+      "prompt": "PEDIATRICIAN is to CHILDREN as VETERINARIAN is to",
+      "choices": [
+        "veterans",
+        "farmers",
+        "plants",
+        "animals",
+        "hospitals"
+      ],
+      "answer": 3,
+      "explanation": "A pediatrician treats children; a veterinarian treats animals."
+    },
+    {
+      "id": "VA-164",
+      "prompt": "DENTIST is to TEETH as OPTOMETRIST is to",
+      "choices": [
+        "feet",
+        "eyes",
+        "bones",
+        "heart",
+        "skin"
+      ],
+      "answer": 1,
+      "explanation": "A dentist cares for teeth; an optometrist cares for eyes."
+    },
+    {
+      "id": "VA-165",
+      "prompt": "MAYOR is to CITY as GOVERNOR is to",
+      "choices": [
+        "country",
+        "senate",
+        "election",
+        "county",
+        "state"
+      ],
+      "answer": 4,
+      "explanation": "A mayor leads a city; a governor leads a state."
+    },
+    {
+      "id": "VA-166",
+      "prompt": "ABRIDGE is to SHORTEN as AMPLIFY is to",
+      "choices": [
+        "shrink",
+        "quiet",
+        "intensify",
+        "speaker",
+        "record"
+      ],
+      "answer": 2,
+      "explanation": "Abridge means shorten; amplify means intensify, or make stronger."
+    },
+    {
+      "id": "VA-167",
+      "prompt": "MITIGATE is to WORSEN as ACCELERATE is to",
+      "choices": [
+        "slow",
+        "speed",
+        "hurry",
+        "drive",
+        "race"
+      ],
+      "answer": 0,
+      "explanation": "Mitigate (make less severe) is the opposite of worsen; accelerate is the opposite of slow."
+    },
+    {
+      "id": "VA-168",
+      "prompt": "COMMENCE is to BEGIN as CEASE is to",
+      "choices": [
+        "start",
+        "continue",
+        "delay",
+        "stop",
+        "repeat"
+      ],
+      "answer": 3,
+      "explanation": "Commence means begin; cease means stop."
+    },
+    {
+      "id": "VA-169",
+      "prompt": "AUGMENT is to INCREASE as DIMINISH is to",
+      "choices": [
+        "expand",
+        "decrease",
+        "maintain",
+        "repair",
+        "grow"
+      ],
+      "answer": 1,
+      "explanation": "Augment means increase; diminish means decrease."
+    },
+    {
+      "id": "VA-170",
+      "prompt": "PRUDENT is to WISE as RASH is to",
+      "choices": [
+        "careful",
+        "slow",
+        "itchy",
+        "calm",
+        "reckless"
+      ],
+      "answer": 4,
+      "explanation": "Prudent means wise; rash means reckless. Itchy uses the other meaning of rash."
+    },
+    {
+      "id": "VA-171",
+      "prompt": "NOCTURNAL is to NIGHT as DIURNAL is to",
+      "choices": [
+        "evening",
+        "owl",
+        "day",
+        "moon",
+        "sleep"
+      ],
+      "answer": 2,
+      "explanation": "A nocturnal animal is active at night; a diurnal animal is active during the day."
+    },
+    {
+      "id": "VA-172",
+      "prompt": "HERBIVORE is to PLANTS as CARNIVORE is to",
+      "choices": [
+        "meat",
+        "carnival",
+        "grass",
+        "teeth",
+        "hunter"
+      ],
+      "answer": 0,
+      "explanation": "A herbivore eats plants; a carnivore eats meat."
+    },
+    {
+      "id": "VA-173",
+      "prompt": "AMPHIBIAN is to FROG as REPTILE is to",
+      "choices": [
+        "toad",
+        "salamander",
+        "fish",
+        "lizard",
+        "bird"
+      ],
+      "answer": 3,
+      "explanation": "A frog is an amphibian; a lizard is a reptile. Toads and salamanders are amphibians too."
+    },
+    {
+      "id": "VA-174",
+      "prompt": "MAMMAL is to WHALE as BIRD is to",
+      "choices": [
+        "bat",
+        "penguin",
+        "butterfly",
+        "fly",
+        "kite"
+      ],
+      "answer": 1,
+      "explanation": "A whale is a mammal that doesn't look like one; a penguin is a bird that can't fly. A bat flies but is a mammal."
+    },
+    {
+      "id": "VA-175",
+      "prompt": "TRIANGLE is to THREE as HEXAGON is to",
+      "choices": [
+        "five",
+        "eight",
+        "seven",
+        "four",
+        "six"
+      ],
+      "answer": 4,
+      "explanation": "A triangle has three sides; a hexagon has six."
+    },
+    {
+      "id": "VA-176",
+      "prompt": "CIRCLE is to SPHERE as SQUARE is to",
+      "choices": [
+        "rectangle",
+        "pyramid",
+        "cube",
+        "angle",
+        "line"
+      ],
+      "answer": 2,
+      "explanation": "A sphere is the 3D form of a circle; a cube is the 3D form of a square."
+    },
+    {
+      "id": "VA-177",
+      "prompt": "ADDITION is to SUM as MULTIPLICATION is to",
+      "choices": [
+        "product",
+        "quotient",
+        "difference",
+        "total",
+        "number"
+      ],
+      "answer": 0,
+      "explanation": "Addition gives a sum; multiplication gives a product. Division gives a quotient and subtraction a difference."
+    },
+    {
+      "id": "VA-178",
+      "prompt": "RIVER is to BANK as ROAD is to",
+      "choices": [
+        "car",
+        "lane",
+        "map",
+        "shoulder",
+        "bridge"
+      ],
+      "answer": 3,
+      "explanation": "A bank is the edge of a river; a shoulder is the edge of a road."
+    },
+    {
+      "id": "VA-179",
+      "prompt": "THERMOSTAT is to TEMPERATURE as DIMMER is to",
+      "choices": [
+        "switch",
+        "brightness",
+        "bulb",
+        "darkness",
+        "electricity"
+      ],
+      "answer": 1,
+      "explanation": "A thermostat adjusts temperature; a dimmer adjusts brightness."
+    },
+    {
+      "id": "VA-180",
+      "prompt": "POND is to LAKE as HILL is to",
+      "choices": [
+        "valley",
+        "slope",
+        "rock",
+        "cliff",
+        "mountain"
+      ],
+      "answer": 4,
+      "explanation": "A lake is a larger pond; a mountain is a larger hill."
+    },
+    {
+      "id": "VA-181",
+      "prompt": "TWIG is to BRANCH as PEBBLE is to",
+      "choices": [
+        "sand",
+        "path",
+        "boulder",
+        "beach",
+        "dust"
+      ],
+      "answer": 2,
+      "explanation": "A twig is a small branch; a pebble is a small boulder. Sand and dust are smaller still."
+    },
+    {
+      "id": "VA-182",
+      "prompt": "HOUSE is to MANSION as BOAT is to",
+      "choices": [
+        "yacht",
+        "oar",
+        "harbor",
+        "canoe",
+        "sail"
+      ],
+      "answer": 0,
+      "explanation": "A mansion is a large, luxurious house; a yacht is a large, luxurious boat."
+    },
+    {
+      "id": "VA-183",
+      "prompt": "CLOUD is to RAIN as VOLCANO is to",
+      "choices": [
+        "mountain",
+        "crater",
+        "island",
+        "lava",
+        "heat"
+      ],
+      "answer": 3,
+      "explanation": "Rain comes out of a cloud; lava comes out of a volcano."
+    },
+    {
+      "id": "VA-184",
+      "prompt": "CANDLE is to WAX as TIRE is to",
+      "choices": [
+        "wheel",
+        "rubber",
+        "car",
+        "spare",
+        "road"
+      ],
+      "answer": 1,
+      "explanation": "A candle is made of wax; a tire is made of rubber."
+    },
+    {
+      "id": "VA-185",
+      "prompt": "SOW is to REAP as INVEST is to",
+      "choices": [
+        "spend",
+        "bank",
+        "lose",
+        "risk",
+        "profit"
+      ],
+      "answer": 4,
+      "explanation": "You sow seeds and later reap a harvest; you invest money and later profit."
+    },
+    {
+      "id": "VA-186",
+      "prompt": "EXCERPT is to BOOK as CLIP is to",
+      "choices": [
+        "actor",
+        "theater",
+        "movie",
+        "ticket",
+        "paper"
+      ],
+      "answer": 2,
+      "explanation": "An excerpt is a short piece taken from a book; a clip is a short piece taken from a movie."
+    },
+    {
+      "id": "VA-187",
+      "prompt": "SYLLABLE is to WORD as NOTE is to",
+      "choices": [
+        "melody",
+        "paper",
+        "piano",
+        "reminder",
+        "singer"
+      ],
+      "answer": 0,
+      "explanation": "Syllables combine to make a word; notes combine to make a melody."
+    },
+    {
+      "id": "VA-188",
+      "prompt": "PARAGRAPH is to ESSAY as STANZA is to",
+      "choices": [
+        "rhyme",
+        "poet",
+        "book",
+        "poem",
+        "line"
+      ],
+      "answer": 3,
+      "explanation": "An essay is made of paragraphs; a poem is made of stanzas."
+    },
+    {
+      "id": "VA-189",
+      "prompt": "ATOM is to MOLECULE as CELL is to",
+      "choices": [
+        "nucleus",
+        "tissue",
+        "biology",
+        "membrane",
+        "microscope"
+      ],
+      "answer": 1,
+      "explanation": "Atoms join to form a molecule; cells join to form tissue. The nucleus and membrane are parts of a cell."
+    },
+    {
+      "id": "VA-190",
+      "prompt": "FEATHER is to BIRD as",
+      "choices": [
+        "wing is to airplane",
+        "tree is to leaf",
+        "nest is to egg",
+        "water is to ocean",
+        "scale is to fish"
+      ],
+      "answer": 4,
+      "explanation": "Feathers cover a bird's body; scales cover a fish's body."
+    },
+    {
+      "id": "VA-191",
+      "prompt": "ARCHIVE is to RECORDS as",
+      "choices": [
+        "kitchen is to chef",
+        "library is to librarian",
+        "pantry is to food",
+        "file is to folder",
+        "drawer is to desk"
+      ],
+      "answer": 2,
+      "explanation": "An archive is where records are stored; a pantry is where food is stored."
+    },
+    {
+      "id": "VA-192",
+      "prompt": "BLIZZARD is to SNOW as",
+      "choices": [
+        "deluge is to rain",
+        "winter is to cold",
+        "cloud is to sky",
+        "drizzle is to mist",
+        "sleet is to ice"
+      ],
+      "answer": 0,
+      "explanation": "A blizzard is an extreme snowfall; a deluge is an extreme rainfall."
+    },
+    {
+      "id": "VA-193",
+      "prompt": "SENTRY is to GUARD as",
+      "choices": [
+        "soldier is to uniform",
+        "fort is to wall",
+        "spy is to enemy",
+        "scout is to explore",
+        "medic is to bandage"
+      ],
+      "answer": 3,
+      "explanation": "A sentry's job is to guard; a scout's job is to explore."
+    },
+    {
+      "id": "VA-194",
+      "prompt": "AMATEUR is to PROFESSIONAL as",
+      "choices": [
+        "player is to team",
+        "apprentice is to master",
+        "student is to school",
+        "worker is to factory",
+        "fan is to stadium"
+      ],
+      "answer": 1,
+      "explanation": "An amateur is less skilled than a professional; an apprentice is less skilled than a master."
+    },
+    {
+      "id": "VA-195",
+      "prompt": "LEAF is to TREE as",
+      "choices": [
+        "root is to soil",
+        "nest is to bird",
+        "branch is to leaf",
+        "seed is to flower",
+        "feather is to bird"
+      ],
+      "answer": 4,
+      "explanation": "A leaf grows from and covers a tree; a feather grows from and covers a bird. A nest is not part of the bird."
+    },
+    {
+      "id": "VA-196",
+      "prompt": "COOL is to FREEZING as",
+      "choices": [
+        "wet is to dry",
+        "hot is to sun",
+        "damp is to soaked",
+        "rain is to cloud",
+        "warm is to mild"
+      ],
+      "answer": 2,
+      "explanation": "Freezing is an extreme form of cool; soaked is an extreme form of damp."
+    },
+    {
+      "id": "VA-197",
+      "prompt": "LIFEGUARD is to SWIMMER as",
+      "choices": [
+        "shepherd is to sheep",
+        "pool is to water",
+        "coach is to whistle",
+        "doctor is to hospital",
+        "fisherman is to fish"
+      ],
+      "answer": 0,
+      "explanation": "A lifeguard watches over and protects swimmers; a shepherd watches over and protects sheep."
+    },
+    {
+      "id": "VA-198",
+      "prompt": "DESERT is to ARID as",
+      "choices": [
+        "mountain is to valley",
+        "ocean is to fish",
+        "jungle is to tree",
+        "rainforest is to humid",
+        "tundra is to hot"
+      ],
+      "answer": 3,
+      "explanation": "A desert is arid (dry); a rainforest is humid. A tundra is cold, not hot."
+    },
+    {
+      "id": "VA-199",
+      "prompt": "STARVE is to FOOD as",
+      "choices": [
+        "eat is to hunger",
+        "suffocate is to air",
+        "drink is to thirst",
+        "breathe is to lungs",
+        "freeze is to ice"
+      ],
+      "answer": 1,
+      "explanation": "You starve without food; you suffocate without air."
+    },
+    {
+      "id": "VA-200",
+      "prompt": "ORCHARD is to FRUIT as",
+      "choices": [
+        "garden is to shovel",
+        "farm is to farmer",
+        "field is to fence",
+        "barn is to hay",
+        "vineyard is to grapes"
+      ],
+      "answer": 4,
+      "explanation": "Fruit is grown in an orchard; grapes are grown in a vineyard."
     }
   ]
 }
