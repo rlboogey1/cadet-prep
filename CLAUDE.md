@@ -4,8 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Cadet Prep: a C++17 study app for AFROTC cadets, with a Mac window version (Dear ImGui + GLFW + OpenGL)
-and a console version. It's split into **prep sections** ("tracks"): AFOQT Prep and Warrior Knowledge.
+Cadet Prep: a C++17 study app for AFROTC cadets, with a Mac window version (Dear ImGui + GLFW + OpenGL),
+an iPhone/iPad version (Dear ImGui + SDL3, see `IOS.md`), and a console version. It's split into **prep sections** ("tracks"): AFOQT Prep and Warrior Knowledge.
 Internal names still say `afoqt` (targets, save files) from before the rename; keep them, since
 existing saved progress depends on the file names.
 
@@ -16,7 +16,15 @@ cmake -S . -B build                  # configure (first time, or after deleting 
 cmake --build build                  # build both apps; also re-copies data/ into the .app bundle
 open "build/Cadet Prep.app"          # window version (macOS); build/afoqt_gui elsewhere
 ./build/afoqt                        # console version; optional arg: path to a data folder
+
+cmake -S . -B build-mobile -DCADET_MOBILE=ON && cmake --build build-mobile --target cadet_mobile
+./build-mobile/cadet_mobile          # phone layout in a Mac window (--ipad, --size WxH, --touch)
+cmake -S . -B build-ios -G Xcode -DCMAKE_SYSTEM_NAME=iOS   # iPhone/iPad Xcode project (needs Xcode)
 ```
+
+To check layouts without clicking, `cadet_mobile --script file.txt` replays `wait N`, `tap X Y`,
+`drag X1 Y1 X2 Y2 FRAMES`, and `shot out.bmp` lines (points, touch input), then quits. Run it with
+`HOME` set to a scratch folder so it doesn't touch the user's real progress.
 
 There are no tests and no linter. Builds use `-Wall -Wextra -Wpedantic`; keep them warning-free.
 On startup both apps load and validate every question file (bad answer indexes, missing files) and
@@ -28,11 +36,23 @@ run `cmake --build build` after editing anything in `data/`. If the project fold
 
 ## Architecture
 
-**Two front ends, one core.** `afoqt_core` (static lib) holds everything that isn't UI. The console
+**Three front ends, one core.** `afoqt_core` (static lib) holds everything that isn't UI. The console
 app (`main.cpp`, `ConsoleUI`) runs quizzes with `TestSession`, which blocks on input through the
 abstract `UI` interface. The window app (`gui_main.cpp`, `GuiApp`) is immediate mode: `draw()` runs
 every frame, so it uses `QuizEngine`, which advances one step at a time (`submit`, `next`, `update`
-for the timer) instead of blocking.
+for the timer) instead of blocking. The iPhone/iPad app (`mobile_main.cpp`, target `cadet_mobile`)
+runs the same `GuiApp` on SDL3 with SDL's renderer (Metal on Apple devices); it passes the notch
+and home-bar insets (`setSafeArea`) and turns on touch mode (`setTouch`). Each front end gives
+`Visuals` a texture maker (`setTextureMaker`), since OpenGL and SDL make textures differently.
+
+**Phone layout.** Below 1000 points of width (`kCompactBelow`: any iPhone, an upright iPad),
+`GuiApp` is "compact": a navy top bar with a menu button that slides the sidebar in
+(`drawDrawer`), cards that stack (`Grid(maxCols, minW)` picks the column count, `subjectCard`
+grows to fit and moves its buttons under the footer), and auto-height cards
+(`beginAutoCard`) instead of cards that scroll inside the page. Keep the Mac layout unchanged
+when editing: put phone-only changes behind `compact_`. Touch mode adds finger scrolling with
+momentum (`touchScroll`, which also stops a drag from clicking the button it started on) and
+says "tap" instead of "click"/keyboard hints.
 
 **Data-driven sections.** `data/subtests.json` lists every section: `track` (prep section),
 `category` (group within a track, e.g. AFOQT `knowledge`/`pilot`), question `file`, `visual`,

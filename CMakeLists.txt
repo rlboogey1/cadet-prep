@@ -6,17 +6,43 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 
+# iPhone/iPad: configure with  cmake -S . -B build-ios -G Xcode -DCMAKE_SYSTEM_NAME=iOS
+# (see IOS.md). That builds only the touch version. On the Mac, -DCADET_MOBILE=ON also
+# builds it as "cadet_mobile", a phone-sized window for trying the layout.
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+    set(CADET_IOS ON)
+endif()
+option(CADET_MOBILE "Also build the SDL3 touch version (cadet_mobile)" OFF)
+if(CADET_IOS)
+    set(CADET_MOBILE ON)
+endif()
+if(CADET_MOBILE AND APPLE)
+    enable_language(OBJC)  # SDL3's Apple code is Objective-C
+endif()
+
 # --- Libraries, downloaded automatically the first time you configure ---
 FetchContent_Declare(json
     URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
 
-FetchContent_Declare(glfw                     # creates the window
+if(NOT CADET_IOS)
+FetchContent_Declare(glfw                     # creates the window (Mac version)
     GIT_REPOSITORY https://github.com/glfw/glfw.git
     GIT_TAG 3.4)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+endif()
+
+if(CADET_MOBILE)
+FetchContent_Declare(SDL3                     # window, touch input, and drawing on iPhone/iPad
+    URL https://github.com/libsdl-org/SDL/releases/download/release-3.2.10/SDL3-3.2.10.tar.gz
+    DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+set(SDL_SHARED OFF CACHE BOOL "" FORCE)
+set(SDL_STATIC ON CACHE BOOL "" FORCE)
+set(SDL_TEST_LIBRARY OFF CACHE BOOL "" FORCE)
+set(SDL_EXAMPLES OFF CACHE BOOL "" FORCE)
+endif()
 
 FetchContent_Declare(imgui                    # draws buttons, text, tables
     GIT_REPOSITORY https://github.com/ocornut/imgui.git
@@ -31,19 +57,36 @@ FetchContent_Declare(stb                     # loads the rank insignia pictures 
     GIT_REPOSITORY https://github.com/nothings/stb.git
     GIT_TAG 4e9b368bfc071e97206ea5c6adba68dd0cbf8897)
 
-FetchContent_MakeAvailable(json glfw imgui miniaudio stb)
-find_package(OpenGL REQUIRED)
+FetchContent_MakeAvailable(json imgui miniaudio stb)
+if(NOT CADET_IOS)
+    FetchContent_MakeAvailable(glfw)
+    find_package(OpenGL REQUIRED)
+endif()
+if(CADET_MOBILE)
+    FetchContent_MakeAvailable(SDL3)
+endif()
 
 # Dear ImGui has no CMake file of its own, so we list its source files here.
-add_library(imgui STATIC
+# imgui_base is the library itself; each app adds the backends for its window.
+add_library(imgui_base STATIC
     ${imgui_SOURCE_DIR}/imgui.cpp
     ${imgui_SOURCE_DIR}/imgui_draw.cpp
     ${imgui_SOURCE_DIR}/imgui_tables.cpp
-    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
-    ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
-    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp)
-target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
-target_link_libraries(imgui PUBLIC glfw OpenGL::GL)
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp)
+target_include_directories(imgui_base PUBLIC ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
+
+if(NOT CADET_IOS)
+    add_library(imgui STATIC                  # Mac version: GLFW + OpenGL
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp)
+    target_link_libraries(imgui PUBLIC imgui_base glfw OpenGL::GL)
+endif()
+if(CADET_MOBILE)
+    add_library(imgui_sdl STATIC              # touch version: SDL3 + SDL's renderer
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl3.cpp
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_sdlrenderer3.cpp)
+    target_link_libraries(imgui_sdl PUBLIC imgui_base SDL3::SDL3-static)
+endif()
 
 # --- Shared quiz logic, used by both the console and GUI apps ---
 add_library(afoqt_core STATIC
@@ -60,6 +103,7 @@ target_include_directories(afoqt_core PUBLIC src)
 target_link_libraries(afoqt_core PUBLIC nlohmann_json::nlohmann_json)
 target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
 
+if(NOT CADET_IOS)
 # --- Console app (unchanged) ---
 add_executable(afoqt src/main.cpp src/ConsoleUI.cpp)
 target_link_libraries(afoqt PRIVATE afoqt_core)
@@ -99,8 +143,58 @@ if(APPLE)
         VERBATIM)
     add_dependencies(afoqt_gui_data afoqt_gui)
 endif()
+endif()
 
-foreach(t afoqt_core afoqt afoqt_gui)
+# --- Touch version: iPhone and iPad (cadet_mobile) ---
+if(CADET_MOBILE)
+    set(MOBILE_SOURCES src/mobile_main.cpp src/GuiApp.cpp src/Widgets.cpp src/Visuals.cpp src/Sound.cpp)
+    if(CADET_IOS)
+        add_executable(cadet_mobile MACOSX_BUNDLE ${MOBILE_SOURCES} ios/Assets.xcassets)
+        set_source_files_properties(ios/Assets.xcassets PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+        set(CADET_TEAM_ID "" CACHE STRING "Apple team ID for signing (or pick your team in Xcode)")
+        set_target_properties(cadet_mobile PROPERTIES
+            OUTPUT_NAME "CadetPrep"
+            MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/ios/Info.plist.in"
+            MACOSX_BUNDLE_BUNDLE_NAME "Cadet Prep"
+            MACOSX_BUNDLE_GUI_IDENTIFIER "com.renzo.cadetprep"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+            MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+            XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.renzo.cadetprep"
+            XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2"          # iPhone and iPad
+            XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "15.0"
+            XCODE_ATTRIBUTE_CODE_SIGN_STYLE "Automatic"
+            XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "${CADET_TEAM_ID}"
+            XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
+            XCODE_GENERATE_SCHEME ON)
+        target_link_libraries(cadet_mobile PRIVATE "-framework CoreText" "-framework CoreFoundation"
+                              "-framework AudioToolbox" "-framework CoreAudio")
+        # miniaudio's iOS audio-session setup is Objective-C; skip it (the default session works).
+        set_source_files_properties(src/Sound.cpp PROPERTIES COMPILE_DEFINITIONS MA_NO_AVFOUNDATION)
+        # Question files and pictures go inside the app, at CadetPrep.app/data
+        add_custom_command(TARGET cadet_mobile POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/data"
+                    "$<TARGET_BUNDLE_CONTENT_DIR:cadet_mobile>/data"
+            VERBATIM)
+    else()
+        add_executable(cadet_mobile ${MOBILE_SOURCES})  # Mac preview, reads the project's data/
+        if(APPLE)
+            target_link_libraries(cadet_mobile PRIVATE "-framework CoreFoundation" "-framework CoreAudio"
+                                  "-framework AudioToolbox")
+        endif()
+    endif()
+    target_link_libraries(cadet_mobile PRIVATE afoqt_core imgui_sdl)
+    target_include_directories(cadet_mobile PRIVATE ${miniaudio_SOURCE_DIR})
+    target_include_directories(cadet_mobile SYSTEM PRIVATE ${stb_SOURCE_DIR})
+endif()
+
+set(WARN_TARGETS afoqt_core)
+if(NOT CADET_IOS)
+    list(APPEND WARN_TARGETS afoqt afoqt_gui)
+endif()
+if(CADET_MOBILE)
+    list(APPEND WARN_TARGETS cadet_mobile)
+endif()
+foreach(t ${WARN_TARGETS})
     if(MSVC)
         target_compile_options(${t} PRIVATE /W4)
     else()

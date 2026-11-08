@@ -16,6 +16,11 @@ own dashboard, practice tests, review list, cards, progress, and focus area.
 > This project was built with [Claude Code](https://claude.com/claude-code), Anthropic's
 > AI coding assistant.
 
+## iPhone and iPad
+
+There's also an iPhone/iPad version with a layout made for phones. It installs from your
+Mac with Xcode; see [IOS.md](IOS.md).
+
 ## Build and run
 
 Requires CMake 3.16+ and a C++17 compiler (g++, clang, or Visual Studio 2019+).

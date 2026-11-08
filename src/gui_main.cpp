@@ -1,12 +1,27 @@
 #define GL_SILENCE_DEPRECATION  // macOS marks OpenGL deprecated; it still works
 #include "AppPaths.h"
 #include "GuiApp.h"
+#include "Visuals.h"
 #include "Widgets.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
+
+// Uploads a picture (the rank insignia) as an OpenGL texture.
+static ImTextureID makeGlTexture(const unsigned char* rgba, int w, int h) {
+    GLuint id = 0;
+    glGenTextures(1, &id);
+    glBindTexture(GL_TEXTURE_2D, id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba);
+    return static_cast<ImTextureID>(id);
+}
 
 int main(int argc, char* argv[]) {
     // Find the questions, then switch to the folder where progress is saved.
@@ -50,6 +65,7 @@ int main(int argc, char* argv[]) {
     ui::applyTheme();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 150");
+    ui::setTextureMaker(makeGlTexture);
 
     // Main loop: draw a frame, show it, repeat.
     while (!glfwWindowShouldClose(window)) {

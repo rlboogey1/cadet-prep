@@ -8,6 +8,15 @@
 #include <cstring>
 #include <fstream>
 #include <initializer_list>
+#include <string>
+
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
+#include <CoreText/CoreText.h>
+#define CADET_IOS_FONTS 1
+#endif
+#endif
 
 namespace ui {
 
@@ -53,6 +62,31 @@ const char* firstExisting(std::initializer_list<const char*> paths) {
     return nullptr;
 }
 
+#ifdef CADET_IOS_FONTS
+// iOS keeps its fonts in system folders that move between versions, so ask Core
+// Text where a font lives (by PostScript name). Empty if it isn't installed.
+std::string systemFontPath(const char* psName) {
+    std::string out;
+    CFStringRef name = CFStringCreateWithCString(nullptr, psName, kCFStringEncodingUTF8);
+    CTFontRef font = CTFontCreateWithName(name, 16.0, nullptr);
+    CFStringRef actual = CTFontCopyPostScriptName(font);  // a missing font gives a stand-in
+    if (CFStringCompare(actual, name, 0) == kCFCompareEqualTo) {
+        if (CFURLRef url = static_cast<CFURLRef>(CTFontCopyAttribute(font, kCTFontURLAttribute))) {
+            char buf[1024];
+            if (CFURLGetFileSystemRepresentation(url, true, reinterpret_cast<UInt8*>(buf), sizeof buf)) out = buf;
+            CFRelease(url);
+        }
+    }
+    CFRelease(actual);
+    CFRelease(font);
+    CFRelease(name);
+    return out;
+}
+#endif
+
+bool gCompact = false;  // phone layout (see setDevice)
+bool gTouch = false;
+
 float easeOut(float t) {
     t = std::clamp(t, 0.0f, 1.0f);
     return 1.0f - (1.0f - t) * (1.0f - t) * (1.0f - t);
@@ -76,6 +110,13 @@ ImVec4 mix(ImVec4 a, ImVec4 b, float t) {
 }  // namespace
 
 bool darkMode() { return gDark; }
+
+void setDevice(bool compact, bool touch) {
+    gCompact = compact;
+    gTouch = touch;
+}
+bool compact() { return gCompact; }
+bool touch() { return gTouch; }
 
 void setDarkMode(bool dark) {
     gDark = dark;
@@ -128,6 +169,16 @@ void loadFonts(ImGuiIO& io, float scale) {
                                          0x2190, 0x21FF, 0x2200, 0x22FF, 0};
     static const ImWchar basicRanges[] = {0x0020, 0x00FF, 0x2013, 0x2014, 0x2022, 0x2022, 0x2190, 0x2193, 0x2212, 0x2212, 0};
 
+#ifdef CADET_IOS_FONTS
+    // iPhone and iPad have Arial too; Menlo fills in arrows and math symbols.
+    static const std::string iosRegular = systemFontPath("ArialMT"), iosBold = systemFontPath("Arial-BoldMT");
+    static std::string iosSymbols;
+    for (const char* n : {"ArialUnicodeMS", "AppleSymbols", "Menlo-Regular"})
+        if (iosSymbols.empty()) iosSymbols = systemFontPath(n);
+    const char* regular = iosRegular.empty() ? nullptr : iosRegular.c_str();
+    const char* bold = iosBold.empty() ? nullptr : iosBold.c_str();
+    const char* symbols = iosSymbols.empty() ? nullptr : iosSymbols.c_str();
+#else
     const char* regular = firstExisting({
         "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",  // macOS
         "/System/Library/Fonts/Supplemental/Arial.ttf",
@@ -147,6 +198,7 @@ void loadFonts(ImGuiIO& io, float scale) {
         "C:\\Windows\\Fonts\\seguisym.ttf",
         "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
     });
+#endif
 
     if (!regular) {  // no system fonts: ImGui's built-in font everywhere
         ImFont* f = io.Fonts->AddFontDefault();
@@ -451,6 +503,7 @@ void gradientRect(ImDrawList* dl, ImVec2 a, ImVec2 b, ImVec4 from, ImVec4 to, fl
 }
 
 void beginCard(const char* id, ImVec2 size, bool scroll, ImVec2 padding) {
+    if (gCompact) padding = ImVec2(std::min(padding.x, 18.0f), std::min(padding.y, 18.0f));
     ImVec2 avail = ImGui::GetContentRegionAvail();
     if (size.x <= 0) size.x = avail.x + size.x;
     if (size.y <= 0) size.y = avail.y + size.y;
@@ -462,6 +515,20 @@ void beginCard(const char* id, ImVec2 size, bool scroll, ImVec2 padding) {
 }
 
 void endCard() { ImGui::EndChild(); }
+
+void beginAutoCard(const char* id, ImVec2 padding) {
+    if (gCompact) padding = ImVec2(std::min(padding.x, 18.0f), std::min(padding.y, 18.0f));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, padding);
+    ImGui::BeginChild(id, ImVec2(0, 0), ImGuiChildFlags_AlwaysUseWindowPadding | ImGuiChildFlags_AutoResizeY,
+                      ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+    ImGui::PopStyleVar();
+}
+
+void endAutoCard() {
+    ImGui::EndChild();
+    // The child draws on top of its parent, so the card can go in afterwards.
+    cardShape(ImGui::GetWindowDrawList(), ImGui::GetItemRectMin(), ImGui::GetItemRectSize());
+}
 
 // ================================================================ widgets
 
@@ -564,13 +631,17 @@ void statCard(ImVec2 size, const char* label, const char* value, const char* cap
     ImGui::Dummy(size);
     ImDrawList* dl = ImGui::GetWindowDrawList();
     cardShape(dl, p, size);
+    const float pad = gCompact ? 18.0f : 24.0f, inner = size.x - pad * 2;
     float y = p.y + 22;
-    textAt(dl, fonts.strong, ImVec2(p.x + 24, y), u32(col::InkSoft), label);
+    ImFont* lf = measure(fonts.strong, label).x > inner ? fonts.small : fonts.strong;  // narrow card: smaller label
+    textAt(dl, lf, ImVec2(p.x + pad, y), u32(col::InkSoft), label);
     y += fontPx(fonts.strong) + 12;
     ImFont* vf = measure(fonts.big, value).x > size.x - 40 ? fonts.heading : fonts.big;
-    textAt(dl, vf, ImVec2(p.x + 24, y), u32(valueColor), value);
+    textAt(dl, vf, ImVec2(p.x + pad, y), u32(valueColor), value);
     y += fontPx(fonts.big) + 12;
-    textAt(dl, fonts.small, ImVec2(p.x + 24, y), u32(col::Muted), caption);
+    dl->PushClipRect(p, p + size, true);
+    dl->AddText(fonts.small, fontPx(fonts.small), ImVec2(p.x + pad, y), u32(col::Muted), caption, nullptr, inner);
+    dl->PopClipRect();
 }
 
 void iconTile(ImDrawList* dl, ImVec2 p, float size, Tint t, const char* glyph, Icon* icon) {
@@ -795,7 +866,9 @@ void cardText(ImFont* font, ImVec4 color, const char* text, float left, float wi
     const char* s = text;
     const char* end = text + std::strlen(text);
     while (s < end) {
-        const char* lineEnd = font->CalcWordWrapPositionA(scale, s, end, width);
+        // Wrap within one line of the text: ImGui's wrapping doesn't stop at a line break
+        const char* nl = static_cast<const char*>(std::memchr(s, '\n', static_cast<size_t>(end - s)));
+        const char* lineEnd = font->CalcWordWrapPositionA(scale, s, nl ? nl : end, width);
         if (lineEnd == s) ++lineEnd;  // a word wider than the card: break it
         const char* trim = lineEnd;
         while (trim > s && (trim[-1] == ' ' || trim[-1] == '\n')) --trim;
@@ -815,7 +888,7 @@ int swipeCard(const char* id, SwipeCard& s, float minHeight, const std::function
     ImGuiIO& io = ImGui::GetIO();
     const double now = ImGui::GetTime();
     const float dt = io.DeltaTime;
-    const float pad = 44.0f, rounding = 22.0f;
+    const float pad = gCompact ? 24.0f : 44.0f, rounding = 22.0f;
     const ImVec2 start = ImGui::GetCursorScreenPos();
     const float avail = ImGui::GetContentRegionAvail().x;
     const float cw = std::min(avail, 820.0f);
@@ -913,7 +986,7 @@ int swipeCard(const char* id, SwipeCard& s, float minHeight, const std::function
     if (squash > 0.98f) s.contentH[shown] = ImGui::GetItemRectSize().y;
     ImGui::PopStyleVar();
 
-    const char* hint = shown ? "Click to flip back" : "Click to flip";
+    const char* hint = gTouch ? (shown ? "Tap to flip back" : "Tap to flip") : shown ? "Click to flip back" : "Click to flip";
     textCentered(dl, fonts.small, ImVec2(p.x + sz.x * 0.5f, p.y + ch - 24), u32(col::Muted, alpha * (1.0f - k)), hint);
     if (k > 0.01f) {  // "KNOW IT" / "STILL LEARNING" stamp
         const char* stamp = x > 0 ? "KNOW IT" : "STILL LEARNING";

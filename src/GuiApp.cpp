@@ -4,6 +4,7 @@
 #include "Visuals.h"
 #include "Widgets.h"
 #include "imgui.h"
+#include "imgui_internal.h"  // touch scrolling: the window under the finger, SetScrollY
 #include <algorithm>
 #include <cctype>
 #include <cmath>
@@ -19,8 +20,10 @@ using namespace ui;
 
 namespace {
 
-constexpr float kSidebar = 288.0f;  // width of the navy sidebar
-constexpr float kGap = 18.0f;       // space between cards
+constexpr float kSidebar = 288.0f;       // width of the navy sidebar
+constexpr float kGap = 18.0f;            // space between cards
+constexpr float kCompactBelow = 1000.0f; // narrower than this (points): phone layout
+constexpr float kTopBar = 58.0f;         // phone layout: height of the navy top bar
 
 ImU32 u32(ImVec4 c, float alphaMul = 1.0f) {
     c.w *= alphaMul;
@@ -165,6 +168,22 @@ struct SubjectCard {
 };
 
 int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
+    const float pad = compact() ? 20.0f : 26.0f;
+    // Phone layout: the buttons go under the footer text when they don't fit beside it,
+    // and the card is as tall as its description needs.
+    float buttonsW = 0.0f;
+    int buttonCount = 0;
+    for (const char* l : {c.primary, c.secondary})
+        if (l) buttonsW += textSize(fonts.strong, l).x + 36 + (buttonCount++ ? 10 : 0);
+    const bool stack = compact() && !c.disabled && buttonCount > 0 &&
+                       textSize(fonts.label, c.footer.c_str()).x + 16 + buttonsW > size.x - pad * 2;
+    if (compact()) {
+        const float top = pad + 50 + 18 + fontPx(fonts.heading) + 10 +
+                          textSize(fonts.body, c.desc.c_str(), size.x - pad * 2).y + 12;
+        const float bottom = (c.progress >= 0 ? 7.0f + (stack ? 14.0f : 19.0f) : 0.0f) + (stack ? 28.0f : 0.0f) + 40 + pad;
+        size.y = top + bottom;
+    }
+
     ImGui::PushID(id);
     ImGui::BeginGroup();
     const ImVec2 p = ImGui::GetCursorScreenPos();
@@ -175,7 +194,6 @@ int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
     cardShape(dl, p - ImVec2(0, hov ? 2.0f : 0.0f), size, 16.0f, hov,
               c.highlight ? col::Accent : col::CardBorder, c.highlight ? 2.0f : 1.0f);
     const ImVec2 q = p - ImVec2(0, hov ? 2.0f : 0.0f);  // card lifts slightly on hover
-    const float pad = 26.0f;
     const float fade = c.disabled ? 0.55f : 1.0f;
 
     Tint t = tint(c.tint);
@@ -202,7 +220,10 @@ int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
     dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(q.x + pad, y), u32(col::Muted, fade), c.desc.c_str(), nullptr,
                 size.x - pad * 2);
 
-    const float barY = q.y + size.y - pad - 40 - 26;
+    // Bottom: progress bar, footer text, buttons (beside the footer, or under it when stacked)
+    const float rowY = q.y + size.y - pad - 40;
+    const float footerY = stack ? rowY - 12 - 16 : rowY + 20 - fontPx(fonts.label) * 0.5f;
+    const float barY = stack ? footerY - 14 - 7 : q.y + size.y - pad - 40 - 26;
     if (c.progress >= 0) {
         const float w = size.x - pad * 2;
         dl->AddRectFilled(ImVec2(q.x + pad, barY), ImVec2(q.x + pad + w, barY + 7), u32(col::Track), 3.5f);
@@ -210,17 +231,14 @@ int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
             dl->AddRectFilled(ImVec2(q.x + pad, barY), ImVec2(q.x + pad + std::max(7.0f, w * c.progress), barY + 7),
                               u32(col::Accent), 3.5f);
     }
-
-    // Footer: stats text on the left, buttons on the right
-    const float rowY = q.y + size.y - pad - 40;
-    dl->AddText(fonts.label, fontPx(fonts.label), ImVec2(q.x + pad, rowY + 20 - fontPx(fonts.label) * 0.5f),
-                u32(col::Footer, fade), c.footer.c_str());
+    dl->AddText(fonts.label, fontPx(fonts.label), ImVec2(q.x + pad, footerY), u32(col::Footer, fade), c.footer.c_str());
 
     int clicked = 0;
     if (!c.disabled) {
         float x = q.x + size.x - pad;
+        const float stackW = buttonCount ? (size.x - pad * 2 - 10 * (buttonCount - 1)) / buttonCount : 0.0f;
         auto place = [&](const char* label, ButtonStyle style) {
-            float w = textSize(fonts.strong, label).x + 36;
+            float w = stack ? stackW : textSize(fonts.strong, label).x + 36;
             x -= w;
             ImGui::SetCursorScreenPos(ImVec2(x, rowY));
             bool hit = button(label, style, ImVec2(w, 40));
@@ -236,12 +254,15 @@ int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
 }
 
 // Lays out cards in a grid: call next() before each card.
+// Up to `maxCols` columns, each at least `minW` wide: fewer columns on narrow screens.
 struct Grid {
     int cols;
     float cardW;
     int i = 0;
-    Grid(int columns) : cols(columns) {
-        cardW = (ImGui::GetContentRegionAvail().x - kGap * (cols - 1)) / cols;
+    explicit Grid(int maxCols, float minW = 330.0f) {
+        const float avail = ImGui::GetContentRegionAvail().x;
+        cols = std::clamp(static_cast<int>((avail + kGap) / (minW + kGap)), 1, maxCols);
+        cardW = (avail - kGap * (cols - 1)) / cols;
     }
     void next() {
         if (i % cols != 0) ImGui::SameLine(0, kGap);
@@ -252,13 +273,28 @@ struct Grid {
 
 // A page title with a muted subtitle underneath.
 void pageTitle(const char* title, const char* subtitle = nullptr) {
-    textIn(fonts.title, col::Ink, title);
+    if (compact()) wrappedIn(fonts.heading, col::Ink, title);
+    else textIn(fonts.title, col::Ink, title);
     if (subtitle) {
-        ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + 760);
+        ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + std::min(760.0f, ImGui::GetContentRegionAvail().x));
         textIn(fonts.body, col::Muted, subtitle);
         ImGui::PopTextWrapPos();
     }
     ImGui::Dummy(ImVec2(0, 6));
+}
+
+// A section heading: big on wide screens, smaller and wrapped on phones.
+void heading(const char* text) {
+    if (compact()) wrappedIn(fonts.heading, col::Ink, text);
+    else textIn(fonts.title, col::Ink, text);
+}
+
+float buttonWidth(const char* label) { return textSize(fonts.strong, label).x + 40.0f; }
+
+// Puts the next item (`width` wide) on the same line if it fits, else on a new line.
+void sameLineIfFits(float width, float gap = 12.0f) {
+    const float right = ImGui::GetItemRectMax().x + gap + width;
+    if (right <= ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x) ImGui::SameLine(0, gap);
 }
 
 // Popups need their own padding (the main window has none).
@@ -391,6 +427,7 @@ void GuiApp::draw() {
         setDarkMode(darkMode_);
         themeApplied_ = true;
     }
+    touchScroll();
     const ImGuiViewport* vp = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(vp->WorkPos);
     ImGui::SetNextWindowSize(vp->WorkSize);
@@ -403,21 +440,39 @@ void GuiApp::draw() {
 
     const ImVec2 o = ImGui::GetWindowPos();
     const ImVec2 sz = ImGui::GetWindowSize();
-    ImGui::GetWindowDrawList()->AddRectFilled(o, ImVec2(o.x + kSidebar, o.y + sz.y), u32(col::Sidebar));
+    const float innerW = sz.x - safe_.left - safe_.right;
+    compact_ = innerW < kCompactBelow;
+    ui::setDevice(compact_, touch_);
+    if (!compact_) menuOpen_ = false;
 
-    // Sidebar
-    ImGui::SetCursorScreenPos(o);
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(26, 30));
-    ImGui::BeginChild("sidebar", ImVec2(kSidebar, sz.y), ImGuiChildFlags_AlwaysUseWindowPadding,
-                      ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-    drawSidebar(sz.y);
-    ImGui::EndChild();
-    ImGui::PopStyleVar();
+    ImVec2 mainPos, mainSize, mainPad;
+    if (!compact_) {
+        // Sidebar (its navy also fills the space beside a notch)
+        const float sideW = safe_.left + kSidebar;
+        ImGui::GetWindowDrawList()->AddRectFilled(o, ImVec2(o.x + sideW, o.y + sz.y), u32(col::Sidebar));
+        const float sideH = sz.y - safe_.top - safe_.bottom;
+        ImGui::SetCursorScreenPos(ImVec2(o.x + safe_.left, o.y + safe_.top));
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(26, 30));
+        ImGui::BeginChild("sidebar", ImVec2(kSidebar, sideH), ImGuiChildFlags_AlwaysUseWindowPadding,
+                          ImGuiWindowFlags_NoScrollbar);
+        drawSidebar(sideH);
+        ImGui::EndChild();
+        ImGui::PopStyleVar();
+        mainPos = ImVec2(o.x + sideW, o.y + safe_.top);
+        mainSize = ImVec2(sz.x - sideW - safe_.right, sz.y - safe_.top);
+        mainPad = ImVec2(46, 34);
+    } else {
+        drawTopBar(o, sz.x, kTopBar);
+        mainPos = ImVec2(o.x + safe_.left, o.y + safe_.top + kTopBar);
+        mainSize = ImVec2(innerW, sz.y - safe_.top - kTopBar);
+        mainPad = innerW < 600 ? ImVec2(16, 18) : ImVec2(28, 26);
+    }
 
     // Main area
-    ImGui::SetCursorScreenPos(ImVec2(o.x + kSidebar, o.y));
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(46, 34));
-    ImGui::BeginChild("main", ImVec2(sz.x - kSidebar, sz.y), ImGuiChildFlags_AlwaysUseWindowPadding);
+    ImGui::SetCursorScreenPos(mainPos);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, mainPad);
+    ImGui::BeginChild("main", mainSize, ImGuiChildFlags_AlwaysUseWindowPadding,
+                      touch_ ? ImGuiWindowFlags_NoScrollbar : 0);
     if (screen_ != lastScreen_) {  // new page: start at the top
         ImGui::SetScrollY(0.0f);
         lastScreen_ = screen_;
@@ -433,11 +488,155 @@ void GuiApp::draw() {
         case Screen::Quiz: drawQuiz(); break;
         case Screen::Results: drawResults(); break;
     }
-    ImGui::Dummy(ImVec2(0, 12));  // breathing room at the bottom when scrolling
+    ImGui::Dummy(ImVec2(0, 12 + safe_.bottom));  // breathing room at the bottom (and above a home bar)
     ImGui::EndChild();
     ImGui::PopStyleVar();
 
     ImGui::End();
+    if (compact_ && menuOpen_) drawDrawer();
+}
+
+// Phone layout: navy bar with the menu button, logo, and the page name.
+void GuiApp::drawTopBar(ImVec2 o, float width, float barH) {
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    const float top = o.y + safe_.top;
+    dl->AddRectFilled(o, ImVec2(o.x + width, top + barH), u32(col::Sidebar));
+    float x = o.x + safe_.left + 8;
+    if (screen_ != Screen::Quiz) {  // during a quiz, Quit is the way out
+        ImGui::SetCursorScreenPos(ImVec2(x, top + (barH - 44) * 0.5f));
+        if (ImGui::InvisibleButton("menu", ImVec2(44, 44))) {
+            menuOpen_ = true;
+            menuTime_ = ImGui::GetTime();
+        }
+        const ImVec2 c(x + 22, top + barH * 0.5f);
+        for (int i = -1; i <= 1; ++i)
+            dl->AddLine(c + ImVec2(-10, i * 6.5f), c + ImVec2(10, i * 6.5f), u32(col::White), 2.2f);
+        x += 50;
+    } else {
+        x += 8;
+    }
+    drawLogo(dl, ImVec2(x + 15, top + barH * 0.5f), 15.0f);
+    x += 40;
+    const float right = o.x + width - safe_.right - 12;
+    dl->PushClipRect(ImVec2(x, top), ImVec2(right, top + barH), true);
+    dl->AddText(fonts.heading, fontPx(fonts.heading), ImVec2(x, top + (barH - fontPx(fonts.heading)) * 0.5f),
+                u32(col::White), pageName());
+    dl->PopClipRect();
+}
+
+const char* GuiApp::pageName() const {
+    switch (screen_) {
+        case Screen::Home: return "Cadet Prep";
+        case Screen::Settings: return "Settings";
+        case Screen::Dashboard: return trackInfo(track_).name;
+        case Screen::Practice: return "Practice tests";
+        case Screen::Review: return "Review missed";
+        case Screen::Flashcards: return track_ == "afoqt" ? "Vocabulary cards" : "Memorize cards";
+        case Screen::Progress: return "My progress";
+        case Screen::Quiz: return sessionName_.c_str();
+        case Screen::Results: return "Results";
+    }
+    return "Cadet Prep";
+}
+
+// Phone layout: the sidebar slides in from the left over a dimmed page. Tapping
+// the page (or picking a page from the menu) closes it.
+void GuiApp::drawDrawer() {
+    const ImGuiViewport* vp = ImGui::GetMainViewport();
+    float k = std::clamp(static_cast<float>(ImGui::GetTime() - menuTime_) / 0.2f, 0.0f, 1.0f);
+    k = 1.0f - (1.0f - k) * (1.0f - k) * (1.0f - k);
+    const float dw = safe_.left + std::min(320.0f, vp->WorkSize.x * 0.86f);
+
+    ImGui::SetNextWindowPos(vp->WorkPos);
+    ImGui::SetNextWindowSize(vp->WorkSize);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
+    ImGui::Begin("drawer", nullptr,
+                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings |
+                     ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+    ImGui::PopStyleColor();
+    ImGui::PopStyleVar();
+    const ImVec2 o = ImGui::GetWindowPos(), sz = ImGui::GetWindowSize();
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    dl->AddRectFilled(o, o + sz, IM_COL32(0, 0, 0, static_cast<int>(120 * k)));
+    ImGui::SetCursorScreenPos(o);
+    if (ImGui::InvisibleButton("scrim", sz)) menuOpen_ = false;
+
+    const float x0 = o.x - dw * (1.0f - k);
+    dl->AddRectFilled(ImVec2(x0, o.y), ImVec2(x0 + dw, o.y + sz.y), u32(col::Sidebar));
+    const float sideH = sz.y - safe_.top - safe_.bottom;
+    ImGui::SetCursorScreenPos(ImVec2(x0 + safe_.left, o.y + safe_.top));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(22, 24));
+    ImGui::BeginChild("drawer_side", ImVec2(dw - safe_.left, sideH), ImGuiChildFlags_AlwaysUseWindowPadding,
+                      ImGuiWindowFlags_NoScrollbar);
+    drawSidebar(sideH);
+    ImGui::EndChild();
+    ImGui::PopStyleVar();
+    ImGui::End();
+}
+
+// Touch screens have no scroll wheel: dragging a finger scrolls whatever is under
+// it (the innermost window that can scroll that way), and a quick flick keeps it
+// gliding. Once a drag turns into a scroll, the button it started on won't click.
+// Sideways drags that nothing can scroll are left alone (swipe cards use them).
+void GuiApp::touchScroll() {
+    if (!touch_) return;
+    ImGuiContext& g = *GImGui;
+    const ImGuiIO& io = g.IO;
+    auto scrollable = [](ImGuiWindow* w, bool vertical) -> ImGuiWindow* {
+        for (; w; w = w->ParentWindow) {
+            if ((vertical ? w->ScrollMax.y : w->ScrollMax.x) > 0.5f) return w;
+            if (!(w->Flags & ImGuiWindowFlags_ChildWindow)) break;
+        }
+        return nullptr;
+    };
+    if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {  // finger down: stops a fling, finds what can scroll
+        scrollWinY_ = scrollable(g.HoveredWindow, true);
+        scrollWinX_ = scrollable(g.HoveredWindow, false);
+        dragAxis_ = 0;
+        flingWin_ = nullptr;
+        flingVel_ = ImVec2(0, 0);
+    }
+    if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+        const ImVec2 d = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left, 0.0f);
+        if (dragAxis_ == 0 && d.x * d.x + d.y * d.y > 10.0f * 10.0f) {
+            const bool vertical = std::fabs(d.y) >= std::fabs(d.x);
+            dragAxis_ = (vertical ? scrollWinY_ : scrollWinX_) ? (vertical ? 2 : 1) : -1;
+        }
+        if (dragAxis_ > 0) {
+            auto* w = static_cast<ImGuiWindow*>(dragAxis_ == 2 ? scrollWinY_ : scrollWinX_);
+            const float delta = dragAxis_ == 2 ? io.MouseDelta.y : io.MouseDelta.x;
+            if (dragAxis_ == 2) ImGui::SetScrollY(w, w->Scroll.y - delta);
+            else ImGui::SetScrollX(w, w->Scroll.x - delta);
+            const float v = io.DeltaTime > 0 ? -delta / io.DeltaTime : 0.0f;
+            float& fv = dragAxis_ == 2 ? flingVel_.y : flingVel_.x;
+            fv = fv * 0.6f + v * 0.4f;
+            flingWin_ = w;
+            if (g.ActiveId) ImGui::ClearActiveID();  // a scroll, not a tap
+        }
+        return;
+    }
+    dragAxis_ = 0;
+    if (!flingWin_) return;
+    auto* w = static_cast<ImGuiWindow*>(flingWin_);
+    const float dt = io.DeltaTime;
+    if (flingVel_.y != 0) ImGui::SetScrollY(w, w->Scroll.y + flingVel_.y * dt);
+    if (flingVel_.x != 0) ImGui::SetScrollX(w, w->Scroll.x + flingVel_.x * dt);
+    flingVel_ = flingVel_ * std::exp(-dt * 3.5f);
+    const bool atEdgeY = (flingVel_.y < 0 && w->Scroll.y <= 0) || (flingVel_.y > 0 && w->Scroll.y >= w->ScrollMax.y);
+    const bool atEdgeX = (flingVel_.x < 0 && w->Scroll.x <= 0) || (flingVel_.x > 0 && w->Scroll.x >= w->ScrollMax.x);
+    if ((std::fabs(flingVel_.x) < 12 && std::fabs(flingVel_.y) < 12) || (flingVel_.y != 0 && atEdgeY) ||
+        (flingVel_.x != 0 && atEdgeX)) {
+        flingWin_ = nullptr;
+        flingVel_ = ImVec2(0, 0);
+    }
+}
+
+bool GuiApp::animating() const {
+    const double now = ImGui::GetTime();
+    return flingWin_ || dragAxis_ > 0 || (menuOpen_ && now - menuTime_ < 0.4) || swipe_.fly || swipe_.dragging ||
+           swipe_.flipStart >= 0 || std::fabs(swipe_.x) > 0.5f || (swipe_.enterStart >= 0 && now - swipe_.enterStart < 0.4) ||
+           (feedbackTime_ >= 0 && now - feedbackTime_ < 1.6);
 }
 
 // ================================================================ frame
@@ -534,6 +733,7 @@ void GuiApp::drawSidebar(float height) {
 }
 
 void GuiApp::drawHeader(const std::string& label) {
+    if (compact_) return;  // the top bar names the page
     const float y = ImGui::GetCursorPosY();
     ImGui::SetCursorPosY(y + 9);
     spacedLabel(label.c_str(), col::Muted, 2.2f);
@@ -553,15 +753,16 @@ void GuiApp::drawStatRow() {
     const Overall ov = overall();
     int missedTotal = 0;
     for (const auto& [id, n] : missedBySubtest()) missedTotal += n;
-    const float w = (ImGui::GetContentRegionAvail().x - kGap * 3) / 4;
-    const ImVec2 size(w, 142);
+    Grid grid(4, 150);  // two by two on phones
+    const ImVec2 size(grid.cardW, 142);
+    grid.next();
     statCard(size, "Study sessions", fmt("%d", ov.sessions).c_str(), "Practice and timed tests");
-    ImGui::SameLine(0, kGap);
+    grid.next();
     statCard(size, "Questions answered", fmt("%d", ov.total).c_str(), "Across all sections");
-    ImGui::SameLine(0, kGap);
+    grid.next();
     statCard(size, "Practice accuracy", ov.total ? fmt("%d%%", ov.correct * 100 / ov.total).c_str() : "\xE2\x80\x94",
              "Not an official percentile");
-    ImGui::SameLine(0, kGap);
+    grid.next();
     statCard(size, "Saved to review", fmt("%d", missedTotal).c_str(), "Questions to revisit");
 }
 
@@ -571,14 +772,18 @@ void GuiApp::drawHome() {
     // ---- Welcome banner
     ImDrawList* dl = ImGui::GetWindowDrawList();
     const float w = ImGui::GetContentRegionAvail().x;
-    const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, 190);
+    const float pad = compact_ ? 24.0f : 42.0f;
+    ImFont* heroFont = compact_ ? fonts.title : fonts.hero;
+    const char* blurb = "What are we working on today? Your progress saves as you go.";
+    const float blurbW = compact_ ? w - pad * 2 : std::min(620.0f, w * 0.6f);
+    const float bannerH = compact_ ? 34 + 20 + fontPx(heroFont) * 2.4f + textSize(fonts.body, blurb, blurbW).y + 30 : 190.0f;
+    const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, bannerH);
     gradientRect(dl, a, b, col::HeroA, col::HeroB, 24.0f);
     dl->PushClipRect(a, b, true);
     dl->AddCircle(ImVec2(b.x - 130, a.y + 40), 170, u32(col::White, 0.10f), 96, 1.5f);
     dl->PopClipRect();
-    drawLogo(dl, ImVec2(b.x - 120, a.y + 95), 58.0f);
-    const float pad = 42.0f;
-    ImGui::SetCursorScreenPos(a + ImVec2(pad, 38));
+    if (!compact_) drawLogo(dl, ImVec2(b.x - 120, a.y + 95), 58.0f);
+    ImGui::SetCursorScreenPos(a + ImVec2(pad, compact_ ? 30 : 38));
     spacedLabel("CADET PREP", ImVec4(1, 1, 1, 0.85f), 2.2f);
     float y = ImGui::GetCursorScreenPos().y + 6;
     // Greet by local time of day.
@@ -589,15 +794,13 @@ void GuiApp::drawHome() {
                            : local.tm_hour < 12 ? "Good morning, Cadet"
                            : local.tm_hour < 17 ? "Good afternoon, Cadet"
                                                 : "Good evening, Cadet";
-    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), greeting);
-    y += fontPx(fonts.hero) + 14;
-    const char* blurb = "What are we working on today? Your progress saves as you go.";
-    dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(a.x + pad, y), u32(col::White, 0.88f), blurb, nullptr,
-                std::min(620.0f, w * 0.6f));
-    ImGui::SetCursorScreenPos(ImVec2(a.x, b.y + 28));
+    dl->AddText(heroFont, fontPx(heroFont), ImVec2(a.x + pad, y), u32(col::White), greeting, nullptr, w - pad * 2);
+    y += textSize(heroFont, greeting, w - pad * 2).y + 14;
+    dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(a.x + pad, y), u32(col::White, 0.88f), blurb, nullptr, blurbW);
+    ImGui::SetCursorScreenPos(ImVec2(a.x, b.y + (compact_ ? 22 : 28)));
 
     // ---- One card per prep section
-    textIn(fonts.title, col::Ink, "Sections");
+    heading("Sections");
     ImGui::Dummy(ImVec2(0, 6));
     Grid grid(2);
     const ImVec2 size(grid.cardW, 262);
@@ -637,9 +840,11 @@ void GuiApp::drawDashboard() {
     // ---- Hero banner
     ImDrawList* dl = ImGui::GetWindowDrawList();
     const float w = ImGui::GetContentRegionAvail().x;
-    const float pad = 42.0f, wrap = std::min(560.0f, w * 0.6f);
+    const float pad = compact_ ? 24.0f : 42.0f, wrap = compact_ ? w - pad * 2 : std::min(560.0f, w * 0.6f);
+    ImFont* heroFont = compact_ ? fonts.title : fonts.hero;
     const char* blurb = ti.blurb;
-    const float h = 38 + fontPx(fonts.hero) + 12 + textSize(fonts.body, blurb, wrap).y + 24 + 48 + 38;
+    const float top = compact_ ? 28.0f : 38.0f;
+    const float h = top + textSize(heroFont, ti.name, w - pad * 2).y + 12 + textSize(fonts.body, blurb, wrap).y + 24 + 48 + top;
     const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, h);
     gradientRect(dl, a, b, col::HeroA, col::HeroB, 24.0f);
     dl->PushClipRect(a, b, true);  // decorations stay inside the banner
@@ -647,16 +852,16 @@ void GuiApp::drawDashboard() {
     dl->AddCircle(ImVec2(b.x - 110, a.y + 110), 140, u32(col::White, 0.08f), 96, 1.5f);
     dl->PopClipRect();
 
-    float y = a.y + 38;
-    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), ti.name);
-    y += fontPx(fonts.hero) + 12;
+    float y = a.y + top;
+    dl->AddText(heroFont, fontPx(heroFont), ImVec2(a.x + pad, y), u32(col::White), ti.name, nullptr, w - pad * 2);
+    y += textSize(heroFont, ti.name, w - pad * 2).y + 12;
     dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(a.x + pad, y), u32(col::White, 0.88f), blurb, nullptr, wrap);
     y += textSize(fonts.body, blurb, wrap).y + 24;
     ImGui::SetCursorScreenPos(ImVec2(a.x + pad, y));
-    if (button(track_ == "afoqt" ? "Start a 10-question warm-up  \xE2\x86\x92" : "Start a warm-up deck  \xE2\x86\x92",
-               ButtonStyle::White, ImVec2(0, 48)))
-        startWarmup();
-    ImGui::SetCursorScreenPos(ImVec2(a.x, b.y + 24));
+    const char* warm = track_ == "afoqt" ? (compact_ ? "Start a warm-up  \xE2\x86\x92" : "Start a 10-question warm-up  \xE2\x86\x92")
+                                         : "Start a warm-up deck  \xE2\x86\x92";
+    if (button(warm, ButtonStyle::White, ImVec2(0, 48))) startWarmup();
+    ImGui::SetCursorScreenPos(ImVec2(a.x, b.y + (compact_ ? 18 : 24)));
 
     if (!message_.empty()) {
         beginCallout();
@@ -669,11 +874,13 @@ void GuiApp::drawDashboard() {
 
     // ---- Training areas
     const float ty = ImGui::GetCursorPosY();
-    textIn(fonts.title, col::Ink, "What do you want to work on?");
+    heading("What do you want to work on?");
     const char* note = "Original practice questions \xC2\xB7 Full explanations";
-    alignRight(textSize(fonts.body, note).x);
-    ImGui::SetCursorPosY(ty + fontPx(fonts.title) - fontPx(fonts.body) - 2);
-    textIn(fonts.body, col::Muted, note);
+    if (!compact_) {
+        alignRight(textSize(fonts.body, note).x);
+        ImGui::SetCursorPosY(ty + fontPx(fonts.title) - fontPx(fonts.body) - 2);
+        textIn(fonts.body, col::Muted, note);
+    }
     ImGui::Dummy(ImVec2(0, 6));
 
     if (track_ != "afoqt") {
@@ -687,8 +894,8 @@ void GuiApp::drawDashboard() {
     if (!pilot.empty()) {
         ImGui::Dummy(ImVec2(0, 14));
         spacedLabel("PILOT SECTIONS", col::Muted, 2.0f);
-        textIn(fonts.body, col::Muted, "Table Reading, Instrument Comprehension, and Aviation Information count toward "
-                                       "the Pilot score, along with Math Knowledge.");
+        wrappedIn(fonts.body, col::Muted, "Table Reading, Instrument Comprehension, and Aviation Information count toward "
+                                          "the Pilot score, along with Math Knowledge.");
         ImGui::Dummy(ImVec2(0, 2));
         drawSectionGrid(pilot, false, false);
     }
@@ -765,19 +972,26 @@ void GuiApp::drawPractice() {
     // Full battery banner
     ImDrawList* dl = ImGui::GetWindowDrawList();
     const float w = ImGui::GetContentRegionAvail().x;
-    const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, 118);
+    // Phone layout: title, text, then the buttons underneath, all full width
+    const float bpad = compact_ ? 22.0f : 32.0f;
+    auto bannerHeight = [&](const std::string& sub) {
+        return compact_ ? 26 + fontPx(fonts.heading) + 12 + textSize(fonts.body, sub.c_str(), w - bpad * 2).y + 18 + 48 + 22 : 118.0f;
+    };
     if (track_ != "afoqt") {
         // One battery: every topic in this prep section, back to back
         const auto secs = trackSections();
         int total = 0;
         for (const auto& s : secs) total += s.timeLimitSeconds;
-        gradientRect(dl, a, b, col::HeroA, col::HeroB, 18.0f);
-        dl->AddText(fonts.heading, fontPx(fonts.heading), a + ImVec2(32, 30), u32(col::White), "Full knowledge check");
         std::string sub = fmt("Every block, timed and back to back. About %d min.", total / 60);
-        dl->AddText(fonts.body, fontPx(fonts.body), a + ImVec2(32, 64), u32(col::White, 0.85f), sub.c_str(), nullptr, w - 320);
+        const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, bannerHeight(sub));
+        gradientRect(dl, a, b, col::HeroA, col::HeroB, 18.0f);
+        dl->AddText(fonts.heading, fontPx(fonts.heading), a + ImVec2(bpad, compact_ ? 26 : 30), u32(col::White), "Full knowledge check");
+        const float subY = compact_ ? 26 + fontPx(fonts.heading) + 12 : 64;
+        dl->AddText(fonts.body, fontPx(fonts.body), a + ImVec2(bpad, subY), u32(col::White, 0.85f), sub.c_str(), nullptr,
+                    compact_ ? w - bpad * 2 : w - 320);
         const char* bl = "Start  \xE2\x86\x92";
         const float bw = textSize(fonts.strong, bl).x + 40;
-        ImGui::SetCursorScreenPos(ImVec2(b.x - 32 - bw, a.y + 35));
+        ImGui::SetCursorScreenPos(compact_ ? ImVec2(a.x + bpad, b.y - 22 - 48) : ImVec2(b.x - 32 - bw, a.y + 35));
         if (button(bl, ButtonStyle::White, ImVec2(bw, 48))) {
             queue_ = secs;
             startNextInQueue();
@@ -788,21 +1002,25 @@ void GuiApp::drawPractice() {
         drawSectionGrid(secs, true, false);
         return;
     }
+    int kSecs = 0, pSecs = 0;
+    for (const auto& s : registry_.inCategory("knowledge")) kSecs += s.timeLimitSeconds;
+    for (const auto& s : registry_.inCategory("pilot")) pSecs += s.timeLimitSeconds;
+    std::string sub = fmt("Every section in a group, timed and back to back. Knowledge: about %d min. Pilot: about %d min.",
+                          kSecs / 60, pSecs / 60);
+    const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, bannerHeight(sub));
     gradientRect(dl, a, b, col::HeroA, col::HeroB, 18.0f);
     dl->PushClipRect(a, b, true);
     dl->AddCircle(ImVec2(b.x - 260, a.y + 10), 120, u32(col::White, 0.08f), 64, 1.5f);
     dl->PopClipRect();
-    int kSecs = 0, pSecs = 0;
-    for (const auto& s : registry_.inCategory("knowledge")) kSecs += s.timeLimitSeconds;
-    for (const auto& s : registry_.inCategory("pilot")) pSecs += s.timeLimitSeconds;
-    dl->AddText(fonts.heading, fontPx(fonts.heading), a + ImVec2(32, 30), u32(col::White), "Full batteries");
-    std::string sub = fmt("Every section in a group, timed and back to back. Knowledge: about %d min. Pilot: about %d min.",
-                          kSecs / 60, pSecs / 60);
-    dl->AddText(fonts.body, fontPx(fonts.body), a + ImVec2(32, 64), u32(col::White, 0.85f), sub.c_str(), nullptr, w - 520);
+    dl->AddText(fonts.heading, fontPx(fonts.heading), a + ImVec2(bpad, compact_ ? 26 : 30), u32(col::White), "Full batteries");
+    const float subY = compact_ ? 26 + fontPx(fonts.heading) + 12 : 64;
+    dl->AddText(fonts.body, fontPx(fonts.body), a + ImVec2(bpad, subY), u32(col::White, 0.85f), sub.c_str(), nullptr,
+                compact_ ? w - bpad * 2 : w - 520);
     const char* b1 = "Knowledge  \xE2\x86\x92";
     const char* b2 = "Pilot  \xE2\x86\x92";
-    const float w1 = textSize(fonts.strong, b1).x + 40, w2 = textSize(fonts.strong, b2).x + 40;
-    ImGui::SetCursorScreenPos(ImVec2(b.x - 32 - w2 - 12 - w1, a.y + 35));
+    float w1 = textSize(fonts.strong, b1).x + 40, w2 = textSize(fonts.strong, b2).x + 40;
+    if (compact_) w1 = w2 = (w - bpad * 2 - 12) / 2;
+    ImGui::SetCursorScreenPos(compact_ ? ImVec2(a.x + bpad, b.y - 22 - 48) : ImVec2(b.x - 32 - w2 - 12 - w1, a.y + 35));
     if (button(b1, ButtonStyle::White, ImVec2(w1, 48))) {
         startBattery("knowledge");
         return;
@@ -834,9 +1052,11 @@ void GuiApp::drawReview() {
               "Every question you miss is saved here. Answer it correctly to clear it from the list.");
     if (total > 0) {
         std::string all = fmt("Review all %d  \xE2\x86\x92", total);
-        alignRight(textSize(fonts.strong, all.c_str()).x + 40);
-        ImGui::SetCursorPosY(ty);
-        if (button(all.c_str(), ButtonStyle::Primary, ImVec2(0, 46))) {
+        if (!compact_) {
+            alignRight(textSize(fonts.strong, all.c_str()).x + 40);
+            ImGui::SetCursorPosY(ty);
+        }
+        if (button(all.c_str(), ButtonStyle::Primary, ImVec2(compact_ ? ImGui::GetContentRegionAvail().x : 0, 46))) {
             startReview("");
             return;
         }
@@ -844,12 +1064,14 @@ void GuiApp::drawReview() {
     }
 
     if (total == 0) {
-        beginCard("empty", ImVec2(0, 230), false, ImVec2(40, 40));
+        if (compact_) beginAutoCard("empty", ImVec2(40, 40));
+        else beginCard("empty", ImVec2(0, 230), false, ImVec2(40, 40));
         ImDrawList* dl = ImGui::GetWindowDrawList();
         ImVec2 c = ImGui::GetCursorScreenPos() + ImVec2(30, 30);
         dl->AddCircleFilled(c, 30, u32(col::GoodSoft));
         drawIcon(dl, Icon::Check, c, 30, u32(col::Good));
-        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 84);
+        if (compact_) ImGui::Dummy(ImVec2(0, 66));  // phones: text under the check mark
+        else ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 84);
         ImGui::BeginGroup();
         textIn(fonts.heading, col::Ink, "You're all caught up");
         wrappedIn(fonts.body, col::Muted, "No missed questions right now. When you miss one in practice, it lands "
@@ -857,7 +1079,8 @@ void GuiApp::drawReview() {
         ImGui::Dummy(ImVec2(0, 4));
         if (button("Go to practice tests  \xE2\x86\x92")) goTo(Screen::Practice);
         ImGui::EndGroup();
-        endCard();
+        if (compact_) endAutoCard();
+        else endCard();
         return;
     }
 
@@ -898,25 +1121,37 @@ void GuiApp::drawQuiz() {
     const SessionResult& r = engine_.result();
     const float anim = feedback && feedbackTime_ >= 0 ? static_cast<float>(ImGui::GetTime() - feedbackTime_) : -1.0f;
 
-    // ---- Header: label on the left; timer and sound chips on the right
-    const float y0 = ImGui::GetCursorPosY();
-    ImGui::SetCursorPosY(y0 + 9);
-    spacedLabel((sessionTag_ + "  \xC2\xB7  " + upper(sessionName_)).c_str(), col::Muted, 2.0f);
+    // ---- Header: label on the left; timer chip on the right
+    // (phone layout: the top bar has the name, so just the timer and Quit)
     const int left = engine_.secondsLeft();
     std::string timer = left >= 0 ? mmss(left) + " left" : "Untimed";
     Icon clock = Icon::Clock;
-    alignRight(textSize(fonts.strong, timer.c_str()).x + 52);
-    ImGui::SetCursorPosY(y0);
     const bool urgent = left >= 0 && left <= 30;
-    chip("timer", timer.c_str(), urgent ? col::BadSoft : col::Card, urgent ? col::Bad : col::Ink, false, true, &clock);
-    ImGui::Dummy(ImVec2(0, 6));
+    bool quit = false;
+    if (compact_) {
+        const float y0 = ImGui::GetCursorPosY();
+        chip("timer", timer.c_str(), urgent ? col::BadSoft : col::Card, urgent ? col::Bad : col::Ink, false, true, &clock);
+        alignRight(textSize(fonts.strong, "Quit").x + 40);
+        ImGui::SetCursorPosY(y0);
+        quit = button("Quit", ButtonStyle::Outline);
+        ImGui::Dummy(ImVec2(0, 2));
+    } else {
+        const float y0 = ImGui::GetCursorPosY();
+        ImGui::SetCursorPosY(y0 + 9);
+        spacedLabel((sessionTag_ + "  \xC2\xB7  " + upper(sessionName_)).c_str(), col::Muted, 2.0f);
+        alignRight(textSize(fonts.strong, timer.c_str()).x + 52);
+        ImGui::SetCursorPosY(y0);
+        chip("timer", timer.c_str(), urgent ? col::BadSoft : col::Card, urgent ? col::Bad : col::Ink, false, true, &clock);
+        ImGui::Dummy(ImVec2(0, 6));
 
-    // ---- Title and quit
-    const float ty = ImGui::GetCursorPosY();
-    textIn(fonts.title, col::Ink, sessionName_.c_str());
-    alignRight(textSize(fonts.strong, "Quit").x + 40);
-    ImGui::SetCursorPosY(ty);
-    if (button("Quit", ButtonStyle::Outline)) {
+        // ---- Title and quit
+        const float ty = ImGui::GetCursorPosY();
+        textIn(fonts.title, col::Ink, sessionName_.c_str());
+        alignRight(textSize(fonts.strong, "Quit").x + 40);
+        ImGui::SetCursorPosY(ty);
+        quit = button("Quit", ButtonStyle::Outline);
+    }
+    if (quit) {
         queue_.clear();
         goTo(sessionTag_ == "REVIEW" ? Screen::Review : sessionTag_ == "WARM-UP" ? Screen::Dashboard : Screen::Practice);
         return;
@@ -940,9 +1175,29 @@ void GuiApp::drawQuiz() {
     }
 
     // ---- The question card
-    beginCard("question", ImVec2(0, std::max(420.0f, ImGui::GetContentRegionAvail().y - 26)), true, ImVec2(32, 30));
+    // Phone layout: the card is as tall as the question (the page scrolls instead)
+    if (compact_) beginAutoCard("question", ImVec2(32, 30));
+    else beginCard("question", ImVec2(0, std::max(420.0f, ImGui::GetContentRegionAvail().y - 26)), true, ImVec2(32, 30));
     const bool hasVisual = q.visual.kind != VisualKind::None;
-    if (hasVisual) {
+    // Narrow card: the picture goes above the question, centered (a wide Table
+    // Reading grid scrolls sideways), instead of beside it.
+    const float cardW = ImGui::GetContentRegionAvail().x;
+    const bool stackVisual = hasVisual && cardW < 760;
+    const bool sideVisual = hasVisual && !stackVisual;
+    if (stackVisual) {
+        const float vw = visualWidth(q.visual, cardW, true);
+        if (vw > cardW) {
+            ImGui::BeginChild("visual", ImVec2(cardW, visualHeight(q.visual, vw) + 14), ImGuiChildFlags_None,
+                              ImGuiWindowFlags_HorizontalScrollbar);
+            drawVisual(q.visual, vw);
+            ImGui::EndChild();
+            textIn(fonts.small, col::Muted, touch_ ? "Drag the table sideways to see all of it." : "Scroll sideways to see all of the table.");
+        } else {
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (cardW - vw) * 0.5f);
+            drawVisual(q.visual, vw);
+        }
+        ImGui::Dummy(ImVec2(0, 4));
+    } else if (sideVisual) {
         const float vw = visualWidth(q.visual, ImGui::GetContentRegionAvail().x);
         ImGui::BeginGroup();
         drawVisual(q.visual, vw);
@@ -965,7 +1220,7 @@ void GuiApp::drawQuiz() {
     int clicked = -2;  // -2 = nothing, -1 = skip, 0+ = choice
     const float aw = ImGui::GetContentRegionAvail().x;
     const bool pictures = q.choiceVisuals.size() == q.choices.size();
-    const int perRow = 3;
+    const int perRow = aw < 560 ? 2 : 3;
     const float picGap = 12.0f, picW = (aw - picGap * (perRow - 1)) / perRow, picH = std::floor(picW * 0.78f);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(12, 10));
     for (int i = 0; pictures && i < static_cast<int>(q.choices.size()); ++i) {
@@ -1009,7 +1264,7 @@ void GuiApp::drawQuiz() {
     ImGui::Dummy(ImVec2(0, 4));
 
     if (!feedback) {
-        if (button("Skip   S", ButtonStyle::Outline) || ImGui::IsKeyPressed(ImGuiKey_S, false)) clicked = -1;
+        if (button(touch_ ? "Skip" : "Skip   S", ButtonStyle::Outline) || ImGui::IsKeyPressed(ImGuiKey_S, false)) clicked = -1;
     } else {
         const int chosen = engine_.lastChoice();
         const bool right = chosen == q.correctIndex;
@@ -1030,20 +1285,24 @@ void GuiApp::drawQuiz() {
             }
         }
         endCallout(right ? col::GoodSoft : col::BadSoft, right ? col::Good : col::Bad);
-        if (button("Next  \xE2\x86\x92   Enter") || ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
+        if (button(touch_ ? "Next  \xE2\x86\x92" : "Next  \xE2\x86\x92   Enter",
+                   ButtonStyle::Primary, ImVec2(compact_ ? ImGui::GetContentRegionAvail().x : 0, compact_ ? 48 : 0)) ||
+            ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
             ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false)) {
             engine_.next();
             feedbackTime_ = -1.0;
         }
     }
-    if (hasVisual) ImGui::EndGroup();
+    if (sideVisual) ImGui::EndGroup();
     if (!sessionTips_.empty()) {
         ImGui::Dummy(ImVec2(0, 4));
         divider();
         const std::string keys = std::string("A\xE2\x80\x93") + static_cast<char>('A' + q.choices.size() - 1);
-        wrappedIn(fonts.small, col::Muted, ("Tip: " + sessionTips_ + "   Keys: " + keys + " to answer, S to skip, Enter for next.").c_str());
+        wrappedIn(fonts.small, col::Muted, ("Tip: " + sessionTips_ +
+                                            (touch_ ? "" : "   Keys: " + keys + " to answer, S to skip, Enter for next.")).c_str());
     }
-    endCard();
+    if (compact_) endAutoCard();
+    else endCard();
 
     if (clicked != -2) {
         engine_.submit(clicked);
@@ -1087,19 +1346,14 @@ void GuiApp::drawCardQuestion(const Question& q) {
 
     // Buttons for people who'd rather click than drag
     ImGui::Dummy(ImVec2(0, 10));
-    const float bw = 210.0f, gap = 14.0f, w = ImGui::GetContentRegionAvail().x;
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + std::max(0.0f, (w - bw * 3 - gap * 2) * 0.5f));
-    if (button("\xE2\x86\x90  Still learning", ButtonStyle::Danger, ImVec2(bw, 50))) swipe_.send(-1);
-    ImGui::SameLine(0, gap);
-    if (button(swipe_.flipped ? "Show question" : "Flip card", ButtonStyle::Outline, ImVec2(bw, 50))) swipe_.flip();
-    ImGui::SameLine(0, gap);
-    if (button("Know it  \xE2\x86\x92", ButtonStyle::Primary, ImVec2(bw, 50))) swipe_.send(1);
+    swipeButtons(swipe_.flipped ? "Show question" : "Flip card");
     ImGui::Dummy(ImVec2(0, 6));
     divider();
     wrappedIn(fonts.small, col::Muted,
               ((sessionTips_.empty() ? std::string() : "Tip: " + sessionTips_ + "   ") +
-               "Click the card or press Space to flip. Drag or swipe it right if you knew it, left if you didn't "
-               "(or use the arrow keys).").c_str());
+               (touch_ ? "Tap the card to flip it. Swipe it right if you knew it, left if you didn't."
+                       : "Click the card or press Space to flip. Drag or swipe it right if you knew it, left if you didn't "
+                         "(or use the arrow keys).")).c_str());
 
     if (swiped != 0) {
         const bool knew = swiped > 0;
@@ -1111,6 +1365,27 @@ void GuiApp::drawCardQuestion(const Question& q) {
     }
 }
 
+// "Still learning", flip, and "Know it" under a swipe card. Phones: the two answers
+// side by side, flip underneath.
+void GuiApp::swipeButtons(const char* flipLabel) {
+    const float gap = 14.0f, w = ImGui::GetContentRegionAvail().x;
+    if (!compact_ || w >= 3 * 150 + 2 * gap) {
+        const float bw = std::min(210.0f, (w - gap * 2) / 3);
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + std::max(0.0f, (w - bw * 3 - gap * 2) * 0.5f));
+        if (button("\xE2\x86\x90  Still learning", ButtonStyle::Danger, ImVec2(bw, 50))) swipe_.send(-1);
+        ImGui::SameLine(0, gap);
+        if (button(flipLabel, ButtonStyle::Outline, ImVec2(bw, 50))) swipe_.flip();
+        ImGui::SameLine(0, gap);
+        if (button("Know it  \xE2\x86\x92", ButtonStyle::Primary, ImVec2(bw, 50))) swipe_.send(1);
+        return;
+    }
+    const float bw = (w - gap) / 2;
+    if (button("\xE2\x86\x90  Still learning", ButtonStyle::Danger, ImVec2(bw, 50))) swipe_.send(-1);
+    ImGui::SameLine(0, gap);
+    if (button("Know it  \xE2\x86\x92", ButtonStyle::Primary, ImVec2(bw, 50))) swipe_.send(1);
+    if (button(flipLabel, ButtonStyle::Outline, ImVec2(w, 46))) swipe_.flip();
+}
+
 // ================================================================ results
 
 void GuiApp::drawResults() {
@@ -1120,16 +1395,18 @@ void GuiApp::drawResults() {
     const int pct = total ? r.correctCount() * 100 / total : 0;
 
     pageTitle(fmt("%s results", sessionName_.c_str()).c_str());
-    const float w = (ImGui::GetContentRegionAvail().x - kGap * 2) / 3;
+    Grid grid(3, 150);
+    const float w = grid.cardW;
+    grid.next();
     statCard(ImVec2(w, 142), "Score", fmt("%d%%", pct).c_str(),
              pct == 100 ? "Flawless" : pct >= 90 ? "Outstanding" : pct >= 80 ? "Strong work"
              : pct >= 60 ? "Getting there" : pct >= 40 ? "Building up" : "Every rep counts",
              pct >= 80 ? col::Good : pct >= 60 ? col::Accent : col::Bad);
-    ImGui::SameLine(0, kGap);
+    grid.next();
     statCard(ImVec2(w, 142), cardMode_ ? "Knew it" : "Correct", fmt("%d / %d", r.correctCount(), total).c_str(),
              cardMode_ ? fmt("%d still learning", total - r.correctCount()).c_str()
                        : fmt("%d answered", r.answeredCount()).c_str());
-    ImGui::SameLine(0, kGap);
+    grid.next();
     statCard(ImVec2(w, 142), "Time used", mmss(static_cast<int>(r.totalSeconds)).c_str(),
              r.answeredCount() ? fmt(cardMode_ ? "%.0f sec per card" : "%.0f sec per answer", r.totalSeconds / r.answeredCount()).c_str() : "");
     ImGui::Dummy(ImVec2(0, 4));
@@ -1146,7 +1423,7 @@ void GuiApp::drawResults() {
             startNextInQueue();
             return;
         }
-        ImGui::SameLine(0, 12);
+        sameLineIfFits(buttonWidth("Back to dashboard"));
     }
     if (button("Back to dashboard", queue_.empty() ? ButtonStyle::Primary : ButtonStyle::Outline)) {
         queue_.clear();
@@ -1155,7 +1432,8 @@ void GuiApp::drawResults() {
     }
     ImGui::Dummy(ImVec2(0, 8));
 
-    beginCard("missed", ImVec2(0, std::max(300.0f, ImGui::GetContentRegionAvail().y - 26)), true);
+    if (compact_) beginAutoCard("missed");
+    else beginCard("missed", ImVec2(0, std::max(300.0f, ImGui::GetContentRegionAvail().y - 26)), true);
     spacedLabel(cardMode_ ? "STILL LEARNING" : "MISSED QUESTIONS", col::Muted, 1.8f);
     ImGui::Dummy(ImVec2(0, 2));
     const auto& qs = engine_.questions();
@@ -1176,8 +1454,9 @@ void GuiApp::drawResults() {
         wrappedIn(fonts.small, col::Muted, q.explanation.c_str());
         divider();
     }
-    if (!any) textIn(fonts.heading, col::Good, cardMode_ ? "Nothing here. You knew every card!" : "Nothing here. You got every one right!");
-    endCard();
+    if (!any) wrappedIn(fonts.heading, col::Good, cardMode_ ? "Nothing here. You knew every card!" : "Nothing here. You got every one right!");
+    if (compact_) endAutoCard();
+    else endCard();
 }
 
 // ================================================================ flashcards
@@ -1204,11 +1483,13 @@ void GuiApp::drawFlashcards() {
             textIn(fonts.strong, col::Ink, message_.c_str());
             endCallout(col::AccentSoft, col::Accent);
         }
-        const float w3 = (ImGui::GetContentRegionAvail().x - kGap * 2) / 3;
+        Grid stats(3, 150);
+        const float w3 = stats.cardW;
+        stats.next();
         statCard(ImVec2(w3, 142), "Mastered", fmt("%d", mastered).c_str(), fmt("of %d %s", total, unit).c_str(), col::Accent);
-        ImGui::SameLine(0, kGap);
+        stats.next();
         statCard(ImVec2(w3, 142), "Still learning", fmt("%d", total - mastered).c_str(), "Not mastered yet");
-        ImGui::SameLine(0, kGap);
+        stats.next();
         // Options card with the "definition first" toggle (vocabulary only)
         if (!vocab) {
             statCard(ImVec2(w3, 142), "Blocks", "11", "From your Det 105 handbook");
@@ -1221,8 +1502,10 @@ void GuiApp::drawFlashcards() {
         textIn(fonts.strong, col::InkSoft, "Definition first");
         ImGui::SetCursorScreenPos(p + ImVec2(24, 58));
         if (toggle("deffirst", &definitionFirst_)) saveSettings();
-        ImGui::SetCursorScreenPos(p + ImVec2(24, 100));
+        ImGui::SetCursorScreenPos(p + ImVec2(24, compact_ ? 94 : 100));
+        ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + w3 - 40);  // two lines on a narrow card
         textIn(fonts.small, col::Muted, "Guess the word from its meaning");
+        ImGui::PopTextWrapPos();
         ImGui::EndGroup();
         }
         ImGui::Dummy(ImVec2(0, 16));
@@ -1233,7 +1516,7 @@ void GuiApp::drawFlashcards() {
             ImGui::Dummy(ImVec2(0, 16));
         }
 
-        textIn(fonts.title, col::Ink, vocab ? "Other sessions" : "Start a session");
+        heading(vocab ? "Other sessions" : "Start a session");
         ImGui::Dummy(ImVec2(0, 4));
         const Icon ic[3] = {Icon::Bolt, Icon::Target, Icon::List};
         struct Opt { const char* title; std::string desc; std::string badge; size_t count; bool learning; };
@@ -1243,7 +1526,7 @@ void GuiApp::drawFlashcards() {
             {"Still learning", vocab ? "Only words you haven't mastered yet." : "Only cards you haven't mastered yet.", "Up to 30", 30, true},
             {"Whole deck", vocab ? "Every word once, in random order." : "Every card once, in random order.", plural(total, "card"), 0, false},
         };
-        Grid grid(3);
+        Grid grid(3, 220);
         for (int i = 0; i < 3; ++i) {
             SubjectCard c;
             c.tint = i == 0 ? 2 : i == 1 ? 0 : 1;
@@ -1271,12 +1554,14 @@ void GuiApp::drawFlashcards() {
                                     plural(streak, "day").c_str()).c_str()
                               : "You already finished your deck today, so the streak stays the same. Come back tomorrow "
                                 "to add another day.");
-        const float w3 = (ImGui::GetContentRegionAvail().x - kGap * 2) / 3;
+        Grid stats(3, 150);
+        const float w3 = stats.cardW;
+        stats.next();
         statCard(ImVec2(w3, 142), "Streak", plural(streak, "day").c_str(),
                  fmt("Best: %s", plural(repDeck_.bestStreak(), "day").c_str()).c_str(), col::Accent);
-        ImGui::SameLine(0, kGap);
+        stats.next();
         statCard(ImVec2(w3, 142), "Knew it", fmt("%d", deck.sessionGotIt()).c_str(), "Moved up a level", col::Good);
-        ImGui::SameLine(0, kGap);
+        stats.next();
         statCard(ImVec2(w3, 142), "Still learning", fmt("%d", deck.sessionMissed()).c_str(), "Repeated until you knew it", col::Bad);
         ImGui::Dummy(ImVec2(0, 8));
         if (button("Back to vocabulary cards")) flashActive_ = false;
@@ -1285,11 +1570,13 @@ void GuiApp::drawFlashcards() {
     if (deck.sessionDone()) {
         pageTitle("Session complete", vocab ? "Nice work. Words you marked \"still learning\" will come back sooner next time."
                                             : "Nice work. Cards you marked \"still learning\" will come back sooner next time.");
-        const float w3 = (ImGui::GetContentRegionAvail().x - kGap * 2) / 3;
+        Grid stats(3, 150);
+        const float w3 = stats.cardW;
+        stats.next();
         statCard(ImVec2(w3, 142), "Knew it", fmt("%d", deck.sessionGotIt()).c_str(), "Moved up a level", col::Good);
-        ImGui::SameLine(0, kGap);
+        stats.next();
         statCard(ImVec2(w3, 142), "Still learning", fmt("%d", deck.sessionMissed()).c_str(), "Coming back soon", col::Bad);
-        ImGui::SameLine(0, kGap);
+        stats.next();
         statCard(ImVec2(w3, 142), "Mastered", fmt("%d", mastered).c_str(), fmt("of %d %s", total, unit).c_str(), col::Accent);
         ImGui::Dummy(ImVec2(0, 8));
         if (button(vocab ? "Back to vocabulary cards" : "Back to memorize cards")) flashActive_ = false;
@@ -1299,15 +1586,15 @@ void GuiApp::drawFlashcards() {
     // ---- A card
     const Flashcard& c = deck.current();
     const float ty = ImGui::GetCursorPosY();
-    textIn(fonts.title, col::Ink, repSession_ ? "Spaced repetition" : deckName);
+    textIn(compact_ ? fonts.heading : fonts.title, col::Ink, repSession_ ? "Spaced repetition" : deckName);
     alignRight(textSize(fonts.strong, "End session").x + 40);
     ImGui::SetCursorPosY(ty);
     if (button("End session", ButtonStyle::Outline)) {
         flashActive_ = false;
         return;
     }
-    textIn(fonts.body, col::Muted, fmt("%d cards left  \xC2\xB7  %d known  \xC2\xB7  %d still learning",
-                                       static_cast<int>(deck.remaining()), deck.sessionGotIt(), deck.sessionMissed()).c_str());
+    wrappedIn(fonts.body, col::Muted, fmt("%d cards left  \xC2\xB7  %d known  \xC2\xB7  %d still learning",
+                                          static_cast<int>(deck.remaining()), deck.sessionGotIt(), deck.sessionMissed()).c_str());
     ImGui::Dummy(ImVec2(0, 4));
 
     const float minH = std::clamp(ImGui::GetContentRegionAvail().y - 170, 300.0f, vocab ? 420.0f : 520.0f);
@@ -1360,17 +1647,12 @@ void GuiApp::drawFlashcards() {
         });
 
     ImGui::Dummy(ImVec2(0, 10));
-    const float bw = 210.0f, gap = 14.0f, w = ImGui::GetContentRegionAvail().x;
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + std::max(0.0f, (w - bw * 3 - gap * 2) * 0.5f));
-    if (button("\xE2\x86\x90  Still learning", ButtonStyle::Danger, ImVec2(bw, 50))) swipe_.send(-1);
-    ImGui::SameLine(0, gap);
-    if (button(swipe_.flipped ? "Flip back" : "Flip card", ButtonStyle::Outline, ImVec2(bw, 50))) swipe_.flip();
-    ImGui::SameLine(0, gap);
-    if (button("Know it  \xE2\x86\x92", ButtonStyle::Primary, ImVec2(bw, 50))) swipe_.send(1);
+    swipeButtons(swipe_.flipped ? "Flip back" : "Flip card");
     ImGui::Dummy(ImVec2(0, 6));
     divider();
-    wrappedIn(fonts.small, col::Muted, "Click the card or press Space to flip. Drag or swipe it right if you knew it, "
-                                       "left if you're still learning (or use the arrow keys).");
+    wrappedIn(fonts.small, col::Muted, touch_ ? "Tap the card to flip it. Swipe it right if you knew it, left if you're still learning."
+                                              : "Click the card or press Space to flip. Drag or swipe it right if you knew it, "
+                                                "left if you're still learning (or use the arrow keys).");
     if (swiped != 0) {
         if (swiped > 0) sound_.correct();
         deck.mark(swiped > 0);
@@ -1386,21 +1668,23 @@ void GuiApp::drawRepetition() {
     const int streak = repDeck_.streak();
     const bool done = repDeck_.doneToday();
 
-    textIn(fonts.title, col::Ink, "Spaced repetition");
+    heading("Spaced repetition");
     wrappedIn(fonts.body, col::Muted,
               "Your own deck, starting with 3 words. Go through the whole deck once a day to keep your streak; "
               "words you miss come back until you know them. Add 3 more words whenever you're ready.");
     ImGui::Dummy(ImVec2(0, 4));
 
-    const float w3 = (ImGui::GetContentRegionAvail().x - kGap * 2) / 3;
+    Grid stats(3, 150);
+    const float w3 = stats.cardW;
+    stats.next();
     statCard(ImVec2(w3, 142), "Streak", plural(streak, "day").c_str(),
              fmt("Best: %s", plural(repDeck_.bestStreak(), "day").c_str()).c_str(), streak > 0 ? col::Accent : col::Ink);
-    ImGui::SameLine(0, kGap);
+    stats.next();
     statCard(ImVec2(w3, 142), "Today", done ? "Done" : "Not yet",
              done ? "Come back tomorrow for the next day" : streak > 0 ? "Finish your deck to keep the streak"
                                                                       : "Finish your deck to start a streak",
              done ? col::Good : col::Bad);
-    ImGui::SameLine(0, kGap);
+    stats.next();
     int mastered = 0;
     for (const auto& w : words) mastered += deck_.box(w) >= FlashcardDeck::kMasteredBox ? 1 : 0;
     statCard(ImVec2(w3, 142), "In your deck", plural(n, "word").c_str(), fmt("%d mastered", mastered).c_str());
@@ -1417,14 +1701,15 @@ void GuiApp::drawRepetition() {
     }
     const int canAdd = repDeck_.canAdd(deck_);
     if (canAdd > 0) {
-        ImGui::SameLine(0, 12);
-        if (button(fmt("+  Add %d more %s", canAdd, canAdd == 1 ? "word" : "words").c_str(), ButtonStyle::Outline))
-            repDeck_.addMore(deck_);
+        const std::string add = fmt("+  Add %d more %s", canAdd, canAdd == 1 ? "word" : "words");
+        sameLineIfFits(buttonWidth(add.c_str()));
+        if (button(add.c_str(), ButtonStyle::Outline)) repDeck_.addMore(deck_);
     }
     const int last = repDeck_.lastBatchSize();
     if (last > 0) {
-        ImGui::SameLine(0, 12);
-        if (button(fmt("Remove the %d just added", last).c_str(), ButtonStyle::Outline)) repDeck_.removeLastBatch();
+        const std::string remove = fmt("Remove the %d just added", last);
+        sameLineIfFits(buttonWidth(remove.c_str()));
+        if (button(remove.c_str(), ButtonStyle::Outline)) repDeck_.removeLastBatch();
     }
     if (canAdd == 0) wrappedIn(fonts.small, col::Muted, "Every vocabulary word is in your deck.");
 }
@@ -1443,12 +1728,15 @@ void GuiApp::drawProgress() {
 
     const auto stats = progress_.stats();
     const std::string focusSid = focusId();
-    const float listW = ImGui::GetContentRegionAvail().x * 0.64f;
+    // Phone layout: the two cards stack, full width
+    const bool narrow = ImGui::GetContentRegionAvail().x < 700;
+    const float listW = narrow ? ImGui::GetContentRegionAvail().x : ImGui::GetContentRegionAvail().x * 0.64f;
 
     // ---- Left: accuracy by section
     const float rowH = 84.0f;
     const auto sections = trackSections();
-    const float listH = std::max(470.0f, 70 + rowH * sections.size());
+    const float listH = narrow ? (compact_ ? 40.0f : 70.0f) + rowH * sections.size()
+                               : std::max(470.0f, 70 + rowH * sections.size());
     beginCard("bysection", ImVec2(listW, listH));
     spacedLabel("ACCURACY BY SECTION", col::Muted, 1.8f);
     ImGui::Dummy(ImVec2(0, 4));
@@ -1463,12 +1751,15 @@ void GuiApp::drawProgress() {
         Icon rowIcon = styleFor(s).icon;
         iconTile(dl, p + ImVec2(0, 6), 44, tint(subjectIndex(s.id)), styleFor(s).glyph,
                  styleFor(s).glyph ? nullptr : &rowIcon);
-        dl->AddText(fonts.strong, fontPx(fonts.strong), p + ImVec2(60, 8), u32(col::Ink), s.name.c_str());
         std::string sub = has ? fmt("%s  \xC2\xB7  %.0f sec/question", plural(it->second.sessions, "session").c_str(),
                                     it->second.avgSecondsPerQuestion())
                               : "Not started yet";
-        if (focus) sub += "  \xC2\xB7  FOCUS AREA";
+        if (narrow && has) sub = plural(it->second.sessions, "session");  // phones: keep it short
+        if (focus) sub += narrow ? "  \xC2\xB7  FOCUS" : "  \xC2\xB7  FOCUS AREA";
+        dl->PushClipRect(p, p + ImVec2(w - (has ? 64 : 0), rowH), true);
+        dl->AddText(fonts.strong, fontPx(fonts.strong), p + ImVec2(60, 8), u32(col::Ink), s.name.c_str());
         dl->AddText(fonts.small, fontPx(fonts.small), p + ImVec2(60, 32), u32(focus ? col::Accent : col::Muted), sub.c_str());
+        dl->PopClipRect();
         if (has) {
             const double acc = it->second.accuracy();
             const ImVec4 c = acc >= 80 ? col::Good : acc >= 60 ? col::Accent : col::Bad;
@@ -1483,8 +1774,13 @@ void GuiApp::drawProgress() {
     endCard();
 
     // ---- Right: focus area (sound, theme, and card options live on the Settings page)
-    ImGui::SameLine(0, kGap);
-    beginCard("settings", ImVec2(0, listH));
+    if (narrow) {
+        ImGui::Dummy(ImVec2(0, kGap - 12));
+        beginAutoCard("settings");
+    } else {
+        ImGui::SameLine(0, kGap);
+        beginCard("settings", ImVec2(0, listH));
+    }
     spacedLabel("FOCUS AREA", col::Muted, 1.8f);
     ImGui::Dummy(ImVec2(0, 4));
     wrappedIn(fonts.small, col::Muted, "The section highlighted across the app. Automatic picks your lowest accuracy.");
@@ -1503,7 +1799,8 @@ void GuiApp::drawProgress() {
     divider();
     wrappedIn(fonts.small, col::Muted, "Sound, dark mode, and flashcard options are on the Settings page.");
     if (button("Open settings", ButtonStyle::Outline)) goTo(Screen::Settings);
-    endCard();
+    if (narrow) endAutoCard();
+    else endCard();
 }
 
 // ================================================================ settings
@@ -1524,10 +1821,12 @@ void GuiApp::drawSettings() {
         return changed;
     };
     const float w = ImGui::GetContentRegionAvail().x;
-    const float colW = (w - kGap) / 2;
+    const bool narrow = w < 700;  // phones: one card per row
+    const float colW = narrow ? w : (w - kGap) / 2;
 
     // ---- Sound
-    beginCard("set_sound", ImVec2(colW, 220));
+    if (narrow) beginAutoCard("set_sound");
+    else beginCard("set_sound", ImVec2(colW, 220));
     spacedLabel("SOUND", col::Muted, 1.8f);
     ImGui::Dummy(ImVec2(0, 4));
     if (row("snd", "Sound effects", "A chime when you get an answer right, and a low tone when you miss.", &sound_.enabled)) {
@@ -1536,13 +1835,22 @@ void GuiApp::drawSettings() {
     }
     ImGui::Dummy(ImVec2(0, 10));
     if (button("Play the correct sound", ButtonStyle::Outline) && sound_.enabled) sound_.correct();
-    ImGui::SameLine(0, 10);
+    sameLineIfFits(buttonWidth("Play the wrong sound"), 10);
     if (button("Play the wrong sound", ButtonStyle::Outline) && sound_.enabled) sound_.wrong();
-    endCard();
+    if (narrow) {
+        endAutoCard();
+        ImGui::Dummy(ImVec2(0, kGap - 12));
+    } else {
+        endCard();
+    }
 
     // ---- Appearance: two swatches to pick from
-    ImGui::SameLine(0, kGap);
-    beginCard("set_look", ImVec2(0, 220));
+    if (narrow) {
+        beginAutoCard("set_look");
+    } else {
+        ImGui::SameLine(0, kGap);
+        beginCard("set_look", ImVec2(0, 220));
+    }
     spacedLabel("APPEARANCE", col::Muted, 1.8f);
     ImGui::Dummy(ImVec2(0, 4));
     ImDrawList* dl = ImGui::GetWindowDrawList();
@@ -1565,8 +1873,8 @@ void GuiApp::drawSettings() {
         dl->AddRectFilled(pa, pb, bg, 6.0f);
         dl->AddRectFilled(pa, ImVec2(pa.x + 28, pb.y), u32(col::Sidebar), 6.0f, ImDrawFlags_RoundCornersLeft);
         dl->AddRectFilled(pa + ImVec2(38, 10), ImVec2(pb.x - 10, pa.y + 46), card, 4.0f);
-        dl->AddRectFilled(pa + ImVec2(48, 20), pa + ImVec2(110, 26), IM_COL32(63, 95, 218, 255), 2.0f);
-        dl->AddRectFilled(pa + ImVec2(48, 32), pa + ImVec2(140, 36), line, 2.0f);
+        dl->AddRectFilled(pa + ImVec2(48, 20), ImVec2(std::min(pa.x + 110, pb.x - 20), pa.y + 26), IM_COL32(63, 95, 218, 255), 2.0f);
+        dl->AddRectFilled(pa + ImVec2(48, 32), ImVec2(std::min(pa.x + 140, pb.x - 20), pa.y + 36), line, 2.0f);
         dl->AddRect(p, p + ImVec2(tw, th), u32(picked ? col::Accent : hov ? col::Ring : col::CardBorder), 12.0f, 0, picked ? 2.0f : 1.2f);
         const char* label = dark ? "Dark" : "Light";
         Icon ic = dark ? Icon::Moon : Icon::Sparkle;
@@ -1579,24 +1887,29 @@ void GuiApp::drawSettings() {
             saveSettings();
         }
     }
-    endCard();
+    if (narrow) endAutoCard();
+    else endCard();
     ImGui::Dummy(ImVec2(0, kGap - 12));
 
     // ---- Flashcards
-    beginCard("set_cards", ImVec2(colW, 150));
+    if (narrow) beginAutoCard("set_cards");
+    else beginCard("set_cards", ImVec2(colW, 150));
     spacedLabel("VOCABULARY CARDS", col::Muted, 1.8f);
     ImGui::Dummy(ImVec2(0, 4));
     if (row("def", "Definition first", "AFOQT vocabulary cards show the meaning, and you guess the word.", &definitionFirst_))
         saveSettings();
-    endCard();
+    if (narrow) endAutoCard();
+    else endCard();
 }
 
 void GuiApp::drawComposites() {
     const auto estimates = estimateComposites(progress_.stats());
-    const int perRow = 3;
+    const float availW = ImGui::GetContentRegionAvail().x;
+    const int perRow = availW < 560 ? 1 : availW < 820 ? 2 : 3;
     const float tileH = 150.0f, gap = 14.0f;
     const int rows = (static_cast<int>(estimates.size()) + perRow - 1) / perRow;
-    beginCard("composites", ImVec2(0, 130 + rows * tileH + (rows - 1) * gap));
+    if (compact_) beginAutoCard("composites");
+    else beginCard("composites", ImVec2(0, 130 + rows * tileH + (rows - 1) * gap));
     spacedLabel("ESTIMATED COMPOSITE SCORES", col::Muted, 1.8f);
     wrappedIn(fonts.small, col::Muted,
               "The average of your accuracy on the sections in each composite. The real AFOQT reports "
@@ -1655,12 +1968,14 @@ void GuiApp::drawComposites() {
         dl->PopClipRect();
     }
     ImGui::Dummy(ImVec2(0, rows * tileH + (rows - 1) * gap));
-    endCard();
+    if (compact_) endAutoCard();
+    else endCard();
 }
 
 // ================================================================ actions
 
 void GuiApp::goTo(Screen s) {
+    menuOpen_ = false;
     message_.clear();
     if (s != Screen::Results) queue_.clear();
     if (s == Screen::Flashcards && screen_ != Screen::Flashcards) flashActive_ = false;
@@ -1785,7 +2100,7 @@ void GuiApp::finishSession() {
 void GuiApp::focusMenuItems() {
     spacedLabel("CHOOSE YOUR FOCUS AREA", col::Muted, 1.6f);
     ImGui::Dummy(ImVec2(0, 2));
-    const ImVec2 row(310, 34);
+    const ImVec2 row(std::min(310.0f, ImGui::GetMainViewport()->WorkSize.x - 60), touch_ ? 44.0f : 34.0f);
     const SubtestInfo* w = registry_.find(weakestId());
     std::string autoLabel = w ? "Automatic  (now: " + w->name + ")" : "Automatic  (lowest accuracy)";
     if (ImGui::Selectable(autoLabel.c_str(), pinnedFocus_.empty(), 0, row)) setFocus("");

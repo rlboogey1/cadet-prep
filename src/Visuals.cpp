@@ -3,8 +3,6 @@
 #include "JetShape.h"
 #include "Widgets.h"
 #include "imgui_internal.h"  // ShadeVertsLinearColorGradientKeepAlpha
-#define GL_SILENCE_DEPRECATION
-#include <GLFW/glfw3.h>  // OpenGL, for the insignia textures
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_ONLY_PNG
 #include <stb_image.h>
@@ -380,7 +378,18 @@ void drawBlocks(const Visual& v, float width) {
 
 }  // namespace
 
-float visualWidth(const Visual& v, float available) {
+float visualWidth(const Visual& v, float available, bool stacked) {
+    if (stacked) {  // the picture gets the whole width (phones): fill it, within limits
+        switch (v.kind) {
+            case VisualKind::Table: {
+                const int n = 2 * v.data[0] + 2;
+                return std::clamp(available / static_cast<float>(n), 20.0f, 27.0f) * static_cast<float>(n);
+            }
+            case VisualKind::Instruments: return std::clamp((available - 24.0f) / 4.0f, 60.0f, 92.0f) * 4.0f + 24.0f;
+            case VisualKind::Blocks: return std::clamp(available / 5.6f, 30.0f, 54.0f) * 5.6f;
+            default: return 0.0f;
+        }
+    }
     switch (v.kind) {
         case VisualKind::Table: {
             const int n = 2 * v.data[0] + 1;
@@ -388,6 +397,18 @@ float visualWidth(const Visual& v, float available) {
         }
         case VisualKind::Instruments: return dialRadius(available) * 4.0f + 24.0f;
         case VisualKind::Blocks: return blockUnit(available) * 5.6f;
+        default: return 0.0f;
+    }
+}
+
+float visualHeight(const Visual& v, float width) {
+    switch (v.kind) {
+        case VisualKind::Table: {
+            const int n = 2 * v.data[0] + 2;
+            return std::max(19.0f, width / static_cast<float>(n) * 0.82f) * static_cast<float>(n);
+        }
+        case VisualKind::Instruments: return (width - 24.0f) / 2.0f + 30.0f;
+        case VisualKind::Blocks: return width / 5.6f * 7.2f;
         default: return 0.0f;
     }
 }
@@ -408,11 +429,12 @@ void drawVisual(const Visual& v, float width) {
 namespace {
 
 struct Texture {
-    GLuint id = 0;
+    ImTextureID id = 0;
     int w = 0, h = 0;
 };
 
 std::string gImageFolder;
+TextureMaker gMakeTexture = nullptr;
 
 const Texture* texture(const std::string& file) {
     static std::map<std::string, Texture> cache;  // also remembers files that failed (id 0)
@@ -420,16 +442,9 @@ const Texture* texture(const std::string& file) {
     if (it != cache.end()) return it->second.id ? &it->second : nullptr;
     Texture t;
     int n = 0;
-    unsigned char* px = stbi_load((gImageFolder + "/" + file).c_str(), &t.w, &t.h, &n, 4);
+    unsigned char* px = gMakeTexture ? stbi_load((gImageFolder + "/" + file).c_str(), &t.w, &t.h, &n, 4) : nullptr;
     if (px) {
-        glGenTextures(1, &t.id);
-        glBindTexture(GL_TEXTURE_2D, t.id);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, t.w, t.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, px);
+        t.id = gMakeTexture(px, t.w, t.h);
         stbi_image_free(px);
     }
     return (cache[file] = t).id ? &cache[file] : nullptr;
@@ -445,6 +460,7 @@ std::string insigniaFile(int scheme, int index) {
 }  // namespace
 
 void setImageFolder(const std::string& folder) { gImageFolder = folder; }
+void setTextureMaker(TextureMaker make) { gMakeTexture = make; }
 
 void drawInsignia(const Visual& v, float height, float left, float width) {
     if (v.data.size() < 2) return;
@@ -459,7 +475,7 @@ void drawInsignia(const Visual& v, float height, float left, float width) {
         const float maxW = std::min(width, height * 2.4f);
         const float s = std::min({height / static_cast<float>(t->h), maxW / static_cast<float>(t->w), 3.0f});
         const ImVec2 half(t->w * s * 0.5f, t->h * s * 0.5f);
-        dl->AddImage(static_cast<ImTextureID>(t->id), c - half, c + half, ImVec2(0, 0), ImVec2(1, 1),
+        dl->AddImage(t->id, c - half, c + half, ImVec2(0, 0), ImVec2(1, 1),
                      u32(ImVec4(1, 1, 1, 1), a));
     } else {
         textCentered(dl, fonts.small, c, u32(col::Muted, a), "Picture missing");

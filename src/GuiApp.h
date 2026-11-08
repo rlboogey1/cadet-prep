@@ -16,7 +16,7 @@
 
 // The whole GUI. draw() is called once per frame.
 //
-// Layout:
+// Layout on wide screens (Mac, iPad held sideways):
 //   +------------+-------------------------------------------+
 //   |  sidebar   |  main area (scrolls)                      |
 //   |  (navy)    |  header label .................. chips    |
@@ -24,16 +24,30 @@
 //   |  menu      |                                           |
 //   |  focus     |                                           |
 //   +------------+-------------------------------------------+
+// Narrow screens (iPhone, iPad held upright) get the phone layout ("compact"):
+// a navy top bar with a menu button that slides the sidebar in, and cards that
+// stack into one or two columns.
 class GuiApp {
 public:
     bool load(const std::string& dataDir, std::string& error);
     void draw();
+
+    // iPhone and iPad (set by mobile_main.cpp)
+    void setTouch(bool on) { touch_ = on; }  // drag to scroll, "tap" wording, no keyboard hints
+    // Space the device keeps for itself (notch, rounded corners, home bar), in points
+    void setSafeArea(float top, float right, float bottom, float left) { safe_ = {top, right, bottom, left}; }
+    bool animating() const;  // something is moving: keep drawing at full speed
+    ImVec4 backgroundColor() const { return ui::col::Bg; }
 
 private:
     enum class Screen { Home, Settings, Dashboard, Practice, Review, Flashcards, Progress, Quiz, Results };
 
     // Frame pieces
     void drawSidebar(float height);
+    void drawTopBar(ImVec2 origin, float width, float height);  // phone layout
+    void drawDrawer();                                          // phone layout: the sidebar, slid in
+    const char* pageName() const;                               // top bar title
+    void touchScroll();                                         // drag with a finger to scroll
     void drawHeader(const std::string& label);  // small CAPS label + chips on the right
 
     // Pages
@@ -46,6 +60,7 @@ private:
     void drawProgress();
     void drawQuiz();
     void drawCardQuestion(const Question& q);  // Warrior Knowledge: the question as a swipe card
+    void swipeButtons(const char* flipLabel);  // the buttons under a swipe card
     void drawResults();
 
     // Shared pieces
@@ -129,4 +144,20 @@ private:
     bool repSession_ = false;  // the current flashcard session is the spaced repetition deck
     bool repCounted_ = false;  // that session's finish counted a new streak day
     bool definitionFirst_ = false;
+
+    // Phone and tablet
+    struct Insets { float top = 0, right = 0, bottom = 0, left = 0; };
+    Insets safe_;
+    bool touch_ = false;
+    bool compact_ = false;   // phone layout this frame
+    bool menuOpen_ = false;  // phone layout: the sidebar drawer is showing
+    double menuTime_ = -1.0; // when the drawer started opening (slide-in animation)
+    // Touch scrolling: the windows under the finger that can scroll, the direction
+    // picked once the finger has moved far enough (0 = not yet, -1 = not a scroll),
+    // and the speed it keeps after the finger lifts
+    void* scrollWinY_ = nullptr;
+    void* scrollWinX_ = nullptr;
+    int dragAxis_ = 0;
+    void* flingWin_ = nullptr;
+    ImVec2 flingVel_{0, 0};
 };

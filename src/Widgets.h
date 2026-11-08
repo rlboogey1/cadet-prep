@@ -70,6 +70,11 @@ void loadFonts(ImGuiIO& io, float scale);  // scale = screen pixel density (2 on
 void applyTheme();
 void setDarkMode(bool dark);  // switches every color above and re-applies the theme
 bool darkMode();
+// Phone layout (narrow screen) and touch input; set by GuiApp every frame.
+// Compact shrinks card padding; touch changes "click" hints to "tap".
+void setDevice(bool compact, bool touch);
+bool compact();
+bool touch();
 float fontPx(ImFont* f);
 ImVec2 textSize(ImFont* font, const char* text, float wrap = -1.0f);
 
@@ -94,6 +99,9 @@ void gradientRect(ImDrawList* dl, ImVec2 a, ImVec2 b, ImVec4 from, ImVec4 to, fl
 // A white card that holds other widgets (a child window). Size 0 = fill.
 void beginCard(const char* id, ImVec2 size, bool scroll = false, ImVec2 padding = ImVec2(26, 24));
 void endCard();
+// A card as tall as what's in it (no scrolling of its own), for phones.
+void beginAutoCard(const char* id, ImVec2 padding = ImVec2(26, 24));
+void endAutoCard();
 
 // ---------------------------------------------------------------- widgets
 enum class ButtonStyle { Primary, Outline, White, Danger };

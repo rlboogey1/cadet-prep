@@ -2,3 +2,5 @@ build/
 afoqt_progress.json
 afoqt_flashcards.json
 .DS_Store
+build-mobile/
+build-ios/
