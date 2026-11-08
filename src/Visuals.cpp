@@ -41,43 +41,23 @@ void drawTable(const Visual& v, float width) {
     ImGui::Dummy(size);
     ImDrawList* dl = ImGui::GetWindowDrawList();
 
-    // Which cell is the mouse over? Highlight its row and column to help line things up.
-    int hr = -1, hc = -1;
-    if (ImGui::IsItemHovered()) {
-        ImVec2 m = ImGui::GetMousePos() - p;
-        hc = static_cast<int>(m.x / cw) - 1;
-        hr = static_cast<int>(m.y / ch) - 1;
-        if (hc < 0 || hc >= N || hr < 0 || hr >= N) hr = hc = -1;
-    }
-
     dl->AddRectFilled(p, p + size, u32(col::Card), 8.0f);
     dl->AddRectFilled(p, ImVec2(p.x + size.x, p.y + ch), u32(col::AccentSoft), 8.0f, ImDrawFlags_RoundCornersTop);
     dl->AddRectFilled(p, ImVec2(p.x + cw, p.y + size.y), u32(col::AccentSoft), 8.0f, ImDrawFlags_RoundCornersLeft);
-    for (int r = 0; r < N; ++r) {
-        if (r % 2 == 1)
-            dl->AddRectFilled(ImVec2(p.x + cw, p.y + ch * (r + 1)), ImVec2(p.x + size.x, p.y + ch * (r + 2)), u32(col::Bg));
-    }
-    if (hr >= 0) {
-        const ImVec4 hl(0.247f, 0.373f, 0.855f, 0.10f);
-        dl->AddRectFilled(ImVec2(p.x, p.y + ch * (hr + 1)), ImVec2(p.x + size.x, p.y + ch * (hr + 2)), u32(hl));
-        dl->AddRectFilled(ImVec2(p.x + cw * (hc + 1), p.y), ImVec2(p.x + cw * (hc + 2), p.y + size.y), u32(hl));
-    }
     // Headers: X across the top, Y down the side
     const char* corner = "Y\\X";
     textCentered(dl, fonts.label, p + ImVec2(cw * 0.5f, ch * 0.5f), u32(col::Accent), corner);
     for (int c = 0; c < N; ++c)
-        textCentered(dl, fonts.label, p + ImVec2(cw * (c + 1.5f), ch * 0.5f), u32(c == hc ? col::Accent : col::InkSoft),
+        textCentered(dl, fonts.label, p + ImVec2(cw * (c + 1.5f), ch * 0.5f), u32(col::InkSoft),
                      signedNum(c - R).c_str());
     for (int r = 0; r < N; ++r)
-        textCentered(dl, fonts.label, p + ImVec2(cw * 0.5f, ch * (r + 1.5f)), u32(r == hr ? col::Accent : col::InkSoft),
+        textCentered(dl, fonts.label, p + ImVec2(cw * 0.5f, ch * (r + 1.5f)), u32(col::InkSoft),
                      signedNum(R - r).c_str());
     // Values
     for (int r = 0; r < N; ++r)
         for (int c = 0; c < N; ++c) {
-            const bool here = r == hr && c == hc;
-            ImVec2 cc = p + ImVec2(cw * (c + 1.5f), ch * (r + 1.5f));
-            if (here) dl->AddRect(cc - ImVec2(cw * 0.5f, ch * 0.5f), cc + ImVec2(cw * 0.5f, ch * 0.5f), u32(col::Accent), 3.0f, 0, 1.5f);
-            textCentered(dl, fonts.small, cc, u32(here ? col::Accent : col::Ink),
+            const ImVec2 cc = p + ImVec2(cw * (c + 1.5f), ch * (r + 1.5f));
+            textCentered(dl, fonts.small, cc, u32(col::Ink),
                          std::to_string(v.data[static_cast<size_t>(1 + r * N + c)]).c_str());
         }
     dl->AddLine(ImVec2(p.x + cw, p.y), ImVec2(p.x + cw, p.y + size.y), u32(col::CardBorder), 1.0f);
