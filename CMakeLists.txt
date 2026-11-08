@@ -36,7 +36,7 @@ endif()
 
 if(CADET_MOBILE)
 FetchContent_Declare(SDL3                     # window, touch input, and drawing on iPhone/iPad
-    URL https://github.com/libsdl-org/SDL/releases/download/release-3.2.10/SDL3-3.2.10.tar.gz
+    URL https://github.com/libsdl-org/SDL/releases/download/release-3.4.20/SDL3-3.4.20.tar.gz
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
 set(SDL_SHARED OFF CACHE BOOL "" FORCE)
 set(SDL_STATIC ON CACHE BOOL "" FORCE)
@@ -167,14 +167,15 @@ if(CADET_MOBILE)
             XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
             XCODE_GENERATE_SCHEME ON)
         target_link_libraries(cadet_mobile PRIVATE "-framework CoreText" "-framework CoreFoundation"
+                              "-framework Foundation" "-framework AVFoundation"
                               "-framework AudioToolbox" "-framework CoreAudio")
-        # miniaudio's iOS audio-session setup is Objective-C; skip it (the default session works).
-        set_source_files_properties(src/Sound.cpp PROPERTIES COMPILE_DEFINITIONS MA_NO_AVFOUNDATION)
-        # Question files and pictures go inside the app, at CadetPrep.app/data
+        # On iOS, miniaudio uses AVFoundation (Objective-C) to set up the audio session
+        set_source_files_properties(src/Sound.cpp PROPERTIES COMPILE_OPTIONS "-xobjective-c++")
+        # Question files and pictures go inside the app, at CadetPrep.app/data. Xcode
+        # fills in TARGET_BUILD_DIR and CONTENTS_FOLDER_PATH when the build runs.
         add_custom_command(TARGET cadet_mobile POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/data"
-                    "$<TARGET_BUNDLE_CONTENT_DIR:cadet_mobile>/data"
-            VERBATIM)
+                    "\${TARGET_BUILD_DIR}/\${CONTENTS_FOLDER_PATH}/data")
     else()
         add_executable(cadet_mobile ${MOBILE_SOURCES})  # Mac preview, reads the project's data/
         if(APPLE)

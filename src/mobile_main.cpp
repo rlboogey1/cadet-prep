@@ -219,15 +219,25 @@ int main(int argc, char* argv[]) {
     ui::setTextureMaker(makeSdlTexture);
 
     bool done = false, background = false;
+    bool fingerDown = false;  // a finger is on the screen
     Uint64 lastInput = SDL_GetTicks();
     while (!done) {
         // Sleep while the app is in the background; when nothing is happening,
         // redraw a few times a second (enough for the timer) to save battery.
         SDL_Event e;
+        bool touchEvents = false;
         const bool idle = !scripted && SDL_GetTicks() - lastInput > 1500;
         bool got = background ? SDL_WaitEvent(&e) : idle ? SDL_WaitEventTimeout(&e, 250) : SDL_PollEvent(&e);
         while (got) {
             ImGui_ImplSDL3_ProcessEvent(&e);
+            // Mouse events SDL makes from touches
+            if ((e.type == SDL_EVENT_MOUSE_MOTION && e.motion.which == SDL_TOUCH_MOUSEID) ||
+                ((e.type == SDL_EVENT_MOUSE_BUTTON_DOWN || e.type == SDL_EVENT_MOUSE_BUTTON_UP) &&
+                 e.button.which == SDL_TOUCH_MOUSEID)) {
+                touchEvents = true;
+                if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN) fingerDown = true;
+                if (e.type == SDL_EVENT_MOUSE_BUTTON_UP) fingerDown = false;
+            }
             switch (e.type) {
                 case SDL_EVENT_QUIT:
                 case SDL_EVENT_TERMINATING: done = true; break;
@@ -238,15 +248,15 @@ int main(int argc, char* argv[]) {
                 case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
                     if (e.window.windowID == SDL_GetWindowID(window)) done = true;
                     break;
-                // A finger has no hover: once it lifts, nothing stays highlighted
-                case SDL_EVENT_MOUSE_BUTTON_UP:
-                    if (touch) io.AddMousePosEvent(-FLT_MAX, -FLT_MAX);
-                    break;
                 default: break;
             }
             if (e.type != SDL_EVENT_WINDOW_EXPOSED) lastInput = SDL_GetTicks();
             got = SDL_PollEvent(&e);
         }
+        // A finger has no hover: once it's off the screen (SDL may send one more
+        // movement after it lifts), nothing stays highlighted. ImGui handles events
+        // in order, so a tap in this batch still lands first.
+        if (touch && touchEvents && !fingerDown) io.AddMousePosEvent(-FLT_MAX, -FLT_MAX);
         if (done) break;
         if (background) continue;
         if (app.animating()) lastInput = SDL_GetTicks();
