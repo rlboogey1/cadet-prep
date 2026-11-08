@@ -118,6 +118,7 @@ private:
     // Flashcards
     FlashcardDeck deck_;     // AFOQT: Word Knowledge vocabulary
     FlashcardDeck memDeck_;  // Warrior Knowledge: memorize cards (creeds, oaths, lists)
+    FlashcardDeck vaWords_;  // Verbal Analogies word definitions (lookup only, never studied)
     FlashcardDeck& activeDeck() { return track_ == "afoqt" ? deck_ : memDeck_; }
     const FlashcardDeck& activeDeck() const { return track_ == "afoqt" ? deck_ : memDeck_; }
     bool flashActive_ = false;

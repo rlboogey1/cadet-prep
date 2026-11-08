@@ -93,6 +93,9 @@ map to `Icon` values in `iconNamed()` in `GuiApp.cpp`.
 - Warrior Knowledge (`data/warrior_cards.json`) is exactly the user's Det 105 Warrior Knowledge
   handbook, Blocks 1 to 11; only add what the user sends. The chain of command (Block 5) changes
   over time; update the "Chain of Command" card.
+- A missed Word Knowledge or Verbal Analogies question shows definitions for its words, looked
+  up in `data/flashcards.json` and then `data/va_definitions.json` (lookup only, never studied).
+  When adding analogy questions, add any new words to `va_definitions.json`.
 - Don't add song lyrics (Air Force Song, Space Force Song); the user can add them to the cards file.
 - Pilot sections use official AFOQT question counts and time limits; knowledge-section limits are
   practice pacing.

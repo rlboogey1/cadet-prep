@@ -38,6 +38,49 @@ std::string fmt(const char* f, ...) {
 
 std::string mmss(int seconds) { return fmt("%d:%02d", seconds / 60, seconds % 60); }
 
+// Word Knowledge and Verbal Analogies: definitions for the words in a missed question
+// (the prompt, then the picked choice, then the right one). Words are looked up in the
+// given decks (data/flashcards.json, then data/va_definitions.json); two-word entries
+// like "vice president" match first, and a plural falls back to its singular.
+std::vector<const Flashcard*> definitionsFor(const Question& q, int chosen,
+                                             const std::vector<const FlashcardDeck*>& decks) {
+    std::vector<const Flashcard*> out;
+    if (q.subtest != "word_knowledge" && q.subtest != "verbal_analogies") return out;
+    auto lower = [](std::string s) {
+        for (char& ch : s) ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+        return s;
+    };
+    auto find = [&](const std::string& word) -> const Flashcard* {
+        for (const FlashcardDeck* d : decks)
+            for (const Flashcard& c : d->cards())
+                if (lower(c.word) == word) return &c;
+        return nullptr;
+    };
+    auto addWords = [&](const std::string& text) {
+        std::vector<std::string> words;
+        std::string word;
+        for (char ch : text + " ") {
+            if (std::isalpha(static_cast<unsigned char>(ch))) {
+                word += static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+            } else if (!word.empty()) {
+                words.push_back(word);
+                word.clear();
+            }
+        }
+        for (size_t i = 0; i < words.size(); ++i) {
+            const Flashcard* c = i + 1 < words.size() ? find(words[i] + " " + words[i + 1]) : nullptr;
+            if (c) ++i;
+            if (!c) c = find(words[i]);
+            if (!c && words[i].size() > 3 && words[i].back() == 's') c = find(words[i].substr(0, words[i].size() - 1));
+            if (c && std::find(out.begin(), out.end(), c) == out.end()) out.push_back(c);
+        }
+    };
+    addWords(q.prompt);
+    if (chosen >= 0 && chosen < static_cast<int>(q.choices.size())) addWords(q.choices[static_cast<size_t>(chosen)]);
+    addWords(q.choices[static_cast<size_t>(q.correctIndex)]);
+    return out;
+}
+
 std::string upper(std::string s) {
     for (char& c : s) c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
     return s;
@@ -239,6 +282,7 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
         deck_.loadProgress(apppaths::userFile("afoqt_flashcards.json"));
         memDeck_.load(dataDir + "/warrior_cards.json");
         memDeck_.loadProgress(apppaths::userFile("warrior_cards_progress.json"));
+        vaWords_.load(dataDir + "/va_definitions.json");
         addWarriorCards();
     } catch (const std::exception& e) {
         error = e.what();
@@ -798,10 +842,10 @@ void GuiApp::drawQuiz() {
         return;
     }
 
-    // ---- Progress bar and counts
-    const float w = ImGui::GetContentRegionAvail().x;
+    // ---- Counts; timed tests also get a progress bar (practice, review and warm-up don't)
     const int answered = static_cast<int>(r.answers.size());
-    thinBar(static_cast<float>(answered) / engine_.total(), w, col::Accent, 8.0f);
+    if (sessionTag_ == "TIMED TEST")
+        thinBar(static_cast<float>(answered) / engine_.total(), ImGui::GetContentRegionAvail().x, col::Accent, 8.0f);
     textIn(fonts.strong, col::InkSoft,
            fmt(cardMode_ ? "Card %d of %d" : "Question %d of %d", engine_.index() + 1, engine_.total()).c_str());
     std::string score = sessionTag_ == "TIMED TEST" ? std::string("Score shown at the end")
@@ -892,6 +936,19 @@ void GuiApp::drawQuiz() {
         beginCallout();
         textIn(fonts.heading, right ? col::Good : col::Bad, right ? "Correct!" : chosen < 0 ? "Skipped" : "Not quite");
         wrappedIn(fonts.body, col::Ink, q.explanation.c_str());
+        if (!right) {
+            const auto defs = definitionsFor(q, chosen, {&deck_, &vaWords_});
+            if (!defs.empty()) {
+                ImGui::Dummy(ImVec2(0, 4));
+                spacedLabel(defs.size() == 1 ? "DEFINITION" : "DEFINITIONS", col::Muted, 1.6f);
+                for (const Flashcard* c : defs) {
+                    std::string word = c->word;
+                    if (!word.empty()) word[0] = static_cast<char>(std::toupper(static_cast<unsigned char>(word[0])));
+                    textIn(fonts.strong, col::Ink, (word + (c->partOfSpeech.empty() ? "" : "  (" + c->partOfSpeech + ")")).c_str());
+                    wrappedIn(fonts.body, col::InkSoft, c->definition.c_str());
+                }
+            }
+        }
         endCallout(right ? col::GoodSoft : col::BadSoft, right ? col::Good : col::Bad);
         if (button("Next  \xE2\x86\x92   Enter") || ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
             ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false)) {
