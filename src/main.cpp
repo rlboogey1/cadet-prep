@@ -226,9 +226,9 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    app.ui.showMessage("Cadet Prep -- AFOQT study, knowledge sections");
+    app.ui.showMessage("Welcome to Cadet Prep. Let's get some AFOQT reps in.");
     while (true) {
-        int choice = app.ui.menu("Main menu", {
+        int choice = app.ui.menu("What would you like to do?", {
             "Practice a subtest (untimed, instant feedback)",
             "Timed test (one subtest)",
             "Full knowledge battery (all sections, timed)",

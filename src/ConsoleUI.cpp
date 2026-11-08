@@ -46,7 +46,7 @@ int ConsoleUI::askQuestion(const Question& q, int number, int total, int seconds
         if (c == 'S' || c == 'Q') return -1;
         int idx = c - 'A';
         if (idx >= 0 && idx < static_cast<int>(q.choices.size())) return idx;
-        std::cout << "Please enter a valid letter.";
+        std::cout << "Hmm, that isn't one of the choices. Type a letter from the list.";
     }
 }
 

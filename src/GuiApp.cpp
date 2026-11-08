@@ -11,6 +11,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <ctime>
 #include <fstream>
 #include <nlohmann/json.hpp>
 
@@ -508,9 +509,17 @@ void GuiApp::drawHome() {
     ImGui::SetCursorScreenPos(a + ImVec2(pad, 38));
     spacedLabel("CADET PREP", ImVec4(1, 1, 1, 0.85f), 2.2f);
     float y = ImGui::GetCursorScreenPos().y + 6;
-    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), "Choose a section");
+    // Greet by local time of day.
+    const std::time_t now = std::time(nullptr);
+    std::tm local{};
+    localtime_r(&now, &local);
+    const char* greeting = local.tm_hour < 5    ? "Up late, Cadet?"
+                           : local.tm_hour < 12 ? "Good morning, Cadet"
+                           : local.tm_hour < 17 ? "Good afternoon, Cadet"
+                                                : "Good evening, Cadet";
+    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), greeting);
     y += fontPx(fonts.hero) + 14;
-    const char* blurb = "AFOQT Prep or Warrior Knowledge. Your progress saves automatically.";
+    const char* blurb = "What are we working on today? Your progress saves as you go.";
     dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(a.x + pad, y), u32(col::White, 0.88f), blurb, nullptr,
                 std::min(620.0f, w * 0.6f));
     ImGui::SetCursorScreenPos(ImVec2(a.x, b.y + 28));
@@ -588,7 +597,7 @@ void GuiApp::drawDashboard() {
 
     // ---- Training areas
     const float ty = ImGui::GetCursorPosY();
-    textIn(fonts.title, col::Ink, "Choose your training area");
+    textIn(fonts.title, col::Ink, "What do you want to work on?");
     const char* note = "Original practice questions \xC2\xB7 Full explanations";
     alignRight(textSize(fonts.body, note).x);
     ImGui::SetCursorPosY(ty + fontPx(fonts.title) - fontPx(fonts.body) - 2);
@@ -770,9 +779,9 @@ void GuiApp::drawReview() {
         drawIcon(dl, Icon::Check, c, 30, u32(col::Good));
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 84);
         ImGui::BeginGroup();
-        textIn(fonts.heading, col::Ink, "Nothing to review");
-        wrappedIn(fonts.body, col::Muted, "You have no missed questions right now. Take a practice test, and any "
-                                           "question you miss will show up here.");
+        textIn(fonts.heading, col::Ink, "You're all caught up");
+        wrappedIn(fonts.body, col::Muted, "No missed questions right now. When you miss one in practice, it lands "
+                                           "here so you can take another shot at it.");
         ImGui::Dummy(ImVec2(0, 4));
         if (button("Go to practice tests  \xE2\x86\x92")) goTo(Screen::Practice);
         ImGui::EndGroup();
@@ -790,7 +799,7 @@ void GuiApp::drawReview() {
         c.glyph = styleFor(s).glyph;
         c.icon = styleFor(s).icon;
         c.title = s.name;
-        c.desc = n ? "Questions you missed in this section." : "Nothing to review here.";
+        c.desc = n ? "Questions that tripped you up. Get them right to clear them." : "Nothing to review here. Nice.";
         c.badge = n ? plural(n, "question") : "All clear";
         c.footer = n ? "Clears as you get them right" : "";
         c.primary = n ? "Review  \xE2\x86\x92" : nullptr;
@@ -1032,7 +1041,8 @@ void GuiApp::drawResults() {
     pageTitle(fmt("%s results", sessionName_.c_str()).c_str());
     const float w = (ImGui::GetContentRegionAvail().x - kGap * 2) / 3;
     statCard(ImVec2(w, 142), "Score", fmt("%d%%", pct).c_str(),
-             pct >= 80 ? "Strong work" : pct >= 60 ? "Getting there" : "Keep practicing",
+             pct == 100 ? "Flawless" : pct >= 90 ? "Outstanding" : pct >= 80 ? "Strong work"
+             : pct >= 60 ? "Getting there" : pct >= 40 ? "Building up" : "Every rep counts",
              pct >= 80 ? col::Good : pct >= 60 ? col::Accent : col::Bad);
     ImGui::SameLine(0, kGap);
     statCard(ImVec2(w, 142), cardMode_ ? "Knew it" : "Correct", fmt("%d / %d", r.correctCount(), total).c_str(),
@@ -1045,8 +1055,8 @@ void GuiApp::drawResults() {
 
     if (r.timeExpired) {
         beginCallout();
-        textIn(fonts.strong, col::Ink, cardMode_ ? "Time ran out before you finished. Cards you didn't get to count as missed."
-                                                 : "Time ran out before you finished. Unanswered questions count as missed.");
+        textIn(fonts.strong, col::Ink, cardMode_ ? "Time's up. Cards you didn't get to count as missed, so you'll see them again."
+                                                 : "Time's up. Questions you didn't get to count as missed, so they're waiting in review.");
         endCallout(col::BadSoft, col::Bad);
     }
 
@@ -1084,7 +1094,7 @@ void GuiApp::drawResults() {
         wrappedIn(fonts.small, col::Muted, q.explanation.c_str());
         divider();
     }
-    if (!any) textIn(fonts.heading, col::Good, cardMode_ ? "None. You knew every card!" : "None. Perfect score!");
+    if (!any) textIn(fonts.heading, col::Good, cardMode_ ? "Nothing here. You knew every card!" : "Nothing here. You got every one right!");
     endCard();
 }
 
