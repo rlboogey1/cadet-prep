@@ -6,12 +6,14 @@
 #include "QuestionBank.h"
 #include "QuizEngine.h"
 #include "RepetitionDeck.h"
+#include "SavedQuestions.h"
 #include "Sound.h"
 #include "imgui.h"
 #include "SubtestRegistry.h"
 #include "Widgets.h"
 #include <map>
 #include <random>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -76,6 +78,10 @@ private:
 
     // Actions
     void startSubtest(const SubtestInfo& s, SessionMode mode);
+    void startEndless(const SubtestInfo& s);  // math: generated questions until you tap Finish
+    void topUpEndless();                      // keep a few generated questions ahead
+    void saveGenerated(const Question& q);    // keep a generated question for Review missed
+    void saveButton(const Question& q, bool fullWidth, bool sameLine);  // "Save for review" / "Saved for review"
     void startBattery(const std::string& category);
     void startNextInQueue();
     void startWarmup();
@@ -111,6 +117,8 @@ private:
     SubtestRegistry registry_;
     QuestionBank bank_;
     ProgressStore progress_{apppaths::userFile("afoqt_progress.json")};
+    SavedQuestions saved_{apppaths::userFile("afoqt_saved_questions.json")};
+    std::set<std::string> savedGen_;  // GEN- ids saved this run (the button then says "Saved")
     QuizEngine engine_;
     Sound sound_;
     std::mt19937 rng_{std::random_device{}()};
@@ -123,6 +131,7 @@ private:
     std::string sessionTips_;
     int sessionTimeLimit_ = 0;
     bool isReview_ = false;
+    bool endless_ = false;  // endless practice: more questions are added as you go
     std::string message_;
     std::string pinnedFocus_;  // subtest id chosen by the user for the current track; empty = automatic
     std::map<std::string, std::string> pinnedByTrack_;  // the same, for every track

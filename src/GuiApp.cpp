@@ -1,6 +1,7 @@
 #define IMGUI_DEFINE_MATH_OPERATORS  // lets us write ImVec2 + ImVec2
 #include "GuiApp.h"
 #include "Composites.h"
+#include "QuestionGenerator.h"
 #include "Visuals.h"
 #include "Widgets.h"
 #include "imgui.h"
@@ -165,6 +166,7 @@ struct SubjectCard {
     ButtonStyle primaryStyle = ButtonStyle::Outline;
     bool highlight = false;
     bool disabled = false;
+    const char* corner = nullptr;  // small button in the top-right corner, instead of the badge (returns 3)
 };
 
 int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
@@ -211,7 +213,9 @@ int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
         dl->AddText(fonts.label, fontPx(fonts.label), ImVec2(a.x + 10, a.y + 6), u32(fg, fade), text.c_str());
         bx = a.x - 8;
     };
-    badge(c.badge, col::AccentSoft, col::Accent);
+    const float cornerW = c.corner ? textSize(fonts.strong, c.corner).x + 32 : 0.0f;
+    if (c.corner) bx -= cornerW + 8;
+    else badge(c.badge, col::AccentSoft, col::Accent);
     badge(c.tag, col::TagSoft, col::TagStrong);
 
     float y = q.y + pad + 50 + 18;
@@ -247,6 +251,10 @@ int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
         };
         if (c.primary && place(c.primary, c.primaryStyle)) clicked = 1;
         if (c.secondary && place(c.secondary, ButtonStyle::Outline)) clicked = 2;
+        if (c.corner) {
+            ImGui::SetCursorScreenPos(ImVec2(q.x + size.x - pad - cornerW, q.y + pad + 5));
+            if (button(c.corner, ButtonStyle::Outline, ImVec2(cornerW, 36))) clicked = 3;
+        }
     }
     ImGui::EndGroup();
     ImGui::PopID();
@@ -323,6 +331,7 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
         memDeck_.loadProgress(apppaths::userFile("warrior_cards_progress.json"));
         vaWords_.load(dataDir + "/va_definitions.json");
         addWarriorCards();
+        for (const auto& q : saved_.all()) bank_.add(q);  // generated questions saved for review
     } catch (const std::exception& e) {
         error = e.what();
         return false;
@@ -334,6 +343,9 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
 
 void GuiApp::reloadProgress() {
     progress_.reload();
+    saved_.reload();  // another device may have saved questions
+    for (const auto& q : saved_.all())
+        if (bank_.byIds({q.id}).empty()) bank_.add(q);
     deck_.reloadProgress();
     memDeck_.reloadProgress();
     repDeck_.reload(deck_);
@@ -942,12 +954,15 @@ void GuiApp::drawSectionGrid(const std::vector<SubtestInfo>& sections, bool prac
         }
         std::string timed = fmt("Timed \xC2\xB7 %d min", (s.timeLimitSeconds + 30) / 60);
         if (practicePage) c.secondary = timed.c_str();
+        // Math: endless practice, new generated questions until you finish
+        if (practicePage && (s.id == "math_knowledge" || s.id == "arithmetic_reasoning")) c.corner = "Endless";
         grid.next();
         const ImVec2 p = ImGui::GetCursorScreenPos();
         const int hit = subjectCard(s.id.c_str(), c, size);
         cardFocusMenu(s, p, p + size);
         if (hit == 1) startSubtest(s, SessionMode::Practice);
         if (hit == 2) startSubtest(s, SessionMode::Timed);
+        if (hit == 3) startEndless(s);
     }
     if (!addVocabCard) return;
     const FlashcardDeck& d = activeDeck();
@@ -1120,6 +1135,7 @@ void GuiApp::drawReview() {
 // ================================================================ quiz
 
 void GuiApp::drawQuiz() {
+    topUpEndless();  // before taking a reference to the current question (adding may move them)
     engine_.update();
     if (engine_.finished()) {
         finishSession();
@@ -1137,12 +1153,13 @@ void GuiApp::drawQuiz() {
     Icon clock = Icon::Clock;
     const bool urgent = left >= 0 && left <= 30;
     bool quit = false;
+    const char* quitLabel = endless_ ? "Finish" : "Quit";  // endless practice ends when you say so, and counts
     if (compact_) {
         const float y0 = ImGui::GetCursorPosY();
         chip("timer", timer.c_str(), urgent ? col::BadSoft : col::Card, urgent ? col::Bad : col::Ink, false, true, &clock);
-        alignRight(textSize(fonts.strong, "Quit").x + 40);
+        alignRight(textSize(fonts.strong, quitLabel).x + 40);
         ImGui::SetCursorPosY(y0);
-        quit = button("Quit", ButtonStyle::Outline);
+        quit = button(quitLabel, endless_ ? ButtonStyle::Primary : ButtonStyle::Outline);
         ImGui::Dummy(ImVec2(0, 2));
     } else {
         const float y0 = ImGui::GetCursorPosY();
@@ -1156,9 +1173,14 @@ void GuiApp::drawQuiz() {
         // ---- Title and quit
         const float ty = ImGui::GetCursorPosY();
         textIn(fonts.title, col::Ink, sessionName_.c_str());
-        alignRight(textSize(fonts.strong, "Quit").x + 40);
+        alignRight(textSize(fonts.strong, quitLabel).x + 40);
         ImGui::SetCursorPosY(ty);
-        quit = button("Quit", ButtonStyle::Outline);
+        quit = button(quitLabel, endless_ ? ButtonStyle::Primary : ButtonStyle::Outline);
+    }
+    if (quit && endless_ && !r.answers.empty()) {
+        engine_.finishNow();  // the question on screen, if unanswered, doesn't count
+        finishSession();
+        return;
     }
     if (quit) {
         queue_.clear();
@@ -1171,7 +1193,8 @@ void GuiApp::drawQuiz() {
     if (sessionTag_ == "TIMED TEST")
         thinBar(static_cast<float>(answered) / engine_.total(), ImGui::GetContentRegionAvail().x, col::Accent, 8.0f);
     textIn(fonts.strong, col::InkSoft,
-           fmt(cardMode_ ? "Card %d of %d" : "Question %d of %d", engine_.index() + 1, engine_.total()).c_str());
+           endless_ ? fmt("Question %d", engine_.index() + 1).c_str()
+                    : fmt(cardMode_ ? "Card %d of %d" : "Question %d of %d", engine_.index() + 1, engine_.total()).c_str());
     std::string score = sessionTag_ == "TIMED TEST" ? std::string("Score shown at the end")
                         : cardMode_ ? fmt("%d know it  \xC2\xB7  %d still learning", r.correctCount(), answered - r.correctCount())
                                     : fmt("%d correct  \xC2\xB7  %d missed", r.correctCount(), answered - r.correctCount());
@@ -1294,10 +1317,12 @@ void GuiApp::drawQuiz() {
             }
         }
         endCallout(right ? col::GoodSoft : col::BadSoft, right ? col::Good : col::Bad);
-        if (button(touch_ ? "Next  \xE2\x86\x92" : "Next  \xE2\x86\x92   Enter",
-                   ButtonStyle::Primary, ImVec2(compact_ ? ImGui::GetContentRegionAvail().x : 0, compact_ ? 48 : 0)) ||
-            ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
-            ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false)) {
+        const bool nextHit = button(touch_ ? "Next  \xE2\x86\x92" : "Next  \xE2\x86\x92   Enter",
+                                    ButtonStyle::Primary, ImVec2(compact_ ? ImGui::GetContentRegionAvail().x : 0, compact_ ? 48 : 0)) ||
+                             ImGui::IsKeyPressed(ImGuiKey_Enter, false) ||
+                             ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false);
+        saveButton(q, compact_, !compact_);  // generated math questions: keep this one for review
+        if (nextHit) {
             engine_.next();
             feedbackTime_ = -1.0;
         }
@@ -1461,6 +1486,7 @@ void GuiApp::drawResults() {
             textIn(fonts.body, col::Good, fmt("Correct:  %s", q.choices[q.correctIndex].c_str()).c_str());
         }
         wrappedIn(fonts.small, col::Muted, q.explanation.c_str());
+        saveButton(q, false, false);
         divider();
     }
     if (!any) wrappedIn(fonts.heading, col::Good, cardMode_ ? "Nothing here. You knew every card!" : "Nothing here. You got every one right!");
@@ -2065,12 +2091,62 @@ void GuiApp::startSubtest(const SubtestInfo& s, SessionMode mode) {
     sessionTag_ = mode == SessionMode::Timed ? "TIMED TEST" : "PRACTICE";
     sessionTips_ = s.tips;
     sessionTimeLimit_ = s.timeLimitSeconds;
+    endless_ = false;
     isReview_ = false;
     feedbackTime_ = -1.0;
     cardMode_ = track_ == "warrior";
     swipe_ = SwipeCard{};
     engine_.start(s.id, std::move(questions), mode, s.timeLimitSeconds);
     screen_ = Screen::Quiz;
+}
+
+void GuiApp::startEndless(const SubtestInfo& s) {
+    auto questions = QuestionGenerator::generate(s.id, 40, rng_);
+    if (questions.empty()) {
+        message_ = "No questions can be generated for " + s.name + ".";
+        return;
+    }
+    for (auto& q : questions) QuestionBank::shuffleChoices(q, rng_);  // generated: the answer is always first
+    message_.clear();
+    sessionName_ = s.name;
+    sessionTag_ = "ENDLESS";
+    sessionTips_ = s.tips;
+    sessionTimeLimit_ = 0;
+    isReview_ = false;
+    endless_ = true;
+    feedbackTime_ = -1.0;
+    cardMode_ = false;
+    swipe_ = SwipeCard{};
+    engine_.start(s.id, std::move(questions), SessionMode::Practice, 0);
+    screen_ = Screen::Quiz;
+}
+
+void GuiApp::topUpEndless() {
+    if (!endless_ || engine_.finished() || engine_.total() - engine_.index() > 2) return;
+    auto more = QuestionGenerator::generate(engine_.result().subtestId, 40, rng_);
+    for (auto& q : more) QuestionBank::shuffleChoices(q, rng_);
+    engine_.append(std::move(more));
+}
+
+void GuiApp::saveGenerated(const Question& q) {
+    const Question copy = saved_.add(q);  // stored under its own id, so it can be found again
+    bank_.add(copy);
+    progress_.markMissed(copy.id);        // shows up in Review missed until you get it right
+    savedGen_.insert(q.id);
+}
+
+void GuiApp::saveButton(const Question& q, bool fullWidth, bool sameLine) {
+    // Only generated questions need saving (written ones go on the review list by themselves),
+    // and only plain text ones: pictures (pilot sections) aren't stored.
+    if (q.id.rfind("GEN-", 0) != 0 || q.visual.kind != VisualKind::None || !q.choiceVisuals.empty()) return;
+    const bool done = savedGen_.count(q.id) > 0;
+    if (sameLine) ImGui::SameLine(0, 10);
+    ImGui::PushID(q.id.c_str());
+    if (button(done ? "Saved for review" : "Save for review", ButtonStyle::Outline,
+               ImVec2(fullWidth ? ImGui::GetContentRegionAvail().x : 0, fullWidth ? 44 : 0)) &&
+        !done)
+        saveGenerated(q);
+    ImGui::PopID();
 }
 
 void GuiApp::startBattery(const std::string& category) {
@@ -2102,6 +2178,7 @@ void GuiApp::startWarmup() {
     sessionTag_ = "WARM-UP";
     sessionTips_ = "A quick mix from every section. Read each question type carefully as it switches.";
     sessionTimeLimit_ = 0;
+    endless_ = false;
     isReview_ = false;
     feedbackTime_ = -1.0;
     cardMode_ = track_ == "warrior";
@@ -2130,6 +2207,7 @@ void GuiApp::startReview(const std::string& subtestId) {
     sessionTag_ = "REVIEW";
     sessionTips_ = info ? info->tips : "";
     sessionTimeLimit_ = 0;
+    endless_ = false;
     isReview_ = true;
     feedbackTime_ = -1.0;
     cardMode_ = track_ == "warrior";

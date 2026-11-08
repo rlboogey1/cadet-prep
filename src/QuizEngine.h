@@ -16,6 +16,8 @@ public:
     void update();                 // call every frame: ends the quiz when time runs out
     void submit(int choice);       // record an answer (-1 = skip)
     void next();                   // practice mode: move on after viewing feedback
+    void append(std::vector<Question> more);  // endless practice: add questions to the end
+    void finishNow();              // end early (endless practice); only answered questions count
 
     bool finished() const { return finished_; }
     bool showingFeedback() const { return showingFeedback_; }

@@ -14,7 +14,7 @@ public:
 
     // Returns up to `count` random questions from one subtest (0 = all), with
     // the answer choices shuffled. For Math Knowledge and Arithmetic Reasoning,
-    // about a third of the set is newly generated with random numbers.
+    // about two thirds of the set is newly generated with random numbers.
     std::vector<Question> draw(const std::string& subtestId, size_t count,
                                std::mt19937& rng) const;
 

@@ -491,9 +491,451 @@ bool arClock(Rng& rng, Question& q) {
                  fmt("A flight departs at %s and lasts %d hour%s %d minutes. When does it arrive?", clock12(start).c_str(), dh,
                      dh == 1 ? "" : "s", dm),
                  clock12(end), w,
-                 fmt("Add the hours first: %s plus %d hour%s is %s. Adding %d more minutes gives %s",
+                 fmt("Add the hours first: %s plus %d hour%s is %s, and %d more minutes gives %s",
                      clock12(start).c_str(), dh, dh == 1 ? "" : "s", clock12(start + dh * 60).c_str(), dm,
                      clock12(end).c_str()));
+}
+
+
+// ---------------------------------------------------------------- more helpers
+
+// "3x + 4", "−x − 2", "2x", "5": a linear expression with whole-number coefficients
+std::string linear(int a, int b, const char* var = "x") {
+    std::string out;
+    if (a != 0) {
+        out = a == 1 ? std::string(var) : a == -1 ? std::string(kMinus) + var : (a < 0 ? kMinus + std::to_string(-a) : std::to_string(a)) + var;
+    }
+    if (b != 0 || a == 0) {
+        if (a == 0) out = b < 0 ? kMinus + std::to_string(-b) : std::to_string(b);
+        else out += " " + signedTerm(b);
+    }
+    return out;
+}
+
+// A fraction in lowest terms: "7/12", "−1/3", or a whole number when it divides evenly
+std::string frac(long long n, long long d) {
+    if (d < 0) n = -n, d = -d;
+    const long long g = std::gcd(n < 0 ? -n : n, d);
+    if (g > 1) n /= g, d /= g;
+    if (d == 1) return commas(n);
+    return (n < 0 ? std::string(kMinus) : std::string()) + std::to_string(n < 0 ? -n : n) + "/" + std::to_string(d);
+}
+
+// Exponent with a minus sign allowed: −4 -> "⁻⁴"
+std::string supSigned(int n) { return n < 0 ? "\xE2\x81\xBB" + sup(-n) : sup(n); }
+
+const char* kTimes = "\xC3\x97";  // ×
+const char* kLess = "<";
+const char* kGreater = ">";
+
+// ================================================================ Math Knowledge (more)
+
+bool mkInequality(Rng& rng, Question& q) {  // ax + b < c
+    int a = ri(rng, -6, 6), k = ri(rng, -8, 10), b = ri(rng, -15, 15);
+    if (a == 0 || a == 1 || b == 0) return false;
+    bool lessThan = ri(rng, 0, 1) == 1;
+    int c = a * k + b;
+    const char* sign = lessThan ? kLess : kGreater;
+    const char* flipped = lessThan ? kGreater : kLess;
+    const char* ans = a > 0 ? sign : flipped;   // dividing by a negative flips the sign
+    const char* other = a > 0 ? flipped : sign;
+    std::vector<std::string> w{fmt("x %s %s", other, num(k).c_str()), fmt("x %s %s", ans, num(-k).c_str()),
+                               fmt("x %s %s", ans, num(k + 1).c_str()), fmt("x %s %s", other, num(-k).c_str()),
+                               fmt("x %s %s", ans, num(k - 1).c_str())};
+    return build(q, MK, "MK-ineq", fmt("Solve for x: %s %s %s", linear(a, b).c_str(), sign, num(c).c_str()),
+                 fmt("x %s %s", ans, num(k).c_str()), w,
+                 fmt("%s %d %s both sides: %s %s %s. Divide by %s: x %s %s.%s", b > 0 ? "Subtract" : "Add", std::abs(b),
+                     b > 0 ? "from" : "to", linear(a, 0).c_str(), sign, num(c - b).c_str(), num(a).c_str(), ans,
+                     num(k).c_str(), a < 0 ? " Dividing by a negative number flips the inequality sign." : ""));
+}
+
+bool mkQuadratic(Rng& rng, Question& q) {  // x² + bx + c = 0 with whole-number roots
+    int r1 = ri(rng, -9, 9), r2 = ri(rng, -9, 9);
+    if (r1 == 0 || r2 == 0 || r1 == r2 || r1 == -r2) return false;
+    if (r1 > r2) std::swap(r1, r2);
+    int b = -(r1 + r2), c = r1 * r2;
+    auto roots = [](int x, int y) {
+        if (x > y) std::swap(x, y);
+        return fmt("x = %s or x = %s", num(x).c_str(), num(y).c_str());
+    };
+    std::vector<std::string> w{roots(-r1, -r2), roots(r1, -r2), roots(-r1, r2), roots(r1 + 1, r2 + 1), roots(b, c)};
+    std::string poly = "x" + sup(2) + (b == 0 ? "" : " " + (b == 1 ? std::string("+ x") : b == -1 ? kMinus + std::string(" x") : signedTerm(b) + "x")) +
+                       " " + signedTerm(c);
+    return build(q, MK, "MK-quad", fmt("What are the solutions of %s = 0?", poly.c_str()), roots(r1, r2), w,
+                 fmt("Find two numbers that multiply to %s and add to %s: %s and %s. So (x %s)(x %s) = 0, and x = %s or x = %s.",
+                     num(c).c_str(), num(b).c_str(), num(-r1).c_str(), num(-r2).c_str(), signedTerm(-r1).c_str(),
+                     signedTerm(-r2).c_str(), num(r1).c_str(), num(r2).c_str()));
+}
+
+bool mkDistribute(Rng& rng, Question& q) {  // a(x + b) − c(x − d)
+    int a = ri(rng, 2, 7), b = ri(rng, 1, 9), c = ri(rng, 2, 6), d = ri(rng, 1, 9);
+    if (a == c) return false;
+    int x = a - c, k = a * b + c * d;
+    std::vector<std::string> w{linear(x, a * b - c * d), linear(a + c, k), linear(x, a * b - d), linear(x, b + d),
+                               linear(a + c, a * b - c * d)};
+    return build(q, MK, "MK-dist", fmt("Simplify %d(x + %d) %s %d(x %s %d).", a, b, kMinus, c, kMinus, d), linear(x, k), w,
+                 fmt("%d(x + %d) = %dx + %d, and %s%d(x %s %d) = %s%dx + %d (negative times negative is positive). "
+                     "Combine: %s.", a, b, a, a * b, kMinus, c, kMinus, d, kMinus, c, c * d, linear(x, k).c_str()));
+}
+
+bool mkFractionAdd(Rng& rng, Question& q) {
+    static const std::vector<int> dens{2, 3, 4, 5, 6, 8, 10, 12};
+    int b = pick(rng, dens), d = pick(rng, dens);
+    if (b == d) return false;
+    int a = ri(rng, 1, b - 1), c = ri(rng, 1, d - 1);
+    if (std::gcd(a, b) != 1 || std::gcd(c, d) != 1) return false;
+    bool add = ri(rng, 0, 2) != 0;
+    long long n = add ? a * d + c * b : a * d - c * b;
+    long long den = static_cast<long long>(b) * d;
+    if (n == 0) return false;
+    std::vector<std::string> w{frac(add ? a + c : a - c, b + d), frac(a * c, b * d), frac(add ? a * d - c * b : a * d + c * b, den),
+                               frac(add ? a + c : a - c, b * d), frac(n + 1, den), frac(n, den + 1)};
+    const char* op = add ? "+" : kMinus;
+    return build(q, MK, "MK-fadd", fmt("%d/%d %s %d/%d =", a, b, op, c, d), frac(n, den), w,
+                 fmt("Use a common denominator: %d/%d %s %d/%d = %s/%lld = %s. Don't add the denominators.", a * d, b * d, op,
+                     c * b, b * d, num(static_cast<double>(n)).c_str(), den, frac(n, den).c_str()));
+}
+
+bool mkFractionDivide(Rng& rng, Question& q) {
+    int a = ri(rng, 1, 9), b = ri(rng, 2, 10), c = ri(rng, 1, 9), d = ri(rng, 2, 10);
+    if (std::gcd(a, b) != 1 || std::gcd(c, d) != 1 || a == b || c == d) return false;
+    bool divide = ri(rng, 0, 1) == 1;
+    long long n = divide ? a * d : a * c, den = divide ? b * c : b * d;
+    std::vector<std::string> w{divide ? frac(a * c, b * d) : frac(a * d, b * c), divide ? frac(b * c, a * d) : frac(a + c, b + d),
+                               frac(n + 1, den), frac(n, den + 1), frac(a * d + c * b, b * d)};
+    return build(q, MK, divide ? "MK-fdiv" : "MK-fmul",
+                 fmt("%d/%d %s %d/%d =", a, b, divide ? "\xC3\xB7" : kTimes, c, d), frac(n, den), w,
+                 divide ? fmt("Dividing by a fraction means multiplying by its reciprocal: %d/%d %s %d/%d = %s.", a, b, kTimes, d, c,
+                              frac(n, den).c_str())
+                        : fmt("Multiply straight across: (%d %s %d)/(%d %s %d) = %s.", a, kTimes, c, b, kTimes, d, frac(n, den).c_str()));
+}
+
+bool mkSciNotation(Rng& rng, Question& q) {
+    int mant = ri(rng, 11, 99);  // two digits: 4.5 is mant 45
+    if (mant % 10 == 0) return false;
+    int e = ri(rng, 0, 1) ? ri(rng, -6, -2) : ri(rng, 3, 7);
+    // The plain number, written out
+    std::string plain;
+    if (e < 0) {
+        plain = "0." + std::string(static_cast<size_t>(-e - 1), '0') + std::to_string(mant);
+    } else {
+        long long v = mant;
+        for (int i = 1; i < e; ++i) v *= 10;
+        plain = commas(v);
+    }
+    std::string m = num(mant / 10.0);
+    auto sci = [&](const std::string& mm, int ee) { return mm + " " + kTimes + " 10" + supSigned(ee); };
+    std::vector<std::string> w{sci(m, -e), sci(m, e + 1), sci(m, e - 1), sci(std::to_string(mant), e), sci(num(mant / 100.0), e)};
+    return build(q, MK, "MK-sci", fmt("Which is %s written in scientific notation?", plain.c_str()), sci(m, e), w,
+                 e < 0 ? fmt("Move the decimal point %d places right to get %s, a number between 1 and 10. Moving right means a negative exponent: 10%s.",
+                             -e, m.c_str(), supSigned(e).c_str())
+                       : fmt("Move the decimal point %d places left to get %s, a number between 1 and 10. So the exponent is %d.", e, m.c_str(), e));
+}
+
+bool mkProbability(Rng& rng, Question& q) {
+    int r = ri(rng, 1, 9), b = ri(rng, 1, 9), g = ri(rng, 1, 9);
+    int total = r + b + g;
+    static const std::vector<std::string> colors{"red", "blue", "green"};
+    int which = ri(rng, 0, 2);
+    int k = which == 0 ? r : which == 1 ? b : g;
+    bool notColor = ri(rng, 0, 3) == 0;
+    int good = notColor ? total - k : k;
+    std::vector<std::string> w{frac(total - good, total), frac(good, total - good > 0 ? total - good : total + 1), frac(1, 3),
+                               frac(good, total + 1), frac(good + 1, total)};
+    return build(q, MK, "MK-prob",
+                 fmt("A bag holds %d red, %d blue, and %d green marbles. If one marble is drawn at random, what is the probability it is %s%s?",
+                     r, b, g, notColor ? "not " : "", colors[static_cast<size_t>(which)].c_str()),
+                 frac(good, total), w,
+                 fmt("Probability = favorable outcomes \xC3\xB7 total outcomes = %d/%d = %s.", good, total, frac(good, total).c_str()));
+}
+
+bool mkVolume(Rng& rng, Question& q) {
+    if (ri(rng, 0, 1) == 0) {
+        int l = ri(rng, 2, 12), wd = ri(rng, 2, 10), h = ri(rng, 2, 9);
+        int v = l * wd * h, sa = 2 * (l * wd + l * h + wd * h);
+        std::vector<std::string> w{num(sa), num(l + wd + h), num(l * wd), num(v * 2), num(v + l)};
+        return build(q, MK, "MK-volbox",
+                     fmt("What is the volume of a rectangular box %d inches long, %d inches wide, and %d inches high?", l, wd, h),
+                     num(v) + " cubic inches", [&] { std::vector<std::string> o; for (auto& s : w) o.push_back(s + " cubic inches"); return o; }(),
+                     fmt("V = length %s width %s height = %d %s %d %s %d = %d cubic inches.", kTimes, kTimes, l, kTimes, wd, kTimes, h, v));
+    }
+    int r = ri(rng, 2, 7), h = ri(rng, 3, 12);
+    std::vector<std::string> w{pi(2 * r * h), pi(r * h), pi(4 * r * r * h), pi(r * r), pi(2 * r * r * h)};
+    return build(q, MK, "MK-volcyl", fmt("What is the volume of a cylinder with radius %d and height %d?", r, h), pi(r * r * h), w,
+                 fmt("V = \xCF\x80r%sh = \xCF\x80 %s %d %s %d = %s. Square the radius first.", sup(2).c_str(), kTimes, r * r, kTimes, h,
+                     pi(r * r * h).c_str()));
+}
+
+bool mkTriangleAngle(Rng& rng, Question& q) {
+    const char* deg = "\xC2\xB0";
+    if (ri(rng, 0, 1) == 0) {
+        int a = ri(rng, 20, 100), b = ri(rng, 15, 80);
+        int c = 180 - a - b;
+        if (c < 10) return false;
+        std::vector<std::string> w{fmt("%d%s", 360 - a - b, deg), fmt("%d%s", 180 - a, deg), fmt("%d%s", a + b, deg),
+                                   fmt("%d%s", 90 - (c > 90 ? 0 : c / 2), deg), fmt("%d%s", c + 10, deg)};
+        return build(q, MK, "MK-tri",
+                     fmt("Two angles of a triangle measure %d%s and %d%s. What is the third angle?", a, deg, b, deg),
+                     fmt("%d%s", c, deg), w, fmt("The angles of a triangle add to 180%s: 180 %s %d %s %d = %d%s.", deg, kMinus, a, kMinus, b, c, deg));
+    }
+    int v = ri(rng, 10, 80) * 2;  // isosceles: vertex angle, find a base angle
+    if (v >= 180) return false;
+    int base = (180 - v) / 2;
+    std::vector<std::string> w{fmt("%d%s", 180 - v, deg), fmt("%d%s", v, deg), fmt("%d%s", (360 - v) / 2, deg),
+                               fmt("%d%s", base + 5, deg), fmt("%d%s", 90 - v / 2 + 10, deg)};
+    return build(q, MK, "MK-iso",
+                 fmt("In an isosceles triangle, the angle between the two equal sides is %d%s. What is each of the other two angles?", v, deg),
+                 fmt("%d%s", base, deg), w,
+                 fmt("The two base angles are equal and share 180 %s %d = %d%s, so each is %d%s.", kMinus, v, 180 - v, deg, base, deg));
+}
+
+bool mkAbsolute(Rng& rng, Question& q) {  // |x − a| = b
+    int a = ri(rng, -9, 9), b = ri(rng, 1, 12);
+    if (a == 0) return false;
+    auto pair = [](int x, int y) {
+        if (x > y) std::swap(x, y);
+        return fmt("x = %s or x = %s", num(x).c_str(), num(y).c_str());
+    };
+    std::string inside = a > 0 ? fmt("x %s %d", kMinus, a) : fmt("x + %d", -a);
+    std::vector<std::string> w{pair(-a + b, -a - b), fmt("x = %s only", num(a + b).c_str()), pair(b, -b), pair(a + b, b - a),
+                               fmt("x = %s only", num(a - b).c_str())};
+    return build(q, MK, "MK-abs", fmt("Solve |%s| = %d.", inside.c_str(), b), pair(a + b, a - b), w,
+                 fmt("The inside can be %d or %s%d: %s = %d gives x = %s, and %s = %s%d gives x = %s.", b, kMinus, b, inside.c_str(), b,
+                     num(a + b).c_str(), inside.c_str(), kMinus, b, num(a - b).c_str()));
+}
+
+bool mkOrderOps(Rng& rng, Question& q) {  // a + b × (c − d)² ÷ e, or a − b × c + d
+    if (ri(rng, 0, 1) == 0) {
+        int a = ri(rng, 2, 20), b = ri(rng, 2, 6), c = ri(rng, 3, 9), d = ri(rng, 1, 5);
+        if (c <= d) return false;
+        int s = (c - d) * (c - d);
+        int v = a + b * s;
+        std::vector<std::string> w{num((a + b) * s), num(a + (b * (c - d)) * (b * (c - d))), num(a + b * (c - d) * 2),
+                                   num(a + b * (c * c - d * d)), num(v + b)};
+        return build(q, MK, "MK-ops", fmt("Evaluate %d + %d %s (%d %s %d)%s.", a, b, kTimes, c, kMinus, d, sup(2).c_str()), num(v), w,
+                     fmt("Parentheses first: %d %s %d = %d. Exponent: %d%s = %d. Multiply: %d %s %d = %d. Add: %d + %d = %d.",
+                         c, kMinus, d, c - d, c - d, sup(2).c_str(), s, b, kTimes, s, b * s, a, b * s, v));
+    }
+    int a = ri(rng, 20, 60), b = ri(rng, 2, 9), c = ri(rng, 2, 9), d = ri(rng, 2, 12);
+    int v = a - b * c + d;
+    std::vector<std::string> w{num((a - b) * c + d), num(a - b * (c + d)), num(a - b * c - d), num((a - b) * (c + d)), num(v + 1)};
+    return build(q, MK, "MK-ops2", fmt("Evaluate %d %s %d %s %d + %d.", a, kMinus, b, kTimes, c, d), num(v), w,
+                 fmt("Multiply first: %d %s %d = %d. Then left to right: %d %s %d + %d = %s.", b, kTimes, c, b * c, a, kMinus, b * c, d,
+                     num(v).c_str()));
+}
+
+bool mkGcfLcm(Rng& rng, Question& q) {
+    int g = ri(rng, 2, 9), x = ri(rng, 2, 9), y = ri(rng, 2, 9);
+    if (x == y || std::gcd(x, y) != 1) return false;
+    int a = g * x, b = g * y;
+    int lcm = a / g * b;
+    bool askLcm = ri(rng, 0, 1) == 1;
+    std::vector<std::string> w{num(askLcm ? g : lcm), num(a * b), num(askLcm ? lcm * 2 : g * 2), num(std::min(a, b)),
+                               num(askLcm ? lcm + g : 1), num(std::max(a, b))};
+    return build(q, MK, askLcm ? "MK-lcm" : "MK-gcf",
+                 fmt("What is the %s of %d and %d?", askLcm ? "least common multiple" : "greatest common factor", a, b),
+                 num(askLcm ? lcm : g), w,
+                 askLcm ? fmt("%d = %d %s %d and %d = %d %s %d. LCM = %d %s %d %s %d = %d, the smallest number both divide into.",
+                              a, g, kTimes, x, b, g, kTimes, y, g, kTimes, x, kTimes, y, lcm)
+                        : fmt("%d = %d %s %d and %d = %d %s %d. The largest number that divides both is %d.", a, g, kTimes, x, b, g,
+                              kTimes, y, g));
+}
+
+// ================================================================ Arithmetic Reasoning (more)
+
+bool arUnits(Rng& rng, Question& q) {
+    struct Conv { const char* big; const char* small; int factor; const char* thing; const char* after; const char* one; };
+    static const std::vector<Conv> convs{{"yards", "feet", 3, "A rope is", " long", "yard"},
+                                         {"hours", "minutes", 60, "A training flight lasts", "", "hour"},
+                                         {"gallons", "quarts", 4, "A water tank holds", "", "gallon"},
+                                         {"pounds", "ounces", 16, "A package weighs", "", "pound"},
+                                         {"feet", "inches", 12, "A model airplane's wingspan is", "", "foot"},
+                                         {"miles", "feet", 5280, "A ruck march covers", "", "mile"}};
+    const Conv& c = pick(rng, convs);
+    bool toSmall = ri(rng, 0, 1) == 1;
+    int big = c.factor >= 60 ? ri(rng, 2, 9) : ri(rng, 3, 40);
+    long long small = static_cast<long long>(big) * c.factor;
+    std::string given = toSmall ? fmt("%s %d %s%s", c.thing, big, c.big, c.after)
+                                : fmt("%s %s %s%s", c.thing, commas(small).c_str(), c.small, c.after);
+    std::string ask = fmt("How many %s is that?", toSmall ? c.small : c.big);
+    std::string correct = toSmall ? commas(small) : num(big);
+    std::vector<std::string> w;
+    if (toSmall) w = {num(big * 10), commas(small / 2), commas(small + c.factor), commas(small - c.factor), num(big + c.factor)};
+    else w = {commas(small * c.factor), num(big * 2), num(big + 1), num(big - 1), num(static_cast<double>(small) / 10)};
+    return build(q, AR, "AR-units", given + ". " + ask, correct, w,
+                 toSmall ? fmt("1 %s = %d %s, so multiply: %d %s %d = %s %s.", c.one, c.factor, c.small, big, kTimes, c.factor,
+                               commas(small).c_str(), c.small)
+                         : fmt("1 %s = %d %s, so divide: %s \xC3\xB7 %d = %d %s.", c.one, c.factor, c.small, commas(small).c_str(),
+                               c.factor, big, c.big));
+}
+
+bool arCoins(Rng& rng, Question& q) {
+    int d = ri(rng, 3, 20), qu = ri(rng, 3, 20);
+    int n = d + qu, cents = 10 * d + 25 * qu;
+    bool askQ = ri(rng, 0, 1) == 1;
+    int ans = askQ ? qu : d;
+    std::vector<std::string> w{num(askQ ? d : qu), num(ans + 1), num(ans - 1), num(cents / 25), num(n / 2)};
+    return build(q, AR, "AR-coins",
+                 fmt("A jar holds %d coins, all dimes and quarters, worth %s in total. How many %s are there?", n, money(cents / 100.0).c_str(),
+                     askQ ? "quarters" : "dimes"),
+                 num(ans), w,
+                 fmt("If all %d were dimes they'd be worth %s. Each quarter adds 15%s more, and the extra is %s, so %s \xC3\xB7 $0.15 = %d quarters and %d dimes.",
+                     n, money(n * 0.10).c_str(), "\xC2\xA2", money((cents - 10 * n) / 100.0).c_str(),
+                     money((cents - 10 * n) / 100.0).c_str(), qu, d));
+}
+
+bool arAges(Rng& rng, Question& q) {
+    struct Case { int m, n; };  // now: m times as old; in k years: n times as old
+    static const std::vector<Case> cases{{3, 2}, {4, 3}, {5, 3}, {4, 2}, {5, 2}};
+    const Case& c = pick(rng, cases);
+    int k = ri(rng, 2, 12);
+    // m·s + k = n(s + k)  ->  s = k(n − 1)/(m − n)
+    if ((k * (c.n - 1)) % (c.m - c.n) != 0) return false;
+    int s = k * (c.n - 1) / (c.m - c.n);
+    int big = c.m * s;
+    if (big > 60 || s < 1) return false;
+    static const char* times[] = {"", "", "twice", "three times", "four times", "five times"};
+    std::vector<std::string> w{num(s), num(big + k), num(c.n * s), num(big - k > 0 ? big - k : big + 2), num(c.m * k)};
+    return build(q, AR, "AR-ages",
+                 fmt("A colonel is %s as old as her nephew. In %d years she will be %s as old as he is. How old is the colonel now?",
+                     times[c.m], k, times[c.n]),
+                 num(big), w,
+                 fmt("Let the nephew be n. Then %dn + %d = %d(n + %d), so %dn + %d = %dn + %d and n = %d. The colonel is %d %s %d = %d.",
+                     c.m, k, c.n, k, c.m, k, c.n, c.n * k, s, c.m, kTimes, s, big));
+}
+
+bool arCommission(Rng& rng, Question& q) {
+    int base = ri(rng, 8, 30) * 100, pct = pick(rng, std::vector<int>{2, 3, 4, 5, 6, 8, 10}), sales = ri(rng, 10, 80) * 500;
+    double comm = sales * pct / 100.0, total = base + comm;
+    std::vector<std::string> w{money(comm), money(base + sales * pct / 1000.0), money(base * (100 + pct) / 100.0),
+                               money(total + base * pct / 100.0), money(sales + base)};
+    return build(q, AR, "AR-comm",
+                 fmt("A salesperson earns %s a month plus a %d%% commission on sales. How much does she earn in a month with %s in sales?",
+                     money(base).c_str(), pct, money(sales).c_str()),
+                 money(total), w,
+                 fmt("Commission = %d%% of %s = %s. Add the base pay: %s + %s = %s.", pct, money(sales).c_str(), money(comm).c_str(),
+                     money(base).c_str(), money(comm).c_str(), money(total).c_str()));
+}
+
+bool arTipSplit(Rng& rng, Question& q) {
+    int people = ri(rng, 2, 6), tip = pick(rng, std::vector<int>{10, 15, 20, 25});
+    int bill = ri(rng, 6, 40) * 4 * people;  // whole dollars, easy to split
+    double total = bill * (100 + tip) / 100.0, each = total / people;
+    if (std::fabs(each * 100 - std::round(each * 100)) > 1e-6) return false;
+    std::vector<std::string> w{money(bill / static_cast<double>(people)), money(total), money(each + tip / 10.0),
+                               money(bill / static_cast<double>(people) + tip), money(bill * tip / 100.0 / people)};
+    return build(q, AR, "AR-tip",
+                 fmt("%d cadets split a dinner bill of %s evenly, including a %d%% tip. How much does each cadet pay?", people,
+                     money(bill).c_str(), tip),
+                 money(each), w,
+                 fmt("Total with tip: %s %s %s = %s. Split %d ways: %s.", money(bill).c_str(), kTimes, num((100 + tip) / 100.0).c_str(),
+                     money(total).c_str(), people, money(each).c_str()));
+}
+
+bool arConsecutive(Rng& rng, Question& q) {
+    int kind = ri(rng, 0, 2);  // 0 = integers, 1 = even, 2 = odd
+    int step = kind == 0 ? 1 : 2;
+    int first = ri(rng, 5, 60);
+    if (kind == 1 && first % 2) ++first;
+    if (kind == 2 && first % 2 == 0) ++first;
+    int n = ri(rng, 3, 4);
+    int sum = 0;
+    for (int i = 0; i < n; ++i) sum += first + i * step;
+    int largest = first + (n - 1) * step;
+    const char* what = kind == 0 ? "consecutive integers" : kind == 1 ? "consecutive even integers" : "consecutive odd integers";
+    std::vector<std::string> w{num(first), num(first + step), num(largest + step), num(sum / n), num(largest - 1)};
+    return build(q, AR, "AR-consec", fmt("The sum of %d %s is %d. What is the largest?", n, what, sum), num(largest), w,
+                 fmt("Call the smallest n. The numbers are n, n + %d%s. Together: %dn + %d = %d, so n = %d and the largest is %d.", step,
+                     n == 3 ? fmt(", n + %d", 2 * step).c_str() : fmt(", n + %d, n + %d", 2 * step, 3 * step).c_str(), n,
+                     sum - n * first, sum, first, largest));
+}
+
+bool arMapScale(Rng& rng, Question& q) {
+    int scale = pick(rng, std::vector<int>{5, 10, 12, 20, 25, 40, 50});
+    double inches = pick(rng, std::vector<double>{1.5, 2, 2.5, 3, 3.5, 4, 4.25, 4.5, 5.5, 6, 7.5});
+    double miles = scale * inches;
+    std::vector<std::string> w{num(scale + inches) + " miles", num(scale / inches) + " miles", num(miles / 2) + " miles",
+                               num(scale * std::floor(inches)) + " miles", num(miles + scale) + " miles"};
+    return build(q, AR, "AR-map",
+                 fmt("On a chart, 1 inch represents %d miles. Two airfields are %s inches apart on the chart. How far apart are they?", scale,
+                     num(inches).c_str()),
+                 num(miles) + " miles", w,
+                 fmt("%s inches %s %d miles per inch = %s miles.", num(inches).c_str(), kTimes, scale, num(miles).c_str()));
+}
+
+bool arRoundTrip(Rng& rng, Question& q) {
+    static const std::vector<std::array<int, 2>> speeds{{30, 60}, {40, 60}, {20, 30}, {60, 120}, {300, 600}, {400, 600}, {200, 300},
+                                                        {45, 90}, {120, 180}};
+    auto s = pick(rng, speeds);
+    if (ri(rng, 0, 1)) std::swap(s[0], s[1]);
+    int avg = 2 * s[0] * s[1] / (s[0] + s[1]);
+    int d = s[0] * s[1] / std::gcd(s[0], s[1]) * ri(rng, 1, 2);
+    std::vector<std::string> w{num((s[0] + s[1]) / 2.0) + " mph", num(s[0] + s[1]) + " mph", num(std::max(s[0], s[1])) + " mph",
+                               num(avg + 5) + " mph", num(std::abs(s[0] - s[1])) + " mph"};
+    return build(q, AR, "AR-round",
+                 fmt("A pilot flies %s miles to a base at %d mph and returns the same distance at %d mph. What is the average speed for the whole trip?",
+                     commas(d).c_str(), s[0], s[1]),
+                 num(avg) + " mph", w,
+                 fmt("Time out: %s hours. Time back: %s hours. Average = total distance \xC3\xB7 total time = %s \xC3\xB7 %s = %d mph. "
+                     "Averaging the two speeds (%s) is wrong because more time is spent at the slower speed.",
+                     num(static_cast<double>(d) / s[0]).c_str(), num(static_cast<double>(d) / s[1]).c_str(), commas(2 * d).c_str(),
+                     num(static_cast<double>(d) / s[0] + static_cast<double>(d) / s[1]).c_str(), avg,
+                     num((s[0] + s[1]) / 2.0).c_str()));
+}
+
+bool arCompound(Rng& rng, Question& q) {
+    int P = ri(rng, 10, 80) * 100, r = pick(rng, std::vector<int>{2, 3, 4, 5, 6, 8, 10});
+    double y1 = P * (100 + r) / 100.0, y2 = y1 * (100 + r) / 100.0;
+    double simple = P + 2 * P * r / 100.0;
+    std::vector<std::string> w{money(simple), money(y1), money(y2 - P), money(P * (100 + 2 * r) / 100.0 + r), money(P * (100 + r * r) / 100.0)};
+    return build(q, AR, "AR-comp",
+                 fmt("%s is deposited at %d%% interest, compounded once a year. What is the balance after 2 years?", money(P).c_str(), r),
+                 money(y2), w,
+                 fmt("After year 1: %s %s %s = %s. After year 2: %s %s %s = %s. Compounding earns interest on the interest, so it beats simple interest (%s).",
+                     money(P).c_str(), kTimes, num((100 + r) / 100.0).c_str(), money(y1).c_str(), money(y1).c_str(), kTimes,
+                     num((100 + r) / 100.0).c_str(), money(y2).c_str(), money(simple).c_str()));
+}
+
+bool arWorkers(Rng& rng, Question& q) {
+    int w1 = ri(rng, 2, 12), d1 = ri(rng, 3, 20), w2 = ri(rng, 2, 16);
+    if (w1 == w2 || (w1 * d1) % w2 != 0) return false;
+    int d2 = w1 * d1 / w2;
+    std::string task = pick(rng, std::vector<std::string>{"repaint a hangar", "build a fence", "clear a training field", "inventory a supply depot"});
+    std::vector<std::string> w{num(static_cast<double>(d1) * w2 / w1), num(d1 + (w1 - w2)), num(d1), num(d2 + 1), num(w1 * d1)};
+    for (auto& s : w) s += " days";
+    return build(q, AR, "AR-workers",
+                 fmt("%d airmen can %s in %d days. At the same rate, how many days would %d airmen take?", w1, task.c_str(), d1, w2),
+                 num(d2) + " days", w,
+                 fmt("The job takes %d %s %d = %d airman-days. %d \xC3\xB7 %d airmen = %d days. More workers means fewer days.", w1, kTimes,
+                     d1, w1 * d1, w1 * d1, w2, d2));
+}
+
+bool arFence(Rng& rng, Question& q) {
+    int l = ri(rng, 20, 120), wd = ri(rng, 10, 80), c = ri(rng, 2, 15);
+    if (l == wd) return false;
+    int per = 2 * (l + wd);
+    std::vector<std::string> w{money(l * wd * c), money((l + wd) * c), money(per), money(per * c + c * 2), money(l * wd)};
+    return build(q, AR, "AR-fence",
+                 fmt("A rectangular field is %d feet by %d feet. Fencing costs %s per foot. How much will it cost to fence the whole field?", l, wd,
+                     money(c).c_str()),
+                 money(per * c), w,
+                 fmt("Fence goes around the edge: perimeter = 2(%d + %d) = %d feet. %d %s %s = %s.", l, wd, per, per, kTimes,
+                     money(c).c_str(), money(per * c).c_str()));
+}
+
+bool arTripCost(Rng& rng, Question& q) {
+    int mpg = pick(rng, std::vector<int>{20, 24, 25, 28, 30, 32, 35, 40});
+    int gallons = ri(rng, 4, 20), miles = mpg * gallons;
+    double price = ri(rng, 280, 460) / 100.0;
+    double cost = gallons * price;
+    std::vector<std::string> w{money(miles * price / 10.0), money(miles / price), money(cost + price), money(gallons + price),
+                               money(miles * price)};
+    return build(q, AR, "AR-trip",
+                 fmt("A car gets %d miles per gallon. Gas costs %s per gallon. How much does gas cost for a %s-mile trip?", mpg,
+                     money(price).c_str(), commas(miles).c_str()),
+                 money(cost), w,
+                 fmt("Gallons needed: %s \xC3\xB7 %d = %d. Cost: %d %s %s = %s.", commas(miles).c_str(), mpg, gallons, gallons, kTimes,
+                     money(price).c_str(), money(cost).c_str()));
 }
 
 
@@ -697,9 +1139,14 @@ std::vector<Question> blockCounting(size_t count, Rng& rng) {
 
 const std::vector<Template>& templatesFor(const std::string& subtest) {
     static const std::vector<Template> mk{mkLinear, mkEvaluate, mkRectangle, mkCircle, mkPythagoras, mkExponents,
-                                          mkSlope, mkPercent, mkPolygon, mkSystem, mkMean, mkRoot};
+                                          mkSlope, mkPercent, mkPolygon, mkSystem, mkMean, mkRoot,
+                                          mkInequality, mkQuadratic, mkDistribute, mkFractionAdd, mkFractionDivide,
+                                          mkSciNotation, mkProbability, mkVolume, mkTriangleAngle, mkAbsolute, mkOrderOps,
+                                          mkGcfLcm};
     static const std::vector<Template> ar{arDistance, arDiscountTax, arWorkRate, arAverage, arRatio, arInterest,
-                                          arFuel, arPercentChange, arProportion, arOpposite, arOvertime, arClock};
+                                          arFuel, arPercentChange, arProportion, arOpposite, arOvertime, arClock,
+                                          arUnits, arCoins, arAges, arCommission, arTipSplit, arConsecutive, arMapScale,
+                                          arRoundTrip, arCompound, arWorkers, arFence, arTripCost};
     static const std::vector<Template> ic{icQuestion};
     static const std::vector<Template> none;
     return subtest == MK ? mk : subtest == AR ? ar : subtest == IC ? ic : none;

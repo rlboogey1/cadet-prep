@@ -47,6 +47,14 @@ void QuizEngine::next() {
     advance();
 }
 
+void QuizEngine::append(std::vector<Question> more) {
+    for (auto& q : more) questions_.push_back(std::move(q));
+}
+
+void QuizEngine::finishNow() {
+    if (!finished_) finish();
+}
+
 void QuizEngine::advance() {
     ++index_;
     questionStart_ = Clock::now();

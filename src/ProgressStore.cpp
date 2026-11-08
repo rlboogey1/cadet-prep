@@ -87,6 +87,11 @@ void ProgressStore::record(const SessionResult& result, bool isReview) {
     save();
 }
 
+void ProgressStore::markMissed(const std::string& questionId) {
+    outcomes_[questionId] = {true, cloudsync::now()};
+    save();
+}
+
 std::map<std::string, SubtestStats> ProgressStore::stats() const {
     std::map<std::string, SubtestStats> out;
     for (const auto& s : sessions_) {

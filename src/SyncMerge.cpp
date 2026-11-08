@@ -130,12 +130,32 @@ json mergeRepetition(const json& inA, const json& inB) {
     return out;
 }
 
+json mergeSaved(const json& a, const json& b) {
+    // Saved questions: every one from both sides, once. Each has a random id and
+    // never changes after it's saved, so the same id means the same question;
+    // the smaller copy wins only to keep the result the same whichever side is first.
+    std::map<std::string, json> byId;
+    for (const json* side : {&a, &b}) {
+        for (const json& q : side->value("questions", json::array())) {
+            if (!q.is_object() || !q.contains("id") || !q["id"].is_string()) continue;
+            const std::string id = q["id"].get<std::string>();
+            auto it = byId.find(id);
+            if (it == byId.end() || q.dump() < it->second.dump()) byId[id] = q;
+        }
+    }
+    json out;
+    out["questions"] = json::array();
+    for (const auto& [id, q] : byId) out["questions"].push_back(q);
+    return out;
+}
+
 const std::vector<std::pair<std::string, std::string>>& syncedFiles() {
     static const std::vector<std::pair<std::string, std::string>> files = {
         {"progress", "afoqt_progress.json"},
         {"flashcards", "afoqt_flashcards.json"},
         {"warrior_cards", "warrior_cards_progress.json"},
         {"repetition", "afoqt_repetition.json"},
+        {"saved_questions", "afoqt_saved_questions.json"},
     };
     return files;
 }
@@ -152,6 +172,7 @@ json mergeBundle(const json& a, const json& b) {
         if (!present(fb)) fb = json::object();
         if (key == "progress") out[key] = mergeProgress(fa, fb);
         else if (key == "repetition") out[key] = mergeRepetition(fa, fb);
+        else if (key == "saved_questions") out[key] = mergeSaved(fa, fb);
         else out[key] = mergeBoxes(fa, fb);
     }
     return out;

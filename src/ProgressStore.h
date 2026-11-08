@@ -23,6 +23,9 @@ public:
     void record(const SessionResult& result, bool isReview = false);
     std::map<std::string, SubtestStats> stats() const;
 
+    // Puts a question on the review list (a generated question the user saved).
+    void markMissed(const std::string& questionId);
+
     // Questions missed and not yet answered correctly since.
     std::vector<std::string> missedQuestionIds() const;
 

@@ -48,12 +48,14 @@ std::vector<Question> QuestionBank::draw(const std::string& subtestId, size_t co
     std::shuffle(pool.begin(), pool.end(), rng);
 
     if (QuestionGenerator::supports(subtestId)) {
-        // Sections with written questions: a third of a timed test is generated,
-        // and practice (count 0) gets every written question plus 20 generated.
-        // Generated-only sections (Table Reading, etc.) get a full set.
-        size_t generated = count > 0 ? count / 3 : 20;
+        // Sections with written questions: two thirds of a timed test is generated,
+        // and practice (count 0) gets 10 written questions plus 20 generated, so
+        // every set is mostly new. Generated-only sections (Table Reading, etc.)
+        // get a full set.
+        size_t generated = count > 0 ? count * 2 / 3 : 20;
         if (pool.empty()) generated = count > 0 ? count : 20;
-        if (count > 0 && count - generated < pool.size()) pool.resize(count - generated);
+        const size_t written = count > 0 ? count - generated : 10;
+        if (pool.size() > written) pool.resize(written);
         auto extra = QuestionGenerator::generate(subtestId, generated, rng);
         pool.insert(pool.end(), extra.begin(), extra.end());
         std::shuffle(pool.begin(), pool.end(), rng);

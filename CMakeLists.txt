@@ -118,6 +118,7 @@ add_library(afoqt_core STATIC
     src/FlashcardDeck.cpp
     src/RepetitionDeck.cpp
     src/QuestionGenerator.cpp
+    src/SavedQuestions.cpp
     src/Composites.cpp
     src/SyncMerge.cpp)
 target_include_directories(afoqt_core PUBLIC src)

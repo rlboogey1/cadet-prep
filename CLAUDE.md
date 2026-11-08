@@ -66,7 +66,12 @@ draw (`shuffleChoices` also permutes `choiceVisuals` so pictures stay with their
 `QuestionGenerator` builds questions in code: Math Knowledge and Arithmetic Reasoning templates
 (mixed into written sets), and the generated-only pilot sections Table Reading, Instrument
 Comprehension, and Block Counting (`supports()`/`generate()`). Generated IDs start with `GEN-`
-and are never saved for review.
+and aren't saved for review on their own; math sets are mostly generated (two thirds of a timed
+test; practice is 10 written + 20 generated). The "Save for review" button (practice feedback and
+the results list) copies a text-only generated question into `SavedQuestions` under a new
+`SAVED-` id, adds it to the bank, and marks it missed. Math cards also have an "Endless" corner
+button (`startEndless`): generated questions added 40 at a time (`topUpEndless`, which must run
+before taking a reference to the current question) until the user taps Finish.
 
 **Pictures.** `Question::visual` (`VisualKind` + an int array whose layout is documented in
 `Question.h`) is drawn by `Visuals.cpp` with `ImDrawList`: the table, attitude indicator and
@@ -108,7 +113,7 @@ macOS, `~/.cadet-prep` elsewhere) and migrates older folders. **Always save and 
 `apppaths::userFile(name)`, never a bare file name:** on macOS GLFW moves the working directory
 into the bundle's Resources folder unless `GLFW_COCOA_CHDIR_RESOURCES` is off (it's turned off in
 `gui_main.cpp`), which once made settings save inside the app. Files: `afoqt_progress.json`
-(`ProgressStore`; review sessions don't count toward accuracy), `afoqt_flashcards.json`, `afoqt_repetition.json` (spaced repetition deck and streak),
+(`ProgressStore`; review sessions don't count toward accuracy), `afoqt_flashcards.json`, `afoqt_repetition.json` (spaced repetition deck and streak), `afoqt_saved_questions.json` (saved generated questions),
 `warrior_cards_progress.json` (no longer written, kept for old installs), and `afoqt_settings.json` (sound, dark mode, definition-first,
 last track, focus area per track). Settings save on every change.
 
