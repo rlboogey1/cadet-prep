@@ -3,8 +3,14 @@
 #include "JetShape.h"
 #include "Widgets.h"
 #include "imgui_internal.h"  // ShadeVertsLinearColorGradientKeepAlpha
+#define GL_SILENCE_DEPRECATION
+#include <GLFW/glfw3.h>  // OpenGL, for the insignia textures
+#define STB_IMAGE_IMPLEMENTATION
+#define STBI_ONLY_PNG
+#include <stb_image.h>
 #include <algorithm>
 #include <cmath>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -393,6 +399,73 @@ void drawVisual(const Visual& v, float width) {
         case VisualKind::Blocks: drawBlocks(v, width); break;
         default: break;
     }
+}
+
+// ---------------------------------------------------------------- rank insignia
+// Warrior Knowledge rank cards show pictures cut from the charts the user sent
+// (data/insignia/*.png, background made transparent), loaded once as textures.
+
+namespace {
+
+struct Texture {
+    GLuint id = 0;
+    int w = 0, h = 0;
+};
+
+std::string gImageFolder;
+
+const Texture* texture(const std::string& file) {
+    static std::map<std::string, Texture> cache;  // also remembers files that failed (id 0)
+    auto it = cache.find(file);
+    if (it != cache.end()) return it->second.id ? &it->second : nullptr;
+    Texture t;
+    int n = 0;
+    unsigned char* px = stbi_load((gImageFolder + "/" + file).c_str(), &t.w, &t.h, &n, 4);
+    if (px) {
+        glGenTextures(1, &t.id);
+        glBindTexture(GL_TEXTURE_2D, t.id);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, t.w, t.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, px);
+        stbi_image_free(px);
+    }
+    return (cache[file] = t).id ? &cache[file] : nullptr;
+}
+
+// The picture for a rank, e.g. "officer_4.png" (see Question.h for the schemes).
+std::string insigniaFile(int scheme, int index) {
+    static const char* names[] = {"cadet", "officer", "af_enlisted", "sf_enlisted"};
+    if (scheme < 0 || scheme > 3) return "";
+    return std::string(names[scheme]) + "_" + std::to_string(index) + ".png";
+}
+
+}  // namespace
+
+void setImageFolder(const std::string& folder) { gImageFolder = folder; }
+
+void drawInsignia(const Visual& v, float height, float left, float width) {
+    if (v.data.size() < 2) return;
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    const float a = ImGui::GetStyle().Alpha;
+    const ImVec2 cur = ImGui::GetCursorScreenPos();
+    const ImVec2 c(left + width * 0.5f, cur.y + height * 0.5f);
+    if (v.data[0] == 2 && v.data[1] == 1) {  // Airman Basic wears no insignia
+        textCentered(dl, fonts.heading, c, u32(col::Muted, a), "No insignia");
+    } else if (const Texture* t = texture(insigniaFile(v.data[0], v.data[1]))) {
+        // Fit inside height x (at most 2.4 x height), never more than 3x the picture's size.
+        const float maxW = std::min(width, height * 2.4f);
+        const float s = std::min({height / static_cast<float>(t->h), maxW / static_cast<float>(t->w), 3.0f});
+        const ImVec2 half(t->w * s * 0.5f, t->h * s * 0.5f);
+        dl->AddImage(static_cast<ImTextureID>(t->id), c - half, c + half, ImVec2(0, 0), ImVec2(1, 1),
+                     u32(ImVec4(1, 1, 1, 1), a));
+    } else {
+        textCentered(dl, fonts.small, c, u32(col::Muted, a), "Picture missing");
+    }
+    ImGui::SetCursorScreenPos(ImVec2(left, cur.y));
+    ImGui::Dummy(ImVec2(width, height));
 }
 
 // ---------------------------------------------------------------- logo

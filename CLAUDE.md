@@ -70,7 +70,14 @@ batch added (never the first 3), and keeps a daily streak (finish the whole deck
 local calendar days).
 **Warrior Knowledge has no multiple choice:** its blocks are built only from the handbook items in
 `data/warrior_cards.json` (`addWarriorCards()`: `pos` "BLOCK n" → `wk_blockNN`, front = `word`, back
-= `definition`, id `WK-` + title). Don't add written or made-up questions to these blocks. Every quiz in
+= `definition`, id `WK-` + title). Exceptions, matched by exact card title: the rank lists
+(Blocks 3-4: cadet, officer, USAF enlisted, USSF enlisted) and "Chain of Command" / "Additional
+Personnel" (Block 5) are split into one card per line: rank from its insignia picture (`VisualKind::Insignia`),
+rank from its pay grade, and "Who is the <position>?". Renaming those cards in the JSON turns them
+back into single list cards. The insignia are pictures, not drawings: `data/insignia/<scheme>_<index>.png`
+(cadet, officer, af_enlisted, sf_enlisted), cut from charts the user sent with the background made
+transparent, loaded as OpenGL textures by `drawInsignia()` in `Visuals.cpp` (stb_image). Don't redraw
+them in code. Don't add written or made-up questions to these blocks. Every quiz in
 that track (`cardMode_`) shows each card as a swipe card (`ui::swipeCard` in `Widgets.cpp`); swipe
 right = correct, left = missed (recorded as the placeholder wrong choice so it lands on the review
 list). `memDeck_` only loads the cards; there's no separate memorize screen. The console version

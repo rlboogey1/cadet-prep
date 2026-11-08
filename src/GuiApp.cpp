@@ -283,6 +283,7 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
         deck_.loadProgress(apppaths::userFile("afoqt_flashcards.json"));
         repDeck_.load(apppaths::userFile("afoqt_repetition.json"), deck_);
         memDeck_.load(dataDir + "/warrior_cards.json");
+        ui::setImageFolder(dataDir + "/insignia");
         memDeck_.loadProgress(apppaths::userFile("warrior_cards_progress.json"));
         vaWords_.load(dataDir + "/va_definitions.json");
         addWarriorCards();
@@ -294,23 +295,94 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
     return true;
 }
 
+namespace {
+
+// "Key: Value" lines of a handbook card (key empty when a line has no colon).
+std::vector<std::pair<std::string, std::string>> handbookLines(const std::string& text) {
+    std::vector<std::pair<std::string, std::string>> out;
+    size_t start = 0;
+    while (start <= text.size()) {
+        const size_t end = std::min(text.find('\n', start), text.size());
+        const std::string line = text.substr(start, end - start);
+        if (!line.empty()) {
+            const size_t colon = line.find(": ");
+            if (colon == std::string::npos) out.emplace_back("", line);
+            else out.emplace_back(line.substr(0, colon), line.substr(colon + 2));
+        }
+        start = end + 1;
+    }
+    return out;
+}
+
+std::string idPart(const std::string& s) {
+    std::string out;
+    for (char ch : s)
+        if (std::isalnum(static_cast<unsigned char>(ch))) out += static_cast<char>(std::toupper(static_cast<unsigned char>(ch)));
+    return out;
+}
+
+Visual insignia(int scheme, int index, bool onFront) { return Visual{VisualKind::Insignia, {scheme, index, onFront ? 1 : 0}}; }
+
+}  // namespace
+
 // Warrior Knowledge blocks hold exactly the handbook items in data/warrior_cards.json:
-// the title on the front, the handbook text on the back. Nothing else is added.
+// the title on the front, the handbook text on the back. The rank lists (Blocks 3-4)
+// and the chain of command (Block 5) are split into one card per line instead, so you
+// learn them one at a time: rank from its insignia, rank from its pay grade, and the
+// person in each position. Nothing is added beyond what the handbook lists.
 void GuiApp::addWarriorCards() {
     for (const Flashcard& c : memDeck_.cards()) {
         int block = 0;
         if (std::sscanf(c.partOfSpeech.c_str(), "BLOCK %d", &block) != 1) continue;
         const std::string subtest = fmt("wk_block%02d", block);
         if (!registry_.find(subtest)) continue;
-        Question q;
-        q.subtest = subtest;
-        q.id = "WK-";  // stable id from the title, so missed cards stay on the review list
-        for (char ch : c.word)
-            if (std::isalnum(static_cast<unsigned char>(ch))) q.id += static_cast<char>(std::toupper(static_cast<unsigned char>(ch)));
-        q.prompt = c.word;
-        q.choices = {c.definition, "(not known)"};  // the second entry is only used to record "didn't know"
-        q.correctIndex = 0;
-        bank_.add(std::move(q));
+        auto add = [&](const std::string& id, const std::string& prompt, const std::string& answer, Visual v = {}) {
+            Question q;
+            q.subtest = subtest;
+            q.id = "WK-" + id;  // stable, so missed cards stay on the review list
+            q.prompt = prompt;
+            q.choices = {answer, "(not known)"};  // the second entry is only used to record "didn't know"
+            q.correctIndex = 0;
+            q.visual = std::move(v);
+            bank_.add(std::move(q));
+        };
+        const std::string& title = c.word;
+        const auto lines = handbookLines(c.definition);
+        if (title.rfind("AFROTC Cadet Ranks", 0) == 0) {
+            for (size_t i = 0; i < lines.size(); ++i)
+                add(fmt("CDT-%d-PIC", static_cast<int>(i) + 1), "Name this AFROTC cadet rank.", lines[i].second,
+                    insignia(0, static_cast<int>(i), true));
+        } else if (title == "USAF & USSF Officer Ranks" || title == "USAF Enlisted Ranks") {
+            const bool officer = title == "USAF & USSF Officer Ranks";
+            const std::string kind = officer ? "officer" : "Air Force enlisted";
+            for (const auto& [key, rank] : lines) {
+                const int n = std::atoi(key.c_str() + 1);
+                const std::string grade = key.substr(0, 1) + "-" + std::to_string(n);
+                const std::string idBase = (officer ? "OFF-" : "AFE-") + idPart(key);
+                add(idBase + "-PIC",
+                    !officer && n == 1 ? "Which Air Force enlisted rank wears no insignia?" : "Name this " + kind + " rank.",
+                    rank, insignia(officer ? 1 : 2, n, true));
+                add(idBase + "-GRADE", "Which " + kind + " rank is " + grade + "?", rank, insignia(officer ? 1 : 2, n, false));
+            }
+        } else if (title == "USSF Enlisted Ranks") {
+            std::vector<std::pair<std::string, std::string>> byGrade;  // E9 is listed twice (CMSgt and CMSSF)
+            for (const auto& [key, rank] : lines) {
+                const bool top = !byGrade.empty() && byGrade.back().first == key;
+                const int n = top ? 10 : std::atoi(key.c_str() + 1);
+                add("SFE-" + (top ? std::string("CMSSF") : idPart(key)) + "-PIC", "Name this Space Force enlisted rank.", rank,
+                    insignia(3, n, true));
+                if (top) byGrade.back().second += "\nor " + rank;
+                else byGrade.emplace_back(key, rank);
+            }
+            for (const auto& [key, rank] : byGrade) {
+                const int n = std::atoi(key.c_str() + 1);
+                add("SFE-" + idPart(key) + "-GRADE", fmt("Which Space Force enlisted rank is E-%d?", n), rank, insignia(3, n, false));
+            }
+        } else if (title == "Chain of Command" || title == "Additional Personnel") {
+            for (const auto& [position, person] : lines) add("COC-" + idPart(position), "Who is the " + position + "?", person);
+        } else {
+            add(idPart(title), title, c.definition);
+        }
     }
 }
 
@@ -991,16 +1063,25 @@ void GuiApp::drawCardQuestion(const Question& q) {
     const float minH = std::clamp(ImGui::GetContentRegionAvail().y - 170, 320.0f, 520.0f);
     const std::string& answer = q.choices[static_cast<size_t>(q.correctIndex)];
     const std::string blockLabel = fmt("BLOCK %d", std::atoi(q.subtest.c_str() + std::strlen("wk_block")));
+    const bool rank = q.visual.kind == VisualKind::Insignia && q.visual.data.size() >= 3;
     const int swiped = swipeCard(
         "wkcard", swipe_, minH,
         [&](float left, float width) {
             cardText(fonts.label, col::Muted, blockLabel.c_str(), left, width);
             ImGui::Dummy(ImVec2(0, 10));
+            if (rank && q.visual.data[2]) {
+                drawInsignia(q.visual, 150, left, width);
+                ImGui::Dummy(ImVec2(0, 14));
+            }
             cardText(fonts.title, col::Ink, q.prompt.c_str(), left, width);
         },
         [&](float left, float width) {
             cardText(fonts.label, col::Muted, upper(q.prompt).c_str(), left, width);
             ImGui::Dummy(ImVec2(0, 12));
+            if (rank) {
+                drawInsignia(q.visual, 110, left, width);
+                ImGui::Dummy(ImVec2(0, 12));
+            }
             cardText(answer.size() < 90 ? fonts.title : fonts.prompt, col::Accent, answer.c_str(), left, width);
         });
 
@@ -1086,6 +1167,7 @@ void GuiApp::drawResults() {
         wrappedIn(fonts.strong, col::Ink, q.prompt.c_str());
         const int chosen = r.answers[i].chosenIndex;
         if (cardMode_) {
+            if (q.visual.kind == VisualKind::Insignia) drawInsignia(q.visual, 64, ImGui::GetCursorScreenPos().x, 64 * 2.1f);
             wrappedIn(fonts.body, col::Good, fmt("Answer:  %s", q.choices[q.correctIndex].c_str()).c_str());
         } else {
             textIn(fonts.body, col::Bad, chosen >= 0 ? fmt("Your answer:  %s", q.choices[chosen].c_str()).c_str() : "Not answered");

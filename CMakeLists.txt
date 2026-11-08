@@ -27,7 +27,11 @@ FetchContent_Declare(miniaudio               # plays the sound effects
     GIT_TAG 0.11.21
     GIT_SHALLOW TRUE)
 
-FetchContent_MakeAvailable(json glfw imgui miniaudio)
+FetchContent_Declare(stb                     # loads the rank insignia pictures (stb_image.h)
+    GIT_REPOSITORY https://github.com/nothings/stb.git
+    GIT_TAG 4e9b368bfc071e97206ea5c6adba68dd0cbf8897)
+
+FetchContent_MakeAvailable(json glfw imgui miniaudio stb)
 find_package(OpenGL REQUIRED)
 
 # Dear ImGui has no CMake file of its own, so we list its source files here.
@@ -69,6 +73,7 @@ add_executable(afoqt_gui MACOSX_BUNDLE src/gui_main.cpp src/GuiApp.cpp src/Widge
                ${APP_ICON})
 target_link_libraries(afoqt_gui PRIVATE afoqt_core imgui)
 target_include_directories(afoqt_gui PRIVATE ${miniaudio_SOURCE_DIR})
+target_include_directories(afoqt_gui SYSTEM PRIVATE ${stb_SOURCE_DIR})
 if(APPLE)
     target_link_libraries(afoqt_gui PRIVATE "-framework CoreFoundation" "-framework CoreAudio" "-framework AudioToolbox")
 elseif(UNIX)

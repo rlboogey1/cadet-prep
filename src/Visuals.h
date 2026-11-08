@@ -5,6 +5,7 @@
 //   Block Counting           - a stack of blocks in 3D (isometric view)
 #include "Question.h"
 #include "imgui.h"
+#include <string>
 
 namespace ui {
 
@@ -18,6 +19,12 @@ void drawVisual(const Visual& v, float width);
 // Comprehension answers). The viewer is behind the aircraft's starting point,
 // looking north and a little down: heading north points away, east points right.
 void drawAircraft(ImDrawList* dl, ImVec2 a, ImVec2 b, int bankDeg, int pitchDeg, int headingDeg);
+
+// Rank insignia (VisualKind::Insignia): the picture from the image folder, fit in
+// `height` and centered in the span from `left` to `left + width` at the cursor;
+// advances past it. Fades with the style alpha. Call setImageFolder first.
+void setImageFolder(const std::string& folder);  // e.g. <data>/insignia
+void drawInsignia(const Visual& v, float height, float left, float width);
 
 // The app logo: an F-22 in a blue circle.
 void drawLogo(ImDrawList* dl, ImVec2 center, float radius);
