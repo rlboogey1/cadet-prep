@@ -783,4 +783,153 @@ void endCallout(ImVec4 soft, ImVec4 strong) {
     ImGui::Dummy(ImVec2(0, 6));
 }
 
+// ================================================================ swipe cards
+
+void cardText(ImFont* font, ImVec4 color, const char* text, float left, float width) {
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    const float px = fontPx(font), scale = px / font->FontSize, lineH = px * 1.25f;
+    color.w *= ImGui::GetStyle().Alpha;
+    const ImU32 c = u32(color);
+    const float y0 = ImGui::GetCursorScreenPos().y;
+    float y = y0;
+    const char* s = text;
+    const char* end = text + std::strlen(text);
+    while (s < end) {
+        const char* lineEnd = font->CalcWordWrapPositionA(scale, s, end, width);
+        if (lineEnd == s) ++lineEnd;  // a word wider than the card: break it
+        const char* trim = lineEnd;
+        while (trim > s && (trim[-1] == ' ' || trim[-1] == '\n')) --trim;
+        const float w = measure(font, s, trim).x;
+        textAt(dl, font, ImVec2(left + (width - w) * 0.5f, y), c, s, trim);
+        y += lineH;
+        s = lineEnd;
+        if (s < end && *s == '\n') ++s;
+        while (s < end && *s == ' ') ++s;
+    }
+    ImGui::SetCursorScreenPos(ImVec2(left, y0));
+    ImGui::Dummy(ImVec2(width, y - y0));
+}
+
+int swipeCard(const char* id, SwipeCard& s, float minHeight, const std::function<void(float, float)>& front,
+              const std::function<void(float, float)>& back, bool keys) {
+    ImGuiIO& io = ImGui::GetIO();
+    const double now = ImGui::GetTime();
+    const float dt = io.DeltaTime;
+    const float pad = 44.0f, rounding = 22.0f;
+    const ImVec2 start = ImGui::GetCursorScreenPos();
+    const float avail = ImGui::GetContentRegionAvail().x;
+    const float cw = std::min(avail, 820.0f);
+    if (s.enterStart < 0) s.enterStart = now;
+
+    // Flip animation: the card squashes to an edge and opens on the other face
+    float squash = 1.0f;
+    int shown = s.flipped ? 1 : 0;
+    if (s.flipStart >= 0) {
+        const float ft = static_cast<float>(now - s.flipStart) / 0.26f;
+        if (ft < 1.0f) {
+            squash = std::fabs(std::cos(ft * 3.14159265f));
+            if (ft < 0.5f) shown = 1 - shown;
+        } else {
+            s.flipStart = -1.0;
+        }
+    }
+    const float ch = std::max(minHeight, s.contentH[shown] + pad * 2 + 30);
+    const ImVec2 base = start + ImVec2((avail - cw) * 0.5f, 0);
+    const float threshold = cw * 0.25f;
+
+    // ---- Input
+    ImGui::PushID(id);
+    ImGui::SetCursorScreenPos(base);
+    ImGui::InvisibleButton("card", ImVec2(cw, ch));
+    ImGui::PopID();
+    const bool hovered = ImGui::IsItemHovered(), active = ImGui::IsItemActive();
+    if (!s.fly) {
+        if (active && ImGui::IsMouseDragging(ImGuiMouseButton_Left, 5.0f)) {
+            s.dragging = true;
+            s.x = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left, 5.0f).x;
+        }
+        if (ImGui::IsItemDeactivated()) {
+            if (!s.dragging) s.flip();
+            else if (std::fabs(s.x) > threshold) s.send(s.x > 0 ? 1 : -1);
+            s.dragging = false;
+        }
+        // Two-finger swipe on a trackpad
+        const bool wheel = hovered && io.MouseWheelH != 0.0f;
+        if (s.wheelLock) {
+            s.wheelIdle = wheel ? 0.0f : s.wheelIdle + dt;
+            if (s.wheelIdle > 0.2f) s.wheelLock = false;
+        } else if (wheel) {
+            s.x += io.MouseWheelH * 22.0f;
+            s.wheeling = true;
+            s.wheelIdle = 0.0f;
+        } else if (s.wheeling && (s.wheelIdle += dt) > 0.12f) {
+            s.wheeling = false;
+            if (std::fabs(s.x) > threshold) s.send(s.x > 0 ? 1 : -1);
+        }
+        if (keys && !s.fly) {
+            if (ImGui::IsKeyPressed(ImGuiKey_RightArrow, false) || ImGui::IsKeyPressed(ImGuiKey_2, false)) s.send(1);
+            else if (ImGui::IsKeyPressed(ImGuiKey_LeftArrow, false) || ImGui::IsKeyPressed(ImGuiKey_1, false)) s.send(-1);
+            else if (ImGui::IsKeyPressed(ImGuiKey_Space, false) || ImGui::IsKeyPressed(ImGuiKey_UpArrow, false) ||
+                     ImGui::IsKeyPressed(ImGuiKey_DownArrow, false))
+                s.flip();
+        }
+        if (!s.dragging && !s.wheeling && !s.fly) s.x -= s.x * std::min(1.0f, dt * 14.0f);  // spring back
+    }
+    if (s.fly) s.wheelLock = true;
+    if (hovered && !s.fly) ImGui::SetMouseCursor(s.dragging ? ImGuiMouseCursor_ResizeEW : ImGuiMouseCursor_Hand);
+
+    float x = s.x;
+    int result = 0;
+    if (s.fly) {
+        const float t = static_cast<float>(now - s.flyStart);
+        x = s.x + s.fly * (t * 1800.0f + t * t * 26000.0f);  // speeds up as it leaves
+        if (t > 0.24f) result = s.fly;
+    }
+
+    // ---- Drawing
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    const float enter = easeOut(static_cast<float>(now - s.enterStart) / 0.2f);
+    cardShape(dl, base + ImVec2(20, 14), ImVec2(cw - 40, ch), rounding);  // the next card, waiting underneath
+
+    const float k = std::clamp(std::fabs(x) / threshold, 0.0f, 1.0f);
+    const ImVec4 edge = x > 0 ? col::Good : col::Bad;
+    const float cwS = cw * std::max(squash, 0.02f);
+    const ImVec2 p = base + ImVec2(x + (cw - cwS) * 0.5f, std::fabs(x) * 0.05f + (1.0f - enter) * 14.0f);
+    const ImVec2 sz(cwS, ch);
+    cardShape(dl, p, sz, rounding, hovered || s.dragging, k > 0.01f ? mix(col::CardBorder, edge, k) : col::CardBorder,
+              1.0f + 2.0f * k);
+    if (k > 0.01f) dl->AddRectFilled(p, p + sz, u32(edge, 0.10f * k), rounding);
+
+    // Face content, centered, clipped to the (possibly squashed) card
+    const float h = s.contentH[shown];
+    const float alpha = (h > 0 ? 1.0f : 0.0f) * squash * squash * enter;
+    const float left = base.x + x + pad;
+    ImGui::PushClipRect(p, p + sz, true);
+    ImGui::PushStyleVar(ImGuiStyleVar_Alpha, std::max(alpha, 0.0f));
+    ImGui::SetCursorScreenPos(ImVec2(left, p.y + std::max(pad, (ch - h) * 0.5f - 10)));
+    ImGui::BeginGroup();
+    (shown ? back : front)(left, cw - pad * 2);
+    ImGui::EndGroup();
+    if (squash > 0.98f) s.contentH[shown] = ImGui::GetItemRectSize().y;
+    ImGui::PopStyleVar();
+
+    const char* hint = shown ? "Click to flip back" : "Click to flip";
+    textCentered(dl, fonts.small, ImVec2(p.x + sz.x * 0.5f, p.y + ch - 24), u32(col::Muted, alpha * (1.0f - k)), hint);
+    if (k > 0.01f) {  // "KNOW IT" / "STILL LEARNING" stamp
+        const char* stamp = x > 0 ? "KNOW IT" : "STILL LEARNING";
+        const ImVec2 ts = measure(fonts.strong, stamp);
+        const ImVec2 c(p.x + sz.x * 0.5f, p.y + 34);
+        const ImVec2 a = c - ts * 0.5f - ImVec2(16, 8), b = c + ts * 0.5f + ImVec2(16, 8);
+        dl->AddRectFilled(a, b, u32(col::Card, k), 999.0f);
+        dl->AddRect(a, b, u32(edge, k), 999.0f, 0, 2.0f);
+        textCentered(dl, fonts.strong, c, u32(edge, k), stamp);
+    }
+    ImGui::PopClipRect();
+
+    ImGui::SetCursorScreenPos(ImVec2(start.x, base.y + ch));
+    ImGui::Dummy(ImVec2(avail, 0.0f));
+    if (result) s.reset();
+    return result;
+}
+
 }  // namespace ui

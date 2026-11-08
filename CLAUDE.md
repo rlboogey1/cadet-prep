@@ -62,10 +62,15 @@ review, progress, focus area, and stats. Warm-ups record under `warmup` (AFOQT) 
 which lists the sections in each composite) are AFOQT only. The app opens on `Screen::Home` (main
 menu); Home and Settings hide the per-track workspace menu.
 
-**Flashcards.** `FlashcardDeck` is a Leitner box system (mastered at box 3). There are two decks:
-`deck_` (Word Knowledge vocabulary, `data/flashcards.json`) and `memDeck_` (Warrior Knowledge
-memorize cards, `data/warrior_cards.json`, front = `word`, back = `definition`). `activeDeck()`
-picks by track, and the same Flashcards screen renders both.
+**Flashcards.** `FlashcardDeck` is a Leitner box system (mastered at box 3), used for the AFOQT
+Word Knowledge vocabulary deck (`deck_`, `data/flashcards.json`, the Flashcards screen, AFOQT only).
+**Warrior Knowledge has no multiple choice:** its blocks are built only from the handbook items in
+`data/warrior_cards.json` (`addWarriorCards()`: `pos` "BLOCK n" → `wk_blockNN`, front = `word`, back
+= `definition`, id `WK-` + title). Don't add written or made-up questions to these blocks. Every quiz in
+that track (`cardMode_`) shows each card as a swipe card (`ui::swipeCard` in `Widgets.cpp`); swipe
+right = correct, left = missed (recorded as the placeholder wrong choice so it lands on the review
+list). `memDeck_` only loads the cards; there's no separate memorize screen. The console version
+hides Warrior Knowledge.
 
 **Saving.** `AppPaths.h` sets the progress folder (`~/Library/Application Support/Cadet Prep` on
 macOS, `~/.cadet-prep` elsewhere) and migrates older folders. **Always save and load with
@@ -73,7 +78,7 @@ macOS, `~/.cadet-prep` elsewhere) and migrates older folders. **Always save and 
 into the bundle's Resources folder unless `GLFW_COCOA_CHDIR_RESOURCES` is off (it's turned off in
 `gui_main.cpp`), which once made settings save inside the app. Files: `afoqt_progress.json`
 (`ProgressStore`; review sessions don't count toward accuracy), `afoqt_flashcards.json`,
-`warrior_cards_progress.json`, and `afoqt_settings.json` (sound, dark mode, definition-first,
+`warrior_cards_progress.json` (no longer written, kept for old installs), and `afoqt_settings.json` (sound, dark mode, definition-first,
 last track, focus area per track). Settings save on every change.
 
 **Look and theme.** `Widgets.h/.cpp` holds the design system: fonts, cards, buttons, chips,
@@ -85,9 +90,9 @@ map to `Icon` values in `iconNamed()` in `GuiApp.cpp`.
 
 ## Content notes
 
-- Warrior Knowledge (`data/wk_block01.json` … `wk_block11.json`, `data/warrior_cards.json`) follows
-  the user's Det 105 Warrior Knowledge handbook, Blocks 1 to 11. The chain of command (Block 5)
-  changes over time; update both the block file and the "Chain of Command" card.
+- Warrior Knowledge (`data/warrior_cards.json`) is exactly the user's Det 105 Warrior Knowledge
+  handbook, Blocks 1 to 11; only add what the user sends. The chain of command (Block 5) changes
+  over time; update the "Chain of Command" card.
 - Don't add song lyrics (Air Force Song, Space Force Song); the user can add them to the cards file.
 - Pilot sections use official AFOQT question counts and time limits; knowledge-section limits are
   practice pacing.

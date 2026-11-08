@@ -7,6 +7,7 @@
 #include "Sound.h"
 #include "imgui.h"
 #include "SubtestRegistry.h"
+#include "Widgets.h"
 #include <map>
 #include <random>
 #include <string>
@@ -43,6 +44,7 @@ private:
     void drawFlashcards();
     void drawProgress();
     void drawQuiz();
+    void drawCardQuestion(const Question& q);  // Warrior Knowledge: the question as a swipe card
     void drawResults();
 
     // Shared pieces
@@ -81,6 +83,7 @@ private:
 
     // Settings saved between launches (afoqt_settings.json)
     void loadSettings();
+    void addWarriorCards();  // Warrior Knowledge blocks: one card per handbook item
     void saveSettings() const;
 
     SubtestRegistry registry_;
@@ -105,6 +108,10 @@ private:
     bool darkMode_ = false;        // saved setting
     bool themeApplied_ = false;    // the saved theme is applied on the first frame (needs ImGui running)
 
+    // Warrior Knowledge quizzes are flashcards: swipe right = knew it, left = didn't.
+    bool cardMode_ = false;
+    ui::SwipeCard swipe_;  // the card on screen (quiz card mode and the Flashcards page)
+
     // Answer animation: when the current feedback started (ImGui time), or -1
     double feedbackTime_ = -1.0;
 
@@ -114,6 +121,5 @@ private:
     FlashcardDeck& activeDeck() { return track_ == "afoqt" ? deck_ : memDeck_; }
     const FlashcardDeck& activeDeck() const { return track_ == "afoqt" ? deck_ : memDeck_; }
     bool flashActive_ = false;
-    bool cardFlipped_ = false;
     bool definitionFirst_ = false;
 };

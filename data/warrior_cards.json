@@ -137,14 +137,74 @@
       "definition": "Centralized Command (CC), Distributed Control (DC), Decentralized Command (DC)."
     },
     {
-      "word": "USAF Major Commands",
+      "word": "Air Mobility Command",
       "pos": "BLOCK 6",
-      "definition": "1. Air Mobility Command: Scott AFB, IL\n2. Air Combat Command: Joint Base Langley-Eustis, VA\n3. Air Education & Training Command: Joint Base San Antonio-Randolph, TX\n4. Air Force Special Operations Command: Hurlburt Field, FL\n5. United States Air Forces in Europe - Air Forces Africa: Ramstein AB, Germany\n6. Pacific Air Forces: Joint Base Pearl Harbor-Hickam, HI\n7. Air Force Materiel Command: Wright-Patterson AFB, OH\n8. Air Force Reserve Command: Robins AFB, GA\n9. Air Force Global Strike Command: Barksdale AFB, LA\n10. Air National Guard: Washington, D.C."
+      "definition": "Scott AFB, IL"
     },
     {
-      "word": "USSF Commands",
+      "word": "Air Combat Command",
       "pos": "BLOCK 6",
-      "definition": "1. Combat Forces Command: Peterson SFB, CO\n2. Space Systems Command: Los Angeles SFB, CA\n3. Space Training and Readiness Command: Patrick SFB, FL\n4. United States Space Command: Redstone Arsenal, Huntsville, AL"
+      "definition": "Joint Base Langley-Eustis, VA"
+    },
+    {
+      "word": "Air Education & Training Command",
+      "pos": "BLOCK 6",
+      "definition": "Joint Base San Antonio-Randolph, TX"
+    },
+    {
+      "word": "Air Force Special Operations Command",
+      "pos": "BLOCK 6",
+      "definition": "Hurlburt Field, FL"
+    },
+    {
+      "word": "United States Air Forces in Europe - Air Forces Africa",
+      "pos": "BLOCK 6",
+      "definition": "Ramstein AB, Germany"
+    },
+    {
+      "word": "Pacific Air Forces",
+      "pos": "BLOCK 6",
+      "definition": "Joint Base Pearl Harbor-Hickam, HI"
+    },
+    {
+      "word": "Air Force Materiel Command",
+      "pos": "BLOCK 6",
+      "definition": "Wright-Patterson AFB, OH"
+    },
+    {
+      "word": "Air Force Reserve Command",
+      "pos": "BLOCK 6",
+      "definition": "Robins AFB, GA"
+    },
+    {
+      "word": "Air Force Global Strike Command",
+      "pos": "BLOCK 6",
+      "definition": "Barksdale AFB, LA"
+    },
+    {
+      "word": "Air National Guard",
+      "pos": "BLOCK 6",
+      "definition": "Washington, D.C."
+    },
+    {
+      "word": "Combat Forces Command",
+      "pos": "BLOCK 6",
+      "definition": "Peterson SFB, CO"
+    },
+    {
+      "word": "Space Systems Command",
+      "pos": "BLOCK 6",
+      "definition": "Los Angeles SFB, CA"
+    },
+    {
+      "word": "Space Training and Readiness Command",
+      "pos": "BLOCK 6",
+      "definition": "Patrick SFB, FL"
+    },
+    {
+      "word": "United States Space Command",
+      "pos": "BLOCK 6",
+      "definition": "Redstone Arsenal, Huntsville, AL"
     },
     {
       "word": "Air Force Core Functions",

@@ -87,132 +87,121 @@
       "name": "Block 1: Values, Missions & Responses",
       "track": "warrior",
       "category": "warrior",
-      "file": "wk_block01.json",
-      "time_limit_seconds": 240,
-      "question_count": 12,
+      "time_limit_seconds": 300,
+      "question_count": 10,
       "icon": "Star",
       "description": "Core values, Honor Code, missions and vision, and the seven basic responses.",
-      "tips": "Say the answer in your head before reading the choices; that's how you'll be asked in person."
+      "tips": "Say the answer out loud before you flip; that's how you'll be asked in person. Be honest when you swipe."
     },
     {
       "id": "wk_block02",
       "name": "Block 2: Det 105 Mission & Songs",
       "track": "warrior",
       "category": "warrior",
-      "file": "wk_block02.json",
-      "time_limit_seconds": 140,
-      "question_count": 7,
+      "time_limit_seconds": 90,
+      "question_count": 3,
       "icon": "Flag",
-      "description": "The Fall 2026 Det 105 mission and vision, the Field Training mission, and the two songs.",
-      "tips": "Say the answer in your head before reading the choices; that's how you'll be asked in person."
+      "description": "The Fall 2026 Det 105 mission and vision and the Field Training mission.",
+      "tips": "Say the answer out loud before you flip; that's how you'll be asked in person. Be honest when you swipe."
     },
     {
       "id": "wk_block03",
       "name": "Block 3: Cadet & Officer Ranks",
       "track": "warrior",
       "category": "warrior",
-      "file": "wk_block03.json",
-      "time_limit_seconds": 300,
-      "question_count": 15,
+      "time_limit_seconds": 150,
+      "question_count": 5,
       "icon": "Star",
       "description": "AFROTC cadet ranks, officer ranks O-1 to O-10, the AFROTC mission, and the Det 105/CC priorities.",
-      "tips": "Say the answer in your head before reading the choices; that's how you'll be asked in person."
+      "tips": "Say the answer out loud before you flip; that's how you'll be asked in person. Be honest when you swipe."
     },
     {
       "id": "wk_block04",
       "name": "Block 4: Enlisted Ranks",
       "track": "warrior",
       "category": "warrior",
-      "file": "wk_block04.json",
-      "time_limit_seconds": 300,
-      "question_count": 15,
+      "time_limit_seconds": 150,
+      "question_count": 5,
       "icon": "List",
       "description": "USAF and USSF enlisted ranks, the Det 105/CC mission and vision, and the Five Cs.",
-      "tips": "Say the answer in your head before reading the choices; that's how you'll be asked in person."
+      "tips": "Say the answer out loud before you flip; that's how you'll be asked in person. Be honest when you swipe."
     },
     {
       "id": "wk_block05",
       "name": "Block 5: Chain of Command",
       "track": "warrior",
       "category": "warrior",
-      "file": "wk_block05.json",
-      "time_limit_seconds": 300,
-      "question_count": 15,
+      "time_limit_seconds": 120,
+      "question_count": 4,
       "icon": "Org",
       "description": "Your chain of command by name, additional personnel, and Det 105's founding.",
-      "tips": "Say the answer in your head before reading the choices; that's how you'll be asked in person."
+      "tips": "Say the answer out loud before you flip; that's how you'll be asked in person. Be honest when you swipe."
     },
     {
       "id": "wk_block06",
       "name": "Block 6: Major Commands",
       "track": "warrior",
       "category": "warrior",
-      "file": "wk_block06.json",
-      "time_limit_seconds": 300,
+      "time_limit_seconds": 450,
       "question_count": 15,
       "icon": "Jet",
       "description": "USAF major commands, USSF commands, their headquarters, and the Air Force Core Functions.",
-      "tips": "Say the answer in your head before reading the choices; that's how you'll be asked in person."
+      "tips": "Say the answer out loud before you flip; that's how you'll be asked in person. Be honest when you swipe."
     },
     {
       "id": "wk_block07",
       "name": "Block 7: Code of Conduct I–III",
       "track": "warrior",
       "category": "warrior",
-      "file": "wk_block07.json",
-      "time_limit_seconds": 140,
-      "question_count": 7,
+      "time_limit_seconds": 90,
+      "question_count": 3,
       "icon": "Shield",
       "description": "Articles I, II, and III of the Code of Conduct.",
-      "tips": "Say the answer in your head before reading the choices; that's how you'll be asked in person."
+      "tips": "Say the answer out loud before you flip; that's how you'll be asked in person. Be honest when you swipe."
     },
     {
       "id": "wk_block08",
       "name": "Block 8: Code of Conduct IV–VI",
       "track": "warrior",
       "category": "warrior",
-      "file": "wk_block08.json",
-      "time_limit_seconds": 140,
-      "question_count": 7,
+      "time_limit_seconds": 90,
+      "question_count": 3,
       "icon": "Shield",
       "description": "Articles IV, V, and VI of the Code of Conduct.",
-      "tips": "Say the answer in your head before reading the choices; that's how you'll be asked in person."
+      "tips": "Say the answer out loud before you flip; that's how you'll be asked in person. Be honest when you swipe."
     },
     {
       "id": "wk_block09",
       "name": "Block 9: Fallen Alumni & Phonetics",
       "track": "warrior",
       "category": "warrior",
-      "file": "wk_block09.json",
-      "time_limit_seconds": 300,
-      "question_count": 15,
+      "time_limit_seconds": 90,
+      "question_count": 3,
       "icon": "Book",
       "description": "The Det 105 Fallen Alumni, the phonetic alphabet, and the Schwarzkopf quote.",
-      "tips": "Say the answer in your head before reading the choices; that's how you'll be asked in person."
+      "tips": "Say the answer out loud before you flip; that's how you'll be asked in person. Be honest when you swipe."
     },
     {
       "id": "wk_block10",
       "name": "Block 10: Airman's Creed",
       "track": "warrior",
       "category": "warrior",
-      "file": "wk_block10.json",
-      "time_limit_seconds": 160,
-      "question_count": 8,
+      "time_limit_seconds": 60,
+      "question_count": 1,
       "icon": "Book",
       "description": "Every line of the Airman's Creed, in order.",
-      "tips": "Say the answer in your head before reading the choices; that's how you'll be asked in person."
+      "tips": "Say the answer out loud before you flip; that's how you'll be asked in person. Be honest when you swipe."
     },
     {
       "id": "wk_block11",
       "name": "Block 11: Oaths of Office",
       "track": "warrior",
       "category": "warrior",
-      "file": "wk_block11.json",
-      "time_limit_seconds": 160,
-      "question_count": 8,
+      "time_limit_seconds": 60,
+      "question_count": 2,
       "icon": "Flag",
       "description": "The Officer and Enlisted Oaths of Office.",
-      "tips": "Say the answer in your head before reading the choices; that's how you'll be asked in person."
+      "tips": "Say the answer out loud before you flip; that's how you'll be asked in person. Be honest when you swipe."
     }
   ]
 }

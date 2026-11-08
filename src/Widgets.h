@@ -129,6 +129,40 @@ void divider(ImVec4 color = col::CardBorder);
 void beginCallout();
 void endCallout(ImVec4 soft, ImVec4 strong);
 
+// ---------------------------------------------------------------- swipe cards
+// A flashcard you flip and swipe, like Quizlet: click (or Space) flips it; drag it,
+// swipe sideways on a trackpad, or press an arrow key to send it off. Right = "know
+// it", left = "still learning". Keep one SwipeCard per card session.
+struct SwipeCard {
+    float x = 0.0f;             // sideways offset while dragging
+    bool dragging = false, wheeling = false;
+    bool wheelLock = false;     // ignores trackpad momentum left over from the last swipe
+    float wheelIdle = 0.0f;
+    int fly = 0;                // -1 / +1 while the card flies off
+    double flyStart = -1.0;
+    bool flipped = false;
+    double flipStart = -1.0;
+    double enterStart = -1.0;
+    float contentH[2] = {0.0f, 0.0f};  // front and back height last frame (for centering)
+
+    void flip() { flipped = !flipped; flipStart = ImGui::GetTime(); }
+    void send(int dir) {
+        if (fly) return;
+        fly = dir;
+        flyStart = ImGui::GetTime();
+        dragging = wheeling = false;
+    }
+    void reset() { const bool lock = wheelLock; const float idle = wheelIdle; *this = SwipeCard{}; wheelLock = lock; wheelIdle = idle; }
+};
+// Draws the card and handles input. `front`/`back` draw the faces; they get the
+// left edge and width to lay text out in (use cardText). Returns +1 or -1 once the
+// card has flown off (and resets `s` for the next card), otherwise 0.
+// `keys` = also answer to Space, arrows, and 1/2.
+int swipeCard(const char* id, SwipeCard& s, float minHeight, const std::function<void(float, float)>& front,
+              const std::function<void(float, float)>& back, bool keys = true);
+// Wrapped text with every line centered, for swipe card faces.
+void cardText(ImFont* font, ImVec4 color, const char* text, float left, float width);
+
 // A burst of colorful particles around `center` (`t` = seconds since start).
 void celebrate(ImDrawList* dl, ImVec2 center, float t);
 

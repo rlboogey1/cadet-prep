@@ -8,7 +8,7 @@ The app is split into prep sections, which you pick from the main menu or the si
   (Table Reading, Instrument Comprehension, Aviation Information, Block Counting), with
   flashcards and estimated composite scores.
 - **Warrior Knowledge**: Blocks 1 to 11 of the Det 105 Warrior Knowledge handbook,
-  with memorize cards for the creed, oaths, and Code of Conduct.
+  as flashcards.
 
 The app opens on a main menu where you pick a prep section. Each prep section has its
 own dashboard, practice tests, review list, cards, progress, and focus area.
@@ -100,30 +100,30 @@ Everything is randomized:
   there and list it in `templatesFor()` to add more. Generated questions don't
   go into "Review missed", since they aren't saved anywhere.
 
-**Warrior Knowledge**: Blocks 1 to 11 of the Det 105 Warrior Knowledge handbook
+**Warrior Knowledge**: Blocks 1 to 11 of the Det 105 Warrior Knowledge handbook, as
+flashcards (window version only). Every card is one handbook item from
+`data/warrior_cards.json`: the title on the front, the handbook text on the back.
+Flip the card, then swipe right if you knew it or left if you didn't; cards you
+swipe left go to "Review missed".
 
-| Block | Covers | Questions |
+| Block | Covers | Cards |
 |---|---|---|
-| 1 | Core values, Honor Code, missions and vision, seven basic responses | 12 |
-| 2 | Fall 2026 Det 105 mission and vision, Field Training mission | 7 |
-| 3 | Cadet and officer ranks, AFROTC mission, Det 105/CC priorities, foundational competencies | 16 |
-| 4 | USAF and USSF enlisted ranks, Det 105/CC mission and vision, Five Cs | 15 |
-| 5 | Chain of command, additional personnel, Det 105 founding, executing mission command | 19 |
-| 6 | USAF major commands, USSF commands, Air Force Core Functions | 19 |
-| 7 | Code of Conduct, Articles I to III | 7 |
-| 8 | Code of Conduct, Articles IV to VI | 7 |
-| 9 | Fallen alumni, phonetic alphabet, Schwarzkopf quote | 16 |
-| 10 | Airman's Creed | 8 |
-| 11 | Officer and Enlisted Oaths of Office | 8 |
-
-Warrior Knowledge also has **memorize cards** (`data/warrior_cards.json`, 42 cards):
-the title on the front and the full text on the back, for everything you need word
-for word. They use the same spaced repetition as the vocabulary cards.
+| 1 | Core values, Honor Code, missions and vision, seven basic responses | 10 |
+| 2 | Fall 2026 Det 105 mission and vision, Field Training mission | 3 |
+| 3 | Cadet and officer ranks, AFROTC mission, Det 105/CC priorities, foundational competencies | 5 |
+| 4 | USAF and USSF enlisted ranks, Det 105/CC mission and vision, Five Cs | 5 |
+| 5 | Chain of command, additional personnel, Det 105 founding, executing mission command | 4 |
+| 6 | USAF major commands, USSF commands (one card each), Air Force Core Functions | 15 |
+| 7 | Code of Conduct, Articles I to III | 3 |
+| 8 | Code of Conduct, Articles IV to VI | 3 |
+| 9 | Fallen alumni, phonetic alphabet, Schwarzkopf quote | 3 |
+| 10 | Airman's Creed | 1 |
+| 11 | Officer and Enlisted Oaths of Office | 2 |
 
 Not included: the Air Force Song and Space Force Song lyrics (Block 2), and details
 for the fallen alumnus you choose (Block 9). Add them as cards in
-`data/warrior_cards.json` if you'd like to drill them. When the chain of command
-changes, update `data/wk_block05.json` and the "Chain of Command" card.
+`data/warrior_cards.json` (`"pos"` is the block, e.g. `"BLOCK 2"`) if you'd like to
+drill them. When the chain of command changes, update the "Chain of Command" card.
 
 ## Adding flashcards
 

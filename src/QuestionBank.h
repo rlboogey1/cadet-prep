@@ -29,6 +29,9 @@ public:
 
     size_t size(const std::string& subtestId) const;
 
+    // Adds a question made in code (Warrior Knowledge cards).
+    void add(Question q) { bySubtest_[q.subtest].push_back(std::move(q)); }
+
 private:
     std::unordered_map<std::string, std::vector<Question>> bySubtest_;
 };

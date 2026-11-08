@@ -10,6 +10,7 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <fstream>
 #include <nlohmann/json.hpp>
 
@@ -55,18 +56,15 @@ struct TrackInfo {
     const char* id;
     const char* name;
     Icon icon;
-    const char* label;     // CAPS label on the dashboard
-    const char* headline;  // second line of the banner headline
-    const char* blurb;
+    const char* label;  // CAPS label on the dashboard
+    const char* blurb;  // one plain line under the name on the dashboard banner
 };
 const std::vector<TrackInfo>& tracks() {
     static const std::vector<TrackInfo> list = {
-        {"afoqt", "AFOQT Prep", Icon::Jet, "AFOQT PREP", "Test with confidence.",
-         "Every AFOQT knowledge and pilot section, explanations that actually teach, flashcards for "
-         "vocabulary, and timed drills when you're ready."},
-        {"warrior", "Warrior Knowledge", Icon::Shield, "WARRIOR KNOWLEDGE", "Know it cold.",
-         "Warrior Knowledge Blocks 1\xE2\x80\x93" "11 from the Det 105 handbook: values and missions, ranks, your chain "
-         "of command, major commands, the Code of Conduct, the Airman's Creed, and the oaths."},
+        {"afoqt", "AFOQT Prep", Icon::Jet, "AFOQT PREP",
+         "Practice questions for every AFOQT section, vocabulary cards, and timed tests."},
+        {"warrior", "Warrior Knowledge", Icon::Shield, "WARRIOR KNOWLEDGE",
+         "Flashcards for Blocks 1\xE2\x80\x93" "11 of the Det 105 handbook."},
     };
     return list;
 }
@@ -241,12 +239,33 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
         deck_.loadProgress(apppaths::userFile("afoqt_flashcards.json"));
         memDeck_.load(dataDir + "/warrior_cards.json");
         memDeck_.loadProgress(apppaths::userFile("warrior_cards_progress.json"));
+        addWarriorCards();
     } catch (const std::exception& e) {
         error = e.what();
         return false;
     }
     loadSettings();
     return true;
+}
+
+// Warrior Knowledge blocks hold exactly the handbook items in data/warrior_cards.json:
+// the title on the front, the handbook text on the back. Nothing else is added.
+void GuiApp::addWarriorCards() {
+    for (const Flashcard& c : memDeck_.cards()) {
+        int block = 0;
+        if (std::sscanf(c.partOfSpeech.c_str(), "BLOCK %d", &block) != 1) continue;
+        const std::string subtest = fmt("wk_block%02d", block);
+        if (!registry_.find(subtest)) continue;
+        Question q;
+        q.subtest = subtest;
+        q.id = "WK-";  // stable id from the title, so missed cards stay on the review list
+        for (char ch : c.word)
+            if (std::isalnum(static_cast<unsigned char>(ch))) q.id += static_cast<char>(std::toupper(static_cast<unsigned char>(ch)));
+        q.prompt = c.word;
+        q.choices = {c.definition, "(not known)"};  // the second entry is only used to record "didn't know"
+        q.correctIndex = 0;
+        bank_.add(std::move(q));
+    }
 }
 
 void GuiApp::draw() {
@@ -357,8 +376,7 @@ void GuiApp::drawSidebar(float height) {
     if (navItem("n_dash", "Dashboard", Icon::Home, section == Screen::Dashboard, w)) goTo(Screen::Dashboard);
     if (navItem("n_prac", "Practice tests", Icon::Target, section == Screen::Practice, w)) goTo(Screen::Practice);
     if (navItem("n_rev", "Review missed", Icon::Review, section == Screen::Review, w, badge.c_str())) goTo(Screen::Review);
-    if (navItem("n_vocab", track_ == "afoqt" ? "Vocabulary cards" : "Memorize cards", Icon::Cards,
-                section == Screen::Flashcards, w))
+    if (track_ == "afoqt" && navItem("n_vocab", "Vocabulary cards", Icon::Cards, section == Screen::Flashcards, w))
         goTo(Screen::Flashcards);
     if (navItem("n_prog", "My progress", Icon::Chart, section == Screen::Progress, w)) goTo(Screen::Progress);
     ImGui::PopStyleVar();
@@ -470,12 +488,12 @@ void GuiApp::drawHome() {
         c.icon = t.icon;
         c.title = t.name;
         c.desc = afoqt ? "Every AFOQT knowledge and pilot section, vocabulary cards, and estimated composite scores."
-                       : "Your Det 105 Warrior Knowledge Blocks 1\xE2\x80\x93" "11, with memorize cards for the creed, oaths, and Code of Conduct.";
+                       : "Det 105 Warrior Knowledge Blocks 1\xE2\x80\x93" "11 as flashcards.";
         c.badge = afoqt ? plural(static_cast<int>(secs.size()), "section") : plural(static_cast<int>(secs.size()), "block");
         if (track_ == t.id) c.tag = "LAST USED";
         c.progress = ov.total ? static_cast<float>(ov.correct) / ov.total : 0.0f;
         c.footer = ov.total ? fmt("%s  \xC2\xB7  %d%% accuracy", plural(ov.sessions, "session").c_str(), ov.correct * 100 / ov.total)
-                            : fmt("%d written questions  \xC2\xB7  Not started yet", questions);
+                            : fmt(afoqt ? "%d written questions  \xC2\xB7  Not started yet" : "%d cards  \xC2\xB7  Not started yet", questions);
         c.primary = "Open  \xE2\x86\x92";
         c.primaryStyle = ButtonStyle::Primary;
         c.highlight = track_ == t.id;
@@ -495,30 +513,25 @@ void GuiApp::drawDashboard() {
     // ---- Hero banner
     ImDrawList* dl = ImGui::GetWindowDrawList();
     const float w = ImGui::GetContentRegionAvail().x;
-    const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, 318);
+    const float pad = 42.0f, wrap = std::min(560.0f, w * 0.6f);
+    const char* blurb = ti.blurb;
+    const float h = 38 + fontPx(fonts.hero) + 12 + textSize(fonts.body, blurb, wrap).y + 24 + 48 + 38;
+    const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, h);
     gradientRect(dl, a, b, col::HeroA, col::HeroB, 24.0f);
     dl->PushClipRect(a, b, true);  // decorations stay inside the banner
     dl->AddCircle(ImVec2(b.x - 150, a.y + 70), 200, u32(col::White, 0.10f), 96, 1.5f);
     dl->AddCircle(ImVec2(b.x - 110, a.y + 110), 140, u32(col::White, 0.08f), 96, 1.5f);
-    dl->AddCircleFilled(ImVec2(b.x - 60, b.y + 40), 120, u32(col::White, 0.04f), 64);
-    drawIcon(dl, Icon::Sparkle, ImVec2(b.x - 128, a.y + 186), 54, u32(col::White, 0.55f));
-    drawIcon(dl, Icon::Sparkle, ImVec2(b.x - 200, a.y + 120), 20, u32(col::White, 0.35f));
     dl->PopClipRect();
 
-    const float pad = 42.0f;
-    ImGui::SetCursorScreenPos(a + ImVec2(pad, 38));
-    spacedLabel("YOUR PERSONAL PREP CENTER", ImVec4(1, 1, 1, 0.85f), 2.2f);
-    float y = ImGui::GetCursorScreenPos().y + 6;
-    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), "Train smarter.");
-    y += fontPx(fonts.hero) + 2;
-    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), ti.headline);
-    y += fontPx(fonts.hero) + 16;
-    const char* blurb = ti.blurb;
-    dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(a.x + pad, y), u32(col::White, 0.88f), blurb, nullptr,
-                std::min(560.0f, w * 0.6f));
-    y += textSize(fonts.body, blurb, std::min(560.0f, w * 0.6f)).y + 24;
+    float y = a.y + 38;
+    dl->AddText(fonts.hero, fontPx(fonts.hero), ImVec2(a.x + pad, y), u32(col::White), ti.name);
+    y += fontPx(fonts.hero) + 12;
+    dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(a.x + pad, y), u32(col::White, 0.88f), blurb, nullptr, wrap);
+    y += textSize(fonts.body, blurb, wrap).y + 24;
     ImGui::SetCursorScreenPos(ImVec2(a.x + pad, y));
-    if (button("Start a 10-question warm-up  \xE2\x86\x92", ButtonStyle::White, ImVec2(0, 48))) startWarmup();
+    if (button(track_ == "afoqt" ? "Start a 10-question warm-up  \xE2\x86\x92" : "Start a warm-up deck  \xE2\x86\x92",
+               ButtonStyle::White, ImVec2(0, 48)))
+        startWarmup();
     ImGui::SetCursorScreenPos(ImVec2(a.x, b.y + 24));
 
     if (!message_.empty()) {
@@ -541,7 +554,7 @@ void GuiApp::drawDashboard() {
 
     if (track_ != "afoqt") {
         spacedLabel("BLOCKS", col::Muted, 2.0f);
-        drawSectionGrid(trackSections(), false, true);
+        drawSectionGrid(trackSections(), false, false);
         return;
     }
     spacedLabel("KNOWLEDGE SECTIONS", col::Muted, 2.0f);
@@ -572,7 +585,7 @@ void GuiApp::drawSectionGrid(const std::vector<SubtestInfo>& sections, bool prac
         c.title = s.name;
         c.desc = st.desc;
         const size_t n = bank_.size(s.id);
-        c.badge = n ? plural(static_cast<int>(n), "question") : "Unlimited";
+        c.badge = n ? plural(static_cast<int>(n), track_ == "afoqt" ? "question" : "card") : "Unlimited";
         c.highlight = s.id == focus;
         if (c.highlight) c.tag = "FOCUS";
         c.progress = it != stats.end() ? static_cast<float>(it->second.accuracy() / 100.0) : 0.0f;
@@ -581,7 +594,8 @@ void GuiApp::drawSectionGrid(const std::vector<SubtestInfo>& sections, bool prac
             c.primary = "Practice  \xE2\x86\x92";
             c.primaryStyle = ButtonStyle::Primary;
         } else {
-            c.footer = it != stats.end() ? fmt("%.0f%% accuracy  \xC2\xB7  %.0f sec/question", it->second.accuracy(),
+            c.footer = it != stats.end() ? fmt(track_ == "afoqt" ? "%.0f%% accuracy  \xC2\xB7  %.0f sec/question"
+                                                                 : "%.0f%% known  \xC2\xB7  %.0f sec/card", it->second.accuracy(),
                                                it->second.avgSecondsPerQuestion())
                                          : "Not started yet";
             c.primary = "Train  \xE2\x86\x92";
@@ -788,13 +802,18 @@ void GuiApp::drawQuiz() {
     const float w = ImGui::GetContentRegionAvail().x;
     const int answered = static_cast<int>(r.answers.size());
     thinBar(static_cast<float>(answered) / engine_.total(), w, col::Accent, 8.0f);
-    textIn(fonts.strong, col::InkSoft, fmt("Question %d of %d", engine_.index() + 1, engine_.total()).c_str());
+    textIn(fonts.strong, col::InkSoft,
+           fmt(cardMode_ ? "Card %d of %d" : "Question %d of %d", engine_.index() + 1, engine_.total()).c_str());
     std::string score = sessionTag_ == "TIMED TEST" ? std::string("Score shown at the end")
-                                                    : fmt("%d correct  \xC2\xB7  %d missed", r.correctCount(),
-                                                          answered - r.correctCount());
+                        : cardMode_ ? fmt("%d know it  \xC2\xB7  %d still learning", r.correctCount(), answered - r.correctCount())
+                                    : fmt("%d correct  \xC2\xB7  %d missed", r.correctCount(), answered - r.correctCount());
     alignRight(textSize(fonts.body, score.c_str()).x);
     textIn(fonts.body, col::Muted, score.c_str());
     ImGui::Dummy(ImVec2(0, 2));
+    if (cardMode_) {
+        drawCardQuestion(q);
+        return;
+    }
 
     // ---- The question card
     beginCard("question", ImVec2(0, std::max(420.0f, ImGui::GetContentRegionAvail().y - 26)), true, ImVec2(32, 30));
@@ -899,6 +918,53 @@ void GuiApp::drawQuiz() {
     }
 }
 
+// Warrior Knowledge: the question on the front, the answer on the back. You grade
+// yourself: swipe right if you knew it, left if you didn't. Right counts as correct;
+// left counts as missed, so the card goes on the review list.
+void GuiApp::drawCardQuestion(const Question& q) {
+    ImGui::Dummy(ImVec2(0, 8));
+    const float minH = std::clamp(ImGui::GetContentRegionAvail().y - 170, 320.0f, 520.0f);
+    const std::string& answer = q.choices[static_cast<size_t>(q.correctIndex)];
+    const std::string blockLabel = fmt("BLOCK %d", std::atoi(q.subtest.c_str() + std::strlen("wk_block")));
+    const int swiped = swipeCard(
+        "wkcard", swipe_, minH,
+        [&](float left, float width) {
+            cardText(fonts.label, col::Muted, blockLabel.c_str(), left, width);
+            ImGui::Dummy(ImVec2(0, 10));
+            cardText(fonts.title, col::Ink, q.prompt.c_str(), left, width);
+        },
+        [&](float left, float width) {
+            cardText(fonts.label, col::Muted, upper(q.prompt).c_str(), left, width);
+            ImGui::Dummy(ImVec2(0, 12));
+            cardText(answer.size() < 90 ? fonts.title : fonts.prompt, col::Accent, answer.c_str(), left, width);
+        });
+
+    // Buttons for people who'd rather click than drag
+    ImGui::Dummy(ImVec2(0, 10));
+    const float bw = 210.0f, gap = 14.0f, w = ImGui::GetContentRegionAvail().x;
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + std::max(0.0f, (w - bw * 3 - gap * 2) * 0.5f));
+    if (button("\xE2\x86\x90  Still learning", ButtonStyle::Danger, ImVec2(bw, 50))) swipe_.send(-1);
+    ImGui::SameLine(0, gap);
+    if (button(swipe_.flipped ? "Show question" : "Flip card", ButtonStyle::Outline, ImVec2(bw, 50))) swipe_.flip();
+    ImGui::SameLine(0, gap);
+    if (button("Know it  \xE2\x86\x92", ButtonStyle::Primary, ImVec2(bw, 50))) swipe_.send(1);
+    ImGui::Dummy(ImVec2(0, 6));
+    divider();
+    wrappedIn(fonts.small, col::Muted,
+              ((sessionTips_.empty() ? std::string() : "Tip: " + sessionTips_ + "   ") +
+               "Click the card or press Space to flip. Drag or swipe it right if you knew it, left if you didn't "
+               "(or use the arrow keys).").c_str());
+
+    if (swiped != 0) {
+        const bool knew = swiped > 0;
+        // "Didn't know" is recorded as a wrong choice so it counts as answered but missed.
+        const int wrong = (q.correctIndex + 1) % static_cast<int>(q.choices.size());
+        engine_.submit(knew ? q.correctIndex : wrong);
+        if (engine_.showingFeedback()) engine_.next();  // no feedback step: the back of the card was the feedback
+        if (knew) sound_.correct();
+    }
+}
+
 // ================================================================ results
 
 void GuiApp::drawResults() {
@@ -913,16 +979,18 @@ void GuiApp::drawResults() {
              pct >= 80 ? "Strong work" : pct >= 60 ? "Getting there" : "Keep practicing",
              pct >= 80 ? col::Good : pct >= 60 ? col::Accent : col::Bad);
     ImGui::SameLine(0, kGap);
-    statCard(ImVec2(w, 142), "Correct", fmt("%d / %d", r.correctCount(), total).c_str(),
-             fmt("%d answered", r.answeredCount()).c_str());
+    statCard(ImVec2(w, 142), cardMode_ ? "Knew it" : "Correct", fmt("%d / %d", r.correctCount(), total).c_str(),
+             cardMode_ ? fmt("%d still learning", total - r.correctCount()).c_str()
+                       : fmt("%d answered", r.answeredCount()).c_str());
     ImGui::SameLine(0, kGap);
     statCard(ImVec2(w, 142), "Time used", mmss(static_cast<int>(r.totalSeconds)).c_str(),
-             r.answeredCount() ? fmt("%.0f sec per answer", r.totalSeconds / r.answeredCount()).c_str() : "");
+             r.answeredCount() ? fmt(cardMode_ ? "%.0f sec per card" : "%.0f sec per answer", r.totalSeconds / r.answeredCount()).c_str() : "");
     ImGui::Dummy(ImVec2(0, 4));
 
     if (r.timeExpired) {
         beginCallout();
-        textIn(fonts.strong, col::Ink, "Time ran out before you finished. Unanswered questions count as missed.");
+        textIn(fonts.strong, col::Ink, cardMode_ ? "Time ran out before you finished. Cards you didn't get to count as missed."
+                                                 : "Time ran out before you finished. Unanswered questions count as missed.");
         endCallout(col::BadSoft, col::Bad);
     }
 
@@ -941,7 +1009,7 @@ void GuiApp::drawResults() {
     ImGui::Dummy(ImVec2(0, 8));
 
     beginCard("missed", ImVec2(0, std::max(300.0f, ImGui::GetContentRegionAvail().y - 26)), true);
-    spacedLabel("MISSED QUESTIONS", col::Muted, 1.8f);
+    spacedLabel(cardMode_ ? "STILL LEARNING" : "MISSED QUESTIONS", col::Muted, 1.8f);
     ImGui::Dummy(ImVec2(0, 2));
     const auto& qs = engine_.questions();
     bool any = false;
@@ -951,12 +1019,16 @@ void GuiApp::drawResults() {
         const Question& q = qs[i];
         wrappedIn(fonts.strong, col::Ink, q.prompt.c_str());
         const int chosen = r.answers[i].chosenIndex;
-        textIn(fonts.body, col::Bad, chosen >= 0 ? fmt("Your answer:  %s", q.choices[chosen].c_str()).c_str() : "Not answered");
-        textIn(fonts.body, col::Good, fmt("Correct:  %s", q.choices[q.correctIndex].c_str()).c_str());
+        if (cardMode_) {
+            wrappedIn(fonts.body, col::Good, fmt("Answer:  %s", q.choices[q.correctIndex].c_str()).c_str());
+        } else {
+            textIn(fonts.body, col::Bad, chosen >= 0 ? fmt("Your answer:  %s", q.choices[chosen].c_str()).c_str() : "Not answered");
+            textIn(fonts.body, col::Good, fmt("Correct:  %s", q.choices[q.correctIndex].c_str()).c_str());
+        }
         wrappedIn(fonts.small, col::Muted, q.explanation.c_str());
         divider();
     }
-    if (!any) textIn(fonts.heading, col::Good, "None. Perfect score!");
+    if (!any) textIn(fonts.heading, col::Good, cardMode_ ? "None. You knew every card!" : "None. Perfect score!");
     endCard();
 }
 
@@ -1066,66 +1138,70 @@ void GuiApp::drawFlashcards() {
                                        static_cast<int>(deck.remaining()), deck.sessionGotIt(), deck.sessionMissed()).c_str());
     ImGui::Dummy(ImVec2(0, 4));
 
-    const float cardH = std::clamp(ImGui::GetContentRegionAvail().y - 100, 300.0f, vocab ? 400.0f : 640.0f);
-    beginCard("flash", ImVec2(0, cardH), true, ImVec2(44, 38));
-    if (!vocab) {  // memorize card: block label and title, then the text once flipped
-        spacedLabel(c.partOfSpeech.c_str(), col::Muted, 1.8f);
-        wrappedIn(fonts.title, col::Accent, c.word.c_str());
-        ImGui::Dummy(ImVec2(0, 4));
-        if (cardFlipped_) {
-            divider();
-            wrappedIn(fonts.prompt, col::Ink, c.definition.c_str());
-        } else {
-            ImGui::Dummy(ImVec2(0, 10));
-            textIn(fonts.body, col::Muted, "Recite it from memory, out loud or on paper. Then flip the card to check.");
-        }
-    } else {
-    const bool showWord = !vocab || !definitionFirst_ || cardFlipped_;
-    const bool showMeaning = definitionFirst_ || cardFlipped_;
-    if (showWord) {
-        spacedLabel(c.partOfSpeech == "adj" ? "ADJECTIVE" : c.partOfSpeech == "verb" ? "VERB" : "NOUN", col::Muted, 1.8f);
-        textIn(fonts.hero, col::Accent, c.word.c_str());
-        ImGui::Dummy(ImVec2(0, 2));
-    }
-    if (showMeaning) {
-        if (showWord) divider();
-        spacedLabel("DEFINITION", col::Muted, 1.8f);
-        wrappedIn(fonts.prompt, col::Ink, c.definition.c_str());
-        if (cardFlipped_) {
-            ImGui::Dummy(ImVec2(0, 4));
-            spacedLabel("SYNONYM", col::Muted, 1.8f);
-            textIn(fonts.strong, col::Good, c.synonym.c_str());
-            if (!c.example.empty()) {
-                ImGui::Dummy(ImVec2(0, 4));
-                spacedLabel("EXAMPLE", col::Muted, 1.8f);
-                wrappedIn(fonts.body, col::InkSoft, ("\"" + c.example + "\"").c_str());
+    const float minH = std::clamp(ImGui::GetContentRegionAvail().y - 170, 300.0f, vocab ? 420.0f : 520.0f);
+    auto posName = [&] {
+        return c.partOfSpeech == "adj" ? "ADJECTIVE" : c.partOfSpeech == "verb" ? "VERB" : "NOUN";
+    };
+    const int swiped = swipeCard(
+        "flash", swipe_, minH,
+        [&](float left, float width) {
+            if (!vocab) {  // memorize card: block label and title; recite the text, then flip
+                cardText(fonts.label, col::Muted, c.partOfSpeech.c_str(), left, width);
+                ImGui::Dummy(ImVec2(0, 10));
+                cardText(fonts.title, col::Accent, c.word.c_str(), left, width);
+                ImGui::Dummy(ImVec2(0, 14));
+                cardText(fonts.body, col::Muted, "Recite it from memory, out loud or on paper. Then flip to check.", left, width);
+            } else if (definitionFirst_) {
+                cardText(fonts.label, col::Muted, "DEFINITION", left, width);
+                ImGui::Dummy(ImVec2(0, 10));
+                cardText(fonts.title, col::Ink, c.definition.c_str(), left, width);
+                ImGui::Dummy(ImVec2(0, 14));
+                cardText(fonts.body, col::Muted, "Which word has this meaning?", left, width);
+            } else {
+                cardText(fonts.label, col::Muted, posName(), left, width);
+                ImGui::Dummy(ImVec2(0, 6));
+                cardText(fonts.hero, col::Accent, c.word.c_str(), left, width);
+                ImGui::Dummy(ImVec2(0, 14));
+                cardText(fonts.body, col::Muted, "What does this word mean?", left, width);
             }
-        }
-    }
-    if (!cardFlipped_) {
-        ImGui::Dummy(ImVec2(0, 10));
-        textIn(fonts.body, col::Muted, definitionFirst_ ? "Which word has this meaning?" : "What does this word mean?");
-    }
-    }
-    endCard();
-    ImGui::Dummy(ImVec2(0, 8));
+        },
+        [&](float left, float width) {
+            if (!vocab) {
+                cardText(fonts.label, col::Muted, (c.partOfSpeech + "  \xC2\xB7  " + upper(c.word)).c_str(), left, width);
+                ImGui::Dummy(ImVec2(0, 12));
+                cardText(fonts.prompt, col::Ink, c.definition.c_str(), left, width);
+                return;
+            }
+            cardText(fonts.label, col::Muted, posName(), left, width);
+            ImGui::Dummy(ImVec2(0, 4));
+            cardText(fonts.title, col::Accent, c.word.c_str(), left, width);
+            ImGui::Dummy(ImVec2(0, 12));
+            cardText(fonts.prompt, col::Ink, c.definition.c_str(), left, width);
+            ImGui::Dummy(ImVec2(0, 12));
+            cardText(fonts.label, col::Muted, "SYNONYM", left, width);
+            ImGui::Dummy(ImVec2(0, 4));
+            cardText(fonts.strong, col::Good, c.synonym.c_str(), left, width);
+            if (!c.example.empty()) {
+                ImGui::Dummy(ImVec2(0, 10));
+                cardText(fonts.body, col::InkSoft, ("\"" + c.example + "\"").c_str(), left, width);
+            }
+        });
 
-    if (!cardFlipped_) {
-        if (button("Flip card    Space", ButtonStyle::Primary, ImVec2(240, 50)) ||
-            ImGui::IsKeyPressed(ImGuiKey_Space, false))
-            cardFlipped_ = true;
-    } else {
-        int answer = -1;
-        if (button("Still learning    1", ButtonStyle::Danger, ImVec2(240, 50))) answer = 0;
-        ImGui::SameLine(0, 14);
-        if (button("Got it    2", ButtonStyle::Primary, ImVec2(240, 50))) answer = 1;
-        if (ImGui::IsKeyPressed(ImGuiKey_1, false)) answer = 0;
-        if (ImGui::IsKeyPressed(ImGuiKey_2, false)) answer = 1;
-        if (answer >= 0) {
-            if (answer == 1) sound_.correct();
-            deck.mark(answer == 1);
-            cardFlipped_ = false;
-        }
+    ImGui::Dummy(ImVec2(0, 10));
+    const float bw = 210.0f, gap = 14.0f, w = ImGui::GetContentRegionAvail().x;
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + std::max(0.0f, (w - bw * 3 - gap * 2) * 0.5f));
+    if (button("\xE2\x86\x90  Still learning", ButtonStyle::Danger, ImVec2(bw, 50))) swipe_.send(-1);
+    ImGui::SameLine(0, gap);
+    if (button(swipe_.flipped ? "Flip back" : "Flip card", ButtonStyle::Outline, ImVec2(bw, 50))) swipe_.flip();
+    ImGui::SameLine(0, gap);
+    if (button("Know it  \xE2\x86\x92", ButtonStyle::Primary, ImVec2(bw, 50))) swipe_.send(1);
+    ImGui::Dummy(ImVec2(0, 6));
+    divider();
+    wrappedIn(fonts.small, col::Muted, "Click the card or press Space to flip. Drag or swipe it right if you knew it, "
+                                       "left if you're still learning (or use the arrow keys).");
+    if (swiped != 0) {
+        if (swiped > 0) sound_.correct();
+        deck.mark(swiped > 0);
     }
 }
 
@@ -1382,6 +1458,8 @@ void GuiApp::startSubtest(const SubtestInfo& s, SessionMode mode) {
     sessionTimeLimit_ = s.timeLimitSeconds;
     isReview_ = false;
     feedbackTime_ = -1.0;
+    cardMode_ = track_ == "warrior";
+    swipe_ = SwipeCard{};
     engine_.start(s.id, std::move(questions), mode, s.timeLimitSeconds);
     screen_ = Screen::Quiz;
 }
@@ -1417,6 +1495,8 @@ void GuiApp::startWarmup() {
     sessionTimeLimit_ = 0;
     isReview_ = false;
     feedbackTime_ = -1.0;
+    cardMode_ = track_ == "warrior";
+    swipe_ = SwipeCard{};
     engine_.start(track_ == "afoqt" ? "warmup" : "warmup_" + track_, std::move(questions), SessionMode::Practice, 0);
     screen_ = Screen::Quiz;
 }
@@ -1443,13 +1523,15 @@ void GuiApp::startReview(const std::string& subtestId) {
     sessionTimeLimit_ = 0;
     isReview_ = true;
     feedbackTime_ = -1.0;
+    cardMode_ = track_ == "warrior";
+    swipe_ = SwipeCard{};
     engine_.start("review", std::move(questions), SessionMode::Practice, 0);
     screen_ = Screen::Quiz;
 }
 
 void GuiApp::startFlashcards(size_t count, bool learningOnly) {
     activeDeck().startSession(count, learningOnly, rng_);
-    cardFlipped_ = false;
+    swipe_ = SwipeCard{};
     if (activeDeck().sessionDone()) {
         message_ = "Nothing to study. You've mastered them all!";
         return;

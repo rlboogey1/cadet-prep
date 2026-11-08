@@ -80,7 +80,7 @@ struct App {
         std::vector<const SubtestInfo*> shown;
         std::vector<std::string> names;
         for (const auto& s : registry.all()) {
-            if (s.visual) continue;
+            if (s.visual || s.track != "afoqt") continue;  // Warrior Knowledge is flashcards, window version only
             shown.push_back(&s);
             names.push_back(s.name + "  (" + std::to_string(bank.size(s.id)) + " questions)");
         }

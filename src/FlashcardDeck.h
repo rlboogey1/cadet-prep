@@ -42,6 +42,7 @@ public:
     void mark(bool knewIt);
 
     size_t size() const { return cards_.size(); }
+    const std::vector<Flashcard>& cards() const { return cards_; }
     int masteredCount() const;
     int box(const std::string& word) const;
 
