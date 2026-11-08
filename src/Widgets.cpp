@@ -111,10 +111,14 @@ ImVec4 mix(ImVec4 a, ImVec4 b, float t) {
 
 bool darkMode() { return gDark; }
 
+TextKind gTextKind = TextKind::None;  // set by textField() while it has focus
+
 void setDevice(bool compact, bool touch) {
     gCompact = compact;
     gTouch = touch;
+    gTextKind = TextKind::None;  // a field that has focus sets it again while drawing
 }
+TextKind activeTextKind() { return gTextKind; }
 bool compact() { return gCompact; }
 bool touch() { return gTouch; }
 
@@ -792,6 +796,35 @@ void celebrate(ImDrawList* dl, ImVec2 center, float t) {
         float s = 13.0f * std::sin(kPi * std::min(1.0f, k * 1.6f));
         if (s > 0.5f) drawIcon(dl, Icon::Sparkle, q, s, u32(col::Gold, fade));
     }
+}
+
+bool textField(const char* id, const char* hint, char* buf, size_t size, TextKind kind, float width) {
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(14, gTouch ? 13.0f : 10.0f));
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 10.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.3f);
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, col::Bg);
+    ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, col::Bg);
+    ImGui::PushStyleColor(ImGuiCol_FrameBgActive, col::Card);
+    ImGui::PushStyleColor(ImGuiCol_Border, col::Ring);
+    ImGui::PushStyleColor(ImGuiCol_Text, col::Ink);
+    ImGui::PushStyleColor(ImGuiCol_TextDisabled, col::Muted);  // the hint
+    ImGui::PushStyleColor(ImGuiCol_TextSelectedBg, ImVec4(col::Accent.x, col::Accent.y, col::Accent.z, 0.3f));
+    ImGui::PushFont(fonts.body);
+    ImGui::SetNextItemWidth(width);
+    ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue;
+    if (kind == TextKind::Password) flags |= ImGuiInputTextFlags_Password;
+    if (kind != TextKind::Text) flags |= ImGuiInputTextFlags_CharsNoBlank;
+    const bool entered = ImGui::InputTextWithHint(id, hint, buf, size, flags);
+    const bool active = ImGui::IsItemActive();
+    ImGui::PopFont();
+    ImGui::PopStyleColor(7);
+    ImGui::PopStyleVar(3);
+    if (active) {
+        gTextKind = kind;
+        // Blue outline while typing
+        ImGui::GetWindowDrawList()->AddRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax(), u32(col::Accent), 10.0f, 0, 2.0f);
+    }
+    return entered;
 }
 
 bool toggle(const char* id, bool* value) {

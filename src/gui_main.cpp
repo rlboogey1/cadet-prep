@@ -51,6 +51,11 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     glfwSetWindowSizeLimits(window, 1180, 760, GLFW_DONT_CARE, GLFW_DONT_CARE);
+    // Switching back to the app: pull progress saved on the other devices
+    glfwSetWindowUserPointer(window, &app);
+    glfwSetWindowFocusCallback(window, [](GLFWwindow* w, int focused) {
+        if (focused) static_cast<GuiApp*>(glfwGetWindowUserPointer(w))->onForeground();
+    });
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);  // vsync
 

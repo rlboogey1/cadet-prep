@@ -13,6 +13,8 @@
 //   wait 30                 frames to wait
 //   tap 200 400             tap at x, y (points)
 //   drag 200 600 200 200 20 drag from one point to another over 20 frames
+//   type some text          type into the text box that has focus
+//   key enter               press Return
 //   shot out.bmp            save a screenshot
 #include "AppPaths.h"
 #include "GuiApp.h"
@@ -47,6 +49,38 @@ constexpr bool kPhoneOS = false;
 namespace {
 
 SDL_Renderer* gRenderer = nullptr;
+
+// Shows the on-screen keyboard while a text box has focus. Replaces the ImGui
+// backend's version so the keyboard fits the field (email, password) and iOS
+// doesn't capitalize or autocorrect what's typed.
+void setImeData(ImGuiContext*, ImGuiViewport* viewport, ImGuiPlatformImeData* data) {
+    static SDL_Window* typing = nullptr;  // the window with the keyboard up
+    static ui::TextKind typingKind = ui::TextKind::None;
+    SDL_Window* window = SDL_GetWindowFromID(static_cast<SDL_WindowID>(reinterpret_cast<intptr_t>(viewport->PlatformHandle)));
+    const ui::TextKind kind = ui::activeTextKind();
+    if (typing && (!data->WantVisible || typing != window || kind != typingKind)) {
+        SDL_StopTextInput(typing);
+        typing = nullptr;
+    }
+    if (!data->WantVisible || !window) return;
+    SDL_Rect r{static_cast<int>(data->InputPos.x), static_cast<int>(data->InputPos.y), 1,
+               static_cast<int>(data->InputLineHeight)};
+    SDL_SetTextInputArea(window, &r, 0);
+    if (typing) return;
+    SDL_PropertiesID props = SDL_CreateProperties();
+    SDL_SetNumberProperty(props, SDL_PROP_TEXTINPUT_TYPE_NUMBER,
+                          kind == ui::TextKind::Email      ? SDL_TEXTINPUT_TYPE_TEXT_EMAIL
+                          : kind == ui::TextKind::Password ? SDL_TEXTINPUT_TYPE_TEXT_PASSWORD_HIDDEN
+                                                           : SDL_TEXTINPUT_TYPE_TEXT);
+    if (kind == ui::TextKind::Email || kind == ui::TextKind::Password) {
+        SDL_SetNumberProperty(props, SDL_PROP_TEXTINPUT_CAPITALIZATION_NUMBER, SDL_CAPITALIZE_NONE);
+        SDL_SetBooleanProperty(props, SDL_PROP_TEXTINPUT_AUTOCORRECT_BOOLEAN, false);
+    }
+    SDL_StartTextInputWithProperties(window, props);
+    SDL_DestroyProperties(props);
+    typing = window;
+    typingKind = kind;
+}
 
 // Uploads a picture (the rank insignia) as an SDL texture.
 ImTextureID makeSdlTexture(const unsigned char* rgba, int w, int h) {
@@ -93,6 +127,8 @@ struct Script {
     float fx = -FLT_MAX, fy = -FLT_MAX;  // the finger (off screen when lifted)
     bool fingerDown = false, liftNext = false, hideNext = false;
     std::string shot;  // save a screenshot after this frame is drawn
+    std::string typed;  // text to type this frame
+    bool enter = false, enterUp = false;  // press Return this frame; let it go the next
 
     bool load(const char* path) {
         std::ifstream in(path);
@@ -142,14 +178,24 @@ struct Script {
                 dragFrame = 0;
             } else if (op == "shot") {
                 cmd >> shot;
+            } else if (op == "type") {
+                std::getline(cmd >> std::ws, typed);
+            } else if (op == "key") {
+                enter = true;  // the only key so far: Return
             }
         }
         return true;
     }
-    void feed(ImGuiIO& io) const {
+    void feed(ImGuiIO& io) {
         io.AddMouseSourceEvent(ImGuiMouseSource_TouchScreen);
         io.AddMousePosEvent(fx, fy);
         io.AddMouseButtonEvent(0, fingerDown);
+        if (!typed.empty()) io.AddInputCharactersUTF8(typed.c_str());
+        typed.clear();
+        if (enterUp) io.AddKeyEvent(ImGuiKey_Enter, false);
+        if (enter) io.AddKeyEvent(ImGuiKey_Enter, true);
+        enterUp = enter;
+        enter = false;
     }
 };
 
@@ -214,6 +260,7 @@ int main(int argc, char* argv[]) {
     ui::applyTheme();
     ImGui_ImplSDL3_InitForSDLRenderer(window, gRenderer);
     ImGui_ImplSDLRenderer3_Init(gRenderer);
+    ImGui::GetPlatformIO().Platform_SetImeDataFn = setImeData;
     // Scripted input replaces the real mouse each frame: take the last event as is
     if (scripted) io.ConfigInputTrickleEventQueue = false;
     ui::setTextureMaker(makeSdlTexture);
@@ -244,7 +291,10 @@ int main(int argc, char* argv[]) {
                 case SDL_EVENT_WILL_ENTER_BACKGROUND:
                 case SDL_EVENT_DID_ENTER_BACKGROUND: background = true; break;
                 case SDL_EVENT_WILL_ENTER_FOREGROUND:
-                case SDL_EVENT_DID_ENTER_FOREGROUND: background = false; break;
+                case SDL_EVENT_DID_ENTER_FOREGROUND:
+                    background = false;
+                    app.onForeground();  // pull progress saved on the other devices
+                    break;
                 case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
                     if (e.window.windowID == SDL_GetWindowID(window)) done = true;
                     break;

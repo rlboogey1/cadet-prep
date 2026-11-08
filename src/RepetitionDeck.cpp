@@ -1,5 +1,6 @@
 #include "RepetitionDeck.h"
 #include "FlashcardDeck.h"
+#include "SyncMerge.h"
 #include <algorithm>
 #include <ctime>
 #include <fstream>
@@ -42,6 +43,7 @@ void RepetitionDeck::load(const std::string& path, const FlashcardDeck& vocab) {
     batches_.clear();
     streak_ = best_ = 0;
     lastDay_.clear();
+    updated_ = 0;
     std::ifstream in(path);
     if (in) {
         try {
@@ -52,6 +54,7 @@ void RepetitionDeck::load(const std::string& path, const FlashcardDeck& vocab) {
             streak_ = root.value("streak", 0);
             best_ = root.value("best_streak", 0);
             lastDay_ = root.value("last_day", "");
+            updated_ = root.value("updated", 0LL);
         } catch (...) {
             words_.clear();
             batches_.clear();
@@ -99,6 +102,7 @@ void RepetitionDeck::addMore(const FlashcardDeck& vocab) {
     }
     if (added > 0) {
         batches_.push_back(added);
+        updated_ = cloudsync::now();
         save();
     }
 }
@@ -108,6 +112,7 @@ void RepetitionDeck::removeLastBatch() {
     const int n = std::min(batches_.back(), static_cast<int>(words_.size()) - kStartSize);
     words_.resize(words_.size() - static_cast<size_t>(std::max(0, n)));
     batches_.pop_back();
+    updated_ = cloudsync::now();
     save();
 }
 
@@ -133,5 +138,6 @@ void RepetitionDeck::save() const {
     root["streak"] = streak_;
     root["best_streak"] = best_;
     root["last_day"] = lastDay_;
+    root["updated"] = updated_;
     std::ofstream(path_) << root.dump(2);
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "AppPaths.h"
+#include "CloudSync.h"
 #include "FlashcardDeck.h"
 #include "ProgressStore.h"
 #include "QuestionBank.h"
@@ -37,6 +38,7 @@ public:
     // Space the device keeps for itself (notch, rounded corners, home bar), in points
     void setSafeArea(float top, float right, float bottom, float left) { safe_ = {top, right, bottom, left}; }
     bool animating() const;  // something is moving: keep drawing at full speed
+    void onForeground() { cloud_.onForeground(); }  // app came back to the front: pull other devices' progress
     ImVec4 backgroundColor() const { return ui::col::Bg; }
 
 private:
@@ -52,7 +54,8 @@ private:
 
     // Pages
     void drawHome();       // main menu: pick a prep section
-    void drawSettings();   // sound, dark mode, flashcard options
+    void drawSettings();   // sound, dark mode, flashcard options, account
+    void drawAccount();    // Settings: sign in for online sync
     void drawDashboard();
     void drawPractice();
     void drawReview();
@@ -103,6 +106,7 @@ private:
     void loadSettings();
     void addWarriorCards();  // Warrior Knowledge blocks: one card per handbook item
     void saveSettings() const;
+    void reloadProgress();   // after online sync merged other devices' progress into the files
 
     SubtestRegistry registry_;
     QuestionBank bank_;
@@ -144,6 +148,11 @@ private:
     bool repSession_ = false;  // the current flashcard session is the spaced repetition deck
     bool repCounted_ = false;  // that session's finish counted a new streak day
     bool definitionFirst_ = false;
+
+    // Online sync (Settings > Account)
+    CloudSync cloud_;
+    char email_[128] = "";
+    char password_[128] = "";
 
     // Phone and tablet
     struct Insets { float top = 0, right = 0, bottom = 0, left = 0; };

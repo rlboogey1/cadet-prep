@@ -26,6 +26,7 @@ public:
 
     void load(const std::string& cardsPath);
     void loadProgress(const std::string& progressPath);  // missing file = all box 0
+    void reloadProgress() { loadProgress(progressPath_); }  // after online sync merged into the file
 
     // Starts a session with up to `count` cards (0 = all).
     // learningOnly = only words not yet mastered.
@@ -53,6 +54,7 @@ private:
 
     std::vector<Flashcard> cards_;
     std::map<std::string, int> boxes_;
+    std::map<std::string, long long> changed_;  // when each word's box last changed (for syncing)
     std::deque<size_t> queue_;  // indexes into cards_
     std::string progressPath_;
     int gotIt_ = 0, missed_ = 0;

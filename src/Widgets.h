@@ -130,6 +130,15 @@ bool pictureAnswerCard(const char* id, char letter, AnswerState state, ImVec2 si
                        const std::function<void(ImDrawList*, ImVec2, ImVec2)>& drawPicture);
 
 bool toggle(const char* id, bool* value);
+
+// A one-line text box with a gray hint when empty. Returns true when Return is
+// pressed in it. `kind` picks the on-screen keyboard on iPhone/iPad (see
+// activeTextKind) and hides a password's letters.
+enum class TextKind { None, Text, Email, Password };
+bool textField(const char* id, const char* hint, char* buf, size_t size, TextKind kind, float width);
+// The kind of field being typed in this frame (None when no field has focus); read
+// it after drawing. mobile_main.cpp uses it to show the right keyboard without autocorrect.
+TextKind activeTextKind();
 void thinBar(float fraction, float width, ImVec4 color = col::Accent, float height = 7.0f);
 void divider(ImVec4 color = col::CardBorder);
 

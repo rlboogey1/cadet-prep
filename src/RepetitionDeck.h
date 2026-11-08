@@ -36,6 +36,8 @@ public:
     static std::string today();      // local date, "YYYY-MM-DD"
     static std::string yesterday();
 
+    void reload(const FlashcardDeck& vocab) { load(path_, vocab); }  // after online sync merged into the file
+
 private:
     void save() const;
 
@@ -44,4 +46,5 @@ private:
     std::vector<int> batches_;  // sizes of the batches added after the starting words, oldest first
     int streak_ = 0, best_ = 0;
     std::string lastDay_;       // last day the whole deck was finished
+    long long updated_ = 0;     // when words were last added or removed (for syncing; 0 = never)
 };

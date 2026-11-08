@@ -328,7 +328,15 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
         return false;
     }
     loadSettings();
+    cloud_.load();
     return true;
+}
+
+void GuiApp::reloadProgress() {
+    progress_.reload();
+    deck_.reloadProgress();
+    memDeck_.reloadProgress();
+    repDeck_.reload(deck_);
 }
 
 namespace {
@@ -427,6 +435,7 @@ void GuiApp::draw() {
         setDarkMode(darkMode_);
         themeApplied_ = true;
     }
+    if (cloud_.update()) reloadProgress();
     touchScroll();
     const ImGuiViewport* vp = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(vp->WorkPos);
@@ -1824,6 +1833,12 @@ void GuiApp::drawSettings() {
     const bool narrow = w < 700;  // phones: one card per row
     const float colW = narrow ? w : (w - kGap) / 2;
 
+    // ---- Account: first on phones, so the keyboard doesn't cover the fields
+    if (narrow) {
+        drawAccount();
+        ImGui::Dummy(ImVec2(0, kGap - 12));
+    }
+
     // ---- Sound
     if (narrow) beginAutoCard("set_sound");
     else beginCard("set_sound", ImVec2(colW, 220));
@@ -1898,8 +1913,63 @@ void GuiApp::drawSettings() {
     ImGui::Dummy(ImVec2(0, 4));
     if (row("def", "Definition first", "AFOQT vocabulary cards show the meaning, and you guess the word.", &definitionFirst_))
         saveSettings();
-    if (narrow) endAutoCard();
-    else endCard();
+    if (narrow) {
+        endAutoCard();
+    } else {
+        endCard();
+        ImGui::Dummy(ImVec2(0, kGap - 12));
+        drawAccount();
+    }
+}
+
+void GuiApp::drawAccount() {
+    beginAutoCard("set_account");
+    spacedLabel("ACCOUNT", col::Muted, 1.8f);
+    ImGui::Dummy(ImVec2(0, 4));
+    const float fieldW = std::min(360.0f, ImGui::GetContentRegionAvail().x);
+
+    if (!cloud_.configured()) {
+        textIn(fonts.strong, col::Ink, "Online sync isn't set up");
+        wrappedIn(fonts.small, col::Muted,
+                  "This copy was built without a server address, so progress stays on this device. "
+                  "SYNC.md in the project folder explains how to turn it on.");
+        endAutoCard();
+        return;
+    }
+
+    if (!cloud_.signedIn()) {
+        textIn(fonts.strong, col::Ink, "Sign in to sync your progress");
+        wrappedIn(fonts.small, col::Muted,
+                  "Practice history, missed questions, and flashcards stay the same on your Mac, iPhone, and iPad.");
+        ImGui::Dummy(ImVec2(0, 4));
+        const bool busy = cloud_.busy();
+        if (busy) ImGui::BeginDisabled();
+        bool go = textField("##email", "Email", email_, sizeof email_, ui::TextKind::Email, fieldW);
+        go |= textField("##password", "Password", password_, sizeof password_, ui::TextKind::Password, fieldW);
+        ImGui::Dummy(ImVec2(0, 2));
+        go |= button(busy ? "Signing in..." : "Sign in");
+        if (busy) ImGui::EndDisabled();
+        if (go && !busy && email_[0] && password_[0]) {
+            std::string email = email_;
+            for (char& c : email) c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+            cloud_.signIn(email, password_);
+            std::fill(std::begin(password_), std::end(password_), '\0');
+            ImGui::ClearActiveID();  // drop focus so the keyboard goes away
+        }
+        if (cloud_.failed()) wrappedIn(fonts.small, col::Bad, cloud_.status().c_str());
+        endAutoCard();
+        return;
+    }
+
+    textIn(fonts.strong, col::Ink, fmt("Signed in as %s", cloud_.email().c_str()).c_str());
+    wrappedIn(fonts.small, cloud_.failed() ? col::Bad : col::Muted, cloud_.status().c_str());
+    wrappedIn(fonts.small, col::Muted,
+              "Progress syncs on its own: when the app opens, after you practice, and every 10 minutes.");
+    ImGui::Dummy(ImVec2(0, 4));
+    if (cloud_.busy()) ImGui::BeginDisabled();
+    if (button("Sign out", ButtonStyle::Outline)) cloud_.signOut();
+    if (cloud_.busy()) ImGui::EndDisabled();
+    endAutoCard();
 }
 
 void GuiApp::drawComposites() {

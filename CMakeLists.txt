@@ -20,6 +20,26 @@ if(CADET_MOBILE AND APPLE)
     enable_language(OBJC)  # SDL3's Apple code is Objective-C
 endif()
 
+# Online sync (see SYNC.md): the Supabase project's address and public key, read
+# from supabase.json at the project root (kept out of git). Without it the apps
+# build fine and keep progress on each device only.
+set(CADET_SUPABASE_URL "" CACHE STRING "Supabase project URL for online sync")
+set(CADET_SUPABASE_KEY "" CACHE STRING "Supabase public (anon) key for online sync")
+set(SUPABASE_CONFIG "${CMAKE_SOURCE_DIR}/supabase.json")
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${SUPABASE_CONFIG}")
+if(EXISTS "${SUPABASE_CONFIG}")
+    file(READ "${SUPABASE_CONFIG}" _supabase)
+    string(JSON _url ERROR_VARIABLE _err GET "${_supabase}" url)
+    string(JSON _key ERROR_VARIABLE _err2 GET "${_supabase}" key)
+    if(_err OR _err2)
+        message(WARNING "supabase.json needs \"url\" and \"key\"; online sync is off")
+    else()
+        string(REGEX REPLACE "/+$" "" _url "${_url}")
+        set(CADET_SUPABASE_URL "${_url}" CACHE STRING "" FORCE)
+        set(CADET_SUPABASE_KEY "${_key}" CACHE STRING "" FORCE)
+    endif()
+endif()
+
 # --- Libraries, downloaded automatically the first time you configure ---
 FetchContent_Declare(json
     URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
@@ -98,10 +118,22 @@ add_library(afoqt_core STATIC
     src/FlashcardDeck.cpp
     src/RepetitionDeck.cpp
     src/QuestionGenerator.cpp
-    src/Composites.cpp)
+    src/Composites.cpp
+    src/SyncMerge.cpp)
 target_include_directories(afoqt_core PUBLIC src)
 target_link_libraries(afoqt_core PUBLIC nlohmann_json::nlohmann_json)
 target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
+
+# Online sync, used by the window and touch versions (not the console)
+# Http.mm is Objective-C++ on Apple systems (it uses NSURLSession) and plain C++ elsewhere
+set(SYNC_SOURCES src/CloudSync.cpp src/Http.mm)
+if(APPLE)
+    set_source_files_properties(src/Http.mm PROPERTIES LANGUAGE CXX COMPILE_OPTIONS "-xobjective-c++;-fobjc-arc")
+else()
+    set_source_files_properties(src/Http.mm PROPERTIES LANGUAGE CXX COMPILE_OPTIONS "-xc++")
+endif()
+set_source_files_properties(src/CloudSync.cpp PROPERTIES COMPILE_DEFINITIONS
+    "CADET_SUPABASE_URL=\"${CADET_SUPABASE_URL}\";CADET_SUPABASE_KEY=\"${CADET_SUPABASE_KEY}\"")
 
 if(NOT CADET_IOS)
 # --- Console app (unchanged) ---
@@ -113,13 +145,14 @@ target_link_libraries(afoqt PRIVATE afoqt_core)
 set(APP_ICON "${CMAKE_SOURCE_DIR}/assets/AppIcon.icns")
 set_source_files_properties(${APP_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
-add_executable(afoqt_gui MACOSX_BUNDLE src/gui_main.cpp src/GuiApp.cpp src/Widgets.cpp src/Visuals.cpp src/Sound.cpp
-               ${APP_ICON})
+add_executable(afoqt_gui MACOSX_BUNDLE src/gui_main.cpp ${SYNC_SOURCES} src/GuiApp.cpp src/Widgets.cpp src/Visuals.cpp
+               src/Sound.cpp ${APP_ICON})
 target_link_libraries(afoqt_gui PRIVATE afoqt_core imgui)
 target_include_directories(afoqt_gui PRIVATE ${miniaudio_SOURCE_DIR})
 target_include_directories(afoqt_gui SYSTEM PRIVATE ${stb_SOURCE_DIR})
 if(APPLE)
-    target_link_libraries(afoqt_gui PRIVATE "-framework CoreFoundation" "-framework CoreAudio" "-framework AudioToolbox")
+    target_link_libraries(afoqt_gui PRIVATE "-framework CoreFoundation" "-framework Foundation" "-framework CoreAudio"
+                          "-framework AudioToolbox")
 elseif(UNIX)
     target_link_libraries(afoqt_gui PRIVATE dl pthread m)
 endif()
@@ -147,7 +180,7 @@ endif()
 
 # --- Touch version: iPhone and iPad (cadet_mobile) ---
 if(CADET_MOBILE)
-    set(MOBILE_SOURCES src/mobile_main.cpp src/GuiApp.cpp src/Widgets.cpp src/Visuals.cpp src/Sound.cpp)
+    set(MOBILE_SOURCES src/mobile_main.cpp ${SYNC_SOURCES} src/GuiApp.cpp src/Widgets.cpp src/Visuals.cpp src/Sound.cpp)
     if(CADET_IOS)
         add_executable(cadet_mobile MACOSX_BUNDLE ${MOBILE_SOURCES} ios/Assets.xcassets)
         set_source_files_properties(ios/Assets.xcassets PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
@@ -179,8 +212,8 @@ if(CADET_MOBILE)
     else()
         add_executable(cadet_mobile ${MOBILE_SOURCES})  # Mac preview, reads the project's data/
         if(APPLE)
-            target_link_libraries(cadet_mobile PRIVATE "-framework CoreFoundation" "-framework CoreAudio"
-                                  "-framework AudioToolbox")
+            target_link_libraries(cadet_mobile PRIVATE "-framework CoreFoundation" "-framework Foundation"
+                                  "-framework CoreAudio" "-framework AudioToolbox")
         endif()
     endif()
     target_link_libraries(cadet_mobile PRIVATE afoqt_core imgui_sdl)

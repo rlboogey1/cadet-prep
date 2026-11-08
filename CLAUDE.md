@@ -23,7 +23,7 @@ cmake -S . -B build-ios -G Xcode -DCMAKE_SYSTEM_NAME=iOS   # iPhone/iPad Xcode p
 ```
 
 To check layouts without clicking, `cadet_mobile --script file.txt` replays `wait N`, `tap X Y`,
-`drag X1 Y1 X2 Y2 FRAMES`, and `shot out.bmp` lines (points, touch input), then quits. Run it with
+`drag X1 Y1 X2 Y2 FRAMES`, `type TEXT`, `key enter`, and `shot out.bmp` lines (points, touch input), then quits. Run it with
 `HOME` set to a scratch folder so it doesn't touch the user's real progress.
 
 There are no tests and no linter. Builds use `-Wall -Wextra -Wpedantic`; keep them warning-free.
@@ -111,6 +111,18 @@ into the bundle's Resources folder unless `GLFW_COCOA_CHDIR_RESOURCES` is off (i
 (`ProgressStore`; review sessions don't count toward accuracy), `afoqt_flashcards.json`, `afoqt_repetition.json` (spaced repetition deck and streak),
 `warrior_cards_progress.json` (no longer written, kept for old installs), and `afoqt_settings.json` (sound, dark mode, definition-first,
 last track, focus area per track). Settings save on every change.
+
+**Online sync** (`SYNC.md`): one Supabase account (only the user's; sign-ups off) keeps the progress
+files the same across devices. Settings don't sync. `cloudsync::syncedFiles()` in `SyncMerge.h` lists
+what syncs. The files are bundled into one JSON row (`progress` table) and merged by `SyncMerge.cpp`
+(core): sessions are unioned by `id` (older id-less ones get a key made from their fields), and missed
+questions (`outcomes`) and flashcard boxes (`changed`) are decided per item by the newer timestamp.
+Merges must stay order-independent and repeatable; when you add a field or a synced file, merge it
+the same way. `CloudSync` (GUI only) runs the network calls on a background thread through `Http.mm`
+(NSURLSession; a stub elsewhere) and reads and writes files only on the main thread in `update()`,
+then `GuiApp::reloadProgress()` reloads them. The server address and key come from the git-ignored
+`supabase.json`, read by CMake. Without it the Account card says sync isn't set up. Sign-in tokens
+are in `afoqt_account.json`. Test with a fake server and a scratch `HOME`, never the real project.
 
 **Look and theme.** `Widgets.h/.cpp` holds the design system: fonts, cards, buttons, chips,
 toggles, answer cards, icons (`Icon` enum + `drawIcon`), and the `col::` palette. The palette is

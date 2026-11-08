@@ -1,4 +1,5 @@
 #include "FlashcardDeck.h"
+#include "SyncMerge.h"
 #include <algorithm>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -26,6 +27,7 @@ void FlashcardDeck::load(const std::string& cardsPath) {
 void FlashcardDeck::loadProgress(const std::string& progressPath) {
     progressPath_ = progressPath;
     boxes_.clear();
+    changed_.clear();
     std::ifstream in(progressPath);
     if (!in) return;
     try {
@@ -34,8 +36,11 @@ void FlashcardDeck::loadProgress(const std::string& progressPath) {
         const json boxes = root.value("boxes", json::object());  // keep alive for the loop
         for (const auto& [word, b] : boxes.items())
             boxes_[word] = std::clamp(b.get<int>(), 0, kMaxBox);
+        const json changed = root.value("changed", json::object());
+        for (const auto& [word, t] : changed.items()) changed_[word] = t.get<long long>();
     } catch (...) {
         boxes_.clear();  // corrupt file: start fresh
+        changed_.clear();
     }
 }
 
@@ -43,6 +48,7 @@ void FlashcardDeck::saveProgress() const {
     if (progressPath_.empty()) return;
     json root;
     root["boxes"] = boxes_;
+    root["changed"] = changed_;
     std::ofstream(progressPath_) << root.dump(2);
 }
 
@@ -88,6 +94,7 @@ void FlashcardDeck::mark(bool knewIt) {
     size_t idx = queue_.front();
     queue_.pop_front();
     int& b = boxes_[cards_[idx].word];
+    changed_[cards_[idx].word] = cloudsync::now();
 
     if (knewIt) {
         b = std::min(b + 1, kMaxBox);

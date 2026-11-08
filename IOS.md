@@ -76,8 +76,9 @@ Developer Mode has to stay on for the app to open.
 
 ## Progress
 
-The phone or iPad keeps its own progress, separate from the Mac app. Deleting the app
-deletes its progress.
+The phone or iPad keeps its own progress, separate from the Mac app, unless you sign in
+under **Settings > Account** (see `SYNC.md`). Then progress syncs between devices.
+Without an account, deleting the app deletes its progress.
 
 ## Trying the phone layout on the Mac
 

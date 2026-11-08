@@ -1,7 +1,6 @@
 #pragma once
 #include "TestSession.h"
 #include <map>
-#include <set>
 #include <string>
 #include <vector>
 
@@ -18,6 +17,7 @@ struct SubtestStats {
 class ProgressStore {
 public:
     explicit ProgressStore(std::string path);
+    void reload();  // reads the file again (after online sync merged into it)
 
     // Review sessions are saved but excluded from accuracy stats.
     void record(const SessionResult& result, bool isReview = false);
@@ -32,11 +32,15 @@ private:
 
     std::string path_;
     struct SessionEntry {
+        std::string id;  // random, so syncing two devices never counts a session twice
         std::string date, subtestId;
         int correct = 0, total = 0;
         double seconds = 0.0;
         bool review = false;
     };
     std::vector<SessionEntry> sessions_;
-    std::set<std::string> missed_;
+    // Each question's latest result: missed or not, and when (seconds since 1970).
+    // Syncing keeps the newer result for each question.
+    struct Outcome { bool missed = false; long long time = 0; };
+    std::map<std::string, Outcome> outcomes_;
 };

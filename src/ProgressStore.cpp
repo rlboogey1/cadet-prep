@@ -1,4 +1,5 @@
 #include "ProgressStore.h"
+#include "SyncMerge.h"
 #include <chrono>
 #include <ctime>
 #include <fstream>
@@ -25,6 +26,12 @@ std::string nowString() {
 
 ProgressStore::ProgressStore(std::string path) : path_(std::move(path)) { load(); }
 
+void ProgressStore::reload() {
+    sessions_.clear();
+    outcomes_.clear();
+    load();
+}
+
 void ProgressStore::load() {
     std::ifstream in(path_);
     if (!in) return;  // first run: no file yet
@@ -35,28 +42,35 @@ void ProgressStore::load() {
         return;  // corrupt file: start fresh rather than crash
     }
     for (const auto& s : root.value("sessions", json::array())) {
-        sessions_.push_back({s.value("date", ""), s.value("subtest", ""),
+        // Sessions saved before syncing existed have no id: cloudsync::sessionKey() makes one
+        sessions_.push_back({cloudsync::sessionKey(s), s.value("date", ""), s.value("subtest", ""),
                              s.value("correct", 0), s.value("total", 0),
                              s.value("seconds", 0.0), s.value("review", false)});
     }
     for (const auto& id : root.value("missed", json::array()))
-        missed_.insert(id.get<std::string>());
+        outcomes_[id.get<std::string>()] = {true, 0};
+    const json outcomes = root.value("outcomes", json::object());  // keep alive for the loop
+    for (const auto& [id, o] : outcomes.items())
+        outcomes_[id] = {o.value("missed", false), o.value("time", 0LL)};
 }
 
 void ProgressStore::save() const {
     json root;
     root["sessions"] = json::array();
     for (const auto& s : sessions_) {
-        root["sessions"].push_back({{"date", s.date}, {"subtest", s.subtestId},
+        root["sessions"].push_back({{"id", s.id}, {"date", s.date}, {"subtest", s.subtestId},
                                     {"correct", s.correct}, {"total", s.total},
                                     {"seconds", s.seconds}, {"review", s.review}});
     }
-    root["missed"] = json(std::vector<std::string>(missed_.begin(), missed_.end()));
+    root["missed"] = json(missedQuestionIds());  // also read by older versions
+    root["outcomes"] = json::object();
+    for (const auto& [id, o] : outcomes_) root["outcomes"][id] = {{"missed", o.missed}, {"time", o.time}};
     std::ofstream(path_) << root.dump(2);
 }
 
 void ProgressStore::record(const SessionResult& result, bool isReview) {
     SessionEntry e;
+    e.id = cloudsync::newId();
     e.date = nowString();
     e.subtestId = result.subtestId;
     e.total = static_cast<int>(result.answers.size());
@@ -65,10 +79,10 @@ void ProgressStore::record(const SessionResult& result, bool isReview) {
     e.review = isReview;
     sessions_.push_back(e);
 
+    const long long now = cloudsync::now();
     for (const auto& a : result.answers) {
         if (a.questionId.rfind("GEN-", 0) == 0) continue;  // generated: can't be reviewed later
-        if (a.correct) missed_.erase(a.questionId);
-        else missed_.insert(a.questionId);
+        outcomes_[a.questionId] = {!a.correct, now};
     }
     save();
 }
@@ -87,5 +101,8 @@ std::map<std::string, SubtestStats> ProgressStore::stats() const {
 }
 
 std::vector<std::string> ProgressStore::missedQuestionIds() const {
-    return {missed_.begin(), missed_.end()};
+    std::vector<std::string> out;
+    for (const auto& [id, o] : outcomes_)
+        if (o.missed) out.push_back(id);
+    return out;
 }
