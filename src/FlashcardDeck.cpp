@@ -74,6 +74,15 @@ void FlashcardDeck::startSession(size_t count, bool learningOnly, std::mt19937& 
     gotIt_ = missed_ = 0;
 }
 
+void FlashcardDeck::startSession(const std::vector<std::string>& words, std::mt19937& rng) {
+    std::vector<size_t> picks;
+    for (size_t i = 0; i < cards_.size(); ++i)
+        if (std::find(words.begin(), words.end(), cards_[i].word) != words.end()) picks.push_back(i);
+    std::shuffle(picks.begin(), picks.end(), rng);
+    queue_.assign(picks.begin(), picks.end());
+    gotIt_ = missed_ = 0;
+}
+
 void FlashcardDeck::mark(bool knewIt) {
     if (queue_.empty()) return;
     size_t idx = queue_.front();

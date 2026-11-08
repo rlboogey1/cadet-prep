@@ -4,6 +4,7 @@
 #include "ProgressStore.h"
 #include "QuestionBank.h"
 #include "QuizEngine.h"
+#include "RepetitionDeck.h"
 #include "Sound.h"
 #include "imgui.h"
 #include "SubtestRegistry.h"
@@ -62,6 +63,8 @@ private:
     void startWarmup();
     void startReview(const std::string& subtestId);  // empty = all sections
     void startFlashcards(size_t count, bool learningOnly);
+    void startRepetition();
+    void drawRepetition();
     void finishSession();
     void goTo(Screen s);
 
@@ -122,5 +125,8 @@ private:
     FlashcardDeck& activeDeck() { return track_ == "afoqt" ? deck_ : memDeck_; }
     const FlashcardDeck& activeDeck() const { return track_ == "afoqt" ? deck_ : memDeck_; }
     bool flashActive_ = false;
+    RepetitionDeck repDeck_;   // AFOQT: the spaced repetition deck and its daily streak
+    bool repSession_ = false;  // the current flashcard session is the spaced repetition deck
+    bool repCounted_ = false;  // that session's finish counted a new streak day
     bool definitionFirst_ = false;
 };

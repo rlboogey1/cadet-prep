@@ -280,6 +280,7 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
             if (!s.file.empty()) bank_.loadFile(dataDir + "/" + s.file, s.id);
         deck_.load(dataDir + "/flashcards.json");
         deck_.loadProgress(apppaths::userFile("afoqt_flashcards.json"));
+        repDeck_.load(apppaths::userFile("afoqt_repetition.json"), deck_);
         memDeck_.load(dataDir + "/warrior_cards.json");
         memDeck_.loadProgress(apppaths::userFile("warrior_cards_progress.json"));
         vaWords_.load(dataDir + "/va_definitions.json");
@@ -1136,7 +1137,13 @@ void GuiApp::drawFlashcards() {
         }
         ImGui::Dummy(ImVec2(0, 16));
 
-        textIn(fonts.title, col::Ink, "Start a session");
+        if (vocab) {
+            drawRepetition();
+            if (flashActive_) return;  // a session just started
+            ImGui::Dummy(ImVec2(0, 16));
+        }
+
+        textIn(fonts.title, col::Ink, vocab ? "Other sessions" : "Start a session");
         ImGui::Dummy(ImVec2(0, 4));
         const Icon ic[3] = {Icon::Bolt, Icon::Target, Icon::List};
         struct Opt { const char* title; std::string desc; std::string badge; size_t count; bool learning; };
@@ -1167,6 +1174,24 @@ void GuiApp::drawFlashcards() {
     }
 
     // ---- Session finished
+    if (deck.sessionDone() && repSession_) {
+        const int streak = repDeck_.streak();
+        pageTitle("Deck complete",
+                  repCounted_ ? fmt("You went through your whole deck today. Your streak is now %s.",
+                                    plural(streak, "day").c_str()).c_str()
+                              : "You already finished your deck today, so the streak stays the same. Come back tomorrow "
+                                "to add another day.");
+        const float w3 = (ImGui::GetContentRegionAvail().x - kGap * 2) / 3;
+        statCard(ImVec2(w3, 142), "Streak", plural(streak, "day").c_str(),
+                 fmt("Best: %s", plural(repDeck_.bestStreak(), "day").c_str()).c_str(), col::Accent);
+        ImGui::SameLine(0, kGap);
+        statCard(ImVec2(w3, 142), "Knew it", fmt("%d", deck.sessionGotIt()).c_str(), "Moved up a level", col::Good);
+        ImGui::SameLine(0, kGap);
+        statCard(ImVec2(w3, 142), "Still learning", fmt("%d", deck.sessionMissed()).c_str(), "Repeated until you knew it", col::Bad);
+        ImGui::Dummy(ImVec2(0, 8));
+        if (button("Back to vocabulary cards")) flashActive_ = false;
+        return;
+    }
     if (deck.sessionDone()) {
         pageTitle("Session complete", vocab ? "Nice work. Words you marked \"still learning\" will come back sooner next time."
                                             : "Nice work. Cards you marked \"still learning\" will come back sooner next time.");
@@ -1184,7 +1209,7 @@ void GuiApp::drawFlashcards() {
     // ---- A card
     const Flashcard& c = deck.current();
     const float ty = ImGui::GetCursorPosY();
-    textIn(fonts.title, col::Ink, deckName);
+    textIn(fonts.title, col::Ink, repSession_ ? "Spaced repetition" : deckName);
     alignRight(textSize(fonts.strong, "End session").x + 40);
     ImGui::SetCursorPosY(ty);
     if (button("End session", ButtonStyle::Outline)) {
@@ -1259,7 +1284,59 @@ void GuiApp::drawFlashcards() {
     if (swiped != 0) {
         if (swiped > 0) sound_.correct();
         deck.mark(swiped > 0);
+        if (repSession_ && deck.sessionDone()) repCounted_ = repDeck_.completePass();
     }
+}
+
+// The spaced repetition deck on the vocabulary cards page: a small deck that grows
+// 3 words at a time, and a streak for going through all of it once a day.
+void GuiApp::drawRepetition() {
+    const auto& words = repDeck_.words();
+    const int n = static_cast<int>(words.size());
+    const int streak = repDeck_.streak();
+    const bool done = repDeck_.doneToday();
+
+    textIn(fonts.title, col::Ink, "Spaced repetition");
+    wrappedIn(fonts.body, col::Muted,
+              "Your own deck, starting with 3 words. Go through the whole deck once a day to keep your streak; "
+              "words you miss come back until you know them. Add 3 more words whenever you're ready.");
+    ImGui::Dummy(ImVec2(0, 4));
+
+    const float w3 = (ImGui::GetContentRegionAvail().x - kGap * 2) / 3;
+    statCard(ImVec2(w3, 142), "Streak", plural(streak, "day").c_str(),
+             fmt("Best: %s", plural(repDeck_.bestStreak(), "day").c_str()).c_str(), streak > 0 ? col::Accent : col::Ink);
+    ImGui::SameLine(0, kGap);
+    statCard(ImVec2(w3, 142), "Today", done ? "Done" : "Not yet",
+             done ? "Come back tomorrow for the next day" : streak > 0 ? "Finish your deck to keep the streak"
+                                                                      : "Finish your deck to start a streak",
+             done ? col::Good : col::Bad);
+    ImGui::SameLine(0, kGap);
+    int mastered = 0;
+    for (const auto& w : words) mastered += deck_.box(w) >= FlashcardDeck::kMasteredBox ? 1 : 0;
+    statCard(ImVec2(w3, 142), "In your deck", plural(n, "word").c_str(), fmt("%d mastered", mastered).c_str());
+
+    ImGui::Dummy(ImVec2(0, 4));
+    std::string list;
+    for (const auto& w : words) list += (list.empty() ? "" : ",  ") + w;
+    wrappedIn(fonts.small, col::Muted, ("Words: " + list).c_str());
+    ImGui::Dummy(ImVec2(0, 4));
+
+    if (button(fmt("Practice my deck  (%s)  \xE2\x86\x92", plural(n, "card").c_str()).c_str())) {
+        startRepetition();
+        return;
+    }
+    const int canAdd = repDeck_.canAdd(deck_);
+    if (canAdd > 0) {
+        ImGui::SameLine(0, 12);
+        if (button(fmt("+  Add %d more %s", canAdd, canAdd == 1 ? "word" : "words").c_str(), ButtonStyle::Outline))
+            repDeck_.addMore(deck_);
+    }
+    const int last = repDeck_.lastBatchSize();
+    if (last > 0) {
+        ImGui::SameLine(0, 12);
+        if (button(fmt("Remove the %d just added", last).c_str(), ButtonStyle::Outline)) repDeck_.removeLastBatch();
+    }
+    if (canAdd == 0) wrappedIn(fonts.small, col::Muted, "Every vocabulary word is in your deck.");
 }
 
 // ================================================================ progress
@@ -1589,12 +1666,22 @@ void GuiApp::startReview(const std::string& subtestId) {
 void GuiApp::startFlashcards(size_t count, bool learningOnly) {
     activeDeck().startSession(count, learningOnly, rng_);
     swipe_ = SwipeCard{};
+    repSession_ = repCounted_ = false;
     if (activeDeck().sessionDone()) {
         message_ = "Nothing to study. You've mastered them all!";
         return;
     }
     message_.clear();
     flashActive_ = true;
+}
+
+void GuiApp::startRepetition() {
+    deck_.startSession(repDeck_.words(), rng_);
+    swipe_ = SwipeCard{};
+    repSession_ = true;
+    repCounted_ = false;
+    message_.clear();
+    flashActive_ = !deck_.sessionDone();
 }
 
 void GuiApp::finishSession() {

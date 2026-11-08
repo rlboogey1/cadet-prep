@@ -64,6 +64,10 @@ menu); Home and Settings hide the per-track workspace menu.
 
 **Flashcards.** `FlashcardDeck` is a Leitner box system (mastered at box 3), used for the AFOQT
 Word Knowledge vocabulary deck (`deck_`, `data/flashcards.json`, the Flashcards screen, AFOQT only).
+The Flashcards screen also has a spaced repetition deck (`RepetitionDeck`, `repDeck_`): it starts
+with the first 3 words of `flashcards.json`, grows 3 at a time in file order, can remove the last
+batch added (never the first 3), and keeps a daily streak (finish the whole deck on consecutive
+local calendar days).
 **Warrior Knowledge has no multiple choice:** its blocks are built only from the handbook items in
 `data/warrior_cards.json` (`addWarriorCards()`: `pos` "BLOCK n" → `wk_blockNN`, front = `word`, back
 = `definition`, id `WK-` + title). Don't add written or made-up questions to these blocks. Every quiz in
@@ -77,7 +81,7 @@ macOS, `~/.cadet-prep` elsewhere) and migrates older folders. **Always save and 
 `apppaths::userFile(name)`, never a bare file name:** on macOS GLFW moves the working directory
 into the bundle's Resources folder unless `GLFW_COCOA_CHDIR_RESOURCES` is off (it's turned off in
 `gui_main.cpp`), which once made settings save inside the app. Files: `afoqt_progress.json`
-(`ProgressStore`; review sessions don't count toward accuracy), `afoqt_flashcards.json`,
+(`ProgressStore`; review sessions don't count toward accuracy), `afoqt_flashcards.json`, `afoqt_repetition.json` (spaced repetition deck and streak),
 `warrior_cards_progress.json` (no longer written, kept for old installs), and `afoqt_settings.json` (sound, dark mode, definition-first,
 last track, focus area per track). Settings save on every change.
 

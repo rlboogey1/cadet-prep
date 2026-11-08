@@ -49,6 +49,7 @@ add_library(afoqt_core STATIC
     src/ProgressStore.cpp
     src/QuizEngine.cpp
     src/FlashcardDeck.cpp
+    src/RepetitionDeck.cpp
     src/QuestionGenerator.cpp
     src/Composites.cpp)
 target_include_directories(afoqt_core PUBLIC src)

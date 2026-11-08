@@ -30,6 +30,8 @@ public:
     // Starts a session with up to `count` cards (0 = all).
     // learningOnly = only words not yet mastered.
     void startSession(size_t count, bool learningOnly, std::mt19937& rng);
+    // Starts a session with exactly these words (in random order); unknown words are skipped.
+    void startSession(const std::vector<std::string>& words, std::mt19937& rng);
 
     bool sessionDone() const { return queue_.empty(); }
     const Flashcard& current() const { return cards_[queue_.front()]; }
