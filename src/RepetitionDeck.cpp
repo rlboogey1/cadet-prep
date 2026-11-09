@@ -141,3 +141,80 @@ void RepetitionDeck::save() const {
     root["updated"] = updated_;
     std::ofstream(path_) << root.dump(2);
 }
+
+// ---------------------------------------------------------------- BlockRepetition
+
+void BlockRepetition::load(const std::string& path, int blockCount) {
+    path_ = path;
+    blockCount_ = blockCount;
+    blocks_.clear();
+    streak_ = best_ = 0;
+    lastDay_.clear();
+    updated_ = 0;
+    std::ifstream in(path);
+    if (in) {
+        try {
+            json root;
+            in >> root;
+            for (const auto& b : root.value("blocks", json::array())) blocks_.push_back(b.get<int>());
+            streak_ = root.value("streak", 0);
+            best_ = root.value("best_streak", 0);
+            lastDay_ = root.value("last_day", "");
+            updated_ = root.value("updated", 0LL);
+        } catch (...) {
+            blocks_.clear();
+            streak_ = best_ = 0;
+            lastDay_.clear();
+        }
+    }
+    // Keep real blocks, once each, in order; a new deck starts with Block 1
+    blocks_.erase(std::remove_if(blocks_.begin(), blocks_.end(), [&](int b) { return b < 1 || b > blockCount_; }),
+                  blocks_.end());
+    std::sort(blocks_.begin(), blocks_.end());
+    blocks_.erase(std::unique(blocks_.begin(), blocks_.end()), blocks_.end());
+    if (blocks_.empty() && blockCount_ > 0) blocks_.push_back(1);
+    save();
+}
+
+bool BlockRepetition::has(int block) const {
+    return std::find(blocks_.begin(), blocks_.end(), block) != blocks_.end();
+}
+
+void BlockRepetition::add(int block) {
+    if (block < 1 || block > blockCount_ || has(block)) return;
+    blocks_.insert(std::upper_bound(blocks_.begin(), blocks_.end(), block), block);
+    updated_ = cloudsync::now();
+    save();
+}
+
+void BlockRepetition::remove(int block) {
+    if (blocks_.size() <= 1 || !has(block)) return;
+    blocks_.erase(std::find(blocks_.begin(), blocks_.end(), block));
+    updated_ = cloudsync::now();
+    save();
+}
+
+int BlockRepetition::streak() const {
+    return lastDay_ == RepetitionDeck::today() || lastDay_ == RepetitionDeck::yesterday() ? streak_ : 0;
+}
+
+bool BlockRepetition::completePass() {
+    const std::string t = RepetitionDeck::today();
+    if (lastDay_ == t) return false;
+    streak_ = lastDay_ == RepetitionDeck::yesterday() ? streak_ + 1 : 1;
+    best_ = std::max(best_, streak_);
+    lastDay_ = t;
+    save();
+    return true;
+}
+
+void BlockRepetition::save() const {
+    if (path_.empty()) return;
+    json root;
+    root["blocks"] = blocks_;
+    root["streak"] = streak_;
+    root["best_streak"] = best_;
+    root["last_day"] = lastDay_;
+    root["updated"] = updated_;
+    std::ofstream(path_) << root.dump(2);
+}

@@ -48,3 +48,34 @@ private:
     std::string lastDay_;       // last day the whole deck was finished
     long long updated_ = 0;     // when words were last added or removed (for syncing; 0 = never)
 };
+
+// The Warrior Knowledge spaced repetition deck: the handbook blocks the user has
+// added, a whole block at a time, plus its own daily streak (same rules as above).
+// It starts with Block 1, and always keeps at least one block.
+class BlockRepetition {
+public:
+    // Loads saved state; a missing or bad file starts with Block 1.
+    // `blockCount` = how many blocks exist (numbered 1 to blockCount).
+    void load(const std::string& path, int blockCount);
+    void reload() { load(path_, blockCount_); }  // after online sync merged into the file
+
+    const std::vector<int>& blocks() const { return blocks_; }  // in order
+    bool has(int block) const;
+    void add(int block);
+    void remove(int block);  // does nothing for the last block left
+
+    int streak() const;
+    bool doneToday() const { return lastDay_ == RepetitionDeck::today(); }
+    int bestStreak() const { return best_; }
+    bool completePass();  // after going through the whole deck; true if it counted a new day
+
+private:
+    void save() const;
+
+    std::string path_;
+    int blockCount_ = 0;
+    std::vector<int> blocks_;
+    int streak_ = 0, best_ = 0;
+    std::string lastDay_;
+    long long updated_ = 0;  // when blocks were last added or removed (for syncing)
+};

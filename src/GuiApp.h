@@ -89,6 +89,9 @@ private:
     void startFlashcards(size_t count, bool learningOnly);
     void startRepetition();
     void drawRepetition();
+    void drawWarriorRepetition();   // Warrior Knowledge: the spaced repetition page
+    void startWarriorRepetition();  // its deck as swipe cards; missed cards come back at the end
+    bool warriorRepSession() const { return sessionTag_ == "SPACED REPETITION"; }
     void finishSession();
     void goTo(Screen s);
 
@@ -156,6 +159,8 @@ private:
     RepetitionDeck repDeck_;   // AFOQT: the spaced repetition deck and its daily streak
     bool repSession_ = false;  // the current flashcard session is the spaced repetition deck
     bool repCounted_ = false;  // that session's finish counted a new streak day
+    BlockRepetition wkRep_;    // Warrior Knowledge: blocks in the spaced repetition deck, and its streak
+    bool wkRepCounted_ = false;  // the last Warrior Knowledge deck session counted a new streak day
     bool definitionFirst_ = false;
 
     // Online sync (Settings > Account)

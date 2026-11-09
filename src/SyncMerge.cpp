@@ -113,11 +113,19 @@ json mergeRepetition(const json& inA, const json& inB) {
     if (!present(a)) return json::object();
     // The word list: from the side that added or removed words last
     const long long ua = a.value("updated", 0LL), ub = b.value("updated", 0LL);
-    const size_t na = a.value("words", json::array()).size(), nb = b.value("words", json::array()).size();
-    const json& words = ub > ua || (ub == ua && nb > na) ? b : a;
+    // (the vocabulary deck keeps "words" and "batches"; Warrior Knowledge keeps "blocks")
+    const auto count = [](const json& side) {
+        return side.value("words", json::array()).size() + side.value("blocks", json::array()).size();
+    };
+    const size_t na = count(a), nb = count(b);
+    const json& words = ub > ua || (ub == ua && (nb > na || (nb == na && b.dump() > a.dump()))) ? b : a;
     json out;
-    out["words"] = words.value("words", json::array());
-    out["batches"] = words.value("batches", json::array());
+    if (a.contains("blocks") || b.contains("blocks")) {
+        out["blocks"] = words.value("blocks", json::array());
+    } else {
+        out["words"] = words.value("words", json::array());
+        out["batches"] = words.value("batches", json::array());
+    }
     out["updated"] = std::max(ua, ub);
 
     // The streak: from the side that finished the deck on the later day
@@ -155,6 +163,7 @@ const std::vector<std::pair<std::string, std::string>>& syncedFiles() {
         {"flashcards", "afoqt_flashcards.json"},
         {"warrior_cards", "warrior_cards_progress.json"},
         {"repetition", "afoqt_repetition.json"},
+        {"warrior_repetition", "warrior_repetition.json"},
         {"saved_questions", "afoqt_saved_questions.json"},
     };
     return files;
@@ -171,7 +180,7 @@ json mergeBundle(const json& a, const json& b) {
         if (!present(fa)) fa = json::object();
         if (!present(fb)) fb = json::object();
         if (key == "progress") out[key] = mergeProgress(fa, fb);
-        else if (key == "repetition") out[key] = mergeRepetition(fa, fb);
+        else if (key == "repetition" || key == "warrior_repetition") out[key] = mergeRepetition(fa, fb);
         else if (key == "saved_questions") out[key] = mergeSaved(fa, fb);
         else out[key] = mergeBoxes(fa, fb);
     }

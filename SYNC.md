@@ -1,7 +1,8 @@
 # Online sync
 
 Sign in to the same account on the Mac, iPhone and iPad, and practice history, missed
-questions, saved math questions, AFOQT flashcard boxes, the spaced repetition deck and its streak stay the same
+questions, saved math questions, AFOQT flashcard boxes, and both spaced repetition decks (vocabulary and Warrior Knowledge)
+with their streaks stay the same
 on all of them. Settings like dark mode and sound stay separate on each device.
 
 The account and progress live in a free [Supabase](https://supabase.com) project that
@@ -78,8 +79,8 @@ Nothing is thrown away. Sign in on the Mac first, then on the iPhone.
   change after saving, so there's nothing to choose between).
 - **Flashcards:** for each word, the latest change wins. A word you miss on the phone
   drops back to box 0 on the Mac too.
-- **Spaced repetition deck:** the word list comes from whichever device added or removed
-  words last. The streak comes from whichever device finished the deck on the later day,
+- **Spaced repetition decks:** the word list (vocabulary) or block list (Warrior Knowledge)
+  comes from whichever device added or removed words or blocks last. The streak comes from whichever device finished the deck on the later day,
   and the best streak is the highest from any device.
 
 Sync runs on its own: when the app opens or comes back to the front, a few seconds after

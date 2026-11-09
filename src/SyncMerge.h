@@ -20,7 +20,7 @@ std::string sessionKey(const json& session);  // its id, or one made from its fi
 
 json mergeProgress(const json& a, const json& b);    // afoqt_progress.json
 json mergeBoxes(const json& a, const json& b);       // afoqt_flashcards.json, warrior_cards_progress.json
-json mergeRepetition(const json& a, const json& b);  // afoqt_repetition.json
+json mergeRepetition(const json& a, const json& b);  // afoqt_repetition.json, warrior_repetition.json
 json mergeSaved(const json& a, const json& b);       // afoqt_saved_questions.json
 
 // The files that sync, as {bundle key, file name}. Settings (dark mode, sound)

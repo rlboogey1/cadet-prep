@@ -331,6 +331,7 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
         memDeck_.loadProgress(apppaths::userFile("warrior_cards_progress.json"));
         vaWords_.load(dataDir + "/va_definitions.json");
         addWarriorCards();
+        wkRep_.load(apppaths::userFile("warrior_repetition.json"), static_cast<int>(registry_.inTrack("warrior").size()));
         for (const auto& q : saved_.all()) bank_.add(q);  // generated questions saved for review
     } catch (const std::exception& e) {
         error = e.what();
@@ -349,6 +350,7 @@ void GuiApp::reloadProgress() {
     deck_.reloadProgress();
     memDeck_.reloadProgress();
     repDeck_.reload(deck_);
+    wkRep_.reload();
 }
 
 namespace {
@@ -552,7 +554,7 @@ const char* GuiApp::pageName() const {
         case Screen::Dashboard: return trackInfo(track_).name;
         case Screen::Practice: return "Practice tests";
         case Screen::Review: return "Review missed";
-        case Screen::Flashcards: return track_ == "afoqt" ? "Vocabulary cards" : "Memorize cards";
+        case Screen::Flashcards: return track_ == "afoqt" ? "Vocabulary cards" : "Spaced repetition";
         case Screen::Progress: return "My progress";
         case Screen::Quiz: return sessionName_.c_str();
         case Screen::Results: return "Results";
@@ -705,7 +707,10 @@ void GuiApp::drawSidebar(float height) {
     for (const auto& [id, n] : missedBySubtest()) missedTotal += n;
     Screen section = screen_;
     if (section == Screen::Quiz || section == Screen::Results)
-        section = sessionTag_ == "REVIEW" ? Screen::Review : sessionTag_ == "WARM-UP" ? Screen::Dashboard : Screen::Practice;
+        section = sessionTag_ == "REVIEW"    ? Screen::Review
+                  : sessionTag_ == "WARM-UP" ? Screen::Dashboard
+                  : warriorRepSession()      ? Screen::Flashcards
+                                             : Screen::Practice;
     std::string badge = missedTotal ? std::to_string(missedTotal) : "";
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 6));
@@ -713,6 +718,8 @@ void GuiApp::drawSidebar(float height) {
     if (navItem("n_prac", "Practice tests", Icon::Target, section == Screen::Practice, w)) goTo(Screen::Practice);
     if (navItem("n_rev", "Review missed", Icon::Review, section == Screen::Review, w, badge.c_str())) goTo(Screen::Review);
     if (track_ == "afoqt" && navItem("n_vocab", "Vocabulary cards", Icon::Cards, section == Screen::Flashcards, w))
+        goTo(Screen::Flashcards);
+    if (track_ == "warrior" && navItem("n_wkrep", "Spaced repetition", Icon::Cards, section == Screen::Flashcards, w))
         goTo(Screen::Flashcards);
     if (navItem("n_prog", "My progress", Icon::Chart, section == Screen::Progress, w)) goTo(Screen::Progress);
     ImGui::PopStyleVar();
@@ -906,7 +913,7 @@ void GuiApp::drawDashboard() {
 
     if (track_ != "afoqt") {
         spacedLabel("BLOCKS", col::Muted, 2.0f);
-        drawSectionGrid(trackSections(), false, false);
+        drawSectionGrid(trackSections(), false, true);
         return;
     }
     spacedLabel("KNOWLEDGE SECTIONS", col::Muted, 2.0f);
@@ -927,6 +934,40 @@ void GuiApp::drawSectionGrid(const std::vector<SubtestInfo>& sections, bool prac
     const std::string focus = focusId();
     Grid grid(2);
     const ImVec2 size(grid.cardW, 262);
+    // The extra card: vocabulary cards (AFOQT, last) or spaced repetition (Warrior Knowledge, first)
+    auto extraCard = [&] {
+        const FlashcardDeck& d = activeDeck();
+        const bool vocab = track_ == "afoqt";
+        SubjectCard v;
+        v.tint = 5;
+        v.icon = Icon::Cards;
+        std::string footer;
+        if (vocab) {
+            v.title = "Vocabulary cards";
+            v.desc = "Flip through Word Knowledge flashcards with spaced repetition.";
+            v.badge = plural(static_cast<int>(d.size()), "word");
+            v.progress = d.size() ? static_cast<float>(d.masteredCount()) / d.size() : 0.0f;
+            footer = fmt("%d mastered  \xC2\xB7  %d to go", d.masteredCount(), static_cast<int>(d.size()) - d.masteredCount());
+        } else {
+            // Warrior Knowledge: the spaced repetition deck
+            const int blocks = static_cast<int>(wkRep_.blocks().size()), all = static_cast<int>(sections.size());
+            const int streak = wkRep_.streak();
+            v.title = "Spaced repetition";
+            v.desc = "Your own deck, a block at a time. Go through it once a day to keep your streak.";
+            v.badge = fmt("%d of %d blocks", blocks, all);
+            v.progress = all ? static_cast<float>(blocks) / all : 0.0f;
+            v.highlight = !wkRep_.doneToday();
+            if (v.highlight) v.tag = "TODAY";
+            footer = wkRep_.doneToday() ? fmt("Done today  \xC2\xB7  %s streak", plural(streak, "day").c_str())
+                     : streak > 0       ? fmt("%s streak  \xC2\xB7  keep it going", plural(streak, "day").c_str())
+                                        : std::string("No streak yet");
+        }
+        v.footer = footer;
+        v.primary = "Study  \xE2\x86\x92";
+        grid.next();
+        if (subjectCard("vocab", v, size) == 1) goTo(Screen::Flashcards);
+    };
+    if (addVocabCard && track_ != "afoqt") extraCard();
     for (const auto& s : sections) {
         auto it = stats.find(s.id);
         const SubjectStyle st = styleFor(s);
@@ -964,21 +1005,7 @@ void GuiApp::drawSectionGrid(const std::vector<SubtestInfo>& sections, bool prac
         if (hit == 2) startSubtest(s, SessionMode::Timed);
         if (hit == 3) startEndless(s);
     }
-    if (!addVocabCard) return;
-    const FlashcardDeck& d = activeDeck();
-    const bool vocab = track_ == "afoqt";
-    SubjectCard v;
-    v.tint = 5;
-    v.icon = Icon::Cards;
-    v.title = vocab ? "Vocabulary cards" : "Memorize cards";
-    v.desc = vocab ? "Flip through Word Knowledge flashcards with spaced repetition."
-                   : "Creeds, oaths, the Code of Conduct, and every list you need word for word.";
-    v.badge = plural(static_cast<int>(d.size()), vocab ? "word" : "card");
-    v.progress = d.size() ? static_cast<float>(d.masteredCount()) / d.size() : 0.0f;
-    v.footer = fmt("%d mastered  \xC2\xB7  %d to go", d.masteredCount(), static_cast<int>(d.size()) - d.masteredCount());
-    v.primary = "Study  \xE2\x86\x92";
-    grid.next();
-    if (subjectCard("vocab", v, size) == 1) goTo(Screen::Flashcards);
+    if (addVocabCard && track_ == "afoqt") extraCard();
 }
 
 // ================================================================ practice tests
@@ -1184,7 +1211,10 @@ void GuiApp::drawQuiz() {
     }
     if (quit) {
         queue_.clear();
-        goTo(sessionTag_ == "REVIEW" ? Screen::Review : sessionTag_ == "WARM-UP" ? Screen::Dashboard : Screen::Practice);
+        goTo(sessionTag_ == "REVIEW"    ? Screen::Review
+             : sessionTag_ == "WARM-UP" ? Screen::Dashboard
+             : warriorRepSession()      ? Screen::Flashcards
+                                        : Screen::Practice);
         return;
     }
 
@@ -1393,7 +1423,10 @@ void GuiApp::drawCardQuestion(const Question& q) {
         const bool knew = swiped > 0;
         // "Didn't know" is recorded as a wrong choice so it counts as answered but missed.
         const int wrong = (q.correctIndex + 1) % static_cast<int>(q.choices.size());
-        engine_.submit(knew ? q.correctIndex : wrong);
+        // Spaced repetition: a missed card comes back at the end until you know it
+        if (!knew && warriorRepSession()) engine_.append({Question(q)});  // a copy: appending can move `q`
+        const int correct = engine_.current().correctIndex;
+        engine_.submit(knew ? correct : wrong);
         if (engine_.showingFeedback()) engine_.next();  // no feedback step: the back of the card was the feedback
         if (knew) sound_.correct();
     }
@@ -1452,6 +1485,22 @@ void GuiApp::drawResults() {
         endCallout(col::BadSoft, col::Bad);
     }
 
+    if (warriorRepSession()) {
+        const int streak = wkRep_.streak();
+        beginCallout();
+        textIn(fonts.heading, col::Ink, "Deck complete");
+        wrappedIn(fonts.body, col::Ink,
+                  wkRepCounted_ ? fmt("You went through your whole deck today. Your streak is now %s (best: %s).",
+                                      plural(streak, "day").c_str(), plural(wkRep_.bestStreak(), "day").c_str()).c_str()
+                                : "You already finished your deck today, so the streak stays the same. Come back tomorrow "
+                                  "to add another day.");
+        endCallout(col::GoodSoft, col::Good);
+        if (button("Back to spaced repetition")) {
+            goTo(Screen::Flashcards);
+            return;
+        }
+        sameLineIfFits(buttonWidth("Back to dashboard"));
+    }
     if (!queue_.empty()) {
         if (button(fmt("Next section: %s  \xE2\x86\x92", queue_.front().name.c_str()).c_str())) {
             startNextInQueue();
@@ -1459,7 +1508,7 @@ void GuiApp::drawResults() {
         }
         sameLineIfFits(buttonWidth("Back to dashboard"));
     }
-    if (button("Back to dashboard", queue_.empty() ? ButtonStyle::Primary : ButtonStyle::Outline)) {
+    if (button("Back to dashboard", queue_.empty() && !warriorRepSession() ? ButtonStyle::Primary : ButtonStyle::Outline)) {
         queue_.clear();
         goTo(Screen::Dashboard);
         return;
@@ -1497,6 +1546,10 @@ void GuiApp::drawResults() {
 // ================================================================ flashcards
 
 void GuiApp::drawFlashcards() {
+    if (track_ != "afoqt") {
+        drawWarriorRepetition();
+        return;
+    }
     // AFOQT: vocabulary cards. Warrior Knowledge: memorize cards (title on the
     // front, the full text on the back; recite it, then flip to check).
     FlashcardDeck& deck = activeDeck();
@@ -1747,6 +1800,85 @@ void GuiApp::drawRepetition() {
         if (button(remove.c_str(), ButtonStyle::Outline)) repDeck_.removeLastBatch();
     }
     if (canAdd == 0) wrappedIn(fonts.small, col::Muted, "Every vocabulary word is in your deck.");
+}
+
+// Warrior Knowledge spaced repetition: the user picks which handbook blocks are in
+// the deck (a whole block at a time) and goes through all of it once a day for the
+// streak. Cards swiped left come back at the end of the session until known.
+void GuiApp::drawWarriorRepetition() {
+    drawHeader("SPACED REPETITION");
+    pageTitle("Spaced repetition",
+              "Your own deck, built a block at a time. Go through the whole deck once a day to keep your streak; "
+              "cards you swipe left come back at the end until you know them. Add the next block whenever you're ready.");
+    if (!message_.empty()) {
+        beginCallout();
+        textIn(fonts.strong, col::Ink, message_.c_str());
+        endCallout(col::AccentSoft, col::Accent);
+    }
+
+    const auto blocks = trackSections();
+    auto cardsIn = [&](int b) { return static_cast<int>(bank_.size(fmt("wk_block%02d", b))); };
+    int cards = 0;
+    for (int b : wkRep_.blocks()) cards += cardsIn(b);
+    const int streak = wkRep_.streak();
+    const bool done = wkRep_.doneToday();
+
+    Grid stats(3, 150);
+    const float w3 = stats.cardW;
+    stats.next();
+    statCard(ImVec2(w3, 142), "Streak", plural(streak, "day").c_str(),
+             fmt("Best: %s", plural(wkRep_.bestStreak(), "day").c_str()).c_str(), streak > 0 ? col::Accent : col::Ink);
+    stats.next();
+    statCard(ImVec2(w3, 142), "Today", done ? "Done" : "Not yet",
+             done ? "Come back tomorrow for the next day" : streak > 0 ? "Finish your deck to keep the streak"
+                                                                      : "Finish your deck to start a streak",
+             done ? col::Good : col::Bad);
+    stats.next();
+    const int nb = static_cast<int>(wkRep_.blocks().size());
+    statCard(ImVec2(w3, 142), "In your deck", plural(cards, "card").c_str(),
+             fmt("%s of %d", plural(nb, "block").c_str(), static_cast<int>(blocks.size())).c_str());
+    ImGui::Dummy(ImVec2(0, 8));
+
+    if (button(fmt("Practice my deck  (%s)  \xE2\x86\x92", plural(cards, "card").c_str()).c_str(), ButtonStyle::Primary,
+               ImVec2(compact_ ? ImGui::GetContentRegionAvail().x : 0, 48))) {
+        startWarriorRepetition();
+        return;
+    }
+    ImGui::Dummy(ImVec2(0, 16));
+
+    heading("Blocks in your deck");
+    wrappedIn(fonts.body, col::Muted, "Add a block to study it every day; remove one you've got down. Your deck always "
+                                      "keeps at least one block.");
+    ImGui::Dummy(ImVec2(0, 4));
+    Grid grid(4, 150);
+    const float tileH = 132.0f;
+    for (const auto& s : blocks) {
+        const int b = std::atoi(s.id.c_str() + std::strlen("wk_block"));
+        const bool in = wkRep_.has(b);
+        grid.next();
+        ImGui::PushID(b);
+        const ImVec2 p = ImGui::GetCursorScreenPos();
+        ImGui::BeginGroup();
+        ImGui::Dummy(ImVec2(grid.cardW, tileH));
+        ImDrawList* dl = ImGui::GetWindowDrawList();
+        cardShape(dl, p, ImVec2(grid.cardW, tileH));
+        if (in) dl->AddRect(p, p + ImVec2(grid.cardW, tileH), u32(col::Accent), 16.0f, 0, 2.0f);
+        ImGui::SetCursorScreenPos(p + ImVec2(20, 18));
+        textIn(fonts.heading, col::Ink, fmt("Block %d", b).c_str());
+        ImGui::SetCursorScreenPos(p + ImVec2(20, 50));
+        textIn(fonts.small, in ? col::Accent : col::Muted,
+               (plural(cardsIn(b), "card") + (in ? "  \xC2\xB7  in your deck" : "")).c_str());
+        ImGui::SetCursorScreenPos(p + ImVec2(20, tileH - 18 - 40));
+        const float bw = grid.cardW - 40;
+        if (in) {
+            if (nb > 1 && button("Remove", ButtonStyle::Outline, ImVec2(bw, 40))) wkRep_.remove(b);
+            if (nb <= 1) textIn(fonts.small, col::Muted, "Your first block");
+        } else if (button("+  Add block", ButtonStyle::Primary, ImVec2(bw, 40))) {
+            wkRep_.add(b);
+        }
+        ImGui::EndGroup();
+        ImGui::PopID();
+    }
 }
 
 // ================================================================ progress
@@ -2237,8 +2369,35 @@ void GuiApp::startRepetition() {
     flashActive_ = !deck_.sessionDone();
 }
 
+void GuiApp::startWarriorRepetition() {
+    std::vector<Question> questions;
+    for (int b : wkRep_.blocks()) {
+        auto all = bank_.draw(fmt("wk_block%02d", b), 0, rng_);
+        questions.insert(questions.end(), all.begin(), all.end());
+    }
+    if (questions.empty()) {
+        message_ = "No cards in your deck yet. Add a block below.";
+        return;
+    }
+    std::shuffle(questions.begin(), questions.end(), rng_);
+    message_.clear();
+    sessionName_ = "My deck";
+    sessionTag_ = "SPACED REPETITION";
+    sessionTips_ = "";
+    sessionTimeLimit_ = 0;
+    endless_ = false;
+    isReview_ = true;  // missed cards repeat, so the session doesn't count toward accuracy
+    wkRepCounted_ = false;
+    feedbackTime_ = -1.0;
+    cardMode_ = true;
+    swipe_ = SwipeCard{};
+    engine_.start("repetition_warrior", std::move(questions), SessionMode::Practice, 0);
+    screen_ = Screen::Quiz;
+}
+
 void GuiApp::finishSession() {
     progress_.record(engine_.result(), isReview_);
+    if (warriorRepSession()) wkRepCounted_ = wkRep_.completePass();  // the whole deck, so the day counts
     feedbackTime_ = -1.0;
     screen_ = Screen::Results;
 }

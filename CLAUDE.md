@@ -107,13 +107,18 @@ that track (`cardMode_`) shows each card as a swipe card (`ui::swipeCard` in `Wi
 right = correct, left = missed (recorded as the placeholder wrong choice so it lands on the review
 list). `memDeck_` only loads the cards; there's no separate memorize screen. The console version
 hides Warrior Knowledge.
+Warrior Knowledge also has its own spaced repetition deck (`BlockRepetition` in `RepetitionDeck.h`,
+`wkRep_`, the Flashcards screen in that track, sidebar "Spaced repetition"): the user adds or removes
+whole blocks (starts with Block 1, never empty); the session (`startWarriorRepetition`, tag
+"SPACED REPETITION") runs the deck as swipe cards, puts each card swiped left back at the end, records
+as a review session, and finishing it counts the day for its own streak.
 
 **Saving.** `AppPaths.h` sets the progress folder (`~/Library/Application Support/Cadet Prep` on
 macOS, `~/.cadet-prep` elsewhere) and migrates older folders. **Always save and load with
 `apppaths::userFile(name)`, never a bare file name:** on macOS GLFW moves the working directory
 into the bundle's Resources folder unless `GLFW_COCOA_CHDIR_RESOURCES` is off (it's turned off in
 `gui_main.cpp`), which once made settings save inside the app. Files: `afoqt_progress.json`
-(`ProgressStore`; review sessions don't count toward accuracy), `afoqt_flashcards.json`, `afoqt_repetition.json` (spaced repetition deck and streak), `afoqt_saved_questions.json` (saved generated questions),
+(`ProgressStore`; review sessions don't count toward accuracy), `afoqt_flashcards.json`, `afoqt_repetition.json` (spaced repetition deck and streak), `warrior_repetition.json` (Warrior Knowledge block deck and streak), `afoqt_saved_questions.json` (saved generated questions),
 `warrior_cards_progress.json` (no longer written, kept for old installs), and `afoqt_settings.json` (sound, dark mode, definition-first,
 last track, focus area per track). Settings save on every change.
 
