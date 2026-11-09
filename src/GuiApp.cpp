@@ -818,10 +818,10 @@ void GuiApp::drawHome() {
     const std::time_t now = std::time(nullptr);
     std::tm local{};
     localtime_r(&now, &local);
-    const char* greeting = local.tm_hour < 5    ? "Up late, Cadet?"
-                           : local.tm_hour < 12 ? "Good morning, Cadet"
-                           : local.tm_hour < 17 ? "Good afternoon, Cadet"
-                                                : "Good evening, Cadet";
+    const char* greeting = local.tm_hour < 5    ? "Up late?"
+                           : local.tm_hour < 12 ? "Good morning"
+                           : local.tm_hour < 17 ? "Good afternoon"
+                                                : "Good evening";
     dl->AddText(heroFont, fontPx(heroFont), ImVec2(a.x + pad, y), u32(col::White), greeting, nullptr, w - pad * 2);
     y += textSize(heroFont, greeting, w - pad * 2).y + 14;
     dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(a.x + pad, y), u32(col::White, 0.88f), blurb, nullptr, blurbW);
