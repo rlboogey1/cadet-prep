@@ -114,10 +114,11 @@ figcaption b { color: var(--ink); font-weight: 600; }
 .foot p { max-width: 46em; margin: 0; }
 
 @media (max-width: 560px) {
-  th, td { padding: 10px 10px; }
+  th, td { padding: 10px 7px; }
+  th:first-child, td:first-child { padding-left: 12px; }
   table { font-size: 14px; }
   td { font-size: 13px; }
   table.plain th { width: 8em; }
-  thead th { letter-spacing: 0.06em; }
+  thead th { letter-spacing: 0.04em; white-space: normal; }
   td .dim { display: block; }   /* "60 + generated" on two lines */
 }
