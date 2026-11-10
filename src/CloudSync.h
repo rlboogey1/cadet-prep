@@ -39,6 +39,14 @@ public:
     void syncNow();  // runs now, or right after the current sync
     void onForeground() { syncNow(); }
 
+    // The website's Download section: asks the server for a link to the Mac app
+    // that works for a few minutes (the file is private; only a signed-in account
+    // can get a link). The link arrives a moment later through takeDownloadUrl().
+    void requestDownload();
+    bool downloadBusy() const { return wantDownload_ || downloading_; }
+    std::string takeDownloadUrl();  // the link, once; empty until it's ready
+    const std::string& downloadError() const { return downloadError_; }
+
     // Call every frame. Returns true when progress files were rewritten with
     // merged progress, so the app should reload them.
     bool update();
@@ -60,6 +68,8 @@ private:
     Account account_;
     std::shared_ptr<Job> job_;
     bool pending_ = false;  // another sync was asked for while one was running
+    bool wantDownload_ = false, downloading_ = false;
+    std::string downloadUrl_, downloadError_;
     std::string error_;
     std::time_t lastSync_ = 0, lastAttempt_ = 0;
     double nextCheck_ = 0, changedAt_ = -1;

@@ -24,6 +24,10 @@ namespace {
 const std::string kUrl = CADET_SUPABASE_URL;
 const std::string kKey = CADET_SUPABASE_KEY;  // the project's public ("anon") key
 const char* kAccountFile = "afoqt_account.json";
+// The Mac app for the website's Download section: bucket/file in the project's
+// private storage (see WEB.md)
+const char* kDownloadObject = "downloads/CadetPrep.dmg";
+const char* kDownloadName = "CadetPrep.dmg";
 
 double seconds() {
     using namespace std::chrono;
@@ -86,6 +90,9 @@ struct CloudSync::Job {
     bool hasMerged = false;
     bool signedOut = false;  // the sign-in expired or was revoked
     std::string error;
+    // A download-link job asks for a link to the Mac app instead of syncing
+    bool download = false;
+    std::string downloadUrl;
 
     void run();                                   // all the steps, waiting for each answer
     static void runAsync(std::shared_ptr<Job> job);  // the same, without waiting (browser)
@@ -98,6 +105,11 @@ struct CloudSync::Job {
     Request getRequest() const;
     bool gotDone(const http::Response& r, Request& put);
     void putDone(const http::Response& r);
+    // Download-link job, after step 1: ask storage to sign a link for 5 minutes
+    Request signRequest() const {
+        return {"POST", kUrl + "/storage/v1/object/sign/" + kDownloadObject, headers(), R"({"expiresIn":300})"};
+    }
+    void signDone(const http::Response& r);
 
     http::Headers headers() const {
         return {{"apikey", kKey}, {"Authorization", "Bearer " + account.accessToken},
@@ -183,11 +195,28 @@ void CloudSync::Job::putDone(const http::Response& r) {
     else error = errorText(r);
 }
 
+void CloudSync::Job::signDone(const http::Response& r) {
+    if (!r.ok()) {
+        // No such file (or no permission to it) means it hasn't been uploaded yet
+        error = r.status == 400 || r.status == 404 ? "The Mac app isn't available to download yet." : errorText(r);
+        return;
+    }
+    try {
+        std::string path = json::parse(r.body).at("signedURL").get<std::string>();
+        if (path.empty() || path[0] != '/') path = "/" + path;
+        downloadUrl = kUrl + "/storage/v1" + path + (path.find('?') == std::string::npos ? "?" : "&") +
+                      "download=" + kDownloadName;
+    } catch (...) {
+        error = "Unexpected answer from the server";
+    }
+}
+
 void CloudSync::Job::run() {
     auto send = [](const Request& q) { return http::request(q.method, q.url, q.headers, q.body); };
     if (!needsAuth() || authDone(send(authRequest()))) {
         Request put;
-        if (gotDone(send(getRequest()), put)) putDone(send(put));
+        if (download) signDone(send(signRequest()));
+        else if (gotDone(send(getRequest()), put)) putDone(send(put));
     }
     done = true;
 }
@@ -198,6 +227,13 @@ void CloudSync::Job::runAsync(std::shared_ptr<Job> job) {
         http::requestAsync(q.method, q.url, q.headers, q.body, std::move(then));
     };
     auto sync = [job, send] {
+        if (job->download) {
+            send(job->signRequest(), [job](const http::Response& r) {
+                job->signDone(r);
+                job->done = true;
+            });
+            return;
+        }
         send(job->getRequest(), [job, send](const http::Response& got) {
             Request put;
             if (!job->gotDone(got, put)) {
@@ -278,9 +314,11 @@ void CloudSync::start(std::shared_ptr<Job> job) {
     job->account = account_;
     job->local = readLocal();
     job_ = job;
-    lastAttempt_ = std::time(nullptr);
-    pending_ = false;
-    changedAt_ = -1;
+    if (!job->download) {
+        lastAttempt_ = std::time(nullptr);
+        pending_ = false;
+        changedAt_ = -1;
+    }
 #if defined(__EMSCRIPTEN__)
     Job::runAsync(job);  // no threads in a browser: each answer comes back as an event
 #else
@@ -305,6 +343,19 @@ void CloudSync::signOut() {
     error_.clear();
     lastSync_ = 0;
     saveAccount();
+}
+
+void CloudSync::requestDownload() {
+    if (!configured() || !signedIn() || downloadBusy()) return;
+    downloadError_.clear();
+    downloadUrl_.clear();
+    wantDownload_ = true;  // starts in update(), after any sync that's running
+}
+
+std::string CloudSync::takeDownloadUrl() {
+    std::string url;
+    url.swap(downloadUrl_);
+    return url;
 }
 
 void CloudSync::syncNow() {
@@ -343,12 +394,20 @@ bool CloudSync::filesChanged() const {
 
 bool CloudSync::apply(Job& job) {
     if (job.signedOut) {
+        wantDownload_ = downloading_ = false;
         account_ = Account{};
         saveAccount();
         error_ = job.error;
         return false;
     }
     if (!job.account.refreshToken.empty()) account_ = job.account;  // new tokens, even if the sync failed
+    if (job.download) {
+        downloading_ = false;
+        downloadUrl_ = job.downloadUrl;
+        downloadError_ = job.error;
+        saveAccount();
+        return false;
+    }
     error_ = job.error;
     bool changed = false;
     if (job.hasMerged) {
@@ -376,7 +435,16 @@ bool CloudSync::update() {
         auto job = job_;
         job_.reset();
         changed = apply(*job);
-        if (pending_ && signedIn()) syncNow();
+        if (pending_ && signedIn() && !wantDownload_) syncNow();
+    }
+    if (wantDownload_ && !busy()) {
+        wantDownload_ = false;
+        if (signedIn()) {
+            auto job = std::make_shared<Job>();
+            job->download = true;
+            downloading_ = true;
+            start(job);
+        }
     }
     if (!signedIn() || busy()) return changed;
 

@@ -149,6 +149,10 @@ private:
 
     // Settings saved between launches (afoqt_settings.json)
     void loadSettings();
+#if defined(__EMSCRIPTEN__)
+    void drawDownloads();  // the website's Download section (main menu)
+    bool downloadStarted_ = false;
+#endif
     void addWarriorCards();  // Warrior Knowledge blocks: one card per handbook item
     void saveSettings() const;
     void reloadProgress();   // after online sync merged other devices' progress into the files

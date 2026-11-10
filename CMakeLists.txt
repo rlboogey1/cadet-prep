@@ -147,7 +147,11 @@ if(CADET_WEB)
     # The browser's files: questions at /data, and no Warrior Knowledge
     target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="/data")
 else()
-    target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
+    # Where the apps look for questions when they aren't inside an app bundle. The copy
+    # made for download (web/make_dmg.sh) sets this to plain "data", so the app carries
+    # no path from the computer it was built on.
+    set(CADET_DATA_DIR "${CMAKE_SOURCE_DIR}/data" CACHE STRING "Fallback question folder")
+    target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="${CADET_DATA_DIR}")
 endif()
 
 if(CADET_NO_WARRIOR)

@@ -19,6 +19,10 @@
 
 using namespace ui;
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
 namespace {
 
 constexpr float kSidebar = 288.0f;       // width of the navy sidebar
@@ -1033,7 +1037,62 @@ void GuiApp::drawHome() {
         if (track_ != id) switchTrack(id);
         else goTo(Screen::Dashboard);
     }
+#if defined(__EMSCRIPTEN__)
+    drawDownloads();
+#endif
 }
+
+#if defined(__EMSCRIPTEN__)
+// Starts a file download in the browser (the page stays where it is)
+EM_JS(void, pageDownload, (const char* url), {
+    var a = document.createElement('a');
+    a.href = UTF8ToString(url);
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+});
+
+// The website's Download section, on the main menu: the Mac app, fetched through a
+// short-lived link that only a signed-in account can get. Windows comes later.
+void GuiApp::drawDownloads() {
+    if (!cloud_.configured() || !cloud_.signedIn()) return;
+    const std::string url = cloud_.takeDownloadUrl();
+    if (!url.empty()) {
+        pageDownload(url.c_str());
+        downloadStarted_ = true;
+    }
+    ImGui::Dummy(ImVec2(0, 8));
+    const bool busy = cloud_.downloadBusy();
+    TableRow mac;
+    mac.name = "Mac";
+    mac.cells = {{"macOS 11 or later", "macOS 11 or later"}};
+    mac.buttons = {busy ? "Getting it..." : "Download"};
+    TableRow win;
+    win.name = "Windows";
+    win.cells = {{"Later", "Later", col::Muted}};
+    const auto hit = drawTable("home_apps", "DOWNLOAD THE APP", {"NEEDS"}, {mac, win});
+    if (hit.first == 0 && !busy) {
+        downloadStarted_ = false;
+        cloud_.requestDownload();
+    }
+    ImGui::Dummy(ImVec2(0, 6));
+    if (!cloud_.downloadError().empty()) {
+        wrappedIn(fonts.small, col::Bad, cloud_.downloadError().c_str());
+    } else if (downloadStarted_) {
+        beginCallout();
+        textIn(fonts.strong, col::Ink, "CadetPrep.dmg is downloading");
+        wrappedIn(fonts.small, col::InkSoft,
+                  "Open it and drag Cadet Prep into Applications. The app isn't signed with Apple yet, so the "
+                  "first time you open it macOS will say it can't be opened. Then go to System Settings > "
+                  "Privacy & Security, scroll down, and choose Open Anyway. You only do this once.");
+        endCallout(col::AccentSoft, col::Accent);
+    } else {
+        wrappedIn(fonts.small, col::Muted,
+                  "The Mac app keeps the same progress as this site when you sign in to it.");
+    }
+}
+#endif
 
 void GuiApp::drawDashboard() {
     const TrackInfo& ti = trackInfo(track_);

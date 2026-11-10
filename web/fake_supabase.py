@@ -23,7 +23,8 @@ TEST_PASSWORD = "practice-only-1"
 USER_ID = "00000000-0000-4000-8000-000000000001"
 KEY = "test-public-key"
 
-state = {"password": TEST_PASSWORD, "row": None, "access": set(), "refresh": set(), "puts": 0}
+state = {"password": TEST_PASSWORD, "row": None, "access": set(), "refresh": set(), "puts": 0,
+         "links": set(), "has_app": True}
 
 
 def tokens():
@@ -66,6 +67,17 @@ class Handler(BaseHTTPRequestHandler):
         url = urlparse(self.path)
         if url.path == "/_state":
             return self.send(200, {"row": state["row"], "puts": state["puts"], "password_changed": state["password"] != TEST_PASSWORD})
+        if url.path.startswith("/storage/v1/object/sign/"):  # a signed download link
+            if parse_qs(url.query).get("token", [""])[0] not in state["links"]:
+                return self.send(400, {"message": "Invalid or expired link"})
+            data = b"This stands in for CadetPrep.dmg\n"
+            self.send_response(200)
+            self.send_header("Content-Type", "application/octet-stream")
+            self.send_header("Content-Disposition", 'attachment; filename="CadetPrep.dmg"')
+            self.send_header("Content-Length", str(len(data)))
+            self.end_headers()
+            self.wfile.write(data)
+            return
         if self.headers.get("apikey") != KEY:
             return self.send(401, {"message": "Invalid API key"})
         if url.path == "/rest/v1/progress":
@@ -96,6 +108,15 @@ class Handler(BaseHTTPRequestHandler):
                 back = query.get("redirect_to", ["http://localhost/reset.html"])[0]
                 print("RESET LINK: %s#access_token=%s&type=recovery" % (back, t), flush=True)
             return self.send(200, {})
+        if url.path.startswith("/storage/v1/object/sign/"):  # ask for a signed download link
+            if not self.authed():
+                return self.send(401, {"message": "JWT expired"})
+            name = url.path[len("/storage/v1/object/sign/"):]
+            if name != "downloads/CadetPrep.dmg" or not state["has_app"]:
+                return self.send(400, {"statusCode": "404", "error": "not_found", "message": "Object not found"})
+            t = secrets.token_hex(8)
+            state["links"].add(t)
+            return self.send(200, {"signedURL": "/object/sign/%s?token=%s" % (name, t)})
         if url.path == "/rest/v1/progress":
             if not self.authed():
                 return self.send(401, {"message": "JWT expired"})
@@ -120,7 +141,9 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", type=int, default=8766)
     ap.add_argument("--seed", help="JSON file to start with as the online progress")
+    ap.add_argument("--no-app", action="store_true", help="act as if the Mac app hasn't been uploaded")
     args = ap.parse_args()
+    state["has_app"] = not args.no_app
     if args.seed:
         with open(args.seed) as f:
             state["row"] = json.load(f)

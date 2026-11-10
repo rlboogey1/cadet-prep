@@ -91,6 +91,41 @@ HOME=/tmp/shots-home ./build-shots/cadet_mobile --size 1280x800 --script taps.tx
 
 Then crop off the sidebar (the left 288 points) and scale to 1400 pixels wide.
 
+## Download section
+
+The website's main menu has a "Download the app" table (logged in only): Mac now,
+Windows later. The Mac app is a file in the Supabase project's **private** storage, so
+hiding the button isn't what protects it: the app asks the server for a link that works
+for five minutes (`CloudSync::requestDownload`), and the server only gives one to a
+signed-in account. The Mac app contains Warrior Knowledge, which is why it stays private.
+
+**Set up the storage once.** In the Supabase project, open **SQL Editor**, paste this
+in, and click **Run**:
+
+```sql
+insert into storage.buckets (id, name, public) values ('downloads', 'downloads', false);
+create policy "Signed-in accounts can download the app" on storage.objects
+  for select to authenticated using (bucket_id = 'downloads');
+```
+
+**Build and upload the app** (again whenever the Mac app changes):
+
+```bash
+./web/make_dmg.sh
+```
+
+That makes `build-release/CadetPrep.dmg`: a separate optimized build for Apple silicon
+and Intel Macs, macOS 11 or later. Then in Supabase open **Storage > downloads**, and
+upload it with exactly the name `CadetPrep.dmg` (replace the old one). Free projects
+allow files up to 50 MB; the app is well under that.
+
+The app isn't signed with an Apple developer account, so macOS blocks it the first time
+it's opened. The site tells the user what to do: System Settings > Privacy & Security >
+Open Anyway. Signing and notarizing it (an Apple Developer account, $99 a year) removes
+that step.
+
+Until the file is uploaded, the Download button says the app isn't available yet.
+
 ## Still to do
 
-The Mac download section, and publishing.
+Publishing.

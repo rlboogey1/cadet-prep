@@ -7,3 +7,4 @@ build-ios/
 supabase.json
 build-web/
 build-web-test/
+build-release/
