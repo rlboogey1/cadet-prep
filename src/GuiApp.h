@@ -116,8 +116,14 @@ private:
     void startWarmup();
     void startReview(const std::string& subtestId);  // empty = all sections
     void startFlashcards(size_t count, bool learningOnly);
-    void startRepetition();
+    // The AFOQT spaced repetition deck can be studied three ways (see repMode_).
+    enum class RepMode { Swipe, Quiz, Describe };
+    void startRepetition(RepMode mode);
     void drawRepetition();
+    void buildDeckQuestion(const Flashcard& c);  // a quiz question for this word (repQ_)
+    void drawDeckQuiz(const Flashcard& c);
+    void drawDeckDescribe(const Flashcard& c);
+    void finishDeckCard(bool knewIt);  // quiz and describe: record the answer, go to the next word
     void drawWarriorRepetition();   // Warrior Knowledge: the spaced repetition page
     void startWarriorRepetition();  // its deck as swipe cards; missed cards come back at the end
     bool warriorRepSession() const { return sessionTag_ == "SPACED REPETITION"; }
@@ -190,6 +196,23 @@ private:
     RepetitionDeck repDeck_;   // AFOQT: the spaced repetition deck and its daily streak
     bool repSession_ = false;  // the current flashcard session is the spaced repetition deck
     bool repCounted_ = false;  // that session's finish counted a new streak day
+    RepMode repMode_ = RepMode::Swipe;  // how the deck is being studied (the last way used, between sessions)
+    // Quiz: the question on screen. Five choices of one kind: 0 = pick the definition
+    // of the word, 1 = pick the word for the definition, 2 = pick the word's synonym.
+    struct DeckQuestion {
+        int kind = -1;  // -1 = not built yet for the current word
+        std::string prompt;
+        std::vector<std::string> choices;
+        int correct = 0;
+        int chosen = -1;  // -1 = not answered yet
+    };
+    DeckQuestion repQ_;
+    std::map<std::string, int> repLastKind_;  // per word this session: a word that comes back is asked another way
+    // Describe: what the user typed, and whether the answer is showing
+    char repText_[1024] = "";
+    bool repRevealed_ = false;
+    bool repDontKnow_ = false;  // revealed with "I don't know" (counts as missed)
+    bool repFocus_ = false;     // put the cursor in the text box next frame
     BlockRepetition wkRep_;    // Warrior Knowledge: blocks in the spaced repetition deck, and its streak
     bool wkRepCounted_ = false;  // the last Warrior Knowledge deck session counted a new streak day
     bool definitionFirst_ = false;

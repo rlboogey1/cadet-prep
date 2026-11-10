@@ -548,10 +548,11 @@ bool button(const char* label, ButtonStyle style, ImVec2 size, ImFont* font) {
     if (size.y <= 0) size.y = ts.y + 20.0f;
 
     ImVec2 p = ImGui::GetCursorScreenPos();
-    bool clicked = ImGui::InvisibleButton(label, size);
-    bool hov = ImGui::IsItemHovered();
-    bool held = ImGui::IsItemActive();
-    handCursorIfHovered();
+    const bool off = style == ButtonStyle::Disabled;
+    bool clicked = ImGui::InvisibleButton(label, size) && !off;
+    bool hov = ImGui::IsItemHovered() && !off;
+    bool held = ImGui::IsItemActive() && !off;
+    if (!off) handCursorIfHovered();
 
     ImDrawList* dl = ImGui::GetWindowDrawList();
     ImU32 textCol = 0;
@@ -574,6 +575,11 @@ bool button(const char* label, ButtonStyle style, ImVec2 size, ImFont* font) {
             dl->AddRectFilled(p, p + size, u32(hov ? col::BadSoft : col::Card), r);
             dl->AddRect(p, p + size, u32(col::Bad, hov ? 1.0f : 0.7f), r, 0, 1.0f);
             textCol = u32(col::Bad);
+            break;
+        case ButtonStyle::Disabled:
+            dl->AddRectFilled(p, p + size, u32(col::Bg), r);
+            dl->AddRect(p, p + size, u32(col::CardBorder), r, 0, 1.0f);
+            textCol = u32(col::Muted);
             break;
     }
     textCentered(dl, font, p + size * 0.5f, textCol, label, end);
@@ -748,6 +754,68 @@ bool textField(const char* id, const char* hint, char* buf, size_t size, TextKin
         ImGui::GetWindowDrawList()->AddRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax(), u32(col::Accent), kRadius, 0, 1.5f);
     }
     return entered;
+}
+
+namespace {
+// Keeps a multi-line box's text inside its width: every line break becomes a space,
+// then the last space before each line would overflow becomes a line break again.
+// Swapping one byte for another leaves the cursor and selection where they were.
+int wrapCallback(ImGuiInputTextCallbackData* data) {
+    const float width = *static_cast<const float*>(data->UserData);
+    ImFont* font = ImGui::GetFont();
+    const float px = ImGui::GetFontSize();
+    char* b = data->Buf;
+    const std::string before(b, static_cast<size_t>(data->BufTextLen));
+    for (int i = 0; i < data->BufTextLen; ++i)
+        if (b[i] == '\n') b[i] = ' ';
+    int lineStart = 0, lastSpace = -1;
+    for (int i = 0; i < data->BufTextLen; ++i) {
+        if (b[i] == ' ') {
+            const float w = font->CalcTextSizeA(px, FLT_MAX, 0.0f, b + lineStart, b + i).x;
+            if (w > width && lastSpace > lineStart) {
+                b[lastSpace] = '\n';
+                lineStart = lastSpace + 1;
+            }
+            lastSpace = i;
+        }
+    }
+    // The last word on the last line
+    if (lastSpace > lineStart &&
+        font->CalcTextSizeA(px, FLT_MAX, 0.0f, b + lineStart, b + data->BufTextLen).x > width) {
+        b[lastSpace] = '\n';
+    }
+    // Only tell ImGui when the line breaks really moved
+    if (before.compare(0, before.size(), b, static_cast<size_t>(data->BufTextLen)) != 0) data->BufDirty = true;
+    return 0;
+}
+}  // namespace
+
+void textArea(const char* id, const char* hint, char* buf, size_t size, ImVec2 box, bool focus) {
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(14, gTouch ? 13.0f : 10.0f));
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, kRadius);
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, col::Bg);
+    ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, col::Bg);
+    ImGui::PushStyleColor(ImGuiCol_FrameBgActive, col::Card);
+    ImGui::PushStyleColor(ImGuiCol_Border, col::Ring);
+    ImGui::PushStyleColor(ImGuiCol_Text, col::Ink);
+    ImGui::PushStyleColor(ImGuiCol_TextSelectedBg, ImVec4(col::Accent.x, col::Accent.y, col::Accent.z, 0.3f));
+    ImGui::PushFont(fonts.body);
+    const ImVec2 p = ImGui::GetCursorScreenPos();
+    float wrapWidth = box.x - 28.0f - ImGui::GetStyle().ScrollbarSize;  // inside the padding, clear of a scrollbar
+    if (focus) ImGui::SetKeyboardFocusHere();
+    ImGui::InputTextMultiline(id, buf, size, box, ImGuiInputTextFlags_CallbackAlways, wrapCallback, &wrapWidth);
+    const bool active = ImGui::IsItemActive();
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    if (!buf[0] && !active)
+        textAt(dl, fonts.body, p + ImVec2(14, gTouch ? 13.0f : 10.0f), u32(col::Muted), hint);
+    ImGui::PopFont();
+    ImGui::PopStyleColor(6);
+    ImGui::PopStyleVar(3);
+    if (active) {
+        gTextKind = TextKind::Text;
+        dl->AddRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax(), u32(col::Accent), kRadius, 0, 1.5f);
+    }
 }
 
 bool toggle(const char* id, bool* value) {

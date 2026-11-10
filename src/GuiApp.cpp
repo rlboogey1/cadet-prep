@@ -889,7 +889,7 @@ void GuiApp::runNextUp(const NextUp& n) {
         case NextUp::Deck:
             if (n.track == "afoqt") {
                 goTo(Screen::Flashcards);
-                startRepetition();
+                startRepetition(repMode_);
             } else {
                 startWarriorRepetition();
             }
@@ -1758,16 +1758,27 @@ void GuiApp::drawFlashcards() {
     // ---- A card
     const Flashcard& c = deck.current();
     const float ty = ImGui::GetCursorPosY();
-    textIn(compact_ ? fonts.heading : fonts.title, col::Ink, repSession_ ? "Spaced repetition" : deckName);
+    const bool written = repSession_ && repMode_ != RepMode::Swipe;  // quiz or describe instead of a swipe card
+    const char* sessionTitle = !repSession_                     ? deckName
+                               : repMode_ == RepMode::Quiz     ? "Spaced repetition: quiz"
+                               : repMode_ == RepMode::Describe ? "Spaced repetition: describe"
+                                                               : "Spaced repetition";
+    textIn(compact_ ? fonts.heading : fonts.title, col::Ink, sessionTitle);
     alignRight(textSize(fonts.strong, "End session").x + 40);
     ImGui::SetCursorPosY(ty);
     if (button("End session", ButtonStyle::Outline)) {
         flashActive_ = false;
         return;
     }
-    wrappedIn(fonts.body, col::Muted, fmt("%d cards left  \xC2\xB7  %d known  \xC2\xB7  %d still learning",
-                                          static_cast<int>(deck.remaining()), deck.sessionGotIt(), deck.sessionMissed()).c_str());
+    wrappedIn(fonts.body, col::Muted, fmt("%d %s left  \xC2\xB7  %d known  \xC2\xB7  %d still learning",
+                                          static_cast<int>(deck.remaining()), written ? "words" : "cards",
+                                          deck.sessionGotIt(), deck.sessionMissed()).c_str());
     ImGui::Dummy(ImVec2(0, 4));
+    if (written) {
+        if (repMode_ == RepMode::Quiz) drawDeckQuiz(c);
+        else drawDeckDescribe(c);
+        return;
+    }
 
     const float minH = std::clamp(ImGui::GetContentRegionAvail().y - 170, 300.0f, vocab ? 420.0f : 520.0f);
     auto posName = [&] {
@@ -1842,8 +1853,9 @@ void GuiApp::drawRepetition() {
 
     textIn(fonts.heading, col::Ink, "Spaced repetition");
     wrappedIn(fonts.small, col::Muted,
-              "Your own deck, starting with 3 words. Go through the whole deck once a day to keep your streak; "
-              "words you miss come back until you know them. Add 3 more words whenever you're ready.");
+              "Your own deck, starting with 3 words. Go through the whole deck once a day to keep your streak, "
+              "with swipe cards, a multiple choice quiz, or by describing each word in your own words. Words you "
+              "miss come back until you know them. Add 3 more words whenever you're ready.");
     ImGui::Dummy(ImVec2(0, 6));
     int mastered = 0;
     for (const auto& w : words) mastered += deck_.box(w) >= FlashcardDeck::kMasteredBox ? 1 : 0;
@@ -1857,9 +1869,16 @@ void GuiApp::drawRepetition() {
     wrappedIn(fonts.small, col::Muted, list.c_str());
     ImGui::Dummy(ImVec2(0, 6));
 
-    if (button(fmt("Practice my deck (%s)", plural(n, "card").c_str()).c_str(), done ? ButtonStyle::Outline : ButtonStyle::Primary)) {
-        startRepetition();
-        return;
+    // Three ways to go through the deck; the last one used stands out until today is done
+    struct Way { const char* label; RepMode mode; };
+    const Way ways[3] = {{"Swipe cards", RepMode::Swipe}, {"Quiz", RepMode::Quiz}, {"Describe", RepMode::Describe}};
+    for (int i = 0; i < 3; ++i) {
+        if (i > 0) sameLineIfFits(buttonWidth(ways[i].label));
+        const bool strong = !done && ways[i].mode == repMode_;
+        if (button(ways[i].label, strong ? ButtonStyle::Primary : ButtonStyle::Outline)) {
+            startRepetition(ways[i].mode);
+            return;
+        }
     }
     const int canAdd = repDeck_.canAdd(deck_);
     if (canAdd > 0) {
@@ -1874,6 +1893,197 @@ void GuiApp::drawRepetition() {
         if (button(remove.c_str(), ButtonStyle::Outline)) repDeck_.removeLastBatch();
     }
     if (canAdd == 0) wrappedIn(fonts.small, col::Muted, "Every vocabulary word is in your deck.");
+}
+
+// ---- Spaced repetition: quiz and describe
+
+namespace {
+std::string lowerCopy(std::string s) {
+    for (char& ch : s) ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+    return s;
+}
+const char* partName(const std::string& pos) {
+    return pos == "adj" ? "ADJECTIVE" : pos == "verb" ? "VERB" : "NOUN";
+}
+}  // namespace
+
+// A Word Knowledge style question with five choices. The wrong choices come from
+// the whole vocabulary file (words of the same part of speech first, so the right
+// one doesn't stand out), never the same text twice. A word that comes back in the
+// same session is asked one of the other two ways.
+void GuiApp::buildDeckQuestion(const Flashcard& c) {
+    int kind = std::uniform_int_distribution<int>(0, 2)(rng_);
+    const auto last = repLastKind_.find(c.word);
+    if (last != repLastKind_.end()) kind = (last->second + 1 + std::uniform_int_distribution<int>(0, 1)(rng_)) % 3;
+    repLastKind_[c.word] = kind;
+
+    auto field = [kind](const Flashcard& f) -> const std::string& {
+        return kind == 0 ? f.definition : kind == 1 ? f.word : f.synonym;
+    };
+    std::vector<const Flashcard*> same, other;
+    for (const Flashcard& f : deck_.cards()) {
+        if (f.word == c.word || field(f).empty()) continue;
+        (f.partOfSpeech == c.partOfSpeech ? same : other).push_back(&f);
+    }
+    std::shuffle(same.begin(), same.end(), rng_);
+    std::shuffle(other.begin(), other.end(), rng_);
+    same.insert(same.end(), other.begin(), other.end());
+
+    DeckQuestion q;
+    q.kind = kind;
+    q.choices.push_back(field(c));
+    std::set<std::string> used{lowerCopy(field(c)), lowerCopy(c.word)};
+    for (const Flashcard* f : same) {
+        if (q.choices.size() == 5) break;
+        if (!used.insert(lowerCopy(field(*f))).second) continue;
+        q.choices.push_back(field(*f));
+    }
+    std::shuffle(q.choices.begin(), q.choices.end(), rng_);
+    q.correct = static_cast<int>(std::find(q.choices.begin(), q.choices.end(), field(c)) - q.choices.begin());
+    q.prompt = kind == 0 ? "What does " + upper(c.word) + " mean?"
+             : kind == 1 ? "Which word means: \"" + c.definition + "\""
+                         : upper(c.word) + " most nearly means:";
+    repQ_ = q;
+}
+
+void GuiApp::drawDeckQuiz(const Flashcard& c) {
+    if (repQ_.kind < 0) buildDeckQuestion(c);
+    const DeckQuestion& q = repQ_;
+    const bool answered = q.chosen >= 0;
+    const float anim = feedbackTime_ < 0 ? -1.0f : static_cast<float>(ImGui::GetTime() - feedbackTime_);
+
+    beginAutoCard("deckquiz", ImVec2(32, 30));
+    textIn(fonts.label, col::Muted, q.kind == 0 ? "MEANING" : q.kind == 1 ? "WORD" : "SYNONYM");
+    ImGui::Dummy(ImVec2(0, 2));
+    wrappedIn(fonts.prompt, col::Ink, q.prompt.c_str());
+    ImGui::Dummy(ImVec2(0, 6));
+
+    int clicked = -1;
+    const float aw = ImGui::GetContentRegionAvail().x;
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(12, 10));
+    for (int i = 0; i < static_cast<int>(q.choices.size()); ++i) {
+        AnswerState st = AnswerState::Normal;
+        if (answered) st = i == q.correct ? AnswerState::Correct : i == q.chosen ? AnswerState::Wrong : AnswerState::Dimmed;
+        if (st == AnswerState::Wrong && anim >= 0 && anim < 0.4f)
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + std::sin(anim * 48.0f) * 7.0f * (1.0f - anim / 0.4f));
+        ImGui::PushID(i);
+        const bool animated = st == AnswerState::Correct || st == AnswerState::Wrong;
+        if (answerCard("ans", static_cast<char>('A' + i), q.choices[static_cast<size_t>(i)].c_str(), st, aw,
+                       animated ? anim : -1.0f))
+            clicked = i;
+        ImGui::PopID();
+        if (!answered && ImGui::IsKeyPressed(static_cast<ImGuiKey>(ImGuiKey_A + i), false)) clicked = i;
+    }
+    ImGui::PopStyleVar();
+    ImGui::Dummy(ImVec2(0, 4));
+
+    bool next = false;
+    if (answered) {
+        const bool right = q.chosen == q.correct;
+        beginCallout();
+        textIn(fonts.heading, right ? col::Good : col::Bad, right ? "Correct" : "Not quite");
+        textIn(fonts.strong, col::Ink, (c.word + "  (" + c.partOfSpeech + ")").c_str());
+        wrappedIn(fonts.body, col::InkSoft, c.definition.c_str());
+        if (!c.synonym.empty()) wrappedIn(fonts.body, col::InkSoft, ("Synonym: " + c.synonym).c_str());
+        if (!c.example.empty()) wrappedIn(fonts.body, col::InkSoft, ("\"" + c.example + "\"").c_str());
+        if (!right) wrappedIn(fonts.small, col::Muted, "It comes back at the end, asked a different way.");
+        endCallout(right ? col::GoodSoft : col::BadSoft, right ? col::Good : col::Bad);
+        next = button(touch_ ? "Next  \xE2\x86\x92" : "Next  \xE2\x86\x92   Enter", ButtonStyle::Primary,
+                      ImVec2(compact_ ? ImGui::GetContentRegionAvail().x : 0, compact_ ? 48 : 0)) ||
+               ImGui::IsKeyPressed(ImGuiKey_Enter, false) || ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false);
+    }
+    if (!touch_) {
+        ImGui::Dummy(ImVec2(0, 4));
+        divider();
+        wrappedIn(fonts.small, col::Muted, "Keys: A\xE2\x80\x93" "E to answer, Enter for next.");
+    }
+    endAutoCard();
+
+    if (!answered && clicked >= 0) {
+        repQ_.chosen = clicked;
+        feedbackTime_ = ImGui::GetTime();
+        if (clicked == q.correct) sound_.correct();
+        else sound_.wrong();
+    } else if (next) {
+        finishDeckCard(repQ_.chosen == repQ_.correct);
+    }
+}
+
+// Describe: type what the word means, then compare it with the real definition and
+// say whether it matched. (Grading is the user's call; a grader could later take
+// repText_ and the card and give its own verdict before the Got it / Missed step.)
+void GuiApp::drawDeckDescribe(const Flashcard& c) {
+    beginAutoCard("deckdescribe", ImVec2(32, 30));
+    textIn(fonts.label, col::Muted, partName(c.partOfSpeech));
+    ImGui::Dummy(ImVec2(0, 2));
+    textIn(fonts.hero, col::Accent, c.word.c_str());
+    ImGui::Dummy(ImVec2(0, 8));
+
+    int verdict = 0;  // +1 got it, -1 missed
+    if (!repRevealed_) {
+        wrappedIn(fonts.body, col::InkSoft, "Describe what this word means in your own words.");
+        ImGui::Dummy(ImVec2(0, 4));
+        const float w = ImGui::GetContentRegionAvail().x;
+        textArea("##describe", "Type your answer", repText_, sizeof repText_, ImVec2(w, compact_ ? 130.0f : 120.0f),
+                 repFocus_ && !touch_);
+        repFocus_ = false;
+        ImGui::Dummy(ImVec2(0, 4));
+        bool typed = false;
+        for (const char* p = repText_; *p && !typed; ++p) typed = !std::isspace(static_cast<unsigned char>(*p));
+        if (button("Show answer", typed ? ButtonStyle::Primary : ButtonStyle::Disabled)) repRevealed_ = true;
+        sameLineIfFits(buttonWidth("I don't know"));
+        if (button("I don't know", ButtonStyle::Outline)) repRevealed_ = repDontKnow_ = true;
+        if (!typed) wrappedIn(fonts.small, col::Muted, "Type something first, then compare it with the real definition.");
+    } else {
+        if (!repDontKnow_) {
+            textIn(fonts.label, col::Muted, "YOUR ANSWER");
+            ImGui::Dummy(ImVec2(0, 2));
+            std::string mine = repText_;
+            std::replace(mine.begin(), mine.end(), '\n', ' ');  // the box's own line breaks
+            wrappedIn(fonts.body, col::Ink, mine.c_str());
+            ImGui::Dummy(ImVec2(0, 10));
+        }
+        textIn(fonts.label, col::Muted, "DEFINITION");
+        ImGui::Dummy(ImVec2(0, 2));
+        wrappedIn(fonts.prompt, col::Ink, c.definition.c_str());
+        if (!c.synonym.empty()) {
+            ImGui::Dummy(ImVec2(0, 8));
+            textIn(fonts.label, col::Muted, "SYNONYM");
+            ImGui::Dummy(ImVec2(0, 2));
+            textIn(fonts.strong, col::Good, c.synonym.c_str());
+        }
+        if (!c.example.empty()) {
+            ImGui::Dummy(ImVec2(0, 8));
+            wrappedIn(fonts.body, col::InkSoft, ("\"" + c.example + "\"").c_str());
+        }
+        ImGui::Dummy(ImVec2(0, 10));
+        divider();
+        if (repDontKnow_) {
+            wrappedIn(fonts.body, col::InkSoft, "Counted as still learning. It comes back at the end.");
+            ImGui::Dummy(ImVec2(0, 4));
+            if (button(touch_ ? "Next  \xE2\x86\x92" : "Next  \xE2\x86\x92   Enter") || ImGui::IsKeyPressed(ImGuiKey_Enter, false))
+                verdict = -1;
+        } else {
+            wrappedIn(fonts.body, col::InkSoft, "Did your answer match the meaning?");
+            ImGui::Dummy(ImVec2(0, 4));
+            if (button("Got it")) verdict = 1;
+            sameLineIfFits(buttonWidth("Missed"));
+            if (button("Missed", ButtonStyle::Outline)) verdict = -1;
+        }
+    }
+    endAutoCard();
+    if (verdict > 0) sound_.correct();
+    if (verdict != 0) finishDeckCard(verdict > 0);
+}
+
+void GuiApp::finishDeckCard(bool knewIt) {
+    deck_.mark(knewIt);
+    repQ_ = DeckQuestion{};
+    repText_[0] = 0;
+    repRevealed_ = repDontKnow_ = false;
+    repFocus_ = true;
+    feedbackTime_ = -1.0;
+    if (deck_.sessionDone()) repCounted_ = repDeck_.completePass();
 }
 
 // Warrior Knowledge spaced repetition: the user picks which handbook blocks are in
@@ -2422,8 +2632,15 @@ void GuiApp::startFlashcards(size_t count, bool learningOnly) {
     flashActive_ = true;
 }
 
-void GuiApp::startRepetition() {
+void GuiApp::startRepetition(RepMode mode) {
     deck_.startSession(repDeck_.words(), rng_);
+    repMode_ = mode;
+    repQ_ = DeckQuestion{};
+    repLastKind_.clear();
+    repText_[0] = 0;
+    repRevealed_ = repDontKnow_ = false;
+    repFocus_ = true;
+    feedbackTime_ = -1.0;
     swipe_ = SwipeCard{};
     repSession_ = true;
     repCounted_ = false;

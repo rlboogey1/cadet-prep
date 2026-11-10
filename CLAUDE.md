@@ -91,7 +91,12 @@ Word Knowledge vocabulary deck (`deck_`, `data/flashcards.json`, the Flashcards 
 The Flashcards screen also has a spaced repetition deck (`RepetitionDeck`, `repDeck_`): it starts
 with the first 3 words of `flashcards.json`, grows 3 at a time in file order, can remove the last
 batch added (never the first 3), and keeps a daily streak (finish the whole deck on consecutive
-local calendar days).
+local calendar days). The deck is studied three ways (`repMode_`): swipe cards, a quiz (`drawDeckQuiz`:
+five choices of one kind, picked at random: definition, word, or synonym; wrong choices come from the whole
+vocabulary file; a missed word comes back asked another way), and describe (`drawDeckDescribe`: type a
+meaning, reveal, self-grade Got it / Missed; "I don't know" counts as missed). All three use
+`FlashcardDeck`'s session, so every answer moves the word's box, and finishing any of them counts the day.
+None of them record to `ProgressStore`.
 **Warrior Knowledge has no multiple choice:** its blocks are built only from the handbook items in
 `data/warrior_cards.json` (`addWarriorCards()`: `pos` "BLOCK n" → `wk_blockNN`, front = `word`, back
 = `definition`, id `WK-` + title). Exceptions, matched by exact card title: the rank lists

@@ -110,7 +110,8 @@ void beginAutoCard(const char* id, ImVec2 padding = ImVec2(26, 24));
 void endAutoCard();
 
 // ---------------------------------------------------------------- widgets
-enum class ButtonStyle { Primary, Outline, White, Danger };
+// Disabled = greyed out; never reports a click.
+enum class ButtonStyle { Primary, Outline, White, Danger, Disabled };
 bool button(const char* label, ButtonStyle style = ButtonStyle::Primary, ImVec2 size = ImVec2(0, 0),
             ImFont* font = nullptr);
 
@@ -132,6 +133,11 @@ bool toggle(const char* id, bool* value);
 // activeTextKind) and hides a password's letters.
 enum class TextKind { None, Text, Email, Password };
 bool textField(const char* id, const char* hint, char* buf, size_t size, TextKind kind, float width);
+// A text box several lines tall for a written answer, with a gray hint when empty.
+// Lines wrap at spaces as you type (the box never scrolls sideways), so the text
+// holds no line breaks of its own. Shows the normal keyboard on iPhone/iPad.
+// `focus` = put the cursor in it this frame.
+void textArea(const char* id, const char* hint, char* buf, size_t size, ImVec2 box, bool focus = false);
 // The kind of field being typed in this frame (None when no field has focus); read
 // it after drawing. mobile_main.cpp uses it to show the right keyboard without autocorrect.
 TextKind activeTextKind();
