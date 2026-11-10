@@ -2,24 +2,30 @@
 // Colors, fonts, and custom-drawn widgets for the GUI.
 //
 // Dear ImGui's built-in buttons all look alike, so these draw their own shapes
-// with ImDrawList (rounded rectangles, gradients, circles, lines) to get the
-// "study lab" look: a navy sidebar, white cards with soft shadows, pill badges,
-// and line icons.
+// with ImDrawList. The look is a briefing / technical manual: flat surfaces,
+// 3-point corners (kRadius), no shadows, thin 1-point rules, one ultramarine
+// accent, amber only for "needs attention", IBM Plex Sans for text and Plex
+// Mono for figures.
 #include "imgui.h"
 #include <functional>
+#include <string>
 
 namespace ui {
 
+constexpr float kRadius = 3.0f;  // corner rounding for cards, buttons, fields, chips
+
 // ---------------------------------------------------------------- colors
 namespace col {
-// Sidebar (dark navy)
-inline const ImVec4 Sidebar(0.078f, 0.122f, 0.243f, 1.0f);
-inline const ImVec4 SidebarSel(0.231f, 0.322f, 0.565f, 1.0f);
-inline const ImVec4 SidebarHover(0.137f, 0.192f, 0.341f, 1.0f);
-inline const ImVec4 SidebarText(0.835f, 0.867f, 0.937f, 1.0f);
-inline const ImVec4 SidebarMuted(0.580f, 0.635f, 0.761f, 1.0f);
-inline const ImVec4 SidebarCard(0.106f, 0.161f, 0.302f, 1.0f);
-inline const ImVec4 SidebarLine(1.0f, 1.0f, 1.0f, 0.09f);
+// Sidebar (dark navy, same in both themes)
+inline const ImVec4 Sidebar(0.071f, 0.106f, 0.200f, 1.0f);
+inline const ImVec4 SidebarSel(0.122f, 0.169f, 0.290f, 1.0f);
+inline const ImVec4 SidebarHover(0.098f, 0.141f, 0.251f, 1.0f);
+inline const ImVec4 SidebarMark(0.545f, 0.659f, 0.937f, 1.0f);  // edge mark on the selected row
+inline const ImVec4 SidebarAmber(0.784f, 0.506f, 0.102f, 1.0f);  // counts that need attention
+inline const ImVec4 SidebarText(0.808f, 0.835f, 0.890f, 1.0f);
+inline const ImVec4 SidebarMuted(0.522f, 0.565f, 0.659f, 1.0f);
+inline const ImVec4 SidebarCard(0.098f, 0.141f, 0.251f, 1.0f);
+inline const ImVec4 SidebarLine(1.0f, 1.0f, 1.0f, 0.08f);
 // Main area. These change with the theme: setDarkMode() swaps in the dark values.
 inline ImVec4 Bg(0.953f, 0.961f, 0.980f, 1.0f);
 inline ImVec4 Card(1.0f, 1.0f, 1.0f, 1.0f);
@@ -61,12 +67,16 @@ struct FontSet {
     ImFont* prompt = nullptr;   // 20 regular, question text
     ImFont* heading = nullptr;  // 21 bold, card titles
     ImFont* title = nullptr;    // 30 bold, page titles
-    ImFont* big = nullptr;      // 32 bold, numbers
-    ImFont* hero = nullptr;     // 46 bold, banner headline
+    ImFont* big = nullptr;      // 28 mono semibold, numbers
+    ImFont* hero = nullptr;     // 40 bold, banner headline
+    ImFont* mono = nullptr;     // 15 mono, figures in tables and lines of stats
+    ImFont* monoStrong = nullptr;  // 15 mono semibold
 };
 extern FontSet fonts;
 
-void loadFonts(ImGuiIO& io, float scale);  // scale = screen pixel density (2 on Retina)
+// scale = screen pixel density (2 on Retina). `fontDir` holds the bundled IBM Plex
+// files (data/fonts); without them it falls back to system fonts.
+void loadFonts(ImGuiIO& io, float scale, const std::string& fontDir = "");
 void applyTheme();
 void setDarkMode(bool dark);  // switches every color above and re-applies the theme
 bool darkMode();
@@ -87,13 +97,13 @@ void drawIcon(ImDrawList* dl, Icon icon, ImVec2 center, float size, ImU32 color)
 void textIn(ImFont* font, ImVec4 color, const char* text);
 void wrappedIn(ImFont* font, ImVec4 color, const char* text);
 // Small CAPS text with extra letter spacing, like "TRAINING DASHBOARD".
-void spacedLabel(const char* text, ImVec4 color = col::Muted, float spacing = 1.6f, ImFont* font = nullptr);
+void spacedLabel(const char* text, ImVec4 color = col::Muted, float spacing = 1.2f, ImFont* font = nullptr);
 
 // ---------------------------------------------------------------- building blocks
-// White card with a soft shadow, drawn at `p`.
-void cardShape(ImDrawList* dl, ImVec2 p, ImVec2 size, float rounding = 16.0f, bool lifted = false,
+// Flat card with a 1-point border, drawn at `p`. `lifted` darkens the border.
+void cardShape(ImDrawList* dl, ImVec2 p, ImVec2 size, float rounding = kRadius, bool lifted = false,
                ImVec4 border = col::CardBorder, float borderWidth = 1.0f);
-// Rounded rectangle filled with a diagonal gradient.
+// Rectangle filled with a diagonal gradient (kept for pictures; pages use flat fills).
 void gradientRect(ImDrawList* dl, ImVec2 a, ImVec2 b, ImVec4 from, ImVec4 to, float rounding);
 
 // A white card that holds other widgets (a child window). Size 0 = fill.
@@ -108,18 +118,18 @@ enum class ButtonStyle { Primary, Outline, White, Danger };
 bool button(const char* label, ButtonStyle style = ButtonStyle::Primary, ImVec2 size = ImVec2(0, 0),
             ImFont* font = nullptr);
 
-// Rounded "pill" chip. Clickable ones get a hover state.
+// Small tag with square-ish corners. Clickable ones get a hover state.
 bool chip(const char* id, const char* text, ImVec4 bg, ImVec4 fg, bool clickable = false,
           bool bordered = true, Icon* icon = nullptr);
 
-// Sidebar menu row. Selected rows get a blue fill and a light bar on the left.
+// Sidebar menu row. Selected rows get a flat fill and a thin mark on the left edge.
 bool navItem(const char* id, const char* label, Icon icon, bool selected, float width, const char* badge = nullptr);
 
 // "Study sessions / 2 / Completed or ended"
 void statCard(ImVec2 size, const char* label, const char* value, const char* caption,
               ImVec4 valueColor = col::Ink);
 
-// Square tile with a pastel background and a short glyph ("A:B", "Aa", "÷").
+// Square tile with a tinted background and a short glyph ("A:B", "Aa", "÷").
 void iconTile(ImDrawList* dl, ImVec2 p, float size, Tint t, const char* glyph, Icon* icon = nullptr);
 
 enum class AnswerState { Normal, Correct, Wrong, Dimmed };
@@ -139,7 +149,7 @@ bool textField(const char* id, const char* hint, char* buf, size_t size, TextKin
 // The kind of field being typed in this frame (None when no field has focus); read
 // it after drawing. mobile_main.cpp uses it to show the right keyboard without autocorrect.
 TextKind activeTextKind();
-void thinBar(float fraction, float width, ImVec4 color = col::Accent, float height = 7.0f);
+void thinBar(float fraction, float width, ImVec4 color = col::Accent, float height = 5.0f);
 void divider(ImVec4 color = col::CardBorder);
 
 // Tinted box sized to its contents (for feedback and notices).

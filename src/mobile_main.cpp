@@ -256,7 +256,7 @@ int main(int argc, char* argv[]) {
     io.IniFilename = nullptr;
     float scale = SDL_GetWindowDisplayScale(window);
     if (scale <= 0.0f) scale = 1.0f;
-    ui::loadFonts(io, scale);
+    ui::loadFonts(io, scale, dataDir + "/fonts");
     ui::applyTheme();
     ImGui_ImplSDL3_InitForSDLRenderer(window, gRenderer);
     ImGui_ImplSDLRenderer3_Init(gRenderer);

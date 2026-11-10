@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
     io.IniFilename = nullptr;  // don't write imgui.ini
     float xscale = 1.0f, yscale = 1.0f;
     glfwGetWindowContentScale(window, &xscale, &yscale);
-    ui::loadFonts(io, xscale);
+    ui::loadFonts(io, xscale, dataDir + "/fonts");
     ui::applyTheme();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 150");

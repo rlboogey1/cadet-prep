@@ -125,53 +125,51 @@ bool touch() { return gTouch; }
 void setDarkMode(bool dark) {
     gDark = dark;
     auto set = [](ImVec4& c, ImVec4 light, ImVec4 darkC) { c = gDark ? darkC : light; };
-    set(col::Bg, {0.953f, 0.961f, 0.980f, 1}, {0.063f, 0.082f, 0.133f, 1});
-    set(col::Card, {1.0f, 1.0f, 1.0f, 1}, {0.102f, 0.129f, 0.196f, 1});
-    set(col::CardBorder, {0.882f, 0.902f, 0.941f, 1}, {0.176f, 0.212f, 0.298f, 1});
-    set(col::Ink, {0.094f, 0.129f, 0.231f, 1}, {0.914f, 0.933f, 0.969f, 1});
-    set(col::InkSoft, {0.275f, 0.325f, 0.443f, 1}, {0.749f, 0.788f, 0.863f, 1});
-    set(col::Muted, {0.420f, 0.471f, 0.580f, 1}, {0.557f, 0.604f, 0.694f, 1});
-    set(col::Track, {0.890f, 0.910f, 0.949f, 1}, {0.176f, 0.208f, 0.286f, 1});
-    set(col::Accent, {0.247f, 0.373f, 0.855f, 1}, {0.400f, 0.541f, 0.980f, 1});
-    set(col::AccentHover, {0.196f, 0.318f, 0.780f, 1}, {0.475f, 0.604f, 1.0f, 1});
-    set(col::AccentSoft, {0.910f, 0.929f, 0.992f, 1}, {0.133f, 0.180f, 0.329f, 1});
-    set(col::Good, {0.153f, 0.620f, 0.365f, 1}, {0.271f, 0.765f, 0.490f, 1});
-    set(col::GoodSoft, {0.906f, 0.973f, 0.929f, 1}, {0.086f, 0.196f, 0.149f, 1});
-    set(col::Bad, {0.851f, 0.239f, 0.275f, 1}, {0.957f, 0.408f, 0.427f, 1});
-    set(col::BadSoft, {0.992f, 0.925f, 0.929f, 1}, {0.247f, 0.110f, 0.129f, 1});
-    set(col::Ring, {0.80f, 0.835f, 0.902f, 1}, {0.298f, 0.345f, 0.455f, 1});
-    set(col::TagSoft, {0.996f, 0.933f, 0.878f, 1}, {0.271f, 0.180f, 0.086f, 1});
-    set(col::TagStrong, {0.851f, 0.451f, 0.094f, 1}, {0.984f, 0.627f, 0.310f, 1});
-    set(col::Footer, {0.30f, 0.37f, 0.58f, 1}, {0.627f, 0.682f, 0.800f, 1});
-    set(col::CalloutEdge, {0.75f, 0.80f, 0.89f, 1}, {0.345f, 0.420f, 0.580f, 1});
-    set(col::Shadow, {0.086f, 0.122f, 0.235f, 1}, {0.0f, 0.0f, 0.0f, 1});
+    // Briefing palette: neutral grays, USAF ultramarine for actions, amber only for
+    // "needs attention", muted green and red only for right and wrong answers.
+    set(col::Bg, {0.957f, 0.961f, 0.969f, 1}, {0.043f, 0.063f, 0.094f, 1});
+    set(col::Card, {1.0f, 1.0f, 1.0f, 1}, {0.071f, 0.098f, 0.141f, 1});
+    set(col::CardBorder, {0.851f, 0.867f, 0.890f, 1}, {0.161f, 0.200f, 0.263f, 1});
+    set(col::Ink, {0.067f, 0.094f, 0.153f, 1}, {0.902f, 0.914f, 0.933f, 1});
+    set(col::InkSoft, {0.227f, 0.263f, 0.322f, 1}, {0.718f, 0.745f, 0.788f, 1});
+    set(col::Muted, {0.420f, 0.447f, 0.502f, 1}, {0.541f, 0.576f, 0.635f, 1});
+    set(col::Track, {0.890f, 0.902f, 0.918f, 1}, {0.118f, 0.149f, 0.200f, 1});
+    set(col::Accent, {0.0f, 0.188f, 0.561f, 1}, {0.416f, 0.561f, 0.910f, 1});       // ultramarine #00308F
+    set(col::AccentHover, {0.0f, 0.149f, 0.439f, 1}, {0.518f, 0.639f, 0.933f, 1});
+    set(col::AccentSoft, {0.902f, 0.925f, 0.969f, 1}, {0.082f, 0.137f, 0.247f, 1});
+    set(col::HeroA, {0.0f, 0.188f, 0.561f, 1}, {0.059f, 0.133f, 0.290f, 1});         // flat: no gradient
+    set(col::HeroB, {0.0f, 0.188f, 0.561f, 1}, {0.059f, 0.133f, 0.290f, 1});
+    set(col::Good, {0.184f, 0.490f, 0.310f, 1}, {0.373f, 0.698f, 0.514f, 1});
+    set(col::GoodSoft, {0.910f, 0.949f, 0.925f, 1}, {0.071f, 0.149f, 0.106f, 1});
+    set(col::Bad, {0.698f, 0.227f, 0.227f, 1}, {0.878f, 0.443f, 0.435f, 1});
+    set(col::BadSoft, {0.969f, 0.914f, 0.910f, 1}, {0.173f, 0.082f, 0.090f, 1});
+    set(col::Gold, {0.784f, 0.506f, 0.102f, 1}, {0.886f, 0.631f, 0.290f, 1});
+    set(col::Ring, {0.765f, 0.788f, 0.824f, 1}, {0.212f, 0.255f, 0.329f, 1});
+    set(col::TagSoft, {0.984f, 0.945f, 0.882f, 1}, {0.176f, 0.129f, 0.075f, 1});    // amber #C8811A
+    set(col::TagStrong, {0.784f, 0.506f, 0.102f, 1}, {0.886f, 0.631f, 0.290f, 1});
+    set(col::Footer, {0.290f, 0.322f, 0.384f, 1}, {0.604f, 0.639f, 0.694f, 1});
+    set(col::CalloutEdge, {0.722f, 0.753f, 0.800f, 1}, {0.227f, 0.278f, 0.361f, 1});
+    set(col::Shadow, {0.067f, 0.094f, 0.153f, 1}, {0.0f, 0.0f, 0.0f, 1});
     applyTheme();
 }
 
-Tint tint(int i) {
-    static const Tint t[] = {
-        {{0.910f, 0.922f, 0.996f, 1}, {0.286f, 0.345f, 0.792f, 1}},  // indigo
-        {{0.871f, 0.957f, 0.937f, 1}, {0.055f, 0.522f, 0.459f, 1}},  // teal
-        {{0.996f, 0.933f, 0.878f, 1}, {0.851f, 0.451f, 0.094f, 1}},  // orange
-        {{0.945f, 0.910f, 0.992f, 1}, {0.502f, 0.302f, 0.808f, 1}},  // purple
-        {{0.894f, 0.965f, 0.906f, 1}, {0.180f, 0.565f, 0.282f, 1}},  // green
-        {{0.992f, 0.906f, 0.933f, 1}, {0.812f, 0.239f, 0.420f, 1}},  // rose
-        {{0.894f, 0.937f, 0.996f, 1}, {0.157f, 0.427f, 0.808f, 1}},  // blue
-        {{0.996f, 0.957f, 0.851f, 1}, {0.733f, 0.502f, 0.035f, 1}},  // amber
-        {{0.871f, 0.957f, 0.980f, 1}, {0.035f, 0.494f, 0.620f, 1}},  // cyan
-        {{0.918f, 0.929f, 0.957f, 1}, {0.278f, 0.333f, 0.459f, 1}},  // slate
-    };
-    const Tint& light = t[((i % 10) + 10) % 10];
-    if (!gDark) return light;
-    // Dark theme: a deep tile tinted with the color, and a brighter icon
-    return {mix(col::Card, light.strong, 0.26f), mix(light.strong, ImVec4(1, 1, 1, 1), 0.28f)};
+Tint tint(int) {
+    // One color for every subject: the briefing look has a single accent.
+    return {col::AccentSoft, col::Accent};
 }
 
-void loadFonts(ImGuiIO& io, float scale) {
+void loadFonts(ImGuiIO& io, float scale, const std::string& fontDir) {
     // Latin, Greek (pi), punctuation, superscripts and subscripts, arrows, math symbols
     static const ImWchar fullRanges[] = {0x0020, 0x00FF, 0x0370, 0x03FF, 0x2000, 0x206F, 0x2070, 0x209F,
                                          0x2190, 0x21FF, 0x2200, 0x22FF, 0};
     static const ImWchar basicRanges[] = {0x0020, 0x00FF, 0x2013, 0x2014, 0x2022, 0x2022, 0x2190, 0x2193, 0x2212, 0x2212, 0};
+
+    // Bundled IBM Plex (data/fonts); the system's symbol font fills in arrows and math.
+    const std::string plexRegular = fontDir + "/IBMPlexSans-Regular.ttf", plexSemi = fontDir + "/IBMPlexSans-SemiBold.ttf",
+                      plexBold = fontDir + "/IBMPlexSans-Bold.ttf", plexMono = fontDir + "/IBMPlexMono-Regular.ttf",
+                      plexMonoSemi = fontDir + "/IBMPlexMono-SemiBold.ttf";
+    const bool plex = !fontDir.empty() && std::ifstream(plexRegular).good() && std::ifstream(plexSemi).good() &&
+                      std::ifstream(plexBold).good() && std::ifstream(plexMono).good() && std::ifstream(plexMonoSemi).good();
 
 #ifdef CADET_IOS_FONTS
     // iPhone and iPad have Arial too; Menlo fills in arrows and math symbols.
@@ -204,12 +202,13 @@ void loadFonts(ImGuiIO& io, float scale) {
     });
 #endif
 
-    if (!regular) {  // no system fonts: ImGui's built-in font everywhere
+    if (!regular && !plex) {  // no fonts at all: ImGui's built-in font everywhere
         ImFont* f = io.Fonts->AddFontDefault();
-        fonts = {f, f, f, f, f, f, f, f, f};
+        fonts = {f, f, f, f, f, f, f, f, f, f, f};
         io.FontGlobalScale = 1.3f;
         return;
     }
+    if (!regular) regular = plexRegular.c_str();  // Plex only; keeps the symbol check below working
     if (!bold) bold = regular;
 
     auto add = [&](const char* path, float size, const ImWchar* ranges) {
@@ -222,15 +221,31 @@ void loadFonts(ImGuiIO& io, float scale) {
         return f;
     };
 
-    fonts.body = add(regular, 16.0f, fullRanges);
-    fonts.small = add(regular, 13.5f, fullRanges);
-    fonts.strong = add(bold, 16.0f, fullRanges);
-    fonts.label = add(bold, 12.5f, basicRanges);
-    fonts.prompt = add(regular, 20.0f, fullRanges);
-    fonts.heading = add(bold, 21.0f, fullRanges);
-    fonts.title = add(bold, 30.0f, basicRanges);
-    fonts.big = add(bold, 32.0f, basicRanges);
-    fonts.hero = add(bold, 46.0f, basicRanges);
+    if (plex) {
+        fonts.body = add(plexRegular.c_str(), 15.5f, fullRanges);
+        fonts.small = add(plexRegular.c_str(), 13.0f, fullRanges);
+        fonts.strong = add(plexSemi.c_str(), 15.5f, fullRanges);
+        fonts.label = add(plexMonoSemi.c_str(), 11.5f, basicRanges);
+        fonts.prompt = add(plexRegular.c_str(), 19.5f, fullRanges);
+        fonts.heading = add(plexSemi.c_str(), 19.0f, fullRanges);
+        fonts.title = add(plexBold.c_str(), 26.0f, basicRanges);
+        fonts.big = add(plexMonoSemi.c_str(), 28.0f, basicRanges);
+        fonts.hero = add(plexBold.c_str(), 40.0f, basicRanges);
+        fonts.mono = add(plexMono.c_str(), 14.5f, basicRanges);
+        fonts.monoStrong = add(plexMonoSemi.c_str(), 14.5f, basicRanges);
+    } else {
+        fonts.body = add(regular, 16.0f, fullRanges);
+        fonts.small = add(regular, 13.5f, fullRanges);
+        fonts.strong = add(bold, 16.0f, fullRanges);
+        fonts.label = add(bold, 12.5f, basicRanges);
+        fonts.prompt = add(regular, 20.0f, fullRanges);
+        fonts.heading = add(bold, 21.0f, fullRanges);
+        fonts.title = add(bold, 28.0f, basicRanges);
+        fonts.big = add(bold, 30.0f, basicRanges);
+        fonts.hero = add(bold, 42.0f, basicRanges);
+        fonts.mono = fonts.body;
+        fonts.monoStrong = fonts.strong;
+    }
 
     io.FontDefault = fonts.body;
     io.FontGlobalScale = 1.0f / scale;  // fonts are rendered at full Retina resolution
@@ -245,11 +260,11 @@ void applyTheme() {
     s.FramePadding = ImVec2(12, 8);
     s.WindowBorderSize = 0.0f;
     s.ChildBorderSize = 0.0f;
-    s.PopupRounding = 12.0f;
+    s.PopupRounding = kRadius;
     s.PopupBorderSize = 1.0f;
-    s.FrameRounding = 8.0f;
-    s.ScrollbarSize = 10.0f;
-    s.ScrollbarRounding = 8.0f;
+    s.FrameRounding = kRadius;
+    s.ScrollbarSize = 8.0f;
+    s.ScrollbarRounding = 2.0f;
     s.SelectableTextAlign = ImVec2(0.0f, 0.5f);
 
     ImVec4* c = s.Colors;
@@ -486,16 +501,10 @@ void spacedLabel(const char* text, ImVec4 color, float spacing, ImFont* font) {
 
 void cardShape(ImDrawList* dl, ImVec2 p, ImVec2 size, float rounding, bool lifted, ImVec4 border,
                float borderWidth) {
-    // Soft shadow: a few faint, slightly larger rounded rectangles below the card
-    ImVec4 shadow = col::Shadow;
-    shadow.w = (lifted ? 0.05f : 0.028f) * (gDark ? 4.0f : 1.0f);
-    for (int i = 1; i <= 4; ++i) {
-        float g = 1.5f * static_cast<float>(i);
-        float drop = (lifted ? 3.0f : 1.5f) * static_cast<float>(i);
-        dl->AddRectFilled(ImVec2(p.x - g * 0.5f, p.y - g * 0.3f + drop), ImVec2(p.x + size.x + g * 0.5f, p.y + size.y + g + drop),
-                          u32(shadow), rounding + g);
-    }
+    // Flat: no shadow. A lifted card (hovered, dragged) gets a darker border instead.
     dl->AddRectFilled(p, p + size, u32(col::Card), rounding);
+    if (lifted && border.x == col::CardBorder.x && border.y == col::CardBorder.y && border.z == col::CardBorder.z)
+        border = col::Ring;
     if (borderWidth > 0) dl->AddRect(p, p + size, u32(border), rounding, 0, borderWidth);
 }
 
@@ -540,38 +549,35 @@ bool button(const char* label, ButtonStyle style, ImVec2 size, ImFont* font) {
     if (!font) font = fonts.strong;
     const char* end = labelEnd(label);
     ImVec2 ts = measure(font, label, end);
-    if (size.x <= 0) size.x = ts.x + 40.0f;
-    if (size.y <= 0) size.y = ts.y + 22.0f;
+    if (size.x <= 0) size.x = ts.x + 32.0f;
+    if (size.y <= 0) size.y = ts.y + 20.0f;
 
     ImVec2 p = ImGui::GetCursorScreenPos();
     bool clicked = ImGui::InvisibleButton(label, size);
     bool hov = ImGui::IsItemHovered();
     bool held = ImGui::IsItemActive();
     handCursorIfHovered();
-    if (held) p.y += 1.0f;  // pressed: nudge down a pixel
 
     ImDrawList* dl = ImGui::GetWindowDrawList();
     ImU32 textCol = 0;
-    const float r = 10.0f;
+    const float r = kRadius;
     switch (style) {
         case ButtonStyle::Primary:
-            dl->AddRectFilled(p + ImVec2(0, 2), p + size + ImVec2(0, 2), u32(col::Accent, 0.25f), r);
-            dl->AddRectFilled(p, p + size, u32(hov ? col::AccentHover : col::Accent), r);
+            dl->AddRectFilled(p, p + size, u32(hov || held ? col::AccentHover : col::Accent), r);
             textCol = u32(col::White);
             break;
         case ButtonStyle::Outline:
             dl->AddRectFilled(p, p + size, u32(hov ? col::AccentSoft : col::Card), r);
-            dl->AddRect(p, p + size, u32(hov ? col::Accent : col::Ring), r, 0, 1.3f);
+            dl->AddRect(p, p + size, u32(hov || held ? col::Accent : col::Ring), r, 0, 1.0f);
             textCol = u32(hov ? col::Accent : col::Ink);
             break;
         case ButtonStyle::White:
-            dl->AddRectFilled(p + ImVec2(0, 3), p + size + ImVec2(0, 3), IM_COL32(10, 20, 60, 50), r);
-            dl->AddRectFilled(p, p + size, u32(hov ? ImVec4(0.93f, 0.95f, 1.0f, 1.0f) : col::White), r);
-            textCol = u32(ImVec4(0.153f, 0.263f, 0.655f, 1.0f));
+            dl->AddRectFilled(p, p + size, u32(hov ? ImVec4(0.90f, 0.925f, 0.97f, 1.0f) : col::White), r);
+            textCol = u32(ImVec4(0.0f, 0.188f, 0.561f, 1.0f));  // ultramarine on white, both themes
             break;
         case ButtonStyle::Danger:
             dl->AddRectFilled(p, p + size, u32(hov ? col::BadSoft : col::Card), r);
-            dl->AddRect(p, p + size, u32(col::Bad, hov ? 1.0f : 0.7f), r, 0, 1.3f);
+            dl->AddRect(p, p + size, u32(col::Bad, hov ? 1.0f : 0.7f), r, 0, 1.0f);
             textCol = u32(col::Bad);
             break;
     }
@@ -582,7 +588,7 @@ bool button(const char* label, ButtonStyle style, ImVec2 size, ImFont* font) {
 bool chip(const char* id, const char* text, ImVec4 bg, ImVec4 fg, bool clickable, bool bordered, Icon* icon) {
     ImVec2 ts = measure(fonts.strong, text);
     const float iconW = icon ? 22.0f : 0.0f;
-    ImVec2 size(ts.x + 30 + iconW, ts.y + 16);
+    ImVec2 size(ts.x + 20 + iconW, ts.y + 10);
     ImVec2 p = ImGui::GetCursorScreenPos();
     bool clicked = false, hov = false;
     if (clickable) {
@@ -593,39 +599,39 @@ bool chip(const char* id, const char* text, ImVec4 bg, ImVec4 fg, bool clickable
         ImGui::Dummy(size);
     }
     ImDrawList* dl = ImGui::GetWindowDrawList();
-    dl->AddRectFilled(p, p + size, u32(hov ? col::AccentSoft : bg), size.y * 0.5f);
-    if (bordered) dl->AddRect(p, p + size, u32(hov ? col::Accent : col::CardBorder), size.y * 0.5f, 0, 1.2f);
-    if (icon) drawIcon(dl, *icon, ImVec2(p.x + 15 + 7, p.y + size.y * 0.5f), 14.0f, u32(fg));
-    textAt(dl, fonts.strong, ImVec2(p.x + 15 + iconW, p.y + (size.y - ts.y) * 0.5f), u32(fg), text);
+    dl->AddRectFilled(p, p + size, u32(hov ? col::AccentSoft : bg), kRadius);
+    if (bordered) dl->AddRect(p, p + size, u32(hov ? col::Accent : col::CardBorder), kRadius, 0, 1.0f);
+    if (icon) drawIcon(dl, *icon, ImVec2(p.x + 10 + 7, p.y + size.y * 0.5f), 14.0f, u32(fg));
+    textAt(dl, fonts.strong, ImVec2(p.x + 10 + iconW, p.y + (size.y - ts.y) * 0.5f), u32(fg), text);
     return clicked;
 }
 
 bool navItem(const char* id, const char* label, Icon icon, bool selected, float width, const char* badge) {
     ImVec2 p = ImGui::GetCursorScreenPos();
-    ImVec2 size(width, 50);
+    ImVec2 size(width, 42);
     bool clicked = ImGui::InvisibleButton(id, size);
     bool hov = ImGui::IsItemHovered();
     handCursorIfHovered();
 
     ImDrawList* dl = ImGui::GetWindowDrawList();
     if (selected) {
-        dl->AddRectFilled(p, p + size, u32(col::SidebarSel), 10.0f);
-        dl->AddRectFilled(p, ImVec2(p.x + 4, p.y + size.y), u32(ImVec4(0.55f, 0.70f, 1.0f, 1.0f)), 10.0f,
-                          ImDrawFlags_RoundCornersLeft);
+        dl->AddRectFilled(p, p + size, u32(col::SidebarSel));
+        dl->AddRectFilled(p, ImVec2(p.x + 3, p.y + size.y), u32(col::SidebarMark));
     } else if (hov) {
-        dl->AddRectFilled(p, p + size, u32(col::SidebarHover), 10.0f);
+        dl->AddRectFilled(p, p + size, u32(col::SidebarHover));
     }
     const ImU32 c = u32(selected || hov ? col::White : col::SidebarText);
-    drawIcon(dl, icon, ImVec2(p.x + 28, p.y + size.y * 0.5f), 17.0f, c);
+    drawIcon(dl, icon, ImVec2(p.x + 26, p.y + size.y * 0.5f), 15.0f, c);
     ImFont* f = selected ? fonts.strong : fonts.body;
-    textAt(dl, f, ImVec2(p.x + 54, p.y + (size.y - fontPx(f)) * 0.5f), c, label);
+    textAt(dl, f, ImVec2(p.x + 48, p.y + (size.y - fontPx(f)) * 0.5f), c, label);
 
     if (badge && *badge) {
         ImVec2 bs = measure(fonts.label, badge);
-        ImVec2 a(p.x + width - bs.x - 30, p.y + (size.y - bs.y - 8) * 0.5f);
+        // A count that needs attention: amber with mono figures
+        ImVec2 a(p.x + width - bs.x - 28, p.y + (size.y - bs.y - 8) * 0.5f);
         ImVec2 b(p.x + width - 14, a.y + bs.y + 8);
-        dl->AddRectFilled(a, b, u32(col::Bad), (b.y - a.y) * 0.5f);
-        textAt(dl, fonts.label, ImVec2(a.x + 8, a.y + 4), u32(col::White), badge);
+        dl->AddRectFilled(a, b, u32(col::SidebarAmber), 2.0f);
+        textAt(dl, fonts.label, ImVec2(a.x + 7, a.y + 4), u32(col::White), badge);
     }
     return clicked;
 }
@@ -636,20 +642,19 @@ void statCard(ImVec2 size, const char* label, const char* value, const char* cap
     ImDrawList* dl = ImGui::GetWindowDrawList();
     cardShape(dl, p, size);
     const float pad = gCompact ? 18.0f : 24.0f, inner = size.x - pad * 2;
-    float y = p.y + 22;
-    ImFont* lf = measure(fonts.strong, label).x > inner ? fonts.small : fonts.strong;  // narrow card: smaller label
-    textAt(dl, lf, ImVec2(p.x + pad, y), u32(col::InkSoft), label);
-    y += fontPx(fonts.strong) + 12;
+    float y = p.y + 20;
+    textAt(dl, fonts.small, ImVec2(p.x + pad, y), u32(col::InkSoft), label);
+    y += fontPx(fonts.small) + 10;
     ImFont* vf = measure(fonts.big, value).x > size.x - 40 ? fonts.heading : fonts.big;
     textAt(dl, vf, ImVec2(p.x + pad, y), u32(valueColor), value);
-    y += fontPx(fonts.big) + 12;
+    y += fontPx(fonts.big) + 8;
     dl->PushClipRect(p, p + size, true);
     dl->AddText(fonts.small, fontPx(fonts.small), ImVec2(p.x + pad, y), u32(col::Muted), caption, nullptr, inner);
     dl->PopClipRect();
 }
 
 void iconTile(ImDrawList* dl, ImVec2 p, float size, Tint t, const char* glyph, Icon* icon) {
-    dl->AddRectFilled(p, ImVec2(p.x + size, p.y + size), u32(t.soft), size * 0.24f);
+    dl->AddRectFilled(p, ImVec2(p.x + size, p.y + size), u32(t.soft), kRadius);
     ImVec2 c(p.x + size * 0.5f, p.y + size * 0.5f);
     if (icon) drawIcon(dl, *icon, c, size * 0.46f, u32(t.strong));
     else textCentered(dl, fonts.heading, c, u32(t.strong), glyph);
@@ -668,13 +673,13 @@ bool answerCard(const char* id, char letter, const char* text, AnswerState state
 
     ImDrawList* dl = ImGui::GetWindowDrawList();
     ImVec4 fill = col::Card, edge = col::CardBorder, textCol = col::Ink;
-    float edgeW = 1.3f;
+    float edgeW = 1.0f;
     switch (state) {
         case AnswerState::Normal:
-            if (hov) { fill = col::AccentSoft; edge = col::Accent; edgeW = 1.8f; }
+            if (hov) { fill = col::AccentSoft; edge = col::Accent; edgeW = 1.5f; }
             break;
-        case AnswerState::Correct: fill = col::GoodSoft; edge = col::Good; edgeW = 2.0f; break;
-        case AnswerState::Wrong: fill = col::BadSoft; edge = col::Bad; edgeW = 2.0f; break;
+        case AnswerState::Correct: fill = col::GoodSoft; edge = col::Good; edgeW = 1.5f; break;
+        case AnswerState::Wrong: fill = col::BadSoft; edge = col::Bad; edgeW = 1.5f; break;
         case AnswerState::Dimmed: textCol = col::Muted; break;
     }
 
@@ -683,26 +688,27 @@ bool answerCard(const char* id, char letter, const char* text, AnswerState state
     if (animating && state == AnswerState::Correct) {
         float e = easeOut(anim / 0.7f) * 14.0f;
         float a = std::max(0.0f, 1.0f - anim / 0.7f) * 0.5f;
-        dl->AddRect(p - ImVec2(e, e), p + size + ImVec2(e, e), u32(col::Good, a), 12.0f + e, 0, 3.0f);
+        dl->AddRect(p - ImVec2(e, e), p + size + ImVec2(e, e), u32(col::Good, a), kRadius, 0, 2.0f);
     }
-    dl->AddRectFilled(p, p + size, u32(fill), 12.0f);
-    dl->AddRect(p, p + size, u32(edge), 12.0f, 0, edgeW);
+    dl->AddRectFilled(p, p + size, u32(fill), kRadius);
+    dl->AddRect(p, p + size, u32(edge), kRadius, 0, edgeW);
 
     // Letter badge (a check or an X after answering), with a "pop" when it appears
     ImVec2 bc(p.x + 32, p.y + size.y * 0.5f);
-    float r = 15.0f;
+    float r = 13.0f;
     if (animating && (state == AnswerState::Correct || state == AnswerState::Wrong))
         r *= 1.0f + 0.4f * std::sin(kPi * std::clamp(anim / 0.3f, 0.0f, 1.0f));
     const char l[2] = {letter, 0};
+    const ImVec2 rr(r, r);  // letter badges are small square boxes
     if (state == AnswerState::Correct || state == AnswerState::Wrong) {
-        dl->AddCircleFilled(bc, r, u32(edge));
+        dl->AddRectFilled(bc - rr, bc + rr, u32(edge), 2.0f);
         drawIcon(dl, state == AnswerState::Correct ? Icon::Check : Icon::Cross, bc, r * 1.1f, u32(col::White));
     } else if (hov) {
-        dl->AddCircleFilled(bc, r, u32(col::Accent));
+        dl->AddRectFilled(bc - rr, bc + rr, u32(col::Accent), 2.0f);
         textCentered(dl, fonts.label, bc, u32(col::White), l);
     } else {
-        dl->AddCircleFilled(bc, r, u32(col::Bg));
-        dl->AddCircle(bc, r, u32(col::Ring), 0, 1.3f);
+        dl->AddRectFilled(bc - rr, bc + rr, u32(col::Bg), 2.0f);
+        dl->AddRect(bc - rr, bc + rr, u32(col::Ring), 2.0f, 0, 1.0f);
         textCentered(dl, fonts.label, bc, u32(state == AnswerState::Dimmed ? col::Muted : col::InkSoft), l);
     }
     textAt(dl, fonts.body, ImVec2(p.x + 64, p.y + (size.y - ts.y) * 0.5f), u32(textCol), text, nullptr, wrap);
@@ -722,22 +728,22 @@ bool pictureAnswerCard(const char* id, char letter, AnswerState state, ImVec2 si
 
     ImDrawList* dl = ImGui::GetWindowDrawList();
     ImVec4 fill = col::Card, edge = col::CardBorder;
-    float edgeW = 1.3f;
+    float edgeW = 1.0f;
     switch (state) {
         case AnswerState::Normal:
-            if (hov) { fill = col::AccentSoft; edge = col::Accent; edgeW = 2.0f; }
+            if (hov) { fill = col::AccentSoft; edge = col::Accent; edgeW = 1.5f; }
             break;
-        case AnswerState::Correct: fill = col::GoodSoft; edge = col::Good; edgeW = 2.5f; break;
-        case AnswerState::Wrong: fill = col::BadSoft; edge = col::Bad; edgeW = 2.5f; break;
+        case AnswerState::Correct: fill = col::GoodSoft; edge = col::Good; edgeW = 2.0f; break;
+        case AnswerState::Wrong: fill = col::BadSoft; edge = col::Bad; edgeW = 2.0f; break;
         case AnswerState::Dimmed: break;
     }
     const bool animating = anim >= 0.0f && anim < 1.0f;
     if (animating && state == AnswerState::Correct) {
         float e = easeOut(anim / 0.7f) * 14.0f;
         float a = std::max(0.0f, 1.0f - anim / 0.7f) * 0.5f;
-        dl->AddRect(p - ImVec2(e, e), p + size + ImVec2(e, e), u32(col::Good, a), 12.0f + e, 0, 3.0f);
+        dl->AddRect(p - ImVec2(e, e), p + size + ImVec2(e, e), u32(col::Good, a), kRadius, 0, 2.0f);
     }
-    dl->AddRectFilled(p, p + size, u32(fill), 12.0f);
+    dl->AddRectFilled(p, p + size, u32(fill), kRadius);
 
     // The picture, inset from the card edge
     const float inset = 7.0f;
@@ -746,20 +752,21 @@ bool pictureAnswerCard(const char* id, char letter, AnswerState state, ImVec2 si
     drawPicture(dl, a, b);
     if (state == AnswerState::Dimmed) dl->AddRectFilled(a, b, u32(col::Card, 0.55f));
     dl->PopClipRect();
-    dl->AddRect(p, p + size, u32(edge), 12.0f, 0, edgeW);
+    dl->AddRect(p, p + size, u32(edge), kRadius, 0, edgeW);
 
     // Letter badge in the top-left corner (a check or an X after answering)
     const ImVec2 bc = p + ImVec2(22, 22);
-    float r = 13.0f;
+    float r = 12.0f;
     if (animating && (state == AnswerState::Correct || state == AnswerState::Wrong))
         r *= 1.0f + 0.4f * std::sin(kPi * std::clamp(anim / 0.3f, 0.0f, 1.0f));
     const char l[2] = {letter, 0};
+    const ImVec2 rr(r, r);  // letter badges are small square boxes
     if (state == AnswerState::Correct || state == AnswerState::Wrong) {
-        dl->AddCircleFilled(bc, r, u32(edge));
+        dl->AddRectFilled(bc - rr, bc + rr, u32(edge), 2.0f);
         drawIcon(dl, state == AnswerState::Correct ? Icon::Check : Icon::Cross, bc, r * 1.1f, u32(col::White));
     } else {
-        dl->AddCircleFilled(bc, r, u32(hov ? col::Accent : col::White));
-        dl->AddCircle(bc, r, u32(hov ? col::Accent : col::Ring), 0, 1.3f);
+        dl->AddRectFilled(bc - rr, bc + rr, u32(hov ? col::Accent : col::Card), 2.0f);
+        dl->AddRect(bc - rr, bc + rr, u32(hov ? col::Accent : col::Ring), 2.0f, 0, 1.0f);
         textCentered(dl, fonts.label, bc, u32(hov ? col::White : state == AnswerState::Dimmed ? col::Muted : col::InkSoft), l);
     }
     if (animating && state == AnswerState::Correct) celebrate(ImGui::GetForegroundDrawList(), bc, anim);
@@ -800,8 +807,8 @@ void celebrate(ImDrawList* dl, ImVec2 center, float t) {
 
 bool textField(const char* id, const char* hint, char* buf, size_t size, TextKind kind, float width) {
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(14, gTouch ? 13.0f : 10.0f));
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 10.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.3f);
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, kRadius);
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
     ImGui::PushStyleColor(ImGuiCol_FrameBg, col::Bg);
     ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, col::Bg);
     ImGui::PushStyleColor(ImGuiCol_FrameBgActive, col::Card);
@@ -822,23 +829,22 @@ bool textField(const char* id, const char* hint, char* buf, size_t size, TextKin
     if (active) {
         gTextKind = kind;
         // Blue outline while typing
-        ImGui::GetWindowDrawList()->AddRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax(), u32(col::Accent), 10.0f, 0, 2.0f);
+        ImGui::GetWindowDrawList()->AddRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax(), u32(col::Accent), kRadius, 0, 1.5f);
     }
     return entered;
 }
 
 bool toggle(const char* id, bool* value) {
     ImVec2 p = ImGui::GetCursorScreenPos();
-    ImVec2 size(46, 26);
+    ImVec2 size(42, 22);
     bool clicked = ImGui::InvisibleButton(id, size);
     handCursorIfHovered();
     if (clicked) *value = !*value;
     ImDrawList* dl = ImGui::GetWindowDrawList();
-    const float r = size.y * 0.5f;
-    dl->AddRectFilled(p, p + size, u32(*value ? col::Accent : col::Ring), r);
+    const float r = size.y * 0.5f, k = r - 3.0f;
+    dl->AddRectFilled(p, p + size, u32(*value ? col::Accent : col::Ring), kRadius);
     ImVec2 knob(*value ? p.x + size.x - r : p.x + r, p.y + r);
-    dl->AddCircleFilled(knob + ImVec2(0, 1), r - 3, IM_COL32(0, 0, 0, 30));
-    dl->AddCircleFilled(knob, r - 3, u32(col::White));
+    dl->AddRectFilled(knob - ImVec2(k, k), knob + ImVec2(k, k), u32(col::White), 2.0f);
     return clicked;
 }
 
@@ -847,9 +853,8 @@ void thinBar(float fraction, float width, ImVec4 color, float height) {
     ImVec2 p = ImGui::GetCursorScreenPos();
     ImGui::Dummy(ImVec2(width, height));
     ImDrawList* dl = ImGui::GetWindowDrawList();
-    dl->AddRectFilled(p, ImVec2(p.x + width, p.y + height), u32(col::Track), height * 0.5f);
-    if (fraction > 0)
-        dl->AddRectFilled(p, ImVec2(p.x + std::max(height, width * fraction), p.y + height), u32(color), height * 0.5f);
+    dl->AddRectFilled(p, ImVec2(p.x + width, p.y + height), u32(col::Track));  // square ends
+    if (fraction > 0) dl->AddRectFilled(p, ImVec2(p.x + std::max(2.0f, width * fraction), p.y + height), u32(color));
 }
 
 void divider(ImVec4 color) {
@@ -881,8 +886,8 @@ void endCallout(ImVec4 soft, ImVec4 strong) {
     float right = g_calloutStart.x + ImGui::GetContentRegionAvail().x;
     dl->ChannelsSetCurrent(0);
     ImVec2 a(g_calloutStart.x, g_calloutStart.y - 6), b(right, bottom);
-    dl->AddRectFilled(a, b, u32(soft), 12.0f);
-    dl->AddRectFilled(a, ImVec2(a.x + 5, b.y), u32(strong), 12.0f, ImDrawFlags_RoundCornersLeft);
+    dl->AddRectFilled(a, b, u32(soft), kRadius);
+    dl->AddRectFilled(a, ImVec2(a.x + 3, b.y), u32(strong));
     dl->ChannelsMerge();
     ImGui::Dummy(ImVec2(0, 6));
 }
@@ -921,7 +926,7 @@ int swipeCard(const char* id, SwipeCard& s, float minHeight, const std::function
     ImGuiIO& io = ImGui::GetIO();
     const double now = ImGui::GetTime();
     const float dt = io.DeltaTime;
-    const float pad = gCompact ? 24.0f : 44.0f, rounding = 22.0f;
+    const float pad = gCompact ? 24.0f : 44.0f, rounding = 4.0f;
     const ImVec2 start = ImGui::GetCursorScreenPos();
     const float avail = ImGui::GetContentRegionAvail().x;
     const float cw = std::min(avail, 820.0f);
@@ -1026,8 +1031,8 @@ int swipeCard(const char* id, SwipeCard& s, float minHeight, const std::function
         const ImVec2 ts = measure(fonts.strong, stamp);
         const ImVec2 c(p.x + sz.x * 0.5f, p.y + 34);
         const ImVec2 a = c - ts * 0.5f - ImVec2(16, 8), b = c + ts * 0.5f + ImVec2(16, 8);
-        dl->AddRectFilled(a, b, u32(col::Card, k), 999.0f);
-        dl->AddRect(a, b, u32(edge, k), 999.0f, 0, 2.0f);
+        dl->AddRectFilled(a, b, u32(col::Card, k), kRadius);
+        dl->AddRect(a, b, u32(edge, k), kRadius, 0, 1.5f);
         textCentered(dl, fonts.strong, c, u32(edge, k), stamp);
     }
     ImGui::PopClipRect();

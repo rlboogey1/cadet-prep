@@ -193,9 +193,9 @@ int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
     ImDrawList* dl = ImGui::GetWindowDrawList();
     const bool hov = !c.disabled && ImGui::IsMouseHoveringRect(p, p + size) && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows);
 
-    cardShape(dl, p - ImVec2(0, hov ? 2.0f : 0.0f), size, 16.0f, hov,
+    cardShape(dl, p, size, kRadius, hov,
               c.highlight ? col::Accent : col::CardBorder, c.highlight ? 2.0f : 1.0f);
-    const ImVec2 q = p - ImVec2(0, hov ? 2.0f : 0.0f);  // card lifts slightly on hover
+    const ImVec2 q = p;  // flat: hover darkens the border instead of lifting the card
     const float fade = c.disabled ? 0.55f : 1.0f;
 
     Tint t = tint(c.tint);
@@ -209,7 +209,7 @@ int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
         if (text.empty()) return;
         ImVec2 ts = textSize(fonts.label, text.c_str());
         ImVec2 a(bx - ts.x - 20, q.y + pad + 10), b(bx, q.y + pad + 10 + ts.y + 12);
-        dl->AddRectFilled(a, b, u32(bg, fade), (b.y - a.y) * 0.5f);
+        dl->AddRectFilled(a, b, u32(bg, fade), 2.0f);
         dl->AddText(fonts.label, fontPx(fonts.label), ImVec2(a.x + 10, a.y + 6), u32(fg, fade), text.c_str());
         bx = a.x - 8;
     };
@@ -230,10 +230,10 @@ int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
     const float barY = stack ? footerY - 14 - 7 : q.y + size.y - pad - 40 - 26;
     if (c.progress >= 0) {
         const float w = size.x - pad * 2;
-        dl->AddRectFilled(ImVec2(q.x + pad, barY), ImVec2(q.x + pad + w, barY + 7), u32(col::Track), 3.5f);
+        dl->AddRectFilled(ImVec2(q.x + pad, barY), ImVec2(q.x + pad + w, barY + 5), u32(col::Track));
         if (c.progress > 0)
-            dl->AddRectFilled(ImVec2(q.x + pad, barY), ImVec2(q.x + pad + std::max(7.0f, w * c.progress), barY + 7),
-                              u32(col::Accent), 3.5f);
+            dl->AddRectFilled(ImVec2(q.x + pad, barY), ImVec2(q.x + pad + std::max(2.0f, w * c.progress), barY + 5),
+                              u32(col::Accent));
     }
     dl->AddText(fonts.label, fontPx(fonts.label), ImVec2(q.x + pad, footerY), u32(col::Footer, fade), c.footer.c_str());
 
@@ -538,8 +538,7 @@ void GuiApp::drawTopBar(ImVec2 o, float width, float barH) {
     } else {
         x += 8;
     }
-    drawLogo(dl, ImVec2(x + 15, top + barH * 0.5f), 15.0f);
-    x += 40;
+    x += 4;
     const float right = o.x + width - safe_.right - 12;
     dl->PushClipRect(ImVec2(x, top), ImVec2(right, top + barH), true);
     dl->AddText(fonts.heading, fontPx(fonts.heading), ImVec2(x, top + (barH - fontPx(fonts.heading)) * 0.5f),
@@ -668,12 +667,12 @@ void GuiApp::drawSidebar(float height) {
     ImDrawList* dl = ImGui::GetWindowDrawList();
     const float w = ImGui::GetContentRegionAvail().x;
 
-    // Brand: gradient "A" tile and name
+    // Wordmark: the name, and the detachment underneath in mono caps
     const ImVec2 p = ImGui::GetCursorScreenPos();
-    drawLogo(dl, p + ImVec2(25, 25), 26.0f);
-    dl->AddText(fonts.heading, fontPx(fonts.heading), p + ImVec2(62, -2), u32(col::White), "Cadet");
-    dl->AddText(fonts.heading, fontPx(fonts.heading), p + ImVec2(62, 22), u32(col::White), "Prep");
-    ImGui::SetCursorScreenPos(p + ImVec2(0, 62));
+    dl->AddText(fonts.title, fontPx(fonts.title), p + ImVec2(2, 0), u32(col::White), "Cadet Prep");
+    ImGui::SetCursorScreenPos(p + ImVec2(3, fontPx(fonts.title) + 6));
+    spacedLabel("AFROTC \xC2\xB7 DET 105", col::SidebarMuted, 1.4f);
+    ImGui::SetCursorScreenPos(p + ImVec2(0, fontPx(fonts.title) + fontPx(fonts.label) + 22));
     divider(col::SidebarLine);
     ImGui::Dummy(ImVec2(0, 4));
 
@@ -729,8 +728,8 @@ void GuiApp::drawSidebar(float height) {
     const float top = std::max(ImGui::GetCursorPosY() + 20, height - cardH - 30);
     ImGui::SetCursorPosY(top);
     const ImVec2 c = ImGui::GetCursorScreenPos();
-    dl->AddRectFilled(c, c + ImVec2(w, cardH), u32(col::SidebarCard), 14.0f);
-    dl->AddRect(c, c + ImVec2(w, cardH), u32(col::SidebarLine), 14.0f, 0, 1.0f);
+    dl->AddRectFilled(c, c + ImVec2(w, cardH), u32(col::SidebarCard), kRadius);
+    dl->AddRect(c, c + ImVec2(w, cardH), u32(col::SidebarLine), kRadius, 0, 1.0f);
 
     ImGui::SetCursorScreenPos(c + ImVec2(20, 18));
     spacedLabel("YOUR FOCUS AREA", col::SidebarMuted, 1.6f);
@@ -751,7 +750,7 @@ void GuiApp::drawSidebar(float height) {
     if (ImGui::InvisibleButton("focuslink", ls)) ImGui::OpenPopup("focuspicker");
     const bool lh = ImGui::IsItemHovered();
     if (lh) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-    const ImU32 lc = u32(lh ? col::White : ImVec4(0.62f, 0.75f, 1.0f, 1.0f));
+    const ImU32 lc = u32(lh ? col::White : col::SidebarMark);
     dl->AddText(fonts.small, fontPx(fonts.small), lp, lc, link);
     dl->AddLine(lp + ImVec2(0, ls.y + 1), lp + ImVec2(ls.x, ls.y + 1), lc, 1.0f);
     if (beginPopup("focuspicker")) {
@@ -806,11 +805,9 @@ void GuiApp::drawHome() {
     const float blurbW = compact_ ? w - pad * 2 : std::min(620.0f, w * 0.6f);
     const float bannerH = compact_ ? 34 + 20 + fontPx(heroFont) * 2.4f + textSize(fonts.body, blurb, blurbW).y + 30 : 190.0f;
     const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, bannerH);
-    gradientRect(dl, a, b, col::HeroA, col::HeroB, 24.0f);
+    gradientRect(dl, a, b, col::HeroA, col::HeroB, kRadius);
     dl->PushClipRect(a, b, true);
-    dl->AddCircle(ImVec2(b.x - 130, a.y + 40), 170, u32(col::White, 0.10f), 96, 1.5f);
     dl->PopClipRect();
-    if (!compact_) drawLogo(dl, ImVec2(b.x - 120, a.y + 95), 58.0f);
     ImGui::SetCursorScreenPos(a + ImVec2(pad, compact_ ? 30 : 38));
     spacedLabel("CADET PREP", ImVec4(1, 1, 1, 0.85f), 2.2f);
     float y = ImGui::GetCursorScreenPos().y + 6;
@@ -874,10 +871,8 @@ void GuiApp::drawDashboard() {
     const float top = compact_ ? 28.0f : 38.0f;
     const float h = top + textSize(heroFont, ti.name, w - pad * 2).y + 12 + textSize(fonts.body, blurb, wrap).y + 24 + 48 + top;
     const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, h);
-    gradientRect(dl, a, b, col::HeroA, col::HeroB, 24.0f);
+    gradientRect(dl, a, b, col::HeroA, col::HeroB, kRadius);
     dl->PushClipRect(a, b, true);  // decorations stay inside the banner
-    dl->AddCircle(ImVec2(b.x - 150, a.y + 70), 200, u32(col::White, 0.10f), 96, 1.5f);
-    dl->AddCircle(ImVec2(b.x - 110, a.y + 110), 140, u32(col::White, 0.08f), 96, 1.5f);
     dl->PopClipRect();
 
     float y = a.y + top;
@@ -1035,7 +1030,7 @@ void GuiApp::drawPractice() {
         for (const auto& s : secs) total += s.timeLimitSeconds;
         std::string sub = fmt("Every block, timed and back to back. About %d min.", total / 60);
         const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, bannerHeight(sub));
-        gradientRect(dl, a, b, col::HeroA, col::HeroB, 18.0f);
+        gradientRect(dl, a, b, col::HeroA, col::HeroB, kRadius);
         dl->AddText(fonts.heading, fontPx(fonts.heading), a + ImVec2(bpad, compact_ ? 26 : 30), u32(col::White), "Full knowledge check");
         const float subY = compact_ ? 26 + fontPx(fonts.heading) + 12 : 64;
         dl->AddText(fonts.body, fontPx(fonts.body), a + ImVec2(bpad, subY), u32(col::White, 0.85f), sub.c_str(), nullptr,
@@ -1059,9 +1054,8 @@ void GuiApp::drawPractice() {
     std::string sub = fmt("Every section in a group, timed and back to back. Knowledge: about %d min. Pilot: about %d min.",
                           kSecs / 60, pSecs / 60);
     const ImVec2 a = ImGui::GetCursorScreenPos(), b = a + ImVec2(w, bannerHeight(sub));
-    gradientRect(dl, a, b, col::HeroA, col::HeroB, 18.0f);
+    gradientRect(dl, a, b, col::HeroA, col::HeroB, kRadius);
     dl->PushClipRect(a, b, true);
-    dl->AddCircle(ImVec2(b.x - 260, a.y + 10), 120, u32(col::White, 0.08f), 64, 1.5f);
     dl->PopClipRect();
     dl->AddText(fonts.heading, fontPx(fonts.heading), a + ImVec2(bpad, compact_ ? 26 : 30), u32(col::White), "Full batteries");
     const float subY = compact_ ? 26 + fontPx(fonts.heading) + 12 : 64;
@@ -1862,7 +1856,7 @@ void GuiApp::drawWarriorRepetition() {
         ImGui::Dummy(ImVec2(grid.cardW, tileH));
         ImDrawList* dl = ImGui::GetWindowDrawList();
         cardShape(dl, p, ImVec2(grid.cardW, tileH));
-        if (in) dl->AddRect(p, p + ImVec2(grid.cardW, tileH), u32(col::Accent), 16.0f, 0, 2.0f);
+        if (in) dl->AddRect(p, p + ImVec2(grid.cardW, tileH), u32(col::Accent), kRadius, 0, 2.0f);
         ImGui::SetCursorScreenPos(p + ImVec2(20, 18));
         textIn(fonts.heading, col::Ink, fmt("Block %d", b).c_str());
         ImGui::SetCursorScreenPos(p + ImVec2(20, 50));
@@ -2042,13 +2036,13 @@ void GuiApp::drawSettings() {
         const ImU32 card = dark ? IM_COL32(26, 33, 50, 255) : IM_COL32(255, 255, 255, 255);
         const ImU32 line = dark ? IM_COL32(60, 72, 100, 255) : IM_COL32(220, 226, 238, 255);
         const ImVec2 pa = p + ImVec2(10, 10), pb = p + ImVec2(tw - 10, th - 40);
-        dl->AddRectFilled(p, p + ImVec2(tw, th), u32(picked ? col::AccentSoft : col::Bg), 12.0f);
-        dl->AddRectFilled(pa, pb, bg, 6.0f);
-        dl->AddRectFilled(pa, ImVec2(pa.x + 28, pb.y), u32(col::Sidebar), 6.0f, ImDrawFlags_RoundCornersLeft);
+        dl->AddRectFilled(p, p + ImVec2(tw, th), u32(picked ? col::AccentSoft : col::Bg), kRadius);
+        dl->AddRectFilled(pa, pb, bg, kRadius);
+        dl->AddRectFilled(pa, ImVec2(pa.x + 28, pb.y), u32(col::Sidebar), kRadius, ImDrawFlags_RoundCornersLeft);
         dl->AddRectFilled(pa + ImVec2(38, 10), ImVec2(pb.x - 10, pa.y + 46), card, 4.0f);
         dl->AddRectFilled(pa + ImVec2(48, 20), ImVec2(std::min(pa.x + 110, pb.x - 20), pa.y + 26), IM_COL32(63, 95, 218, 255), 2.0f);
         dl->AddRectFilled(pa + ImVec2(48, 32), ImVec2(std::min(pa.x + 140, pb.x - 20), pa.y + 36), line, 2.0f);
-        dl->AddRect(p, p + ImVec2(tw, th), u32(picked ? col::Accent : hov ? col::Ring : col::CardBorder), 12.0f, 0, picked ? 2.0f : 1.2f);
+        dl->AddRect(p, p + ImVec2(tw, th), u32(picked ? col::Accent : hov ? col::Ring : col::CardBorder), kRadius, 0, picked ? 2.0f : 1.2f);
         const char* label = dark ? "Dark" : "Light";
         Icon ic = dark ? Icon::Moon : Icon::Sparkle;
         drawIcon(dl, ic, p + ImVec2(22, th - 20), 14, u32(picked ? col::Accent : col::InkSoft));
@@ -2157,8 +2151,8 @@ void GuiApp::drawComposites() {
         const int r = static_cast<int>(i) / perRow, c = static_cast<int>(i) % perRow;
         const ImVec2 p = origin + ImVec2(c * (tileW + gap), r * (tileH + gap));
         const bool pilot = i == 0;
-        dl->AddRectFilled(p, p + ImVec2(tileW, tileH), u32(pilot ? col::AccentSoft : col::Bg), 12.0f);
-        if (pilot) dl->AddRect(p, p + ImVec2(tileW, tileH), u32(col::Accent, 0.5f), 12.0f, 0, 1.3f);
+        dl->AddRectFilled(p, p + ImVec2(tileW, tileH), u32(pilot ? col::AccentSoft : col::Bg), kRadius);
+        if (pilot) dl->AddRect(p, p + ImVec2(tileW, tileH), u32(col::Accent, 0.5f), kRadius, 0, 1.3f);
 
         const float pad = 16.0f, inner = tileW - pad * 2;
         dl->AddText(fonts.strong, fontPx(fonts.strong), p + ImVec2(pad, 14), u32(col::Ink), e.info->name.c_str());
