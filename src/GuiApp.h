@@ -73,10 +73,14 @@ private:
     struct Cell {                // one figure in a table row
         std::string text;        // as shown in its column ("87%")
         std::string phone;       // with its unit, for stacked rows on phones ("87% accuracy")
-        ImVec4 color = ui::col::Ink;
+        ImVec4 color;
+        std::vector<float> trend;  // if set: a small line of these values (0-100) instead of text
+        Cell(std::string t, std::string p = "", ImVec4 c = ui::col::Ink, std::vector<float> tr = {})
+            : text(std::move(t)), phone(std::move(p)), color(c), trend(std::move(tr)) {}
     };
     struct TableRow {
         std::string name, tag;              // tag: small amber label after the name ("FOCUS")
+        std::string note;                   // optional muted line under the name (tips, rules)
         std::vector<Cell> cells;            // one per column header
         std::vector<std::string> buttons;   // outline buttons on the right
         const SubtestInfo* focusMenu = nullptr;  // right-click menu to pin the focus area
@@ -98,9 +102,7 @@ private:
     bool drawNextUp(const NextUp& n, bool showTrack, bool warmup);  // true if it started something
     void runNextUp(const NextUp& n);
     void drawFigures();  // the line of figures under the strip on a dashboard
-    void drawStatRow();
-    void drawComposites();  // estimated composite scores (Progress page)
-    void drawSectionGrid(const std::vector<SubtestInfo>& sections, bool practicePage, bool addVocabCard);
+    void drawComposites();  // estimated composite scores (AFOQT dashboard)
     int subjectIndex(const std::string& id) const;  // position in the subtest list
     void focusMenuItems();
     void cardFocusMenu(const SubtestInfo& s, ImVec2 cardMin, ImVec2 cardMax);
@@ -166,6 +168,7 @@ private:
     bool isReview_ = false;
     bool endless_ = false;  // endless practice: more questions are added as you go
     std::string message_;
+    bool showAllSessions_ = false;  // Progress: the whole session log, not just the latest 20
     std::string pinnedFocus_;  // subtest id chosen by the user for the current track; empty = automatic
     std::map<std::string, std::string> pinnedByTrack_;  // the same, for every track
     std::string track_ = "afoqt";

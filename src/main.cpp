@@ -127,7 +127,7 @@ struct App {
 
         TestSession session(ui, info.id, std::move(questions), mode, info.timeLimitSeconds);
         SessionResult result = session.run();
-        progress.record(result);
+        progress.record(result, false, mode == SessionMode::Timed);
         showSummary(info, result);
         ui.pause();
     }

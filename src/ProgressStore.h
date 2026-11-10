@@ -20,8 +20,9 @@ public:
     explicit ProgressStore(std::string path);
     void reload();  // reads the file again (after online sync merged into it)
 
-    // Review sessions are saved but excluded from accuracy stats.
-    void record(const SessionResult& result, bool isReview = false);
+    // Review sessions are saved but excluded from accuracy stats. `timed` marks a
+    // timed test (the Progress page shows the type; older sessions read as practice).
+    void record(const SessionResult& result, bool isReview = false, bool timed = false);
     std::map<std::string, SubtestStats> stats() const;
 
     // Puts a question on the review list (a generated question the user saved).
@@ -30,18 +31,21 @@ public:
     // Questions missed and not yet answered correctly since.
     std::vector<std::string> missedQuestionIds() const;
 
-private:
-    void load();
-    void save() const;
-
-    std::string path_;
     struct SessionEntry {
         std::string id;  // random, so syncing two devices never counts a session twice
         std::string date, subtestId;
         int correct = 0, total = 0;
         double seconds = 0.0;
         bool review = false;
+        bool timed = false;
     };
+    const std::vector<SessionEntry>& sessions() const { return sessions_; }  // oldest first
+
+private:
+    void load();
+    void save() const;
+
+    std::string path_;
     std::vector<SessionEntry> sessions_;
     // Each question's latest result: missed or not, and when (seconds since 1970).
     // Syncing keeps the newer result for each question.

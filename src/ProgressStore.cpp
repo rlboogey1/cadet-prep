@@ -45,7 +45,7 @@ void ProgressStore::load() {
         // Sessions saved before syncing existed have no id: cloudsync::sessionKey() makes one
         sessions_.push_back({cloudsync::sessionKey(s), s.value("date", ""), s.value("subtest", ""),
                              s.value("correct", 0), s.value("total", 0),
-                             s.value("seconds", 0.0), s.value("review", false)});
+                             s.value("seconds", 0.0), s.value("review", false), s.value("timed", false)});
     }
     for (const auto& id : root.value("missed", json::array()))
         outcomes_[id.get<std::string>()] = {true, 0};
@@ -60,7 +60,7 @@ void ProgressStore::save() const {
     for (const auto& s : sessions_) {
         root["sessions"].push_back({{"id", s.id}, {"date", s.date}, {"subtest", s.subtestId},
                                     {"correct", s.correct}, {"total", s.total},
-                                    {"seconds", s.seconds}, {"review", s.review}});
+                                    {"seconds", s.seconds}, {"review", s.review}, {"timed", s.timed}});
     }
     root["missed"] = json(missedQuestionIds());  // also read by older versions
     root["outcomes"] = json::object();
@@ -68,7 +68,7 @@ void ProgressStore::save() const {
     std::ofstream(path_) << root.dump(2);
 }
 
-void ProgressStore::record(const SessionResult& result, bool isReview) {
+void ProgressStore::record(const SessionResult& result, bool isReview, bool timed) {
     SessionEntry e;
     e.id = cloudsync::newId();
     e.date = nowString();
@@ -77,6 +77,7 @@ void ProgressStore::record(const SessionResult& result, bool isReview) {
     e.correct = result.correctCount();
     e.seconds = result.totalSeconds;
     e.review = isReview;
+    e.timed = timed;
     sessions_.push_back(e);
 
     const long long now = cloudsync::now();
