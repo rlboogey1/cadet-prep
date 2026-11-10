@@ -9,6 +9,7 @@ struct SubtestStats {
     int correct = 0;
     int total = 0;
     double seconds = 0.0;  // total time spent answering
+    std::string last;      // date of the latest session, "YYYY-MM-DD HH:MM" ("" = none)
     double accuracy() const { return total ? 100.0 * correct / total : 0.0; }
     double avgSecondsPerQuestion() const { return total ? seconds / total : 0.0; }
 };

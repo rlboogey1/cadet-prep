@@ -12,6 +12,7 @@
 #include "SubtestRegistry.h"
 #include "Widgets.h"
 #include <map>
+#include <utility>
 #include <random>
 #include <set>
 #include <string>
@@ -22,8 +23,8 @@
 // Layout on wide screens (Mac, iPad held sideways):
 //   +------------+-------------------------------------------+
 //   |  sidebar   |  main area (scrolls)                      |
-//   |  (navy)    |  header label .................. chips    |
-//   |  logo      |  page content: banner, cards, quiz...     |
+//   |  (navy)    |  page title                               |
+//   |  wordmark  |  next up strip, figures line, tables...   |
 //   |  menu      |                                           |
 //   |  focus     |                                           |
 //   +------------+-------------------------------------------+
@@ -69,6 +70,34 @@ private:
     void drawResults();
 
     // Shared pieces
+    struct Cell {                // one figure in a table row
+        std::string text;        // as shown in its column ("87%")
+        std::string phone;       // with its unit, for stacked rows on phones ("87% accuracy")
+        ImVec4 color = ui::col::Ink;
+    };
+    struct TableRow {
+        std::string name, tag;              // tag: small amber label after the name ("FOCUS")
+        std::vector<Cell> cells;            // one per column header
+        std::vector<std::string> buttons;   // outline buttons on the right
+        const SubtestInfo* focusMenu = nullptr;  // right-click menu to pin the focus area
+    };
+    // A flat sheet: a header row of mono caps, then one row per item between thin rules.
+    // Returns {row, button} for a click this frame, or {-1, -1}.
+    std::pair<int, int> drawTable(const char* id, const char* first, const std::vector<const char*>& headers,
+                                  const std::vector<TableRow>& rows, float minActionsW = 0.0f);
+
+    // "Next up": the one thing to do next in a prep section. In order: review missed
+    // questions, then today's spaced repetition deck, then practice the focus area
+    // (pinned, else a section not tried yet, else the lowest accuracy).
+    struct NextUp {
+        enum Kind { None, Review, Deck, Practice } kind = None;
+        std::string track, title, detail, button, subtest;
+        bool urgent = false;  // amber mark: missed questions waiting, or a streak at risk
+    };
+    NextUp nextUpFor(const std::string& track) const;
+    bool drawNextUp(const NextUp& n, bool showTrack, bool warmup);  // true if it started something
+    void runNextUp(const NextUp& n);
+    void drawFigures();  // the line of figures under the strip on a dashboard
     void drawStatRow();
     void drawComposites();  // estimated composite scores (Progress page)
     void drawSectionGrid(const std::vector<SubtestInfo>& sections, bool practicePage, bool addVocabCard);
@@ -110,6 +139,7 @@ private:
     bool inTrackOf(const std::string& subtestId, const std::string& track) const;  // also true for its warm-ups
     void switchTrack(const std::string& track);
     std::map<std::string, int> missedBySubtest() const;
+    std::map<std::string, int> missedIn(const std::string& track) const;
 
     // Settings saved between launches (afoqt_settings.json)
     void loadSettings();

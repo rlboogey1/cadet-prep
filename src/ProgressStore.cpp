@@ -101,6 +101,7 @@ std::map<std::string, SubtestStats> ProgressStore::stats() const {
         st.correct += s.correct;
         st.total += s.total;
         st.seconds += s.seconds;
+        if (s.date > st.last) st.last = s.date;
     }
     return out;
 }
