@@ -122,162 +122,6 @@ const TrackInfo& trackInfo(const std::string& id) {
     return tracks().front();
 }
 
-// Per-subject look: icon glyph and a one-line description
-struct SubjectStyle {
-    const char* glyph;  // short text for the icon tile, or nullptr to draw `icon`
-    Icon icon;
-    const char* desc;
-};
-Icon iconNamed(const std::string& n) {
-    static const std::map<std::string, Icon> names = {
-        {"Home", Icon::Home}, {"Target", Icon::Target}, {"List", Icon::List}, {"Jet", Icon::Jet}, {"Table", Icon::Table},
-        {"Gauge", Icon::Gauge}, {"Cube", Icon::Cube}, {"Shield", Icon::Shield}, {"Star", Icon::Star}, {"Book", Icon::Book},
-        {"Flag", Icon::Flag}, {"Org", Icon::Org}, {"Cards", Icon::Cards}, {"Bolt", Icon::Bolt}};
-    auto it = names.find(n);
-    return it == names.end() ? Icon::List : it->second;
-}
-
-SubjectStyle styleFor(const SubtestInfo& s) {
-    const std::string& id = s.id;
-    if (id == "word_knowledge") return {"Aa", Icon::Home, "Build vocabulary and pick the closest synonym."};
-    if (id == "math_knowledge") return {"x\xC2\xB2", Icon::Home, "Practice algebra, geometry, and number rules."};
-    if (id == "arithmetic_reasoning") return {"\xC3\xB7", Icon::Home, "Turn word problems into calculations."};
-    if (id == "verbal_analogies") return {"A:B", Icon::Home, "Learn word relationships and avoid misleading answers."};
-    if (id == "reading_comprehension") return {"\xC2\xB6", Icon::Home, "Read short passages and find what they support."};
-    if (id == "table_reading") return {nullptr, Icon::Table, "Find values in a grid fast. A new table every session."};
-    if (id == "instrument_comprehension") return {nullptr, Icon::Gauge, "Read the artificial horizon and compass to find the aircraft's position."};
-    if (id == "aviation_information") return {nullptr, Icon::Jet, "Aerodynamics, flight controls, instruments, and airports."};
-    if (id == "block_counting") return {nullptr, Icon::Cube, "Count how many blocks touch a numbered block in a 3D stack."};
-    // Sections that describe themselves in subtests.json (Warrior Knowledge blocks)
-    return {nullptr, iconNamed(s.icon), s.description.c_str()};
-}
-
-// A white subject card: icon tile, badges, title, description, progress bar,
-// footer text, and up to two buttons. Returns 1 or 2 when a button is clicked.
-struct SubjectCard {
-    int tint = 0;
-    const char* glyph = nullptr;  // text for the icon tile...
-    Icon icon = Icon::Home;       // ...or an icon, when glyph is nullptr
-    std::string title, desc, badge, tag;  // tag = extra badge such as "FOCUS"
-    float progress = -1.0f;               // < 0 hides the bar
-    std::string footer;
-    const char* primary = nullptr;
-    const char* secondary = nullptr;
-    ButtonStyle primaryStyle = ButtonStyle::Outline;
-    bool highlight = false;
-    bool disabled = false;
-    const char* corner = nullptr;  // small button in the top-right corner, instead of the badge (returns 3)
-};
-
-int subjectCard(const char* id, const SubjectCard& c, ImVec2 size) {
-    const float pad = compact() ? 20.0f : 26.0f;
-    // Phone layout: the buttons go under the footer text when they don't fit beside it,
-    // and the card is as tall as its description needs.
-    float buttonsW = 0.0f;
-    int buttonCount = 0;
-    for (const char* l : {c.primary, c.secondary})
-        if (l) buttonsW += textSize(fonts.strong, l).x + 36 + (buttonCount++ ? 10 : 0);
-    const bool stack = compact() && !c.disabled && buttonCount > 0 &&
-                       textSize(fonts.label, c.footer.c_str()).x + 16 + buttonsW > size.x - pad * 2;
-    if (compact()) {
-        const float top = pad + 50 + 18 + fontPx(fonts.heading) + 10 +
-                          textSize(fonts.body, c.desc.c_str(), size.x - pad * 2).y + 12;
-        const float bottom = (c.progress >= 0 ? 7.0f + (stack ? 14.0f : 19.0f) : 0.0f) + (stack ? 28.0f : 0.0f) + 40 + pad;
-        size.y = top + bottom;
-    }
-
-    ImGui::PushID(id);
-    ImGui::BeginGroup();
-    const ImVec2 p = ImGui::GetCursorScreenPos();
-    ImGui::Dummy(size);
-    ImDrawList* dl = ImGui::GetWindowDrawList();
-    const bool hov = !c.disabled && ImGui::IsMouseHoveringRect(p, p + size) && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows);
-
-    cardShape(dl, p, size, kRadius, hov,
-              c.highlight ? col::Accent : col::CardBorder, c.highlight ? 2.0f : 1.0f);
-    const ImVec2 q = p;  // flat: hover darkens the border instead of lifting the card
-    const float fade = c.disabled ? 0.55f : 1.0f;
-
-    Tint t = tint(c.tint);
-    if (c.disabled) t.strong.w = 0.5f;
-    Icon ic = c.icon;
-    iconTile(dl, q + ImVec2(pad, pad), 50.0f, t, c.glyph, c.glyph ? nullptr : &ic);
-
-    // Badges in the top-right corner, right to left
-    float bx = q.x + size.x - pad;
-    auto badge = [&](const std::string& text, ImVec4 bg, ImVec4 fg) {
-        if (text.empty()) return;
-        ImVec2 ts = textSize(fonts.label, text.c_str());
-        ImVec2 a(bx - ts.x - 20, q.y + pad + 10), b(bx, q.y + pad + 10 + ts.y + 12);
-        dl->AddRectFilled(a, b, u32(bg, fade), 2.0f);
-        dl->AddText(fonts.label, fontPx(fonts.label), ImVec2(a.x + 10, a.y + 6), u32(fg, fade), text.c_str());
-        bx = a.x - 8;
-    };
-    const float cornerW = c.corner ? textSize(fonts.strong, c.corner).x + 32 : 0.0f;
-    if (c.corner) bx -= cornerW + 8;
-    else badge(c.badge, col::AccentSoft, col::Accent);
-    badge(c.tag, col::TagSoft, col::TagStrong);
-
-    float y = q.y + pad + 50 + 18;
-    dl->AddText(fonts.heading, fontPx(fonts.heading), ImVec2(q.x + pad, y), u32(col::Ink, fade), c.title.c_str());
-    y += fontPx(fonts.heading) + 10;
-    dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(q.x + pad, y), u32(col::Muted, fade), c.desc.c_str(), nullptr,
-                size.x - pad * 2);
-
-    // Bottom: progress bar, footer text, buttons (beside the footer, or under it when stacked)
-    const float rowY = q.y + size.y - pad - 40;
-    const float footerY = stack ? rowY - 12 - 16 : rowY + 20 - fontPx(fonts.label) * 0.5f;
-    const float barY = stack ? footerY - 14 - 7 : q.y + size.y - pad - 40 - 26;
-    if (c.progress >= 0) {
-        const float w = size.x - pad * 2;
-        dl->AddRectFilled(ImVec2(q.x + pad, barY), ImVec2(q.x + pad + w, barY + 5), u32(col::Track));
-        if (c.progress > 0)
-            dl->AddRectFilled(ImVec2(q.x + pad, barY), ImVec2(q.x + pad + std::max(2.0f, w * c.progress), barY + 5),
-                              u32(col::Accent));
-    }
-    dl->AddText(fonts.label, fontPx(fonts.label), ImVec2(q.x + pad, footerY), u32(col::Footer, fade), c.footer.c_str());
-
-    int clicked = 0;
-    if (!c.disabled) {
-        float x = q.x + size.x - pad;
-        const float stackW = buttonCount ? (size.x - pad * 2 - 10 * (buttonCount - 1)) / buttonCount : 0.0f;
-        auto place = [&](const char* label, ButtonStyle style) {
-            float w = stack ? stackW : textSize(fonts.strong, label).x + 36;
-            x -= w;
-            ImGui::SetCursorScreenPos(ImVec2(x, rowY));
-            bool hit = button(label, style, ImVec2(w, 40));
-            x -= 10;
-            return hit;
-        };
-        if (c.primary && place(c.primary, c.primaryStyle)) clicked = 1;
-        if (c.secondary && place(c.secondary, ButtonStyle::Outline)) clicked = 2;
-        if (c.corner) {
-            ImGui::SetCursorScreenPos(ImVec2(q.x + size.x - pad - cornerW, q.y + pad + 5));
-            if (button(c.corner, ButtonStyle::Outline, ImVec2(cornerW, 36))) clicked = 3;
-        }
-    }
-    ImGui::EndGroup();
-    ImGui::PopID();
-    return clicked;
-}
-
-// Lays out cards in a grid: call next() before each card.
-// Up to `maxCols` columns, each at least `minW` wide: fewer columns on narrow screens.
-struct Grid {
-    int cols;
-    float cardW;
-    int i = 0;
-    explicit Grid(int maxCols, float minW = 330.0f) {
-        const float avail = ImGui::GetContentRegionAvail().x;
-        cols = std::clamp(static_cast<int>((avail + kGap) / (minW + kGap)), 1, maxCols);
-        cardW = (avail - kGap * (cols - 1)) / cols;
-    }
-    void next() {
-        if (i % cols != 0) ImGui::SameLine(0, kGap);
-        else if (i > 0) ImGui::Dummy(ImVec2(0, kGap - ImGui::GetStyle().ItemSpacing.y));
-        ++i;
-    }
-};
 
 // A page title with a muted subtitle underneath.
 void pageTitle(const char* title, const char* subtitle = nullptr) {
@@ -289,12 +133,6 @@ void pageTitle(const char* title, const char* subtitle = nullptr) {
         ImGui::PopTextWrapPos();
     }
     ImGui::Dummy(ImVec2(0, 6));
-}
-
-// A section heading: big on wide screens, smaller and wrapped on phones.
-void heading(const char* text) {
-    if (compact()) wrappedIn(fonts.heading, col::Ink, text);
-    else textIn(fonts.title, col::Ink, text);
 }
 
 float buttonWidth(const char* label) { return textSize(fonts.strong, label).x + 40.0f; }
@@ -329,20 +167,29 @@ std::string whenText(const std::string& date) {
 }
 
 // A line of figures: each value in mono with a muted label after it, wrapping on narrow screens.
-void figuresLine(const std::vector<std::pair<std::string, std::string>>& items) {
+// One figure: a mono value and a muted label after it. Amber marks one that needs attention.
+struct Fig {
+    std::string value, label;
+    ImVec4 color;
+    Fig(std::string v, std::string l, ImVec4 c = col::Ink) : value(std::move(v)), label(std::move(l)), color(c) {}
+};
+
+void figuresLine(const std::vector<Fig>& items) {
     ImDrawList* dl = ImGui::GetWindowDrawList();
     const ImVec2 o = ImGui::GetCursorScreenPos();
     const float w = ImGui::GetContentRegionAvail().x, gap = compact() ? 22.0f : 34.0f;
     const float vh = fontPx(fonts.monoStrong), lh = fontPx(fonts.small);
     float x = o.x, y = o.y;
-    for (const auto& [value, label] : items) {
+    for (const Fig& f : items) {
+        const std::string& value = f.value;
+        const std::string& label = f.label;
         const float vw = textSize(fonts.monoStrong, value.c_str()).x;
         const float iw = vw + 7 + textSize(fonts.small, label.c_str()).x;
         if (x > o.x && x + iw > o.x + w) {
             x = o.x;
             y += vh + 10;
         }
-        dl->AddText(fonts.monoStrong, vh, ImVec2(x, y), u32(col::Ink), value.c_str());
+        dl->AddText(fonts.monoStrong, vh, ImVec2(x, y), u32(f.color), value.c_str());
         dl->AddText(fonts.small, lh, ImVec2(x + vw + 7, y + vh - lh - 1), u32(col::Muted), label.c_str());
         x += iw + gap;
     }
@@ -803,20 +650,6 @@ void GuiApp::drawSidebar(float height) {
     }
 }
 
-void GuiApp::drawHeader(const std::string& label) {
-    if (compact_) return;  // the top bar names the page
-    const float y = ImGui::GetCursorPosY();
-    ImGui::SetCursorPosY(y + 9);
-    spacedLabel(label.c_str(), col::Muted, 2.2f);
-
-    // Chip on the right: sessions in this prep section (sound is changed on the Settings page)
-    const Overall ov = overall();
-    std::string sessions = plural(ov.sessions, "session");
-    alignRight(textSize(fonts.strong, sessions.c_str()).x + 30);
-    ImGui::SetCursorPosY(y);
-    chip("sess", sessions.c_str(), col::Card, col::Ink);
-    ImGui::Dummy(ImVec2(0, 10));
-}
 
 // ================================================================ dashboard
 
@@ -1135,7 +968,7 @@ void GuiApp::drawFigures() {
     int missed = 0;
     for (const auto& [id, n] : missedIn(track_)) missed += n;
     const bool afoqt = track_ == "afoqt";
-    std::vector<std::pair<std::string, std::string>> items = {
+    std::vector<Fig> items = {
         {fmt("%d", ov.sessions), ov.sessions == 1 ? "session" : "sessions"},
         {fmt("%d", ov.total), afoqt ? "questions" : "cards"},
         {ov.total ? fmt("%d%%", ov.correct * 100 / ov.total) : "\xE2\x80\x94", afoqt ? "accuracy" : "known"},
@@ -1391,69 +1224,57 @@ void GuiApp::drawPractice() {
 // ================================================================ review
 
 void GuiApp::drawReview() {
-    drawHeader("REVIEW");
     const auto missed = missedBySubtest();
     int total = 0;
     for (const auto& [id, n] : missed) total += n;
+    const bool afoqt = track_ == "afoqt";
+    const char* intro = afoqt ? "Every question you miss is saved here. Answer it correctly to clear it from the list."
+                              : "Every card you swipe left is saved here. Swipe it right to clear it from the list.";
 
     const float ty = ImGui::GetCursorPosY();
-    pageTitle("Review missed questions",
-              "Every question you miss is saved here. Answer it correctly to clear it from the list.");
+    if (!compact_) pageTitle("Review missed questions", intro);
+    else {
+        wrappedIn(fonts.small, col::Muted, intro);
+        ImGui::Dummy(ImVec2(0, 2));
+    }
     if (total > 0) {
-        std::string all = fmt("Review all %d  \xE2\x86\x92", total);
+        const std::string all = "Review all " + plural(total, "question");
         if (!compact_) {
             alignRight(textSize(fonts.strong, all.c_str()).x + 40);
             ImGui::SetCursorPosY(ty);
         }
-        if (button(all.c_str(), ButtonStyle::Primary, ImVec2(compact_ ? ImGui::GetContentRegionAvail().x : 0, 46))) {
+        if (button(all.c_str(), ButtonStyle::Primary, ImVec2(compact_ ? ImGui::GetContentRegionAvail().x : 0, 40))) {
             startReview("");
             return;
         }
-        ImGui::Dummy(ImVec2(0, 0));
+        if (compact_) ImGui::Dummy(ImVec2(0, 4));
     }
 
-    if (total == 0) {
-        if (compact_) beginAutoCard("empty", ImVec2(40, 40));
-        else beginCard("empty", ImVec2(0, 230), false, ImVec2(40, 40));
-        ImDrawList* dl = ImGui::GetWindowDrawList();
-        ImVec2 c = ImGui::GetCursorScreenPos() + ImVec2(30, 30);
-        dl->AddCircleFilled(c, 30, u32(col::GoodSoft));
-        drawIcon(dl, Icon::Check, c, 30, u32(col::Good));
-        if (compact_) ImGui::Dummy(ImVec2(0, 66));  // phones: text under the check mark
-        else ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 84);
-        ImGui::BeginGroup();
-        textIn(fonts.heading, col::Ink, "You're all caught up");
-        wrappedIn(fonts.body, col::Muted, "No missed questions right now. When you miss one in practice, it lands "
-                                           "here so you can take another shot at it.");
-        ImGui::Dummy(ImVec2(0, 4));
-        if (button("Go to practice tests  \xE2\x86\x92")) goTo(Screen::Practice);
-        ImGui::EndGroup();
-        if (compact_) endAutoCard();
-        else endCard();
-        return;
-    }
-
-    Grid grid(2);
-    const ImVec2 size(grid.cardW, 236);
+    std::vector<const SubtestInfo*> secs;
+    std::vector<TableRow> rows;
     for (const auto& s : trackSections()) {
         if (bank_.size(s.id) == 0) continue;  // generated sections have nothing saved to review
         const int n = missed.count(s.id) ? missed.at(s.id) : 0;
-        SubjectCard c;
-        c.tint = subjectIndex(s.id);
-        c.glyph = styleFor(s).glyph;
-        c.icon = styleFor(s).icon;
-        c.title = s.name;
-        c.desc = n ? "Questions that tripped you up. Get them right to clear them." : "Nothing to review here. Nice.";
-        c.badge = n ? plural(n, "question") : "All clear";
-        c.footer = n ? "Clears as you get them right" : "";
-        c.primary = n ? "Review  \xE2\x86\x92" : nullptr;
-        c.primaryStyle = ButtonStyle::Primary;
-        c.disabled = n == 0;
-        grid.next();
-        if (subjectCard(s.id.c_str(), c, size) == 1) {
-            startReview(s.id);
-            return;
-        }
+        TableRow r;
+        r.name = s.name;
+        r.cells = {{n ? fmt("%d", n) : "\xE2\x80\x94", n ? fmt("%d to review", n) : "Nothing to review",
+                    n ? col::TagStrong : col::Muted}};
+        if (n) r.buttons = {"Review"};
+        secs.push_back(registry_.find(s.id));
+        rows.push_back(r);
+    }
+    const auto hit = drawTable("review", afoqt ? "SECTION" : "BLOCK", {"MISSED"}, rows,
+                               textSize(fonts.strong, "Review").x + 34.0f);
+    if (hit.first >= 0 && secs[static_cast<size_t>(hit.first)]) {
+        startReview(secs[static_cast<size_t>(hit.first)]->id);
+        return;
+    }
+    if (total == 0) {
+        ImGui::Dummy(ImVec2(0, 6));
+        wrappedIn(fonts.body, col::Muted, afoqt ? "Nothing to review. Questions you miss in practice show up here."
+                                                : "Nothing to review. Cards you swipe left show up here.");
+        ImGui::Dummy(ImVec2(0, 2));
+        if (button("Go to practice tests", ButtonStyle::Outline)) goTo(Screen::Practice);
     }
 }
 
@@ -1471,36 +1292,33 @@ void GuiApp::drawQuiz() {
     const SessionResult& r = engine_.result();
     const float anim = feedback && feedbackTime_ >= 0 ? static_cast<float>(ImGui::GetTime() - feedbackTime_) : -1.0f;
 
-    // ---- Header: label on the left; timer chip on the right
-    // (phone layout: the top bar has the name, so just the timer and Quit)
+    // ---- Header: the session name, then the clock (mono figures) and Quit on the right.
+    // Phone layout: the top bar has the name, so just the clock and Quit.
     const int left = engine_.secondsLeft();
-    std::string timer = left >= 0 ? mmss(left) + " left" : "Untimed";
-    Icon clock = Icon::Clock;
+    const std::string timer = left >= 0 ? mmss(left) : std::string("Untimed");
     const bool urgent = left >= 0 && left <= 30;
     bool quit = false;
     const char* quitLabel = endless_ ? "Finish" : "Quit";  // endless practice ends when you say so, and counts
-    if (compact_) {
+    const float quitW = textSize(fonts.strong, quitLabel).x + 40;
+    {
         const float y0 = ImGui::GetCursorPosY();
-        chip("timer", timer.c_str(), urgent ? col::BadSoft : col::Card, urgent ? col::Bad : col::Ink, false, true, &clock);
-        alignRight(textSize(fonts.strong, quitLabel).x + 40);
+        const float rowH = compact_ ? 40.0f : std::max(40.0f, fontPx(fonts.title));
+        if (!compact_) {
+            ImGui::SetCursorPosY(y0 + (rowH - fontPx(fonts.title)) * 0.5f);
+            textIn(fonts.title, col::Ink, sessionName_.c_str());
+        }
+        ImFont* tf = left >= 0 ? fonts.big : fonts.strong;
+        const float tw = textSize(tf, timer.c_str()).x;
+        if (compact_) ImGui::SetCursorPosY(y0 + (rowH - fontPx(tf)) * 0.5f);
+        else {
+            alignRight(quitW + 18 + tw);
+            ImGui::SetCursorPosY(y0 + (rowH - fontPx(tf)) * 0.5f);
+        }
+        textIn(tf, urgent ? col::Bad : left >= 0 ? col::Ink : col::Muted, timer.c_str());
+        alignRight(quitW);
         ImGui::SetCursorPosY(y0);
-        quit = button(quitLabel, endless_ ? ButtonStyle::Primary : ButtonStyle::Outline);
-        ImGui::Dummy(ImVec2(0, 2));
-    } else {
-        const float y0 = ImGui::GetCursorPosY();
-        ImGui::SetCursorPosY(y0 + 9);
-        spacedLabel((sessionTag_ + "  \xC2\xB7  " + upper(sessionName_)).c_str(), col::Muted, 2.0f);
-        alignRight(textSize(fonts.strong, timer.c_str()).x + 52);
-        ImGui::SetCursorPosY(y0);
-        chip("timer", timer.c_str(), urgent ? col::BadSoft : col::Card, urgent ? col::Bad : col::Ink, false, true, &clock);
-        ImGui::Dummy(ImVec2(0, 6));
-
-        // ---- Title and quit
-        const float ty = ImGui::GetCursorPosY();
-        textIn(fonts.title, col::Ink, sessionName_.c_str());
-        alignRight(textSize(fonts.strong, quitLabel).x + 40);
-        ImGui::SetCursorPosY(ty);
-        quit = button(quitLabel, endless_ ? ButtonStyle::Primary : ButtonStyle::Outline);
+        quit = button(quitLabel, endless_ ? ButtonStyle::Primary : ButtonStyle::Outline, ImVec2(quitW, 40));
+        ImGui::SetCursorPosY(y0 + rowH + 6);
     }
     if (quit && endless_ && !r.answers.empty()) {
         engine_.finishNow();  // the question on screen, if unanswered, doesn't count
@@ -1520,14 +1338,20 @@ void GuiApp::drawQuiz() {
     const int answered = static_cast<int>(r.answers.size());
     if (sessionTag_ == "TIMED TEST")
         thinBar(static_cast<float>(answered) / engine_.total(), ImGui::GetContentRegionAvail().x, col::Accent, 8.0f);
-    textIn(fonts.strong, col::InkSoft,
-           endless_ ? fmt("Question %d", engine_.index() + 1).c_str()
-                    : fmt(cardMode_ ? "Card %d of %d" : "Question %d of %d", engine_.index() + 1, engine_.total()).c_str());
+    const char* mode = sessionTag_ == "TIMED TEST" ? "Timed test"
+                       : sessionTag_ == "ENDLESS"    ? "Endless practice"
+                       : sessionTag_ == "PRACTICE"   ? "Practice"
+                       : warriorRepSession()         ? "Spaced repetition"
+                                                     : nullptr;  // warm-up and review: the name says it
+    const std::string count = endless_ ? fmt("Question %d", engine_.index() + 1)
+                              : fmt(cardMode_ ? "Card %d of %d" : "Question %d of %d", engine_.index() + 1, engine_.total());
+    textIn(fonts.strong, col::InkSoft, (mode ? std::string(mode) + "  \xC2\xB7  " + count : count).c_str());
     std::string score = sessionTag_ == "TIMED TEST" ? std::string("Score shown at the end")
-                        : cardMode_ ? fmt("%d know it  \xC2\xB7  %d still learning", r.correctCount(), answered - r.correctCount())
-                                    : fmt("%d correct  \xC2\xB7  %d missed", r.correctCount(), answered - r.correctCount());
-    alignRight(textSize(fonts.body, score.c_str()).x);
-    textIn(fonts.body, col::Muted, score.c_str());
+                        : cardMode_ ? fmt("%d known \xC2\xB7 %d learning", r.correctCount(), answered - r.correctCount())
+                                    : fmt("%d right \xC2\xB7 %d missed", r.correctCount(), answered - r.correctCount());
+    ImFont* sf = sessionTag_ == "TIMED TEST" ? fonts.body : fonts.mono;
+    alignRight(textSize(sf, score.c_str()).x);
+    textIn(sf, col::Muted, score.c_str());
     ImGui::Dummy(ImVec2(0, 2));
     if (cardMode_) {
         drawCardQuestion(q);
@@ -1566,7 +1390,7 @@ void GuiApp::drawQuiz() {
         ImGui::BeginGroup();
     }
     if (!q.passage.empty()) {
-        spacedLabel("PASSAGE", col::Muted, 1.8f);
+        textIn(fonts.small, col::Muted, "Passage");
         beginCallout();
         ImGui::PushTextWrapPos(ImGui::GetContentRegionAvail().x + ImGui::GetCursorPosX() - 24);
         textIn(fonts.body, col::InkSoft, q.passage.c_str());
@@ -1629,13 +1453,13 @@ void GuiApp::drawQuiz() {
         const int chosen = engine_.lastChoice();
         const bool right = chosen == q.correctIndex;
         beginCallout();
-        textIn(fonts.heading, right ? col::Good : col::Bad, right ? "Correct!" : chosen < 0 ? "Skipped" : "Not quite");
+        textIn(fonts.heading, right ? col::Good : col::Bad, right ? "Correct" : chosen < 0 ? "Skipped" : "Not quite");
         wrappedIn(fonts.body, col::Ink, q.explanation.c_str());
         if (!right) {
             const auto defs = definitionsFor(q, chosen, {&deck_, &vaWords_});
             if (!defs.empty()) {
                 ImGui::Dummy(ImVec2(0, 4));
-                spacedLabel(defs.size() == 1 ? "DEFINITION" : "DEFINITIONS", col::Muted, 1.6f);
+                textIn(fonts.small, col::Muted, defs.size() == 1 ? "Definition" : "Definitions");
                 for (const Flashcard* c : defs) {
                     std::string word = c->word;
                     if (!word.empty()) word[0] = static_cast<char>(std::toupper(static_cast<unsigned char>(word[0])));
@@ -1754,27 +1578,21 @@ void GuiApp::swipeButtons(const char* flipLabel) {
 // ================================================================ results
 
 void GuiApp::drawResults() {
-    drawHeader("RESULTS");
     const SessionResult& r = engine_.result();
     const int total = static_cast<int>(r.answers.size());
     const int pct = total ? r.correctCount() * 100 / total : 0;
 
-    pageTitle(fmt("%s results", sessionName_.c_str()).c_str());
-    Grid grid(3, 150);
-    const float w = grid.cardW;
-    grid.next();
-    statCard(ImVec2(w, 142), "Score", fmt("%d%%", pct).c_str(),
-             pct == 100 ? "Flawless" : pct >= 90 ? "Outstanding" : pct >= 80 ? "Strong work"
-             : pct >= 60 ? "Getting there" : pct >= 40 ? "Building up" : "Every rep counts",
-             pct >= 80 ? col::Good : pct >= 60 ? col::Accent : col::Bad);
-    grid.next();
-    statCard(ImVec2(w, 142), cardMode_ ? "Knew it" : "Correct", fmt("%d / %d", r.correctCount(), total).c_str(),
-             cardMode_ ? fmt("%d still learning", total - r.correctCount()).c_str()
-                       : fmt("%d answered", r.answeredCount()).c_str());
-    grid.next();
-    statCard(ImVec2(w, 142), "Time used", mmss(static_cast<int>(r.totalSeconds)).c_str(),
-             r.answeredCount() ? fmt(cardMode_ ? "%.0f sec per card" : "%.0f sec per answer", r.totalSeconds / r.answeredCount()).c_str() : "");
-    ImGui::Dummy(ImVec2(0, 4));
+    pageTitle(("Results: " + sessionName_).c_str());
+    std::vector<Fig> figs = {
+        {fmt("%d%%", pct), "score"},
+        {fmt("%d/%d", r.correctCount(), total), cardMode_ ? "known" : "right"},
+        {mmss(static_cast<int>(r.totalSeconds)), "time"},
+    };
+    if (r.answeredCount())
+        figs.push_back({fmt("%.0f s", r.totalSeconds / r.answeredCount()), cardMode_ ? "per card" : "per answer"});
+    if (!cardMode_ && r.answeredCount() < total) figs.push_back({fmt("%d", total - r.answeredCount()), "unanswered"});
+    figuresLine(figs);
+    ImGui::Dummy(ImVec2(0, 10));
 
     if (r.timeExpired) {
         beginCallout();
@@ -1813,14 +1631,14 @@ void GuiApp::drawResults() {
     }
     ImGui::Dummy(ImVec2(0, 8));
 
-    if (compact_) beginAutoCard("missed");
-    else beginCard("missed", ImVec2(0, std::max(300.0f, ImGui::GetContentRegionAvail().y - 26)), true);
-    spacedLabel(cardMode_ ? "STILL LEARNING" : "MISSED QUESTIONS", col::Muted, 1.8f);
+    beginAutoCard("missed");
+    spacedLabel(cardMode_ ? "STILL LEARNING" : "MISSED QUESTIONS", col::Muted, 1.2f);
     ImGui::Dummy(ImVec2(0, 2));
     const auto& qs = engine_.questions();
     bool any = false;
     for (size_t i = 0; i < r.answers.size(); ++i) {
         if (r.answers[i].correct) continue;
+        if (any) divider();
         any = true;
         const Question& q = qs[i];
         wrappedIn(fonts.strong, col::Ink, q.prompt.c_str());
@@ -1834,11 +1652,9 @@ void GuiApp::drawResults() {
         }
         wrappedIn(fonts.small, col::Muted, q.explanation.c_str());
         saveButton(q, false, false);
-        divider();
     }
-    if (!any) wrappedIn(fonts.heading, col::Good, cardMode_ ? "Nothing here. You knew every card!" : "Nothing here. You got every one right!");
-    if (compact_) endAutoCard();
-    else endCard();
+    if (!any) wrappedIn(fonts.body, col::Muted, cardMode_ ? "None. You knew every card." : "None. You got every one right.");
+    endAutoCard();
 }
 
 // ================================================================ flashcards
@@ -1853,81 +1669,61 @@ void GuiApp::drawFlashcards() {
     FlashcardDeck& deck = activeDeck();
     const bool vocab = track_ == "afoqt";
     const char* deckName = vocab ? "Vocabulary cards" : "Memorize cards";
-    const char* unit = vocab ? "words" : "cards";
-    drawHeader(vocab ? "VOCABULARY CARDS" : "MEMORIZE CARDS");
     const int mastered = deck.masteredCount();
     const int total = static_cast<int>(deck.size());
 
     // ---- Start screen
     if (!flashActive_) {
-        pageTitle(deckName, vocab ? "Word Knowledge flashcards with spaced repetition: words you miss come back "
+        const char* intro = vocab ? "Word Knowledge flashcards with spaced repetition: words you miss come back "
                                     "sooner, and a word is mastered after 3 correct answers in a row."
                                   : "Everything in the handbook you need word for word. Recite it from memory, then flip to "
-                                    "check. Cards you miss come back sooner; 3 in a row and it's mastered.");
+                                    "check. Cards you miss come back sooner; 3 in a row and it's mastered.";
+        if (!compact_) pageTitle(deckName, intro);
+        else {  // the top bar names the page
+            wrappedIn(fonts.small, col::Muted, intro);
+            ImGui::Dummy(ImVec2(0, 2));
+        }
         if (!message_.empty()) {
             beginCallout();
             textIn(fonts.strong, col::Ink, message_.c_str());
             endCallout(col::AccentSoft, col::Accent);
         }
-        Grid stats(3, 150);
-        const float w3 = stats.cardW;
-        stats.next();
-        statCard(ImVec2(w3, 142), "Mastered", fmt("%d", mastered).c_str(), fmt("of %d %s", total, unit).c_str(), col::Accent);
-        stats.next();
-        statCard(ImVec2(w3, 142), "Still learning", fmt("%d", total - mastered).c_str(), "Not mastered yet");
-        stats.next();
-        // Options card with the "definition first" toggle (vocabulary only)
-        if (!vocab) {
-            statCard(ImVec2(w3, 142), "Blocks", "11", "From your Det 105 handbook");
-        } else {
-        const ImVec2 p = ImGui::GetCursorScreenPos();
-        ImGui::BeginGroup();
-        ImGui::Dummy(ImVec2(w3, 142));
-        cardShape(ImGui::GetWindowDrawList(), p, ImVec2(w3, 142));
-        ImGui::SetCursorScreenPos(p + ImVec2(24, 22));
-        textIn(fonts.strong, col::InkSoft, "Definition first");
-        ImGui::SetCursorScreenPos(p + ImVec2(24, 58));
-        if (toggle("deffirst", &definitionFirst_)) saveSettings();
-        ImGui::SetCursorScreenPos(p + ImVec2(24, compact_ ? 94 : 100));
-        ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + w3 - 40);  // two lines on a narrow card
-        textIn(fonts.small, col::Muted, "Guess the word from its meaning");
-        ImGui::PopTextWrapPos();
-        ImGui::EndGroup();
-        }
-        ImGui::Dummy(ImVec2(0, 16));
-
+        figuresLine({{fmt("%d/%d", mastered, total), vocab ? "words mastered" : "cards mastered"},
+                     {fmt("%d", total - mastered), "still learning"}});
+        ImGui::Dummy(ImVec2(0, 8));
         if (vocab) {
+            if (toggle("deffirst", &definitionFirst_)) saveSettings();
+            ImGui::SameLine(0, 12);
+            ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 1);
+            textIn(fonts.body, col::InkSoft, "Definition first: guess the word from its meaning");
+            ImGui::Dummy(ImVec2(0, 14));
             drawRepetition();
             if (flashActive_) return;  // a session just started
-            ImGui::Dummy(ImVec2(0, 16));
+            ImGui::Dummy(ImVec2(0, 18));
         }
 
-        heading(vocab ? "Other sessions" : "Start a session");
-        ImGui::Dummy(ImVec2(0, 4));
-        const Icon ic[3] = {Icon::Bolt, Icon::Target, Icon::List};
-        struct Opt { const char* title; std::string desc; std::string badge; size_t count; bool learning; };
-        Opt opts[3] = {
-            {vocab ? "Quick 20" : "Quick 10", vocab ? "Twenty cards, your weakest words first." : "Ten cards, the ones you know least first.",
-             vocab ? "20 cards" : "10 cards", vocab ? 20u : 10u, false},
-            {"Still learning", vocab ? "Only words you haven't mastered yet." : "Only cards you haven't mastered yet.", "Up to 30", 30, true},
-            {"Whole deck", vocab ? "Every word once, in random order." : "Every card once, in random order.", plural(total, "card"), 0, false},
+        struct Opt { const char* title; const char* desc; std::string cards; size_t count; bool learning; };
+        const Opt opts[3] = {
+            {vocab ? "Quick 20" : "Quick 10", vocab ? "Your weakest words first." : "The cards you know least first.",
+             vocab ? "20" : "10", vocab ? 20u : 10u, false},
+            {"Still learning", vocab ? "Only words you haven't mastered yet." : "Only cards you haven't mastered yet.",
+             fmt("%d", std::min(30, total - mastered)), 30, true},
+            {"Whole deck", "Every card once, in random order.", fmt("%d", total), 0, false},
         };
-        Grid grid(3, 220);
-        for (int i = 0; i < 3; ++i) {
-            SubjectCard c;
-            c.tint = i == 0 ? 2 : i == 1 ? 0 : 1;
-            c.icon = ic[i];
-            c.title = opts[i].title;
-            c.desc = opts[i].desc;
-            c.badge = opts[i].badge;
-            c.primary = "Start  \xE2\x86\x92";
-            c.primaryStyle = i == 0 ? ButtonStyle::Primary : ButtonStyle::Outline;
-            c.disabled = opts[i].learning && mastered == total;
-            grid.next();
-            if (subjectCard(fmt("fc%d", i).c_str(), c, ImVec2(grid.cardW, 236)) == 1) {
-                startFlashcards(opts[i].count, opts[i].learning);
-                return;
-            }
+        std::vector<TableRow> rows;
+        for (const Opt& o : opts) {
+            TableRow r;
+            r.name = o.title;
+            r.note = o.desc;
+            r.cells = {{o.cards, o.cards + " cards"}};
+            if (!(o.learning && mastered == total)) r.buttons = {"Start"};
+            rows.push_back(r);
+        }
+        const auto hit = drawTable("fc_sessions", vocab ? "OTHER SESSIONS" : "SESSIONS", {"CARDS"}, rows,
+                                   textSize(fonts.strong, "Start").x + 34.0f);
+        if (hit.first >= 0) {
+            const Opt& o = opts[hit.first];
+            startFlashcards(o.count, o.learning);
         }
         return;
     }
@@ -1940,15 +1736,10 @@ void GuiApp::drawFlashcards() {
                                     plural(streak, "day").c_str()).c_str()
                               : "You already finished your deck today, so the streak stays the same. Come back tomorrow "
                                 "to add another day.");
-        Grid stats(3, 150);
-        const float w3 = stats.cardW;
-        stats.next();
-        statCard(ImVec2(w3, 142), "Streak", plural(streak, "day").c_str(),
-                 fmt("Best: %s", plural(repDeck_.bestStreak(), "day").c_str()).c_str(), col::Accent);
-        stats.next();
-        statCard(ImVec2(w3, 142), "Knew it", fmt("%d", deck.sessionGotIt()).c_str(), "Moved up a level", col::Good);
-        stats.next();
-        statCard(ImVec2(w3, 142), "Still learning", fmt("%d", deck.sessionMissed()).c_str(), "Repeated until you knew it", col::Bad);
+        figuresLine({{fmt("%d", streak), "day streak"},
+                     {fmt("%d", repDeck_.bestStreak()), "best"},
+                     {fmt("%d", deck.sessionGotIt()), "knew it"},
+                     {fmt("%d", deck.sessionMissed()), "repeated"}});
         ImGui::Dummy(ImVec2(0, 8));
         if (button("Back to vocabulary cards")) flashActive_ = false;
         return;
@@ -1956,14 +1747,9 @@ void GuiApp::drawFlashcards() {
     if (deck.sessionDone()) {
         pageTitle("Session complete", vocab ? "Nice work. Words you marked \"still learning\" will come back sooner next time."
                                             : "Nice work. Cards you marked \"still learning\" will come back sooner next time.");
-        Grid stats(3, 150);
-        const float w3 = stats.cardW;
-        stats.next();
-        statCard(ImVec2(w3, 142), "Knew it", fmt("%d", deck.sessionGotIt()).c_str(), "Moved up a level", col::Good);
-        stats.next();
-        statCard(ImVec2(w3, 142), "Still learning", fmt("%d", deck.sessionMissed()).c_str(), "Coming back soon", col::Bad);
-        stats.next();
-        statCard(ImVec2(w3, 142), "Mastered", fmt("%d", mastered).c_str(), fmt("of %d %s", total, unit).c_str(), col::Accent);
+        figuresLine({{fmt("%d", deck.sessionGotIt()), "knew it"},
+                     {fmt("%d", deck.sessionMissed()), "still learning", deck.sessionMissed() ? col::TagStrong : col::Ink},
+                     {fmt("%d/%d", mastered, total), vocab ? "words mastered" : "cards mastered"}});
         ImGui::Dummy(ImVec2(0, 8));
         if (button(vocab ? "Back to vocabulary cards" : "Back to memorize cards")) flashActive_ = false;
         return;
@@ -2054,46 +1840,36 @@ void GuiApp::drawRepetition() {
     const int streak = repDeck_.streak();
     const bool done = repDeck_.doneToday();
 
-    heading("Spaced repetition");
-    wrappedIn(fonts.body, col::Muted,
+    textIn(fonts.heading, col::Ink, "Spaced repetition");
+    wrappedIn(fonts.small, col::Muted,
               "Your own deck, starting with 3 words. Go through the whole deck once a day to keep your streak; "
               "words you miss come back until you know them. Add 3 more words whenever you're ready.");
-    ImGui::Dummy(ImVec2(0, 4));
-
-    Grid stats(3, 150);
-    const float w3 = stats.cardW;
-    stats.next();
-    statCard(ImVec2(w3, 142), "Streak", plural(streak, "day").c_str(),
-             fmt("Best: %s", plural(repDeck_.bestStreak(), "day").c_str()).c_str(), streak > 0 ? col::Accent : col::Ink);
-    stats.next();
-    statCard(ImVec2(w3, 142), "Today", done ? "Done" : "Not yet",
-             done ? "Come back tomorrow for the next day" : streak > 0 ? "Finish your deck to keep the streak"
-                                                                      : "Finish your deck to start a streak",
-             done ? col::Good : col::Bad);
-    stats.next();
+    ImGui::Dummy(ImVec2(0, 6));
     int mastered = 0;
     for (const auto& w : words) mastered += deck_.box(w) >= FlashcardDeck::kMasteredBox ? 1 : 0;
-    statCard(ImVec2(w3, 142), "In your deck", plural(n, "word").c_str(), fmt("%d mastered", mastered).c_str());
-
+    figuresLine({{fmt("%d", streak), "day streak"},
+                 {done ? "Done" : "Not yet", "today", done ? col::Ink : streak > 0 ? col::TagStrong : col::Ink},
+                 {fmt("%d", n), n == 1 ? "word in deck" : "words in deck"},
+                 {fmt("%d", mastered), "mastered"}});
     ImGui::Dummy(ImVec2(0, 4));
     std::string list;
-    for (const auto& w : words) list += (list.empty() ? "" : ",  ") + w;
-    wrappedIn(fonts.small, col::Muted, ("Words: " + list).c_str());
-    ImGui::Dummy(ImVec2(0, 4));
+    for (const auto& w : words) list += (list.empty() ? "" : ", ") + w;
+    wrappedIn(fonts.small, col::Muted, list.c_str());
+    ImGui::Dummy(ImVec2(0, 6));
 
-    if (button(fmt("Practice my deck  (%s)  \xE2\x86\x92", plural(n, "card").c_str()).c_str())) {
+    if (button(fmt("Practice my deck (%s)", plural(n, "card").c_str()).c_str(), done ? ButtonStyle::Outline : ButtonStyle::Primary)) {
         startRepetition();
         return;
     }
     const int canAdd = repDeck_.canAdd(deck_);
     if (canAdd > 0) {
-        const std::string add = fmt("+  Add %d more %s", canAdd, canAdd == 1 ? "word" : "words");
+        const std::string add = fmt("Add %d %s", canAdd, canAdd == 1 ? "word" : "words");
         sameLineIfFits(buttonWidth(add.c_str()));
         if (button(add.c_str(), ButtonStyle::Outline)) repDeck_.addMore(deck_);
     }
     const int last = repDeck_.lastBatchSize();
     if (last > 0) {
-        const std::string remove = fmt("Remove the %d just added", last);
+        const std::string remove = fmt("Remove the last %d", last);
         sameLineIfFits(buttonWidth(remove.c_str()));
         if (button(remove.c_str(), ButtonStyle::Outline)) repDeck_.removeLastBatch();
     }
@@ -2104,10 +1880,13 @@ void GuiApp::drawRepetition() {
 // the deck (a whole block at a time) and goes through all of it once a day for the
 // streak. Cards swiped left come back at the end of the session until known.
 void GuiApp::drawWarriorRepetition() {
-    drawHeader("SPACED REPETITION");
-    pageTitle("Spaced repetition",
-              "Your own deck, built a block at a time. Go through the whole deck once a day to keep your streak; "
-              "cards you swipe left come back at the end until you know them. Add the next block whenever you're ready.");
+    const char* intro = "Your own deck, built a block at a time. Go through the whole deck once a day to keep your streak; "
+              "cards you swipe left come back at the end until you know them. Add the next block whenever you're ready.";
+    if (!compact_) pageTitle("Spaced repetition", intro);
+    else {  // the top bar names the page
+        wrappedIn(fonts.small, col::Muted, intro);
+        ImGui::Dummy(ImVec2(0, 2));
+    }
     if (!message_.empty()) {
         beginCallout();
         textIn(fonts.strong, col::Ink, message_.c_str());
@@ -2121,61 +1900,44 @@ void GuiApp::drawWarriorRepetition() {
     const int streak = wkRep_.streak();
     const bool done = wkRep_.doneToday();
 
-    Grid stats(3, 150);
-    const float w3 = stats.cardW;
-    stats.next();
-    statCard(ImVec2(w3, 142), "Streak", plural(streak, "day").c_str(),
-             fmt("Best: %s", plural(wkRep_.bestStreak(), "day").c_str()).c_str(), streak > 0 ? col::Accent : col::Ink);
-    stats.next();
-    statCard(ImVec2(w3, 142), "Today", done ? "Done" : "Not yet",
-             done ? "Come back tomorrow for the next day" : streak > 0 ? "Finish your deck to keep the streak"
-                                                                      : "Finish your deck to start a streak",
-             done ? col::Good : col::Bad);
-    stats.next();
     const int nb = static_cast<int>(wkRep_.blocks().size());
-    statCard(ImVec2(w3, 142), "In your deck", plural(cards, "card").c_str(),
-             fmt("%s of %d", plural(nb, "block").c_str(), static_cast<int>(blocks.size())).c_str());
-    ImGui::Dummy(ImVec2(0, 8));
+    figuresLine({{fmt("%d", streak), "day streak"},
+                 {fmt("%d", wkRep_.bestStreak()), "best"},
+                 {done ? "Done" : "Not yet", "today", done ? col::Ink : streak > 0 ? col::TagStrong : col::Ink},
+                 {fmt("%d", cards), cards == 1 ? "card in deck" : "cards in deck"},
+                 {fmt("%d/%d", nb, static_cast<int>(blocks.size())), "blocks"}});
+    ImGui::Dummy(ImVec2(0, 10));
 
-    if (button(fmt("Practice my deck  (%s)  \xE2\x86\x92", plural(cards, "card").c_str()).c_str(), ButtonStyle::Primary,
-               ImVec2(compact_ ? ImGui::GetContentRegionAvail().x : 0, 48))) {
+    if (button(fmt("Practice my deck (%s)", plural(cards, "card").c_str()).c_str(),
+               done ? ButtonStyle::Outline : ButtonStyle::Primary,
+               ImVec2(compact_ ? ImGui::GetContentRegionAvail().x : 0, 40))) {
         startWarriorRepetition();
         return;
     }
-    ImGui::Dummy(ImVec2(0, 16));
+    ImGui::Dummy(ImVec2(0, 14));
 
-    heading("Blocks in your deck");
-    wrappedIn(fonts.body, col::Muted, "Add a block to study it every day; remove one you've got down. Your deck always "
-                                      "keeps at least one block.");
-    ImGui::Dummy(ImVec2(0, 4));
-    Grid grid(4, 150);
-    const float tileH = 132.0f;
+    // One row per block: add it to the deck or take it out (the deck keeps at least one)
+    std::vector<TableRow> rows;
     for (const auto& s : blocks) {
         const int b = std::atoi(s.id.c_str() + std::strlen("wk_block"));
         const bool in = wkRep_.has(b);
-        grid.next();
-        ImGui::PushID(b);
-        const ImVec2 p = ImGui::GetCursorScreenPos();
-        ImGui::BeginGroup();
-        ImGui::Dummy(ImVec2(grid.cardW, tileH));
-        ImDrawList* dl = ImGui::GetWindowDrawList();
-        cardShape(dl, p, ImVec2(grid.cardW, tileH));
-        if (in) dl->AddRect(p, p + ImVec2(grid.cardW, tileH), u32(col::Accent), kRadius, 0, 2.0f);
-        ImGui::SetCursorScreenPos(p + ImVec2(20, 18));
-        textIn(fonts.heading, col::Ink, fmt("Block %d", b).c_str());
-        ImGui::SetCursorScreenPos(p + ImVec2(20, 50));
-        textIn(fonts.small, in ? col::Accent : col::Muted,
-               (plural(cardsIn(b), "card") + (in ? "  \xC2\xB7  in your deck" : "")).c_str());
-        ImGui::SetCursorScreenPos(p + ImVec2(20, tileH - 18 - 40));
-        const float bw = grid.cardW - 40;
-        if (in) {
-            if (nb > 1 && button("Remove", ButtonStyle::Outline, ImVec2(bw, 40))) wkRep_.remove(b);
-            if (nb <= 1) textIn(fonts.small, col::Muted, "Your first block");
-        } else if (button("+  Add block", ButtonStyle::Primary, ImVec2(bw, 40))) {
-            wkRep_.add(b);
-        }
-        ImGui::EndGroup();
-        ImGui::PopID();
+        TableRow r;
+        r.name = s.name;
+        r.cells = {{fmt("%d", cardsIn(b)), plural(cardsIn(b), "card")},
+                   {in ? "In deck" : "\xE2\x80\x94", in ? "In deck" : "", in ? col::Accent : col::Muted}};
+        if (!in) r.buttons = {"Add"};
+        else if (nb > 1) r.buttons = {"Remove"};
+        rows.push_back(r);
+    }
+    const auto hit = drawTable("wk_rep_blocks", "BLOCK", {"CARDS", "DECK"}, rows, textSize(fonts.strong, "Remove").x + 34.0f);
+    if (hit.first >= 0) {
+        const int b = std::atoi(blocks[static_cast<size_t>(hit.first)].id.c_str() + std::strlen("wk_block"));
+        if (wkRep_.has(b)) wkRep_.remove(b);
+        else wkRep_.add(b);
+    }
+    if (nb == 1) {
+        ImGui::Dummy(ImVec2(0, 2));
+        wrappedIn(fonts.small, col::Muted, "The last block in your deck can't be removed.");
     }
 }
 
@@ -2731,27 +2493,6 @@ void GuiApp::cardFocusMenu(const SubtestInfo& s, ImVec2 cardMin, ImVec2 cardMax)
         if (!pinnedFocus_.empty() && ImGui::Selectable("Use automatic focus", false, 0, row)) setFocus("");
     }
     ImGui::EndPopup();
-}
-
-int GuiApp::subjectIndex(const std::string& id) const {
-    // Fixed colors per subject, matching the sample design
-    if (id == "verbal_analogies") return 0;
-    if (id == "word_knowledge") return 1;
-    if (id == "arithmetic_reasoning") return 2;
-    if (id == "math_knowledge") return 3;
-    if (id == "reading_comprehension") return 4;
-    if (id == "aviation_information") return 6;
-    if (id == "table_reading") return 7;
-    if (id == "instrument_comprehension") return 8;
-    if (id == "block_counting") return 9;
-    if (id.rfind("wk_block", 0) == 0) {  // Warrior Knowledge blocks: cycle through the colors
-        static const int cycle[] = {0, 3, 2, 1, 4, 7, 5, 6, 8, 9, 0};
-        return cycle[(std::atoi(id.c_str() + 8) - 1 + 11) % 11];
-    }
-    const auto& all = registry_.all();
-    for (size_t i = 0; i < all.size(); ++i)
-        if (all[i].id == id) return static_cast<int>(i);
-    return 6;
 }
 
 std::string GuiApp::focusId() const {

@@ -53,7 +53,6 @@ private:
     void drawDrawer();                                          // phone layout: the sidebar, slid in
     const char* pageName() const;                               // top bar title
     void touchScroll();                                         // drag with a finger to scroll
-    void drawHeader(const std::string& label);  // small CAPS label + chips on the right
 
     // Pages
     void drawHome();       // main menu: pick a prep section
@@ -103,7 +102,6 @@ private:
     void runNextUp(const NextUp& n);
     void drawFigures();  // the line of figures under the strip on a dashboard
     void drawComposites();  // estimated composite scores (AFOQT dashboard)
-    int subjectIndex(const std::string& id) const;  // position in the subtest list
     void focusMenuItems();
     void cardFocusMenu(const SubtestInfo& s, ImVec2 cardMin, ImVec2 cardMax);
 

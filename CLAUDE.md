@@ -47,8 +47,7 @@ and home-bar insets (`setSafeArea`) and turns on touch mode (`setTouch`). Each f
 
 **Phone layout.** Below 1000 points of width (`kCompactBelow`: any iPhone, an upright iPad),
 `GuiApp` is "compact": a navy top bar with a menu button that slides the sidebar in
-(`drawDrawer`), cards that stack (`Grid(maxCols, minW)` picks the column count, `subjectCard`
-grows to fit and moves its buttons under the footer), and auto-height cards
+(`drawDrawer`), table rows that stack their figures under the name (`drawTable`), and auto-height cards
 (`beginAutoCard`) instead of cards that scroll inside the page. Keep the Mac layout unchanged
 when editing: put phone-only changes behind `compact_`. Touch mode adds finger scrolling with
 momentum (`touchScroll`, which also stops a drag from clicking the button it started on) and
@@ -57,7 +56,7 @@ says "tap" instead of "click"/keyboard hints.
 **Data-driven sections.** `data/subtests.json` lists every section: `track` (prep section),
 `category` (group within a track, e.g. AFOQT `knowledge`/`pilot`), question `file`, `visual`,
 timed-test `time_limit_seconds` and `question_count`, `tips`, and optional `icon`/`description`
-for the card. Multiple-choice sections need only a JSON entry plus a question file
+(not shown in the GUI any more). Multiple-choice sections need only a JSON entry plus a question file
 (`{"questions":[{id, prompt, choices, answer (0-based), explanation, passage?}]}`). IDs must be
 unique; they key the missed-question list.
 
@@ -134,12 +133,16 @@ then `GuiApp::reloadProgress()` reloads them. The server address and key come fr
 `supabase.json`, read by CMake. Without it the Account card says sync isn't set up. Sign-in tokens
 are in `afoqt_account.json`. Test with a fake server and a scratch `HOME`, never the real project.
 
-**Look and theme.** `Widgets.h/.cpp` holds the design system: fonts, cards, buttons, chips,
+**Look and theme.** A flat briefing look: IBM Plex Sans for text and Plex Mono for figures
+(`data/fonts`), ultramarine `col::Accent`, amber (`TagStrong`/`Gold`) only for what needs attention,
+green and red only for answers, 3pt corners (`kRadius`), 1pt rules, no shadows or gradients. Pages
+are built from `drawTable` (spaced capitals only on its header row), `figuresLine` (a line of mono
+figures) and the "next up" strip (`nextUpFor`/`drawNextUp`). Icons only in the sidebar and on
+buttons. `Widgets.h/.cpp` holds the design system: fonts, cards, buttons, chips,
 toggles, answer cards, icons (`Icon` enum + `drawIcon`), and the `col::` palette. The palette is
 mutable: `setDarkMode()` assigns light or dark values and re-applies the ImGui style. Don't
 hard-code colors in drawing code; add a `col::` token and give it both values in `setDarkMode()`.
-Pictures (dials, aircraft, blocks) intentionally keep fixed colors. `subtests.json` icon names
-map to `Icon` values in `iconNamed()` in `GuiApp.cpp`.
+Pictures (dials, aircraft, blocks) intentionally keep fixed colors.
 
 ## Content notes
 

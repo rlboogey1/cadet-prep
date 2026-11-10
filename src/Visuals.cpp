@@ -500,16 +500,4 @@ void drawJet(ImDrawList* dl, ImVec2 c, float size, float angle, ImU32 color, ImU
         dl->AddLine(X(t[0], t[1]), X(t[2], t[3]), detail, std::max(1.0f, size * 0.025f));
 }
 
-void drawLogo(ImDrawList* dl, ImVec2 c, float r) {
-    // Blue circle with a diagonal gradient, a thin inner ring, and the jet
-    const int v0 = dl->VtxBuffer.Size;
-    dl->AddCircleFilled(c, r, IM_COL32_WHITE, 64);
-    ImGui::ShadeVertsLinearColorGradientKeepAlpha(dl, v0, dl->VtxBuffer.Size, c - ImVec2(r, r), c + ImVec2(r, r),
-                                                   IM_COL32(79, 120, 234, 255), IM_COL32(27, 50, 102, 255));
-    dl->AddCircle(c, r * 0.9f, IM_COL32(255, 255, 255, 90), 64, std::max(1.0f, r * 0.035f));
-    const float js = r * 0.609f, ang = 40.0f * kPi / 180.0f;
-    drawJet(dl, c + ImVec2(r * 0.03f, r * 0.045f), js, ang, IM_COL32(8, 18, 50, 90));  // soft shadow
-    drawJet(dl, c, js, ang, IM_COL32_WHITE, IM_COL32(35, 62, 140, 255));
-}
-
 }  // namespace ui

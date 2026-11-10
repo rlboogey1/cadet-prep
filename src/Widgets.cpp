@@ -153,16 +153,11 @@ void setDarkMode(bool dark) {
     applyTheme();
 }
 
-Tint tint(int) {
-    // One color for every subject: the briefing look has a single accent.
-    return {col::AccentSoft, col::Accent};
-}
-
 void loadFonts(ImGuiIO& io, float scale, const std::string& fontDir) {
     // Latin, Greek (pi), punctuation, superscripts and subscripts, arrows, math symbols
     static const ImWchar fullRanges[] = {0x0020, 0x00FF, 0x0370, 0x03FF, 0x2000, 0x206F, 0x2070, 0x209F,
                                          0x2190, 0x21FF, 0x2200, 0x22FF, 0};
-    static const ImWchar basicRanges[] = {0x0020, 0x00FF, 0x2013, 0x2014, 0x2022, 0x2022, 0x2190, 0x2193, 0x2212, 0x2212, 0};
+    static const ImWchar basicRanges[] = {0x0020, 0x00FF, 0x2013, 0x2014, 0x2018, 0x201D, 0x2022, 0x2022, 0x2026, 0x2026, 0x2190, 0x2193, 0x2212, 0x2212, 0};
 
     // Bundled IBM Plex (data/fonts); the system's symbol font fills in arrows and math.
     const std::string plexRegular = fontDir + "/IBMPlexSans-Regular.ttf", plexSemi = fontDir + "/IBMPlexSans-SemiBold.ttf",
@@ -585,27 +580,6 @@ bool button(const char* label, ButtonStyle style, ImVec2 size, ImFont* font) {
     return clicked;
 }
 
-bool chip(const char* id, const char* text, ImVec4 bg, ImVec4 fg, bool clickable, bool bordered, Icon* icon) {
-    ImVec2 ts = measure(fonts.strong, text);
-    const float iconW = icon ? 22.0f : 0.0f;
-    ImVec2 size(ts.x + 20 + iconW, ts.y + 10);
-    ImVec2 p = ImGui::GetCursorScreenPos();
-    bool clicked = false, hov = false;
-    if (clickable) {
-        clicked = ImGui::InvisibleButton(id, size);
-        hov = ImGui::IsItemHovered();
-        handCursorIfHovered();
-    } else {
-        ImGui::Dummy(size);
-    }
-    ImDrawList* dl = ImGui::GetWindowDrawList();
-    dl->AddRectFilled(p, p + size, u32(hov ? col::AccentSoft : bg), kRadius);
-    if (bordered) dl->AddRect(p, p + size, u32(hov ? col::Accent : col::CardBorder), kRadius, 0, 1.0f);
-    if (icon) drawIcon(dl, *icon, ImVec2(p.x + 10 + 7, p.y + size.y * 0.5f), 14.0f, u32(fg));
-    textAt(dl, fonts.strong, ImVec2(p.x + 10 + iconW, p.y + (size.y - ts.y) * 0.5f), u32(fg), text);
-    return clicked;
-}
-
 bool navItem(const char* id, const char* label, Icon icon, bool selected, float width, const char* badge) {
     ImVec2 p = ImGui::GetCursorScreenPos();
     ImVec2 size(width, 42);
@@ -634,30 +608,6 @@ bool navItem(const char* id, const char* label, Icon icon, bool selected, float 
         textAt(dl, fonts.label, ImVec2(a.x + 7, a.y + 4), u32(col::White), badge);
     }
     return clicked;
-}
-
-void statCard(ImVec2 size, const char* label, const char* value, const char* caption, ImVec4 valueColor) {
-    ImVec2 p = ImGui::GetCursorScreenPos();
-    ImGui::Dummy(size);
-    ImDrawList* dl = ImGui::GetWindowDrawList();
-    cardShape(dl, p, size);
-    const float pad = gCompact ? 18.0f : 24.0f, inner = size.x - pad * 2;
-    float y = p.y + 20;
-    textAt(dl, fonts.small, ImVec2(p.x + pad, y), u32(col::InkSoft), label);
-    y += fontPx(fonts.small) + 10;
-    ImFont* vf = measure(fonts.big, value).x > size.x - 40 ? fonts.heading : fonts.big;
-    textAt(dl, vf, ImVec2(p.x + pad, y), u32(valueColor), value);
-    y += fontPx(fonts.big) + 8;
-    dl->PushClipRect(p, p + size, true);
-    dl->AddText(fonts.small, fontPx(fonts.small), ImVec2(p.x + pad, y), u32(col::Muted), caption, nullptr, inner);
-    dl->PopClipRect();
-}
-
-void iconTile(ImDrawList* dl, ImVec2 p, float size, Tint t, const char* glyph, Icon* icon) {
-    dl->AddRectFilled(p, ImVec2(p.x + size, p.y + size), u32(t.soft), kRadius);
-    ImVec2 c(p.x + size * 0.5f, p.y + size * 0.5f);
-    if (icon) drawIcon(dl, *icon, c, size * 0.46f, u32(t.strong));
-    else textCentered(dl, fonts.heading, c, u32(t.strong), glyph);
 }
 
 bool answerCard(const char* id, char letter, const char* text, AnswerState state, float width, float anim) {
@@ -714,7 +664,6 @@ bool answerCard(const char* id, char letter, const char* text, AnswerState state
     textAt(dl, fonts.body, ImVec2(p.x + 64, p.y + (size.y - ts.y) * 0.5f), u32(textCol), text, nullptr, wrap);
 
     // Confetti burst from the badge, drawn on top of everything
-    if (animating && state == AnswerState::Correct) celebrate(ImGui::GetForegroundDrawList(), bc, anim);
     return clicked;
 }
 
@@ -769,40 +718,7 @@ bool pictureAnswerCard(const char* id, char letter, AnswerState state, ImVec2 si
         dl->AddRect(bc - rr, bc + rr, u32(hov ? col::Accent : col::Ring), 2.0f, 0, 1.0f);
         textCentered(dl, fonts.label, bc, u32(hov ? col::White : state == AnswerState::Dimmed ? col::Muted : col::InkSoft), l);
     }
-    if (animating && state == AnswerState::Correct) celebrate(ImGui::GetForegroundDrawList(), bc, anim);
     return clicked;
-}
-
-void celebrate(ImDrawList* dl, ImVec2 center, float t) {
-    const float dur = 0.95f;
-    if (t < 0 || t > dur) return;
-    const ImVec4 colors[] = {col::Good, col::Accent, col::Gold, ImVec4(0.93f, 0.36f, 0.55f, 1.0f)};
-    const float k = t / dur;
-    const float fade = 1.0f - k * k;
-    for (int i = 0; i < 22; ++i) {
-        // fixed pseudo-random numbers per particle, so the burst looks scattered
-        float rnd = std::fmod(std::sin(static_cast<float>(i) * 12.9898f) * 43758.5453f, 1.0f);
-        rnd = std::fabs(rnd);
-        float angle = static_cast<float>(i) * (2.0f * kPi / 22.0f) + 0.35f * std::sin(static_cast<float>(i) * 7.3f);
-        float dist = (55.0f + 55.0f * rnd) * easeOut(k * 1.25f);
-        ImVec2 q(center.x + std::cos(angle) * dist, center.y + std::sin(angle) * dist + 70.0f * k * k);
-        ImU32 c = u32(colors[i % 4], fade);
-        float s = 4.2f * (1.0f - 0.6f * k);
-        if (i % 3 == 0) {
-            dl->AddCircleFilled(q, s * 0.9f, c);
-        } else {  // little spinning confetti squares
-            float rot = angle + k * 9.0f * (rnd + 0.5f);
-            ImVec2 d1(std::cos(rot) * s, std::sin(rot) * s), d2(-d1.y * 0.55f, d1.x * 0.55f);
-            dl->AddQuadFilled(q + d1 + d2, q + d1 - d2, q - d1 - d2, q - d1 + d2, c);
-        }
-    }
-    // a few sparkles that twinkle near the center
-    for (int i = 0; i < 3; ++i) {
-        float a = 0.6f + static_cast<float>(i) * 2.1f;
-        ImVec2 q(center.x + std::cos(a) * 34.0f, center.y + std::sin(a) * 30.0f);
-        float s = 13.0f * std::sin(kPi * std::min(1.0f, k * 1.6f));
-        if (s > 0.5f) drawIcon(dl, Icon::Sparkle, q, s, u32(col::Gold, fade));
-    }
 }
 
 bool textField(const char* id, const char* hint, char* buf, size_t size, TextKind kind, float width) {

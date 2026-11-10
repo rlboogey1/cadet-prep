@@ -54,10 +54,6 @@ inline ImVec4 CalloutEdge(0.75f, 0.80f, 0.89f, 1.0f);   // edge of the passage b
 inline ImVec4 Shadow(0.086f, 0.122f, 0.235f, 1.0f);     // card shadows (alpha set where used)
 }  // namespace col
 
-// Pastel tile + strong color pairs for subject icons
-struct Tint { ImVec4 soft, strong; };
-Tint tint(int index);
-
 // ---------------------------------------------------------------- fonts
 struct FontSet {
     ImFont* body = nullptr;     // 16 regular
@@ -118,19 +114,9 @@ enum class ButtonStyle { Primary, Outline, White, Danger };
 bool button(const char* label, ButtonStyle style = ButtonStyle::Primary, ImVec2 size = ImVec2(0, 0),
             ImFont* font = nullptr);
 
-// Small tag with square-ish corners. Clickable ones get a hover state.
-bool chip(const char* id, const char* text, ImVec4 bg, ImVec4 fg, bool clickable = false,
-          bool bordered = true, Icon* icon = nullptr);
-
 // Sidebar menu row. Selected rows get a flat fill and a thin mark on the left edge.
 bool navItem(const char* id, const char* label, Icon icon, bool selected, float width, const char* badge = nullptr);
 
-// "Study sessions / 2 / Completed or ended"
-void statCard(ImVec2 size, const char* label, const char* value, const char* caption,
-              ImVec4 valueColor = col::Ink);
-
-// Square tile with a tinted background and a short glyph ("A:B", "Aa", "÷").
-void iconTile(ImDrawList* dl, ImVec2 p, float size, Tint t, const char* glyph, Icon* icon = nullptr);
 
 enum class AnswerState { Normal, Correct, Wrong, Dimmed };
 // `anim` = seconds since the answer was given (or < 0 for no animation).
@@ -190,7 +176,6 @@ int swipeCard(const char* id, SwipeCard& s, float minHeight, const std::function
 // Wrapped text with every line centered, for swipe card faces.
 void cardText(ImFont* font, ImVec4 color, const char* text, float left, float width);
 
-// A burst of colorful particles around `center` (`t` = seconds since start).
-void celebrate(ImDrawList* dl, ImVec2 center, float t);
+
 
 }  // namespace ui

@@ -35,8 +35,6 @@ using TextureMaker = ImTextureID (*)(const unsigned char* rgba, int width, int h
 void setTextureMaker(TextureMaker make);
 void drawInsignia(const Visual& v, float height, float left, float width);
 
-// The app logo: an F-22 in a blue circle.
-void drawLogo(ImDrawList* dl, ImVec2 center, float radius);
 
 // Just the jet silhouette, pointing at `angle` radians (0 = nose up).
 void drawJet(ImDrawList* dl, ImVec2 center, float size, float angle, ImU32 color, ImU32 detail = 0);
