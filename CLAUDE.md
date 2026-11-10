@@ -25,7 +25,11 @@ emcmake cmake -S . -B build-web && cmake --build build-web --target cadet_mobile
 
 The website build (`WEB.md`) is the touch version compiled to WebAssembly, AFOQT Prep only:
 `CADET_NO_WARRIOR` leaves Warrior Knowledge out of the code and `web/web_data.cmake` out of
-the data. Never add Warrior Knowledge to the website.
+the data. Never add Warrior Knowledge to the website. Around the app are plain pages
+(`web/`: intro `index.html.in`, `login.html`, `reset.html`); the study page only opens while
+logged in. `./publish.sh` puts the site on Cloudflare Pages and the Mac `.dmg` in private
+Supabase storage; only the user runs it (`--dry-run` to check). Test login and sync with
+`web/fake_supabase.py`, never the real project.
 
 To check layouts without clicking, `cadet_mobile --script file.txt` replays `wait N`, `tap X Y`,
 `drag X1 Y1 X2 Y2 FRAMES`, `type TEXT`, `key enter`, and `shot out.bmp` lines (points, touch input), then quits. Run it with

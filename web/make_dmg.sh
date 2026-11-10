@@ -17,6 +17,7 @@ cmake -S . -B "$OUT" -DCMAKE_BUILD_TYPE=Release \
 cmake --build "$OUT" --target afoqt_gui afoqt_gui_data -j8
 
 APP="$OUT/Cadet Prep.app"
+find "$APP" -name '* [0-9].*' -delete     # stray "file 2.json" duplicates never ship
 xattr -cr "$APP"                          # Finder tags and the like stop codesign
 codesign --force --deep --sign - "$APP"   # ad-hoc signature: required on Apple silicon
 codesign --verify --deep "$APP"

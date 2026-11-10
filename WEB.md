@@ -126,6 +126,43 @@ that step.
 
 Until the file is uploaded, the Download button says the app isn't available yet.
 
-## Still to do
+## Publishing
 
-Publishing.
+Nothing goes live on its own. Pushing to GitHub doesn't publish; `./publish.sh` does,
+when you run it:
+
+```bash
+./publish.sh --dry-run    # build and check everything, upload nothing
+./publish.sh              # the site to Cloudflare Pages, the Mac app to Supabase storage
+./publish.sh --site       # only the site
+./publish.sh --app        # only the Mac app
+```
+
+It builds the website, copies just the site's files into `build-web/site`, stops if any
+Warrior Knowledge is in them or if the pages don't point at the account server in
+`supabase.json`, and uploads that folder. Then it builds the Mac app and uploads it.
+
+**Set up once**
+
+1. **Cloudflare.** Make a free account at cloudflare.com, then sign this Mac in to it:
+
+   ```bash
+   npx wrangler login
+   ```
+
+   The first `./publish.sh` asks to create the Pages project `cadet-prep`; say yes, with
+   `main` as the production branch. The site is then at `https://cadet-prep.pages.dev`
+   (or a similar address if that name is taken; the script prints it). To use another
+   project name, run `CADET_PAGES_PROJECT=name ./publish.sh`.
+2. **Supabase, for password reset emails.** **Authentication > URL Configuration**: set
+   **Site URL** to the site's address, and add `https://<site>/reset.html` under
+   **Redirect URLs**.
+3. **Supabase, for the download.** Make the `downloads` bucket (see "Download section").
+4. **Optional: let the script upload the Mac app.** Put the project's secret key
+   (**Project Settings > API Keys**, the `service_role` or secret key) in a file named
+   `supabase.secret` next to `supabase.json`. It's in `.gitignore`. That key can read and
+   change everything in the project, so it never goes in the app, the site, or git.
+   Without the file, the script builds the app and tells you to upload it by hand.
+
+Cloudflare Pages serves each file with a check for a newer version, so visitors get the
+new build on their next visit without clearing anything.

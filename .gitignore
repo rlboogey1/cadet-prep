@@ -8,3 +8,4 @@ supabase.json
 build-web/
 build-web-test/
 build-release/
+supabase.secret
