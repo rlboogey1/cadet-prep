@@ -2,6 +2,12 @@
 #define MA_NO_ENCODING  // we only play generated sound, so skip the file code
 #define MA_NO_DECODING
 #define MA_NO_RESOURCE_MANAGER
+#if defined(__EMSCRIPTEN__)
+// In the browser miniaudio's page script calls this by its plain C name once a
+// click unlocks sound; say so before the header defines it (we compile it as C++).
+struct ma_device;
+extern "C" void ma_device__on_notification_unlocked(ma_device* pDevice);
+#endif
 #include "miniaudio.h"
 
 #include "Sound.h"

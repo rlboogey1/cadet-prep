@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Cadet Prep</title>
+<style>
+  :root { --bg: #f4f5f7; --ink: #1b2330; --muted: #667085; --accent: #2b45d4; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0f1218; --ink: #e8eaf0; --muted: #98a2b3; --accent: #7d92ff; }
+  }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); }
+  canvas { display: block; width: 100vw !important; height: 100vh !important; height: 100dvh !important; outline: none; touch-action: none; }
+  #loading {
+    position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: center;
+    padding: 0 max(24px, 8vw); color: var(--ink);
+    font: 16px/1.4 "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+  }
+  #loading b { font-size: 22px; font-weight: 600; }
+  #loading span { color: var(--muted); margin-top: 6px; font-variant-numeric: tabular-nums; }
+  #bar { width: min(320px, 100%); height: 2px; margin-top: 16px; background: color-mix(in srgb, var(--muted) 30%, transparent); }
+  #bar i { display: block; height: 100%; width: 0; background: var(--accent); }
+</style>
+</head>
+<body>
+<div id="loading"><b>Cadet Prep</b><span id="status">Loading questions</span><div id="bar"><i id="fill"></i></div></div>
+<canvas id="canvas" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas>
+<script>
+  var Module = {
+    canvas: document.getElementById('canvas'),
+    setStatus: function (text) {
+      // Emscripten reports downloads as "Downloading data... (done/total)"
+      var m = text && text.match(/\((\d+(?:\.\d+)?)\/(\d+)\)/);
+      if (m) document.getElementById('fill').style.width = (100 * m[1] / m[2]) + '%';
+    },
+    onRuntimeInitialized: function () {
+      document.getElementById('loading').remove();
+      // The canvas fills the tab (CSS above); tell the app whenever its size changes:
+      // the window resized, a phone rotated or hid its address bar, the zoom changed.
+      var c = Module.canvas;
+      function fit() { Module._cadet_resize(c.clientWidth, c.clientHeight); }
+      new ResizeObserver(fit).observe(c);
+      window.addEventListener('resize', fit);
+    },
+    onAbort: function () {
+      var s = document.getElementById('status');
+      if (s) s.textContent = 'Something went wrong while loading. Reload the page to try again.';
+    }
+  };
+</script>
+{{{ SCRIPT }}}
+</body>
+</html>

@@ -20,7 +20,12 @@ open "build/Cadet Prep.app"          # window version (macOS); build/afoqt_gui e
 cmake -S . -B build-mobile -DCADET_MOBILE=ON && cmake --build build-mobile --target cadet_mobile
 ./build-mobile/cadet_mobile          # phone layout in a Mac window (--ipad, --size WxH, --touch)
 cmake -S . -B build-ios -G Xcode -DCMAKE_SYSTEM_NAME=iOS   # iPhone/iPad Xcode project (needs Xcode)
+emcmake cmake -S . -B build-web && cmake --build build-web --target cadet_mobile   # website (see WEB.md)
 ```
+
+The website build (`WEB.md`) is the touch version compiled to WebAssembly, AFOQT Prep only:
+`CADET_NO_WARRIOR` leaves Warrior Knowledge out of the code and `web/web_data.cmake` out of
+the data. Never add Warrior Knowledge to the website.
 
 To check layouts without clicking, `cadet_mobile --script file.txt` replays `wait N`, `tap X Y`,
 `drag X1 Y1 X2 Y2 FRAMES`, `type TEXT`, `key enter`, and `shot out.bmp` lines (points, touch input), then quits. Run it with

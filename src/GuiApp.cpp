@@ -111,8 +111,10 @@ const std::vector<TrackInfo>& tracks() {
     static const std::vector<TrackInfo> list = {
         {"afoqt", "AFOQT Prep", Icon::Jet, "AFOQT PREP",
          "Practice questions for every AFOQT section, vocabulary cards, and timed tests."},
+#ifndef CADET_NO_WARRIOR  // the website is AFOQT Prep only
         {"warrior", "Warrior Knowledge", Icon::Shield, "WARRIOR KNOWLEDGE",
          "Flashcards for Blocks 1\xE2\x80\x93" "11 of the Det 105 handbook."},
+#endif
     };
     return list;
 }
@@ -217,12 +219,14 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
         deck_.load(dataDir + "/flashcards.json");
         deck_.loadProgress(apppaths::userFile("afoqt_flashcards.json"));
         repDeck_.load(apppaths::userFile("afoqt_repetition.json"), deck_);
+        vaWords_.load(dataDir + "/va_definitions.json");
+#ifndef CADET_NO_WARRIOR  // the website has no Warrior Knowledge files, and never writes its progress
         memDeck_.load(dataDir + "/warrior_cards.json");
         ui::setImageFolder(dataDir + "/insignia");
         memDeck_.loadProgress(apppaths::userFile("warrior_cards_progress.json"));
-        vaWords_.load(dataDir + "/va_definitions.json");
         addWarriorCards();
         wkRep_.load(apppaths::userFile("warrior_repetition.json"), static_cast<int>(registry_.inTrack("warrior").size()));
+#endif
         for (const auto& q : saved_.all()) bank_.add(q);  // generated questions saved for review
     } catch (const std::exception& e) {
         error = e.what();
@@ -239,9 +243,11 @@ void GuiApp::reloadProgress() {
     for (const auto& q : saved_.all())
         if (bank_.byIds({q.id}).empty()) bank_.add(q);
     deck_.reloadProgress();
-    memDeck_.reloadProgress();
     repDeck_.reload(deck_);
+#ifndef CADET_NO_WARRIOR
+    memDeck_.reloadProgress();
     wkRep_.reload();
+#endif
 }
 
 namespace {
@@ -562,7 +568,11 @@ void GuiApp::drawSidebar(float height) {
     const ImVec2 p = ImGui::GetCursorScreenPos();
     dl->AddText(fonts.title, fontPx(fonts.title), p + ImVec2(2, 0), u32(col::White), "Cadet Prep");
     ImGui::SetCursorScreenPos(p + ImVec2(3, fontPx(fonts.title) + 6));
+#ifdef CADET_NO_WARRIOR  // the website is for anyone taking the AFOQT
+    spacedLabel("AFOQT PRACTICE", col::SidebarMuted, 1.4f);
+#else
     spacedLabel("AFROTC \xC2\xB7 DET 105", col::SidebarMuted, 1.4f);
+#endif
     ImGui::SetCursorScreenPos(p + ImVec2(0, fontPx(fonts.title) + fontPx(fonts.label) + 22));
     divider(col::SidebarLine);
     ImGui::Dummy(ImVec2(0, 4));

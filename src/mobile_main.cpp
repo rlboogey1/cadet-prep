@@ -31,6 +31,7 @@
 #include <cstdio>
 #include <cstring>
 #include <filesystem>
+#include <functional>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -46,9 +47,25 @@ constexpr bool kPhoneOS = true;
 constexpr bool kPhoneOS = false;
 #endif
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+constexpr bool kWeb = true;  // the website: the browser calls us once per frame
+#else
+constexpr bool kWeb = false;
+#endif
+
 namespace {
 
+#if defined(__EMSCRIPTEN__)
+std::function<bool()> gWebFrame;
+// True on a phone or tablet browser (the main pointer is a finger)
+EM_JS(int, coarsePointer, (), { return window.matchMedia('(pointer: coarse)').matches ? 1 : 0; });
+EM_JS(int, pageWidth, (), { return window.innerWidth; });
+EM_JS(int, pageHeight, (), { return window.innerHeight; });
+#endif
+
 SDL_Renderer* gRenderer = nullptr;
+SDL_Window* gWindow = nullptr;
 
 // Shows the on-screen keyboard while a text box has focus. Replaces the ImGui
 // backend's version so the keyboard fits the field (email, password) and iOS
@@ -201,12 +218,29 @@ struct Script {
 
 }  // namespace
 
+#if defined(__EMSCRIPTEN__)
+// Called by the page (study_shell.html) whenever the canvas changes size: the
+// browser window resized, a phone rotated, or the zoom changed.
+extern "C" EMSCRIPTEN_KEEPALIVE void cadet_resize(int w, int h) {
+    if (gWindow && w > 0 && h > 0) SDL_SetWindowSize(gWindow, w, h);
+}
+#endif
+
 int main(int argc, char* argv[]) {
     // Window size for trying the layout on the Mac, and touch emulation
+    // Everything the frame function uses is static: in the browser main() returns
+    // once the loop is set up, and the frames keep running after it.
     int winW = 390, winH = 844;
-    bool touch = kPhoneOS;
-    Script script;
-    bool scripted = false;
+    static bool touch = kPhoneOS;
+#if defined(__EMSCRIPTEN__)
+    // A phone or tablet browser: finger scrolling and "tap" wording
+    touch = coarsePointer() != 0;
+    // The canvas fills the tab (study_shell.html); SDL follows its size from there on
+    winW = pageWidth();
+    winH = pageHeight();
+#endif
+    static Script script;
+    static bool scripted = false;
     for (int i = 1; i < argc; ++i) {
         if (!std::strcmp(argv[i], "--ipad")) winW = 820, winH = 1180;
         else if (!std::strcmp(argv[i], "--touch")) touch = true;
@@ -223,7 +257,7 @@ int main(int argc, char* argv[]) {
     const std::string dataDir = dataFolder(argc, argv);
     apppaths::useUserDataDir();
 
-    GuiApp app;
+    static GuiApp app;
     std::string error;
     if (!app.load(dataDir, error)) {
         std::cerr << "Startup error: " << error << "\n";
@@ -238,7 +272,8 @@ int main(int argc, char* argv[]) {
     }
     SDL_WindowFlags flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY;
     if (kPhoneOS) flags |= SDL_WINDOW_FULLSCREEN | SDL_WINDOW_BORDERLESS;
-    SDL_Window* window = SDL_CreateWindow("Cadet Prep", winW, winH, flags);
+    static SDL_Window* window = nullptr;
+    gWindow = window = SDL_CreateWindow("Cadet Prep", winW, winH, flags);
     if (!window) {
         std::cerr << "SDL_CreateWindow failed: " << SDL_GetError() << "\n";
         return 1;
@@ -252,7 +287,7 @@ int main(int argc, char* argv[]) {
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
+    static ImGuiIO& io = ImGui::GetIO();
     io.IniFilename = nullptr;
     float scale = SDL_GetWindowDisplayScale(window);
     if (scale <= 0.0f) scale = 1.0f;
@@ -265,16 +300,22 @@ int main(int argc, char* argv[]) {
     if (scripted) io.ConfigInputTrickleEventQueue = false;
     ui::setTextureMaker(makeSdlTexture);
 
-    bool done = false, background = false;
-    bool fingerDown = false;  // a finger is on the screen
-    Uint64 lastInput = SDL_GetTicks();
-    while (!done) {
+    static bool done = false, background = false;
+    static bool fingerDown = false;  // a finger is on the screen
+    static Uint64 lastInput = 0;
+    lastInput = SDL_GetTicks();
+    // One frame: read input, draw. Returns false when it's time to quit.
+    auto frame = []() -> bool {
         // Sleep while the app is in the background; when nothing is happening,
         // redraw a few times a second (enough for the timer) to save battery.
         SDL_Event e;
         bool touchEvents = false;
         const bool idle = !scripted && SDL_GetTicks() - lastInput > 1500;
-        bool got = background ? SDL_WaitEvent(&e) : idle ? SDL_WaitEventTimeout(&e, 250) : SDL_PollEvent(&e);
+        // (A web page can't wait inside a frame: the browser paces it.)
+        bool got = kWeb         ? SDL_PollEvent(&e)
+                   : background ? SDL_WaitEvent(&e)
+                   : idle       ? SDL_WaitEventTimeout(&e, 250)
+                                : SDL_PollEvent(&e);
         while (got) {
             ImGui_ImplSDL3_ProcessEvent(&e);
             // Mouse events SDL makes from touches
@@ -307,8 +348,8 @@ int main(int argc, char* argv[]) {
         // movement after it lifts), nothing stays highlighted. ImGui handles events
         // in order, so a tap in this batch still lands first.
         if (touch && touchEvents && !fingerDown) io.AddMousePosEvent(-FLT_MAX, -FLT_MAX);
-        if (done) break;
-        if (background) continue;
+        if (done) return false;
+        if (background) return true;
         if (app.animating()) lastInput = SDL_GetTicks();
 
         // Keep content out from under the notch, rounded corners, and home bar
@@ -322,7 +363,7 @@ int main(int argc, char* argv[]) {
         ImGui_ImplSDLRenderer3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
         if (scripted) {
-            if (!script.step()) break;
+            if (!script.step()) return false;
             script.feed(io);
         }
         ImGui::NewFrame();
@@ -342,7 +383,16 @@ int main(int argc, char* argv[]) {
             script.shot.clear();
         }
         SDL_RenderPresent(gRenderer);
-    }
+        return true;
+    };
+#if defined(__EMSCRIPTEN__)
+    // The browser runs the frames from here on
+    gWebFrame = frame;
+    emscripten_set_main_loop([] { if (!gWebFrame()) emscripten_cancel_main_loop(); }, 0, false);
+    return 0;
+#else
+    while (frame()) {}
+#endif
 
     ImGui_ImplSDLRenderer3_Shutdown();
     ImGui_ImplSDL3_Shutdown();

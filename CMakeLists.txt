@@ -16,6 +16,18 @@ option(CADET_MOBILE "Also build the SDL3 touch version (cadet_mobile)" OFF)
 if(CADET_IOS)
     set(CADET_MOBILE ON)
 endif()
+# Website: configure with  emcmake cmake -S . -B build-web  (see WEB.md). That builds
+# the touch version as WebAssembly (study.html), AFOQT Prep only: Warrior Knowledge
+# is left out of both the code and the data that ship to the browser.
+if(EMSCRIPTEN)
+    set(CADET_WEB ON)
+    set(CADET_MOBILE ON)
+    add_compile_options(-fwasm-exceptions)
+    add_link_options(-fwasm-exceptions)
+endif()
+if(CADET_IOS OR CADET_WEB)
+    set(CADET_TOUCH_ONLY ON)  # no console or GLFW window version
+endif()
 if(CADET_MOBILE AND APPLE)
     enable_language(OBJC)  # SDL3's Apple code is Objective-C
 endif()
@@ -45,7 +57,7 @@ FetchContent_Declare(json
     URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
 
-if(NOT CADET_IOS)
+if(NOT CADET_TOUCH_ONLY)
 FetchContent_Declare(glfw                     # creates the window (Mac version)
     GIT_REPOSITORY https://github.com/glfw/glfw.git
     GIT_TAG 3.4)
@@ -78,7 +90,7 @@ FetchContent_Declare(stb                     # loads the rank insignia pictures 
     GIT_TAG 4e9b368bfc071e97206ea5c6adba68dd0cbf8897)
 
 FetchContent_MakeAvailable(json imgui miniaudio stb)
-if(NOT CADET_IOS)
+if(NOT CADET_TOUCH_ONLY)
     FetchContent_MakeAvailable(glfw)
     find_package(OpenGL REQUIRED)
 endif()
@@ -95,7 +107,7 @@ add_library(imgui_base STATIC
     ${imgui_SOURCE_DIR}/imgui_widgets.cpp)
 target_include_directories(imgui_base PUBLIC ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
 
-if(NOT CADET_IOS)
+if(NOT CADET_TOUCH_ONLY)
     add_library(imgui STATIC                  # Mac version: GLFW + OpenGL
         ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
         ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp)
@@ -123,7 +135,12 @@ add_library(afoqt_core STATIC
     src/SyncMerge.cpp)
 target_include_directories(afoqt_core PUBLIC src)
 target_link_libraries(afoqt_core PUBLIC nlohmann_json::nlohmann_json)
-target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
+if(CADET_WEB)
+    # The browser's files: questions at /data, and no Warrior Knowledge
+    target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="/data" CADET_NO_WARRIOR)
+else()
+    target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
+endif()
 
 # Online sync, used by the window and touch versions (not the console)
 # Http.mm is Objective-C++ on Apple systems (it uses NSURLSession) and plain C++ elsewhere
@@ -133,10 +150,14 @@ if(APPLE)
 else()
     set_source_files_properties(src/Http.mm PROPERTIES LANGUAGE CXX COMPILE_OPTIONS "-xc++")
 endif()
+if(CADET_WEB)  # no online sync in the browser yet
+    set(CADET_SUPABASE_URL "")
+    set(CADET_SUPABASE_KEY "")
+endif()
 set_source_files_properties(src/CloudSync.cpp PROPERTIES COMPILE_DEFINITIONS
     "CADET_SUPABASE_URL=\"${CADET_SUPABASE_URL}\";CADET_SUPABASE_KEY=\"${CADET_SUPABASE_KEY}\"")
 
-if(NOT CADET_IOS)
+if(NOT CADET_TOUCH_ONLY)
 # --- Console app (unchanged) ---
 add_executable(afoqt src/main.cpp src/ConsoleUI.cpp)
 target_link_libraries(afoqt PRIVATE afoqt_core)
@@ -210,6 +231,24 @@ if(CADET_MOBILE)
         add_custom_command(TARGET cadet_mobile POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/data"
                     "\${TARGET_BUILD_DIR}/\${CONTENTS_FOLDER_PATH}/data")
+    elseif(CADET_WEB)
+        # study.html + .js + .wasm + .data (the question files, packed for the browser)
+        add_executable(cadet_mobile ${MOBILE_SOURCES})
+        set(WEB_DATA "${CMAKE_BINARY_DIR}/webdata")
+        add_custom_target(cadet_web_data
+            COMMAND ${CMAKE_COMMAND} -DSRC=${CMAKE_SOURCE_DIR}/data -DDST=${WEB_DATA}
+                    -P ${CMAKE_SOURCE_DIR}/web/web_data.cmake
+            VERBATIM)
+        add_dependencies(cadet_mobile cadet_web_data)
+        set_target_properties(cadet_mobile PROPERTIES OUTPUT_NAME "study" SUFFIX ".html")
+        target_link_options(cadet_mobile PRIVATE
+            "--preload-file=${WEB_DATA}@/data"
+            "--shell-file=${CMAKE_SOURCE_DIR}/web/study_shell.html"
+            "--pre-js=${CMAKE_SOURCE_DIR}/web/pre.js"
+            -lidbfs.js -sALLOW_MEMORY_GROWTH=1
+            -sEXPORTED_RUNTIME_METHODS=HEAPF32)  # miniaudio writes its sound through Module.HEAPF32
+        set_property(TARGET cadet_mobile APPEND PROPERTY LINK_DEPENDS
+            "${CMAKE_SOURCE_DIR}/web/study_shell.html" "${CMAKE_SOURCE_DIR}/web/pre.js")
     else()
         add_executable(cadet_mobile ${MOBILE_SOURCES})  # Mac preview, reads the project's data/
         if(APPLE)
@@ -218,12 +257,11 @@ if(CADET_MOBILE)
         endif()
     endif()
     target_link_libraries(cadet_mobile PRIVATE afoqt_core imgui_sdl)
-    target_include_directories(cadet_mobile PRIVATE ${miniaudio_SOURCE_DIR})
-    target_include_directories(cadet_mobile SYSTEM PRIVATE ${stb_SOURCE_DIR})
+    target_include_directories(cadet_mobile SYSTEM PRIVATE ${miniaudio_SOURCE_DIR} ${stb_SOURCE_DIR})
 endif()
 
 set(WARN_TARGETS afoqt_core)
-if(NOT CADET_IOS)
+if(NOT CADET_TOUCH_ONLY)
     list(APPEND WARN_TARGETS afoqt afoqt_gui)
 endif()
 if(CADET_MOBILE)
