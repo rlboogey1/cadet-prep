@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cadet Prep · AFOQT practice</title>
+<meta name="description" content="Practice for the Air Force Officer Qualifying Test: timed tests, practice sets and vocabulary cards for @SECTION_COUNT@ AFOQT sections.">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<header class="bar">
+  <b>Cadet Prep</b><span class="label">AFOQT practice</span>
+  <a class="button outline push" href="login.html">Log in</a>
+</header>
+
+<main class="page">
+  <section class="lead">
+    <h1>AFOQT practice</h1>
+    <p class="big">Timed tests, practice sets and vocabulary cards for the Air Force Officer Qualifying Test. For anyone sitting it: AFROTC cadets, OTS applicants, and everyone else.</p>
+    <p class="figures">
+      <span><b>@SECTION_COUNT@</b> sections</span>
+      <span><b>@WRITTEN_TOTAL@</b> written questions</span>
+      <span><b>@WORD_COUNT@</b> vocabulary words</span>
+      <span><b>6</b> composite estimates</span>
+    </p>
+    <p><a class="button" href="login.html">Log in to study</a></p>
+    <p class="small">Accounts aren't open yet, so there is no sign-up.</p>
+  </section>
+
+  <section>
+    <h2>What it covers</h2>
+    <p>Each section has untimed practice with an explanation after every answer, and a timed test scored at the end. The table gives the size of each question bank, then the number of questions and the time limit on its timed test.</p>
+    <div class="tablewrap">
+    <table>
+      <thead>
+        <tr><th scope="col">Section</th><th scope="col">Questions</th><th scope="col">Timed test</th><th scope="col">Time limit</th></tr>
+      </thead>
+      <tbody>
+      <tr class="group"><th colspan="4" scope="colgroup">Knowledge sections</th></tr>
+@ROWS_KNOWLEDGE@      </tbody>
+      <tbody>
+      <tr class="group"><th colspan="4" scope="colgroup">Pilot sections</th></tr>
+@ROWS_PILOT@      </tbody>
+    </table>
+    </div>
+    <p class="small">Pilot sections use the official question counts and time limits. Knowledge sections use shorter practice pacing. "Generated" questions are made fresh for every set, so they never repeat: tables to read, instruments to match, blocks to count, and most of the math.</p>
+  </section>
+
+  <section>
+    <h2>How studying works</h2>
+    <div class="shots">
+      <figure>
+        <img src="shots/timed.png" width="1400" height="882" alt="A timed Word Knowledge test: question 2 of 20, a countdown clock, and five answer choices." loading="lazy">
+        <figcaption><b>Timed tests.</b> The clock runs, there is no feedback until the end, and the score waits for the last question, as on test day.</figcaption>
+      </figure>
+      <figure>
+        <img src="shots/results.png" width="1400" height="882" alt="A results screen listing two missed questions, each with the answer given, the correct answer, and a one-line explanation." loading="lazy">
+        <figcaption><b>Every miss explained.</b> Missed questions are listed with the right answer and the reason, and stay on a review list until you get them right.</figcaption>
+      </figure>
+      <figure>
+        <img src="shots/instruments.png" width="1400" height="882" alt="An Instrument Comprehension question: an artificial horizon, a compass, and five drawings of an aircraft in different attitudes." loading="lazy">
+        <figcaption><b>Pilot sections are drawn.</b> Read the horizon and the compass, then pick the aircraft that matches. Table Reading and Block Counting work the same way.</figcaption>
+      </figure>
+      <figure>
+        <img src="shots/vocabulary.png" width="1400" height="882" alt="A vocabulary quiz asking what TENACIOUS means, with five definitions to choose from." loading="lazy">
+        <figcaption><b>A vocabulary deck that grows.</b> It starts with three words and adds three at a time. Words you miss come back until you know them, and finishing the deck each day keeps a streak.</figcaption>
+      </figure>
+    </div>
+    <p>It also keeps your accuracy by section, points you at your weakest one, and estimates the six composites (Pilot, Combat Systems Officer, Air Battle Manager, Academic Aptitude, Verbal, Quantitative) from your practice so far.</p>
+  </section>
+
+  <section>
+    <h2>Where it runs</h2>
+    <div class="tablewrap">
+    <table class="plain">
+      <tbody>
+        <tr><th scope="row">Web browser</th><td>Now. Log in and study on this site.</td></tr>
+        <tr><th scope="row">Mac app</th><td>Now. The download is on this site after you log in.</td></tr>
+        <tr><th scope="row">Windows app</th><td class="dim">Later.</td></tr>
+        <tr><th scope="row">iPhone and iPad</th><td class="dim">Later.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="small">Progress is saved to your account, so it is the same wherever you log in.</p>
+    <p><a class="button" href="login.html">Log in to study</a></p>
+  </section>
+</main>
+
+<footer class="foot">
+  <p class="small">Cadet Prep is an independent study tool. It is not affiliated with or endorsed by the U.S. Air Force or the Department of Defense, and its questions are practice questions, not questions from the AFOQT.</p>
+</footer>
+</body>
+</html>

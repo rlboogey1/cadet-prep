@@ -25,6 +25,13 @@ if(EMSCRIPTEN)
     add_compile_options(-fwasm-exceptions)
     add_link_options(-fwasm-exceptions)
 endif()
+# Leaves Warrior Knowledge out of the code. Always on for the website; turning it on
+# for cadet_mobile gives a Mac preview of what the website shows (run it with the
+# website's data folder, build-web/webdata), used for the intro page's screenshots.
+option(CADET_NO_WARRIOR "Build without Warrior Knowledge" OFF)
+if(CADET_WEB)
+    set(CADET_NO_WARRIOR ON)
+endif()
 if(CADET_IOS OR CADET_WEB)
     set(CADET_TOUCH_ONLY ON)  # no console or GLFW window version
 endif()
@@ -138,9 +145,13 @@ target_include_directories(afoqt_core PUBLIC src)
 target_link_libraries(afoqt_core PUBLIC nlohmann_json::nlohmann_json)
 if(CADET_WEB)
     # The browser's files: questions at /data, and no Warrior Knowledge
-    target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="/data" CADET_NO_WARRIOR)
+    target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="/data")
 else()
     target_compile_definitions(afoqt_core PUBLIC AFOQT_DATA_DIR="${CMAKE_SOURCE_DIR}/data")
+endif()
+
+if(CADET_NO_WARRIOR)
+    target_compile_definitions(afoqt_core PUBLIC CADET_NO_WARRIOR)
 endif()
 
 # Online sync, used by the window and touch versions (not the console)
@@ -253,7 +264,12 @@ if(CADET_MOBILE)
         set(WEB_FONTS IBMPlexSans-Regular.ttf IBMPlexSans-SemiBold.ttf IBMPlexMono-Regular.ttf OFL.txt)
         list(TRANSFORM WEB_PAGES PREPEND "${CMAKE_SOURCE_DIR}/web/")
         list(TRANSFORM WEB_FONTS PREPEND "${CMAKE_SOURCE_DIR}/data/fonts/")
+        # index.html is the introduction page: its section table and totals are filled
+        # in from the question files (web/site_data.cmake), its pictures are web/shots.
         add_custom_target(cadet_web_pages ALL
+            COMMAND ${CMAKE_COMMAND} -DSRC=${CMAKE_SOURCE_DIR}/data -DWEB=${CMAKE_SOURCE_DIR}/web
+                    -DOUT=${CMAKE_BINARY_DIR} -P ${CMAKE_SOURCE_DIR}/web/site_data.cmake
+            COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/web/shots" "${CMAKE_BINARY_DIR}/shots"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different ${WEB_PAGES} "${CMAKE_BINARY_DIR}"
             COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/fonts"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different ${WEB_FONTS} "${CMAKE_BINARY_DIR}/fonts"

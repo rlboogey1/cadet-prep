@@ -62,3 +62,62 @@ button.link {
 .note.bad { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
 .note:empty { display: none; }
 .rule { border: 0; border-top: 1px solid var(--rule); margin: 36px 0 16px; }
+
+/* ---- the introduction page ---- */
+.push { margin-left: auto; }
+a.button {
+  display: inline-block; padding: 10px 18px; border: 1px solid var(--accent); border-radius: 3px;
+  background: var(--accent); color: var(--on-accent); font-weight: 600; text-decoration: none;
+}
+a.button:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--on-accent); }
+a.button.outline { background: none; color: var(--ink); border-color: var(--rule); padding: 6px 14px; font-size: 15px; }
+a.button.outline:hover { border-color: var(--accent); color: var(--accent); background: none; }
+.bar { align-items: center; }
+
+main.page { max-width: 1040px; padding: 0 max(16px, 6vw); margin: 0; }
+main.page section { padding: 44px 0 12px; border-top: 1px solid var(--rule); }
+main.page section.lead { border-top: 0; padding-top: 64px; }
+.lead h1 { font-size: clamp(34px, 6vw, 52px); letter-spacing: -0.01em; margin-bottom: 16px; }
+h2 { font-size: 22px; line-height: 1.25; font-weight: 600; margin: 0 0 10px; }
+p.big { font-size: 19px; line-height: 1.5; max-width: 34em; color: var(--ink-soft); }
+main.page p { max-width: 42em; }
+.dim { color: var(--muted); }
+
+.figures {
+  display: flex; flex-wrap: wrap; gap: 6px 28px; margin: 24px 0 28px; max-width: none;
+  font: 14px/1.5 "IBM Plex Mono", ui-monospace, monospace; color: var(--muted);
+}
+.figures b { color: var(--ink); font-weight: 400; font-size: 16px; margin-right: 4px; }
+
+.tablewrap { overflow-x: auto; margin: 20px 0 14px; border: 1px solid var(--rule); border-radius: 3px; background: var(--card); }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th, td { text-align: left; padding: 11px 16px; border-top: 1px solid var(--rule); vertical-align: baseline; }
+thead th, tr.group th {
+  font: 11px/1.4 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); font-weight: 400;
+}
+thead th { border-top: 0; white-space: nowrap; }
+tr.group th { padding-top: 18px; color: var(--ink-soft); }
+tbody th[scope="row"] { font-weight: 600; }
+td { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.plain td { font-family: inherit; font-size: 15px; white-space: normal; }
+table.plain tr:first-child th, table.plain tr:first-child td { border-top: 0; }
+table.plain th { width: 11em; }
+
+.shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 28px 24px; margin: 24px 0 28px; }
+figure { margin: 0; }
+figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 3px; }
+figcaption { margin-top: 10px; font-size: 15px; color: var(--ink-soft); max-width: 36em; }
+figcaption b { color: var(--ink); font-weight: 600; }
+
+.foot { border-top: 1px solid var(--rule); margin-top: 36px; padding: 20px max(16px, 6vw) 40px; }
+.foot p { max-width: 46em; margin: 0; }
+
+@media (max-width: 560px) {
+  th, td { padding: 10px 10px; }
+  table { font-size: 14px; }
+  td { font-size: 13px; }
+  table.plain th { width: 8em; }
+  thead th { letter-spacing: 0.06em; }
+  td .dim { display: block; }   /* "60 + generated" on two lines */
+}

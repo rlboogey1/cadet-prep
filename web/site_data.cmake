@@ -1,0 +1,56 @@
+# Makes index.html (the introduction page) from web/index.html.in, filling in the
+# section table and the totals from the question files, so the page always matches
+# what the app holds. Run by the build:
+#   cmake -DSRC=data -DWEB=web -DOUT=build-web -P site_data.cmake
+file(READ "${SRC}/subtests.json" _json)
+string(JSON _count LENGTH "${_json}" subtests)
+math(EXPR _last "${_count} - 1")
+
+set(ROWS_KNOWLEDGE "")
+set(ROWS_PILOT "")
+set(SECTION_COUNT 0)
+set(WRITTEN_TOTAL 0)
+foreach(_i RANGE 0 ${_last})
+    string(JSON _track ERROR_VARIABLE _e GET "${_json}" subtests ${_i} track)
+    if(_track STREQUAL "warrior")  # the website is AFOQT Prep only
+        continue()
+    endif()
+    string(JSON _id GET "${_json}" subtests ${_i} id)
+    string(JSON _name GET "${_json}" subtests ${_i} name)
+    string(JSON _category GET "${_json}" subtests ${_i} category)
+    string(JSON _n GET "${_json}" subtests ${_i} question_count)
+    string(JSON _secs GET "${_json}" subtests ${_i} time_limit_seconds)
+    string(JSON _file ERROR_VARIABLE _e GET "${_json}" subtests ${_i} file)
+
+    # Question bank: written questions, drawn fresh each time, or both (the math sections)
+    if(_file AND NOT _file MATCHES "NOTFOUND")
+        file(READ "${SRC}/${_file}" _q)
+        string(JSON _written LENGTH "${_q}" questions)
+        math(EXPR WRITTEN_TOTAL "${WRITTEN_TOTAL} + ${_written}")
+        if(_id STREQUAL "math_knowledge" OR _id STREQUAL "arithmetic_reasoning")
+            set(_bank "${_written} <span class=\"dim\">+ generated</span>")
+        else()
+            set(_bank "${_written}")
+        endif()
+    else()
+        set(_bank "<span class=\"dim\">Generated</span>")
+    endif()
+
+    math(EXPR _m "${_secs} / 60")
+    math(EXPR _s "${_secs} % 60")
+    if(_s LESS 10)
+        set(_s "0${_s}")
+    endif()
+    set(_row "      <tr><th scope=\"row\">${_name}</th><td>${_bank}</td><td>${_n}</td><td>${_m}:${_s}</td></tr>\n")
+    if(_category STREQUAL "pilot")
+        string(APPEND ROWS_PILOT "${_row}")
+    else()
+        string(APPEND ROWS_KNOWLEDGE "${_row}")
+    endif()
+    math(EXPR SECTION_COUNT "${SECTION_COUNT} + 1")
+endforeach()
+
+file(READ "${SRC}/flashcards.json" _cards)
+string(JSON WORD_COUNT LENGTH "${_cards}" cards)
+
+configure_file("${WEB}/index.html.in" "${OUT}/index.html" @ONLY)

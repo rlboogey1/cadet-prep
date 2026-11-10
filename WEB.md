@@ -72,6 +72,25 @@ python3 -m http.server 8767 --directory build-web-test      # the site: http://l
 "Forgot password" prints the reset link in the fake server's output, and
 `http://localhost:8766/_state` shows the progress it holds.
 
+## Introduction page
+
+`index.html` is the public page in front of the login. It is made at build time from
+`web/index.html.in` by `web/site_data.cmake`, which fills in the section table and the
+totals from `data/subtests.json` and the question files, so the page can't drift from
+what the app holds. It never mentions Warrior Knowledge.
+
+Its four pictures (`web/shots/`) are real screens of the app. To retake them, build the
+Mac preview without Warrior Knowledge and run it on the website's data with a scratch
+`HOME` holding made-up progress, using `--script` to tap through and save each screen:
+
+```bash
+cmake -S . -B build-shots -DCADET_MOBILE=ON -DCADET_NO_WARRIOR=ON
+cmake --build build-shots --target cadet_mobile
+HOME=/tmp/shots-home ./build-shots/cadet_mobile --size 1280x800 --script taps.txt build-web/webdata
+```
+
+Then crop off the sidebar (the left 288 points) and scale to 1400 pixels wide.
+
 ## Still to do
 
-The introduction page, the Mac download section, and publishing.
+The Mac download section, and publishing.
