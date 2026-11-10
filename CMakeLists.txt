@@ -37,7 +37,8 @@ endif()
 # build fine and keep progress on each device only.
 set(CADET_SUPABASE_URL "" CACHE STRING "Supabase project URL for online sync")
 set(CADET_SUPABASE_KEY "" CACHE STRING "Supabase public (anon) key for online sync")
-set(SUPABASE_CONFIG "${CMAKE_SOURCE_DIR}/supabase.json")
+# (-DSUPABASE_CONFIG=other.json points a test build at a fake server instead.)
+set(SUPABASE_CONFIG "${CMAKE_SOURCE_DIR}/supabase.json" CACHE FILEPATH "Online sync settings file")
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${SUPABASE_CONFIG}")
 if(EXISTS "${SUPABASE_CONFIG}")
     file(READ "${SUPABASE_CONFIG}" _supabase)
@@ -150,10 +151,6 @@ if(APPLE)
 else()
     set_source_files_properties(src/Http.mm PROPERTIES LANGUAGE CXX COMPILE_OPTIONS "-xc++")
 endif()
-if(CADET_WEB)  # no online sync in the browser yet
-    set(CADET_SUPABASE_URL "")
-    set(CADET_SUPABASE_KEY "")
-endif()
 set_source_files_properties(src/CloudSync.cpp PROPERTIES COMPILE_DEFINITIONS
     "CADET_SUPABASE_URL=\"${CADET_SUPABASE_URL}\";CADET_SUPABASE_KEY=\"${CADET_SUPABASE_KEY}\"")
 
@@ -246,7 +243,22 @@ if(CADET_MOBILE)
             "--shell-file=${CMAKE_SOURCE_DIR}/web/study_shell.html"
             "--pre-js=${CMAKE_SOURCE_DIR}/web/pre.js"
             -lidbfs.js -sALLOW_MEMORY_GROWTH=1
-            -sEXPORTED_RUNTIME_METHODS=HEAPF32)  # miniaudio writes its sound through Module.HEAPF32
+            -sEXPORTED_RUNTIME_METHODS=HEAPF32   # miniaudio writes its sound through Module.HEAPF32
+            -sEXPORTED_FUNCTIONS=_main,_malloc,_free)
+
+        # The plain pages around the app (login, password reset), their fonts, and
+        # config.js: the account server's address and public key for those pages.
+        configure_file(web/config.js.in "${CMAKE_BINARY_DIR}/config.js" @ONLY)
+        set(WEB_PAGES login.html reset.html site.css)
+        set(WEB_FONTS IBMPlexSans-Regular.ttf IBMPlexSans-SemiBold.ttf IBMPlexMono-Regular.ttf OFL.txt)
+        list(TRANSFORM WEB_PAGES PREPEND "${CMAKE_SOURCE_DIR}/web/")
+        list(TRANSFORM WEB_FONTS PREPEND "${CMAKE_SOURCE_DIR}/data/fonts/")
+        add_custom_target(cadet_web_pages ALL
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different ${WEB_PAGES} "${CMAKE_BINARY_DIR}"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/fonts"
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different ${WEB_FONTS} "${CMAKE_BINARY_DIR}/fonts"
+            VERBATIM)
+        add_dependencies(cadet_mobile cadet_web_pages)
         set_property(TARGET cadet_mobile APPEND PROPERTY LINK_DEPENDS
             "${CMAKE_SOURCE_DIR}/web/study_shell.html" "${CMAKE_SOURCE_DIR}/web/pre.js")
     else()

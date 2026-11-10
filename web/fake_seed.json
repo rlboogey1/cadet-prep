@@ -1,0 +1,12 @@
+{
+  "progress": {
+    "missed": ["VA-008", "WK-Core Values"],
+    "sessions": [
+      {"id": "seed-afoqt-1", "correct": 7, "date": "2026-11-03 13:34", "review": false, "seconds": 192.6, "subtest": "verbal_analogies", "total": 8},
+      {"id": "seed-afoqt-2", "correct": 18, "date": "2026-11-05 09:10", "review": false, "seconds": 600.0, "subtest": "word_knowledge", "total": 25},
+      {"id": "seed-wk-1", "correct": 9, "date": "2026-11-06 20:15", "review": false, "seconds": 140.0, "subtest": "wk_block01", "total": 12},
+      {"id": "seed-wk-2", "correct": 20, "date": "2026-11-07 20:15", "review": true, "seconds": 300.0, "subtest": "repetition_warrior", "total": 20}
+    ]
+  },
+  "warrior_repetition": {"blocks": [1, 3], "streak": 4, "best_streak": 6, "last_day": "2026-11-09", "updated": 1794000000}
+}

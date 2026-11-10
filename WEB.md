@@ -29,8 +29,49 @@ keep the old `.js` and `.wasm`.
 - **Saving**: `web/pre.js` keeps the progress folder in the browser's storage (IndexedDB),
   loaded before the app starts and written back whenever a file is saved. Clearing site
   data erases it.
-- **Online sync**: off for now (no sign-in in the browser yet).
+- **Online sync**: the same account and merge rules as the apps (`SYNC.md`). A browser
+  has no background threads, so `CloudSync` runs its steps through `http::requestAsync`
+  (the browser's `fetch`). The website never changes Warrior Knowledge progress: it
+  carries those files through a sync untouched.
+
+## Login
+
+When the site is built with an account server (`supabase.json`), the study page only
+opens while logged in:
+
+- `login.html` signs in with the email and password and hands the sign-in to
+  `study.html` (through `localStorage`). `web/pre.js` saves it as `afoqt_account.json`,
+  which is where the app's sync reads it. There is no sign-up form.
+- Opening `study.html` without a sign-in goes to `login.html`. **Log out** (Settings >
+  Account) forgets the sign-in and goes back there. Progress already in the browser stays.
+- **Forgot password** emails a link to `reset.html`, which sets a new password. For that
+  email to arrive with the right link, add the site's address to the Supabase project:
+  **Authentication > URL Configuration**, set **Site URL** to the site and add
+  `https://<site>/reset.html` under **Redirect URLs**.
+- `config.js` (made by CMake) gives those pages the server address and public key.
+
+The login keeps people out of the study screens. It doesn't hide the site's files: the
+question data sits at a public address like everything else on a static host, which is
+why the website carries AFOQT Prep only.
+
+Built without `supabase.json`, nothing asks for a login and progress stays in the browser.
+
+## Testing login and sync
+
+Never test against the real project. `web/fake_supabase.py` is a stand-in server with
+one made-up account (its email and password are at the top of that file):
+
+```bash
+echo '{"url": "http://localhost:8766", "key": "test-public-key"}' > /tmp/fake.json
+emcmake cmake -S . -B build-web-test -DCMAKE_BUILD_TYPE=Release -DSUPABASE_CONFIG=/tmp/fake.json
+cmake --build build-web-test --target cadet_mobile
+python3 web/fake_supabase.py --seed web/fake_seed.json      # the account server, port 8766
+python3 -m http.server 8767 --directory build-web-test      # the site: http://localhost:8767/login.html
+```
+
+"Forgot password" prints the reset link in the fake server's output, and
+`http://localhost:8766/_state` shows the progress it holds.
 
 ## Still to do
 
-Login and sync, the introduction page, the Mac download section, and publishing.
+The introduction page, the Mac download section, and publishing.

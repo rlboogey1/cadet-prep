@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New password · Cadet Prep</title>
+<link rel="stylesheet" href="site.css">
+<script src="config.js"></script>
+</head>
+<body>
+<header class="bar"><b><a href="./">Cadet Prep</a></b><span class="label">AFOQT practice</span></header>
+<main class="narrow">
+  <h1>Set a new password</h1>
+  <p id="lead">Choose a new password for your account.</p>
+
+  <form id="reset" novalidate>
+    <label for="p1">New password</label>
+    <input id="p1" type="password" autocomplete="new-password" minlength="8" required>
+    <label for="p2">New password again</label>
+    <input id="p2" type="password" autocomplete="new-password" required>
+    <button id="go" type="submit">Save password</button>
+  </form>
+  <div id="note" class="note" role="status"></div>
+  <p id="after" style="margin-top:20px" hidden><a href="login.html">Log in</a></p>
+</main>
+<script>
+(function () {
+  var cfg = window.CADET || {};
+  var form = document.getElementById('reset'), note = document.getElementById('note');
+  var p1 = document.getElementById('p1'), p2 = document.getElementById('p2'), go = document.getElementById('go');
+  function say(text, bad) { note.textContent = text; note.className = bad ? 'note bad' : 'note'; }
+  function stop(text) {
+    form.hidden = true; document.getElementById('lead').hidden = true;
+    say(text, true); document.getElementById('after').hidden = false;
+  }
+
+  // The emailed link lands here with a one-time token after the #
+  var hash = new URLSearchParams(location.hash.slice(1));
+  var token = hash.get('access_token');
+  history.replaceState(null, '', location.pathname);  // keep the token out of the address bar
+  if (!cfg.url) { stop('This copy of the site has no account server.'); return; }
+  if (!token || hash.get('error')) {
+    stop('This link has expired or was already used. Choose Forgot password on the login page to get a new one.');
+    return;
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (p1.value.length < 8) { say('Use at least 8 characters.', true); return; }
+    if (p1.value !== p2.value) { say("The two passwords don't match.", true); return; }
+    go.disabled = true; say('');
+    fetch(cfg.url + '/auth/v1/user', {
+      method: 'PUT',
+      headers: { apikey: cfg.key, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: p1.value })
+    }).then(function (r) {
+      return r.json().catch(function () { return null; }).then(function (j) {
+        if (!r.ok) throw new Error((j && (j.msg || j.error_description || j.message)) || ('Server error ' + r.status));
+        form.hidden = true; document.getElementById('lead').hidden = true;
+        say('Password changed.');
+        document.getElementById('after').hidden = false;
+      });
+    }).catch(function (err) {
+      say(err instanceof TypeError ? "Can't reach the server. Check your connection and try again." : err.message, true);
+      go.disabled = false;
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -4,7 +4,11 @@
 #include "SyncMerge.h"
 #include <chrono>
 #include <fstream>
+#include <functional>
 #include <thread>
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
 
 #ifndef CADET_SUPABASE_URL
 #define CADET_SUPABASE_URL ""
@@ -62,8 +66,16 @@ std::string utcNow() {
 }  // namespace
 
 // One background sign-in or sync. The worker thread fills in the results and
-// sets `done`; the main thread picks them up in update().
+// sets `done`; the main thread picks them up in update(). It's written as steps
+// (make a request, handle its answer) so the browser version, which has no
+// threads and can't wait for an answer, can run the same steps one after another.
 struct CloudSync::Job {
+    struct Request {
+        std::string method, url;
+        http::Headers headers;
+        std::string body;
+    };
+
     bool signIn = false;
     std::string email, password;
     Account account;      // in: current sign-in; out: refreshed tokens
@@ -75,9 +87,18 @@ struct CloudSync::Job {
     bool signedOut = false;  // the sign-in expired or was revoked
     std::string error;
 
-    void run();
-    bool authorize();     // signs in, or refreshes an old access token
-    void sync();
+    void run();                                   // all the steps, waiting for each answer
+    static void runAsync(std::shared_ptr<Job> job);  // the same, without waiting (browser)
+
+    // Step 1: sign in, or refresh an old access token (skipped while it still works)
+    bool needsAuth() const { return signIn || account.expiresAt - 60 <= cloudsync::now(); }
+    Request authRequest();
+    bool authDone(const http::Response& r);
+    // Step 2: download what's online and merge. True if `put` must be sent (step 3).
+    Request getRequest() const;
+    bool gotDone(const http::Response& r, Request& put);
+    void putDone(const http::Response& r);
+
     http::Headers headers() const {
         return {{"apikey", kKey}, {"Authorization", "Bearer " + account.accessToken},
                 {"Content-Type", "application/json"}};
@@ -102,39 +123,40 @@ bool CloudSync::Job::takeTokens(const http::Response& r) {
     }
 }
 
-bool CloudSync::Job::authorize() {
+CloudSync::Job::Request CloudSync::Job::authRequest() {
     const http::Headers h = {{"apikey", kKey}, {"Content-Type", "application/json"}};
     if (signIn) {
-        const auto r = http::request("POST", kUrl + "/auth/v1/token?grant_type=password", h,
-                                     json{{"email", email}, {"password", password}}.dump());
+        Request q{"POST", kUrl + "/auth/v1/token?grant_type=password", h,
+                  json{{"email", email}, {"password", password}}.dump()};
         password.clear();
-        if (!r.ok()) {
-            error = errorText(r);
-            return false;
-        }
-        account.email = email;
-        return takeTokens(r);
+        return q;
     }
-    if (account.expiresAt - 60 > cloudsync::now()) return true;  // the access token still works
-    const auto r = http::request("POST", kUrl + "/auth/v1/token?grant_type=refresh_token", h,
-                                 json{{"refresh_token", account.refreshToken}}.dump());
+    return {"POST", kUrl + "/auth/v1/token?grant_type=refresh_token", h,
+            json{{"refresh_token", account.refreshToken}}.dump()};
+}
+
+bool CloudSync::Job::authDone(const http::Response& r) {
     if (!r.ok()) {
         error = errorText(r);
-        // The server turned the sign-in down (not just a lost connection)
-        if (r.status >= 400 && r.status < 500) {
+        // The server turned a saved sign-in down (not just a lost connection)
+        if (!signIn && r.status >= 400 && r.status < 500) {
             signedOut = true;
             error = "Signed out (" + error + "). Sign in again to keep syncing.";
         }
         return false;
     }
+    if (signIn) account.email = email;
     return takeTokens(r);
 }
 
-void CloudSync::Job::sync() {
-    const auto got = http::request("GET", kUrl + "/rest/v1/progress?select=data", headers());
+CloudSync::Job::Request CloudSync::Job::getRequest() const {
+    return {"GET", kUrl + "/rest/v1/progress?select=data", headers(), ""};
+}
+
+bool CloudSync::Job::gotDone(const http::Response& got, Request& put) {
     if (!got.ok()) {
         error = errorText(got);
-        return;
+        return false;
     }
     json remote = json::object();
     try {
@@ -142,26 +164,68 @@ void CloudSync::Job::sync() {
         if (rows.is_array() && !rows.empty() && rows[0].contains("data")) remote = rows[0]["data"];
     } catch (...) {
         error = "Unexpected answer from the server";
-        return;
+        return false;
     }
     merged = cloudsync::mergeBundle(local, remote);
-    if (merged != remote) {
-        http::Headers h = headers();
-        h.push_back({"Prefer", "resolution=merge-duplicates,return=minimal"});
-        const json row = {{"user_id", account.userId}, {"data", merged}, {"updated_at", utcNow()}};
-        const auto put = http::request("POST", kUrl + "/rest/v1/progress?on_conflict=user_id", h, row.dump());
-        if (!put.ok()) {
-            error = errorText(put);
-            return;
-        }
+    if (merged == remote) {  // nothing new here to send up
+        hasMerged = true;
+        return false;
     }
-    hasMerged = true;
+    http::Headers h = headers();
+    h.push_back({"Prefer", "resolution=merge-duplicates,return=minimal"});
+    const json row = {{"user_id", account.userId}, {"data", merged}, {"updated_at", utcNow()}};
+    put = {"POST", kUrl + "/rest/v1/progress?on_conflict=user_id", h, row.dump()};
+    return true;
+}
+
+void CloudSync::Job::putDone(const http::Response& r) {
+    if (r.ok()) hasMerged = true;
+    else error = errorText(r);
 }
 
 void CloudSync::Job::run() {
-    if (authorize()) sync();
+    auto send = [](const Request& q) { return http::request(q.method, q.url, q.headers, q.body); };
+    if (!needsAuth() || authDone(send(authRequest()))) {
+        Request put;
+        if (gotDone(send(getRequest()), put)) putDone(send(put));
+    }
     done = true;
 }
+
+#if defined(__EMSCRIPTEN__)
+void CloudSync::Job::runAsync(std::shared_ptr<Job> job) {
+    auto send = [](const Request& q, std::function<void(const http::Response&)> then) {
+        http::requestAsync(q.method, q.url, q.headers, q.body, std::move(then));
+    };
+    auto sync = [job, send] {
+        send(job->getRequest(), [job, send](const http::Response& got) {
+            Request put;
+            if (!job->gotDone(got, put)) {
+                job->done = true;
+                return;
+            }
+            send(put, [job](const http::Response& r) {
+                job->putDone(r);
+                job->done = true;
+            });
+        });
+    };
+    if (!job->needsAuth()) {
+        sync();
+        return;
+    }
+    send(job->authRequest(), [job, sync](const http::Response& r) {
+        if (job->authDone(r)) sync();
+        else job->done = true;
+    });
+}
+
+// The website's study page only opens while signed in: once the sign-in is gone,
+// the page (web/pre.js) saves that and goes back to the login page.
+EM_JS(void, pageSignedOut, (), {
+    if (Module.cadetSignedOut) Module.cadetSignedOut();
+});
+#endif
 
 // ================================================================ main thread
 
@@ -185,6 +249,9 @@ void CloudSync::saveAccount() const {
     if (!signedIn()) {
         std::error_code ec;
         std::filesystem::remove(path, ec);
+#if defined(__EMSCRIPTEN__)
+        pageSignedOut();
+#endif
         return;
     }
     const json j = {{"email", account_.email}, {"user_id", account_.userId},
@@ -214,8 +281,12 @@ void CloudSync::start(std::shared_ptr<Job> job) {
     lastAttempt_ = std::time(nullptr);
     pending_ = false;
     changedAt_ = -1;
+#if defined(__EMSCRIPTEN__)
+    Job::runAsync(job);  // no threads in a browser: each answer comes back as an event
+#else
     // The thread keeps its own reference, so quitting mid-request is safe
     std::thread([job] { job->run(); }).detach();
+#endif
 }
 
 void CloudSync::signIn(const std::string& email, const std::string& password) {

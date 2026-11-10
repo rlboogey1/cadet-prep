@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log in · Cadet Prep</title>
+<link rel="stylesheet" href="site.css">
+<script src="config.js"></script>
+</head>
+<body>
+<header class="bar"><b><a href="./">Cadet Prep</a></b><span class="label">AFOQT practice</span></header>
+<main class="narrow">
+  <h1>Log in</h1>
+  <p>Your practice history, missed questions and flashcards are saved to your account, so they are the same here as on your other devices.</p>
+
+  <form id="login" novalidate>
+    <label for="email">Email</label>
+    <input id="email" type="email" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+    <label for="password">Password</label>
+    <input id="password" type="password" autocomplete="current-password" required>
+    <div class="row">
+      <button id="go" type="submit">Log in</button>
+      <button id="forgot" type="button" class="link">Forgot password</button>
+    </div>
+    <div id="note" class="note" role="status"></div>
+  </form>
+
+  <hr class="rule">
+  <p class="small">Accounts aren't open yet, so there is no sign-up.</p>
+</main>
+<script>
+(function () {
+  var cfg = window.CADET || {};
+  var form = document.getElementById('login'), note = document.getElementById('note');
+  var email = document.getElementById('email'), password = document.getElementById('password');
+  var go = document.getElementById('go'), forgot = document.getElementById('forgot');
+
+  function say(text, bad) { note.textContent = text; note.className = bad ? 'note bad' : 'note'; }
+  function headers() { return { apikey: cfg.key, 'Content-Type': 'application/json' }; }
+  function reason(j, status) {
+    return (j && (j.msg || j.error_description || j.message || j.error)) || ('Server error ' + status);
+  }
+
+  if (!cfg.url) {  // built without an account server: nothing to log in to
+    form.hidden = true;
+    say('This copy of the site has no account server, so progress stays in this browser.');
+    note.insertAdjacentHTML('afterend', '<p style="margin-top:20px"><a href="study.html">Start studying</a></p>');
+    form.parentNode.insertBefore(note, form);
+    return;
+  }
+  // Already logged in on this browser: go straight in (the study page checks for real)
+  try { if (localStorage.getItem('cadet_signed_in')) { location.replace('study.html'); return; } } catch (e) {}
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var who = email.value.trim().toLowerCase();
+    if (!who || !password.value) { say('Enter your email and password.', true); return; }
+    go.disabled = true; go.textContent = 'Logging in';
+    say('');
+    fetch(cfg.url + '/auth/v1/token?grant_type=password', {
+      method: 'POST', headers: headers(), body: JSON.stringify({ email: who, password: password.value })
+    }).then(function (r) {
+      return r.json().catch(function () { return null; }).then(function (j) {
+        if (!r.ok || !j || !j.access_token || !j.user) {
+          throw new Error(r.status === 400 ? 'Wrong email or password.' : reason(j, r.status));
+        }
+        // Handed to the study page, which saves it where the app keeps its sign-in
+        localStorage.setItem('cadet_login', JSON.stringify({
+          email: j.user.email || who, user_id: j.user.id,
+          access_token: j.access_token, refresh_token: j.refresh_token,
+          expires_at: Math.floor(Date.now() / 1000) + (j.expires_in || 3600), last_sync: 0
+        }));
+        localStorage.setItem('cadet_signed_in', '1');
+        location.replace('study.html');
+      });
+    }).catch(function (err) {
+      say(err instanceof TypeError ? "Can't reach the server. Check your connection and try again." : err.message, true);
+      go.disabled = false; go.textContent = 'Log in';
+    });
+  });
+
+  forgot.addEventListener('click', function () {
+    var who = email.value.trim().toLowerCase();
+    if (!who) { say('Enter your email first, then choose Forgot password.', true); email.focus(); return; }
+    forgot.disabled = true;
+    var back = new URL('reset.html', location.href).href;
+    fetch(cfg.url + '/auth/v1/recover?redirect_to=' + encodeURIComponent(back), {
+      method: 'POST', headers: headers(), body: JSON.stringify({ email: who })
+    }).then(function (r) {
+      if (!r.ok) return r.json().catch(function () { return null; }).then(function (j) { throw new Error(reason(j, r.status)); });
+      say('If that email has an account, a link to set a new password is on its way to it.');
+    }).catch(function (err) {
+      say(err instanceof TypeError ? "Can't reach the server. Check your connection and try again." : err.message, true);
+    }).then(function () { forgot.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>

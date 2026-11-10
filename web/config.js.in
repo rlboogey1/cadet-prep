@@ -1,0 +1,3 @@
+// Made by CMake from supabase.json: the account server's address and public key.
+// Both are empty when the site was built without one (then nothing asks for a login).
+window.CADET = { url: "@CADET_SUPABASE_URL@", key: "@CADET_SUPABASE_KEY@" };

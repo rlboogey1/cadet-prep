@@ -4,8 +4,36 @@
     {
       "name": "cadet-web",
       "runtimeExecutable": "/opt/homebrew/bin/python3",
-      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "build-web"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8765",
+        "--directory",
+        "build-web"
+      ],
       "port": 8765
+    },
+    {
+      "name": "cadet-web-test",
+      "runtimeExecutable": "/opt/homebrew/bin/python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8767",
+        "--directory",
+        "build-web-test"
+      ],
+      "port": 8767
+    },
+    {
+      "name": "cadet-fake-supabase",
+      "runtimeExecutable": "/opt/homebrew/bin/python3",
+      "runtimeArgs": [
+        "web/fake_supabase.py",
+        "--seed",
+        "web/fake_seed.json"
+      ],
+      "port": 8766
     }
   ]
 }

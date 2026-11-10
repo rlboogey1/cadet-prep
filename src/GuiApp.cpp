@@ -2389,7 +2389,11 @@ void GuiApp::drawAccount() {
               "Progress syncs on its own: when the app opens, after you practice, and every 10 minutes.");
     ImGui::Dummy(ImVec2(0, 4));
     if (cloud_.busy()) ImGui::BeginDisabled();
+#if defined(__EMSCRIPTEN__)  // the website: this goes back to the login page
+    if (button("Log out", ButtonStyle::Outline)) cloud_.signOut();
+#else
     if (button("Sign out", ButtonStyle::Outline)) cloud_.signOut();
+#endif
     if (cloud_.busy()) ImGui::EndDisabled();
     endAutoCard();
 }
