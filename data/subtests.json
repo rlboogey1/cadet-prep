@@ -33,8 +33,8 @@
       "name": "Verbal Analogies",
       "category": "knowledge",
       "file": "verbal_analogies.json",
-      "time_limit_seconds": 450,
-      "question_count": 15,
+      "time_limit_seconds": 480,
+      "question_count": 25,
       "tips": "Make a short sentence linking the first pair (\"a ___ is used by a ___\"), then test that sentence on each choice."
     },
     {
