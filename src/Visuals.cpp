@@ -471,10 +471,16 @@ void drawInsignia(const Visual& v, float height, float left, float width) {
     if (v.data[0] == 2 && v.data[1] == 1) {  // Airman Basic wears no insignia
         textCentered(dl, fonts.heading, c, u32(col::Muted, a), "No insignia");
     } else if (const Texture* t = texture(insigniaFile(v.data[0], v.data[1]))) {
-        // Fit inside height x (at most 2.4 x height), never more than 3x the picture's size.
-        const float maxW = std::min(width, height * 2.4f);
-        const float s = std::min({height / static_cast<float>(t->h), maxW / static_cast<float>(t->w), 3.0f});
+        // Fit inside height x (at most 2.4 x height), never more than 3x the picture's size,
+        // on a fixed light panel so dark insignia stay readable on a dark card.
+        const float pad = std::max(4.0f, height * 0.07f);
+        const float inner = height - 2 * pad;
+        const float maxW = std::min(width - 2 * pad, inner * 2.4f);
+        const float s = std::min({inner / static_cast<float>(t->h), maxW / static_cast<float>(t->w), 3.0f});
         const ImVec2 half(t->w * s * 0.5f, t->h * s * 0.5f);
+        const ImVec2 p0 = c - half - ImVec2(pad, pad), p1 = c + half + ImVec2(pad, pad);
+        dl->AddRectFilled(p0, p1, u32(ImVec4(0.945f, 0.953f, 0.965f, 1), a), kRadius);
+        dl->AddRect(p0, p1, u32(ImVec4(0.82f, 0.84f, 0.87f, 1), a), kRadius, 0, 1.0f);
         dl->AddImage(t->id, c - half, c + half, ImVec2(0, 0), ImVec2(1, 1),
                      u32(ImVec4(1, 1, 1, 1), a));
     } else {

@@ -37,6 +37,7 @@ inline ImVec4 Track(0.890f, 0.910f, 0.949f, 1.0f);      // empty part of bars
 inline ImVec4 Accent(0.247f, 0.373f, 0.855f, 1.0f);     // blue
 inline ImVec4 AccentHover(0.196f, 0.318f, 0.780f, 1.0f);
 inline ImVec4 AccentSoft(0.910f, 0.929f, 0.992f, 1.0f);
+inline ImVec4 OnAccent(1.0f, 1.0f, 1.0f, 1.0f);  // text and icons on an Accent fill
 inline ImVec4 HeroA(0.106f, 0.192f, 0.392f, 1.0f);      // banner gradient
 inline ImVec4 HeroB(0.282f, 0.427f, 0.875f, 1.0f);
 inline ImVec4 Good(0.153f, 0.620f, 0.365f, 1.0f);

@@ -137,6 +137,7 @@ void setDarkMode(bool dark) {
     set(col::Accent, {0.0f, 0.188f, 0.561f, 1}, {0.416f, 0.561f, 0.910f, 1});       // ultramarine #00308F
     set(col::AccentHover, {0.0f, 0.149f, 0.439f, 1}, {0.518f, 0.639f, 0.933f, 1});
     set(col::AccentSoft, {0.902f, 0.925f, 0.969f, 1}, {0.082f, 0.137f, 0.247f, 1});
+    set(col::OnAccent, {1, 1, 1, 1}, {0.039f, 0.063f, 0.141f, 1});  // dark text on the light dark-mode accent
     set(col::HeroA, {0.0f, 0.188f, 0.561f, 1}, {0.059f, 0.133f, 0.290f, 1});         // flat: no gradient
     set(col::HeroB, {0.0f, 0.188f, 0.561f, 1}, {0.059f, 0.133f, 0.290f, 1});
     set(col::Good, {0.184f, 0.490f, 0.310f, 1}, {0.373f, 0.698f, 0.514f, 1});
@@ -560,7 +561,7 @@ bool button(const char* label, ButtonStyle style, ImVec2 size, ImFont* font) {
     switch (style) {
         case ButtonStyle::Primary:
             dl->AddRectFilled(p, p + size, u32(hov || held ? col::AccentHover : col::Accent), r);
-            textCol = u32(col::White);
+            textCol = u32(col::OnAccent);
             break;
         case ButtonStyle::Outline:
             dl->AddRectFilled(p, p + size, u32(hov ? col::AccentSoft : col::Card), r);
@@ -639,13 +640,7 @@ bool answerCard(const char* id, char letter, const char* text, AnswerState state
         case AnswerState::Dimmed: textCol = col::Muted; break;
     }
 
-    // Correct answer: a glow ring that expands outward and fades
     const bool animating = anim >= 0.0f && anim < 1.0f;
-    if (animating && state == AnswerState::Correct) {
-        float e = easeOut(anim / 0.7f) * 14.0f;
-        float a = std::max(0.0f, 1.0f - anim / 0.7f) * 0.5f;
-        dl->AddRect(p - ImVec2(e, e), p + size + ImVec2(e, e), u32(col::Good, a), kRadius, 0, 2.0f);
-    }
     dl->AddRectFilled(p, p + size, u32(fill), kRadius);
     dl->AddRect(p, p + size, u32(edge), kRadius, 0, edgeW);
 
@@ -661,7 +656,7 @@ bool answerCard(const char* id, char letter, const char* text, AnswerState state
         drawIcon(dl, state == AnswerState::Correct ? Icon::Check : Icon::Cross, bc, r * 1.1f, u32(col::White));
     } else if (hov) {
         dl->AddRectFilled(bc - rr, bc + rr, u32(col::Accent), 2.0f);
-        textCentered(dl, fonts.label, bc, u32(col::White), l);
+        textCentered(dl, fonts.label, bc, u32(col::OnAccent), l);
     } else {
         dl->AddRectFilled(bc - rr, bc + rr, u32(col::Bg), 2.0f);
         dl->AddRect(bc - rr, bc + rr, u32(col::Ring), 2.0f, 0, 1.0f);
@@ -693,11 +688,6 @@ bool pictureAnswerCard(const char* id, char letter, AnswerState state, ImVec2 si
         case AnswerState::Dimmed: break;
     }
     const bool animating = anim >= 0.0f && anim < 1.0f;
-    if (animating && state == AnswerState::Correct) {
-        float e = easeOut(anim / 0.7f) * 14.0f;
-        float a = std::max(0.0f, 1.0f - anim / 0.7f) * 0.5f;
-        dl->AddRect(p - ImVec2(e, e), p + size + ImVec2(e, e), u32(col::Good, a), kRadius, 0, 2.0f);
-    }
     dl->AddRectFilled(p, p + size, u32(fill), kRadius);
 
     // The picture, inset from the card edge
@@ -722,7 +712,7 @@ bool pictureAnswerCard(const char* id, char letter, AnswerState state, ImVec2 si
     } else {
         dl->AddRectFilled(bc - rr, bc + rr, u32(hov ? col::Accent : col::Card), 2.0f);
         dl->AddRect(bc - rr, bc + rr, u32(hov ? col::Accent : col::Ring), 2.0f, 0, 1.0f);
-        textCentered(dl, fonts.label, bc, u32(hov ? col::White : state == AnswerState::Dimmed ? col::Muted : col::InkSoft), l);
+        textCentered(dl, fonts.label, bc, u32(hov ? col::OnAccent : state == AnswerState::Dimmed ? col::Muted : col::InkSoft), l);
     }
     return clicked;
 }

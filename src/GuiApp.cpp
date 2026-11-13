@@ -1301,13 +1301,14 @@ void GuiApp::drawReview() {
                               : "Every card you swipe left is saved here. Swipe it right to clear it from the list.";
 
     const float ty = ImGui::GetCursorPosY();
-    if (!compact_) pageTitle("Review missed questions", intro);
+    if (!compact_) pageTitle(afoqt ? "Review missed questions" : "Review missed cards", intro);
     else {
         wrappedIn(fonts.small, col::Muted, intro);
         ImGui::Dummy(ImVec2(0, 2));
     }
     if (total > 0) {
-        const std::string all = "Review all " + plural(total, "question");
+        const char* unit = afoqt ? "question" : "card";
+        const std::string all = (total == 1 ? "Review " : "Review all ") + plural(total, unit);
         if (!compact_) {
             alignRight(textSize(fonts.strong, all.c_str()).x + 40);
             ImGui::SetCursorPosY(ty);
@@ -1367,7 +1368,9 @@ void GuiApp::drawQuiz() {
     const std::string timer = left >= 0 ? mmss(left) : std::string("Untimed");
     const bool urgent = left >= 0 && left <= 30;
     bool quit = false;
-    const char* quitLabel = endless_ ? "Finish" : "Quit";  // endless practice ends when you say so, and counts
+    // Endless and AFOQT practice (which runs through the whole bank) end when you say so, and count.
+    const bool openEnded = endless_ || (sessionTag_ == "PRACTICE" && !cardMode_);
+    const char* quitLabel = openEnded ? "Finish" : "Quit";
     const float quitW = textSize(fonts.strong, quitLabel).x + 40;
     {
         const float y0 = ImGui::GetCursorPosY();
@@ -1386,10 +1389,10 @@ void GuiApp::drawQuiz() {
         textIn(tf, urgent ? col::Bad : left >= 0 ? col::Ink : col::Muted, timer.c_str());
         alignRight(quitW);
         ImGui::SetCursorPosY(y0);
-        quit = button(quitLabel, endless_ ? ButtonStyle::Primary : ButtonStyle::Outline, ImVec2(quitW, 40));
+        quit = button(quitLabel, openEnded ? ButtonStyle::Primary : ButtonStyle::Outline, ImVec2(quitW, 40));
         ImGui::SetCursorPosY(y0 + rowH + 6);
     }
-    if (quit && endless_ && !r.answers.empty()) {
+    if (quit && openEnded && !r.answers.empty()) {
         engine_.finishNow();  // the question on screen, if unanswered, doesn't count
         finishSession();
         return;
@@ -1412,7 +1415,7 @@ void GuiApp::drawQuiz() {
                        : sessionTag_ == "PRACTICE"   ? "Practice"
                        : warriorRepSession()         ? "Spaced repetition"
                                                      : nullptr;  // warm-up and review: the name says it
-    const std::string count = endless_ ? fmt("Question %d", engine_.index() + 1)
+    const std::string count = openEnded ? fmt("Question %d", engine_.index() + 1)
                               : fmt(cardMode_ ? "Card %d of %d" : "Question %d of %d", engine_.index() + 1, engine_.total());
     textIn(fonts.strong, col::InkSoft, (mode ? std::string(mode) + "  \xC2\xB7  " + count : count).c_str());
     std::string score = sessionTag_ == "TIMED TEST" ? std::string("Score shown at the end")
@@ -1737,7 +1740,7 @@ void GuiApp::drawFlashcards() {
     // front, the full text on the back; recite it, then flip to check).
     FlashcardDeck& deck = activeDeck();
     const bool vocab = track_ == "afoqt";
-    const char* deckName = vocab ? "Vocabulary cards" : "Memorize cards";
+    const char* deckName = vocab ? "Vocabulary cards" : "Warrior Knowledge cards";
     const int mastered = deck.masteredCount();
     const int total = static_cast<int>(deck.size());
 
@@ -1820,7 +1823,7 @@ void GuiApp::drawFlashcards() {
                      {fmt("%d", deck.sessionMissed()), "still learning", deck.sessionMissed() ? col::TagStrong : col::Ink},
                      {fmt("%d/%d", mastered, total), vocab ? "words mastered" : "cards mastered"}});
         ImGui::Dummy(ImVec2(0, 8));
-        if (button(vocab ? "Back to vocabulary cards" : "Back to memorize cards")) flashActive_ = false;
+        if (button(vocab ? "Back to vocabulary cards" : "Back to Warrior Knowledge")) flashActive_ = false;
         return;
     }
 
@@ -2487,21 +2490,25 @@ void GuiApp::drawComposites() {
     const char* dash = "\xE2\x80\x94";
     for (const CompositeEstimate& e : estimates) {
         dl->AddLine(ImVec2(o.x, y), ImVec2(o.x + w, y), u32(col::CardBorder), 1.0f);
+        // The score shows only once every section in the composite has been practiced;
+        // an average of one or two sections would look like a real score.
+        const bool full = e.hasData() && e.complete();
+        const int nSections = static_cast<int>(e.info->sections.size());
         std::string note1, note2;
         if (!e.hasData()) {
-            note1 = fmt("%d sections, none practiced yet", static_cast<int>(e.info->sections.size()));
-        } else {
+            note1 = fmt("%d sections, none practiced yet", nSections);
+        } else if (full) {
             note1 = "Weakest: " + nameOf(e.weakest);
-            if (!e.complete()) {
-                note2 = "Not practiced: ";
-                for (size_t k = 0; k < e.missing.size(); ++k) note2 += (k ? ", " : "") + nameOf(e.missing[k]);
-            }
+        } else {
+            note1 = fmt("%d of %d sections practiced", e.practiced, nSections);
+            note2 = "Not practiced: ";
+            for (size_t k = 0; k < e.missing.size(); ++k) note2 += (k ? ", " : "") + nameOf(e.missing[k]);
         }
-        const std::string score = e.hasData() ? fmt("%.0f%%", e.score) : dash;
+        const std::string score = full ? fmt("%.0f%%", e.score) : dash;
         const float sh = fontPx(fonts.strong), smh = fontPx(fonts.small);
         auto bar = [&](float x, float by, float bw) {
             dl->AddRectFilled(ImVec2(x, by), ImVec2(x + bw, by + 5), u32(col::Track));
-            if (e.hasData()) dl->AddRectFilled(ImVec2(x, by), ImVec2(x + bw * static_cast<float>(e.score / 100.0), by + 5), u32(col::Accent));
+            if (full) dl->AddRectFilled(ImVec2(x, by), ImVec2(x + bw * static_cast<float>(e.score / 100.0), by + 5), u32(col::Accent));
         };
         auto notes = [&](float x, float ny, float nw) {
             dl->AddText(fonts.small, smh, ImVec2(x, ny), u32(col::InkSoft), note1.c_str(), nullptr, nw);
@@ -2519,14 +2526,14 @@ void GuiApp::drawComposites() {
             dl->AddText(fonts.strong, sh, ImVec2(o.x, y), u32(col::Ink), e.info->name.c_str());
             dl->AddText(fonts.small, smh, ImVec2(o.x, y + sh + 3), u32(col::Muted), e.info->description.c_str(), nullptr, descW);
             const float leftH = sh + 3 + textSize(fonts.small, e.info->description.c_str(), descW).y;
-            dl->AddText(fonts.monoStrong, fontPx(fonts.monoStrong), ImVec2(estX, y), u32(e.hasData() ? col::Ink : col::Muted), score.c_str());
+            dl->AddText(fonts.monoStrong, fontPx(fonts.monoStrong), ImVec2(estX, y), u32(full ? col::Ink : col::Muted), score.c_str());
             bar(barX, y + (sh - 5) * 0.5f, barW);
             const float rightH = notes(noteX, y + 1, o.x + w - noteX) - y;
             y += std::max(leftH, rightH) + 14;
         } else {
             dl->AddText(fonts.strong, sh, ImVec2(o.x, y), u32(col::Ink), e.info->name.c_str());
             const float sw = textSize(fonts.monoStrong, score.c_str()).x;
-            dl->AddText(fonts.monoStrong, fontPx(fonts.monoStrong), ImVec2(o.x + w - sw, y), u32(e.hasData() ? col::Ink : col::Muted), score.c_str());
+            dl->AddText(fonts.monoStrong, fontPx(fonts.monoStrong), ImVec2(o.x + w - sw, y), u32(full ? col::Ink : col::Muted), score.c_str());
             y += sh + 3;
             dl->AddText(fonts.small, smh, ImVec2(o.x, y), u32(col::Muted), e.info->description.c_str(), nullptr, w);
             y += textSize(fonts.small, e.info->description.c_str(), w).y + 8;
