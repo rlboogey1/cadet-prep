@@ -67,6 +67,7 @@ private:
     void drawProgress();
     void drawWeakSpots();  // AFOQT: the words, roots and question types missed most
     void drawQuiz();
+    void drawPassage(const std::string& passage);  // Reading Comprehension: the passage with zoom and highlighting
     void drawCardQuestion(const Question& q);  // Warrior Knowledge: the question as a swipe card
     void swipeButtons(const char* flipLabel);  // the buttons under a swipe card
     void drawResults();
@@ -191,6 +192,7 @@ private:
     bool isReview_ = false;
     bool endless_ = false;  // endless practice: more questions are added as you go
     std::string message_;
+    std::vector<std::string> notices_;  // atomicfile notices (a damaged file set aside, a save that failed), until dismissed
     bool showAllSessions_ = false;  // Progress: the whole session log, not just the latest 20
     std::string pinnedFocus_;  // subtest id chosen by the user for the current track; empty = automatic
     std::map<std::string, std::string> pinnedByTrack_;  // the same, for every track
@@ -251,6 +253,22 @@ private:
     std::vector<int> relChoices_;  // indexes into verbal::relationTypes()
     int relPick_ = -1;           // the choice picked in step 1 (-1 = not yet)
     int relNamed_ = 0, relNamedRight_ = 0;  // step 1 this session
+
+    // Reading passages: text size (an index into the zoom steps in drawPassage, saved in settings)
+    // and highlights. Highlights are kept per passage only while a session is open (one flag
+    // per word); every session start clears them. On touch screens a drag scrolls the page,
+    // so highlighting is a mode (highlightMode_) that turns that off over the passage.
+    int passageZoom_ = 1;
+    bool highlightMode_ = false;
+    std::map<std::string, std::vector<char>> highlights_;
+    struct HighlightDrag {
+        bool active = false;
+        int anchor = 0;          // the word the press started on
+        bool paint = true;       // painting (true) or erasing (false), decided by that first word
+        std::vector<char> base;  // the flags when the press started; the dragged range is applied on top
+    } hlDrag_;
+    bool passageLive_ = false;   // touch + highlight mode: the passage rect below takes drags
+    ImVec2 passageMin_{0, 0}, passageMax_{0, 0};
 
     // The weekly reading set
     WeeklyReading weekly_;

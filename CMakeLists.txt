@@ -141,6 +141,7 @@ add_library(afoqt_core STATIC
     src/SavedQuestions.cpp
     src/Composites.cpp
     src/SyncMerge.cpp
+    src/AtomicFile.cpp
     src/VerbalTypes.cpp
     src/MissLog.cpp
     src/WeeklyReading.cpp)

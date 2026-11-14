@@ -1,4 +1,5 @@
 #include "MissLog.h"
+#include "AtomicFile.h"
 #include "SyncMerge.h"
 #include <algorithm>
 #include <fstream>
@@ -25,7 +26,8 @@ void MissLog::load(const std::string& path, const std::string& deviceId) {
             }
         }
     } catch (...) {
-        devices_.clear();  // unreadable file: start fresh
+        devices_.clear();  // damaged file: set a copy aside before a save replaces it, then start fresh
+        atomicfile::setAside(path);
     }
 }
 
@@ -48,7 +50,7 @@ void MissLog::save() const {
         for (const auto& [key, c] : keys) k[key] = json::array({c.seen, c.missed, c.last});
         root["devices"][dev] = k;
     }
-    std::ofstream(path_) << root.dump(1);
+    atomicfile::write(path_, root.dump(1));
 }
 
 std::vector<MissLog::Count> MissLog::counts(const std::string& kind) const {

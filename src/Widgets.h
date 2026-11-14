@@ -52,6 +52,7 @@ inline ImVec4 TagSoft(0.996f, 0.933f, 0.878f, 1.0f);    // orange tag (FOCUS, LA
 inline ImVec4 TagStrong(0.851f, 0.451f, 0.094f, 1.0f);
 inline ImVec4 Footer(0.30f, 0.37f, 0.58f, 1.0f);        // footer text on subject cards
 inline ImVec4 CalloutEdge(0.75f, 0.80f, 0.89f, 1.0f);   // edge of the passage box
+inline ImVec4 Highlight(1.0f, 0.85f, 0.30f, 0.55f);     // highlighted words in a reading passage
 inline ImVec4 Shadow(0.086f, 0.122f, 0.235f, 1.0f);     // card shadows (alpha set where used)
 }  // namespace col
 

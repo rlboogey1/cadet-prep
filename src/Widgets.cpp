@@ -150,6 +150,7 @@ void setDarkMode(bool dark) {
     set(col::TagStrong, {0.784f, 0.506f, 0.102f, 1}, {0.886f, 0.631f, 0.290f, 1});
     set(col::Footer, {0.290f, 0.322f, 0.384f, 1}, {0.604f, 0.639f, 0.694f, 1});
     set(col::CalloutEdge, {0.722f, 0.753f, 0.800f, 1}, {0.227f, 0.278f, 0.361f, 1});
+    set(col::Highlight, {1.0f, 0.85f, 0.30f, 0.55f}, {0.85f, 0.62f, 0.12f, 0.45f});
     set(col::Shadow, {0.067f, 0.094f, 0.153f, 1}, {0.0f, 0.0f, 0.0f, 1});
     applyTheme();
 }

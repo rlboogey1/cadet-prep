@@ -1,6 +1,7 @@
 #define IMGUI_DEFINE_MATH_OPERATORS  // lets us write ImVec2 + ImVec2
 #include "GuiApp.h"
 #include "Composites.h"
+#include "AtomicFile.h"
 #include "QuestionGenerator.h"
 #include "SyncMerge.h"
 #include "VerbalTypes.h"
@@ -372,7 +373,10 @@ void GuiApp::draw() {
         themeApplied_ = true;
     }
     if (cloud_.update()) reloadProgress();
+    for (auto& n : atomicfile::takeNotices())  // damaged files set aside, saves that failed
+        if (std::find(notices_.begin(), notices_.end(), n) == notices_.end()) notices_.push_back(std::move(n));
     touchScroll();
+    passageLive_ = false;  // drawPassage sets it again this frame if the passage is showing in highlight mode
     const ImGuiViewport* vp = ImGui::GetMainViewport();
     ImGui::SetNextWindowPos(vp->WorkPos);
     ImGui::SetNextWindowSize(vp->WorkSize);
@@ -421,6 +425,17 @@ void GuiApp::draw() {
     if (screen_ != lastScreen_) {  // new page: start at the top
         ImGui::SetScrollY(0.0f);
         lastScreen_ = screen_;
+    }
+    if (screen_ != Screen::Quiz) {  // not mid-question: the notice waits until the quiz is over
+        int dismissed = -1;
+        for (size_t i = 0; i < notices_.size(); ++i) {
+            beginCallout();
+            wrappedIn(fonts.strong, col::Ink, notices_[i].c_str());
+            ImGui::Dummy(ImVec2(0, 2));
+            if (button(fmt("Dismiss##notice%d", static_cast<int>(i)).c_str(), ButtonStyle::Outline)) dismissed = static_cast<int>(i);
+            endCallout(col::TagSoft, col::TagStrong);
+        }
+        if (dismissed >= 0) notices_.erase(notices_.begin() + dismissed);
     }
     switch (screen_) {
         case Screen::Home: drawHome(); break;
@@ -539,6 +554,8 @@ void GuiApp::touchScroll() {
     if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {  // finger down: stops a fling, finds what can scroll
         scrollWinY_ = scrollable(g.HoveredWindow, true);
         scrollWinX_ = scrollable(g.HoveredWindow, false);
+        if (passageLive_ && ImGui::IsMouseHoveringRect(passageMin_, passageMax_, false))
+            scrollWinY_ = scrollWinX_ = nullptr;  // highlighting: a drag over the passage marks words, it doesn't scroll
         dragAxis_ = 0;
         flingWin_ = nullptr;
         flingVel_ = ImVec2(0, 0);
@@ -1511,15 +1528,7 @@ void GuiApp::drawQuiz() {
         ImGui::SameLine(0, 34);
         ImGui::BeginGroup();
     }
-    if (!q.passage.empty()) {
-        textIn(fonts.small, col::Muted, "Passage");
-        beginCallout();
-        ImGui::PushTextWrapPos(ImGui::GetContentRegionAvail().x + ImGui::GetCursorPosX() - 24);
-        textIn(fonts.body, col::InkSoft, q.passage.c_str());
-        ImGui::PopTextWrapPos();
-        endCallout(col::Bg, col::CalloutEdge);
-        ImGui::Dummy(ImVec2(0, 4));
-    }
+    if (!q.passage.empty()) drawPassage(q.passage);
     if (relDrill_) {  // step 2: the relationship stays in view
         const verbal::TypeInfo* t = verbal::findType(q.subtest, q.type);
         textIn(fonts.small, col::Muted, fmt("Step 2 of 2  \xC2\xB7  Relationship: %s", t ? t->name : "?").c_str());
@@ -1630,6 +1639,131 @@ void GuiApp::drawQuiz() {
             else sound_.wrong();
         }
     }
+}
+
+// Reading Comprehension: the passage, with a text size control and word highlighting.
+// ImGui has no text selection, so the words are laid out and drawn here: wrapped by hand
+// at the zoomed size, with a flag per word. Press on a word and drag to another to mark
+// everything between them (or, if the first word was already marked, to erase it); the
+// range follows the pointer, so dragging back shrinks it. A click on one word toggles it.
+// Touch: a drag scrolls the page, so the Highlight button must be on first.
+void GuiApp::drawPassage(const std::string& passage) {
+    static const float kZoom[] = {0.85f, 1.0f, 1.3f, 1.6f};
+    constexpr int kSteps = static_cast<int>(sizeof kZoom / sizeof kZoom[0]);
+    passageZoom_ = std::clamp(passageZoom_, 0, kSteps - 1);
+
+    struct Word { size_t begin, end; };
+    std::vector<Word> words;
+    for (size_t i = 0; i < passage.size();) {
+        while (i < passage.size() && std::isspace(static_cast<unsigned char>(passage[i]))) ++i;
+        const size_t b = i;
+        while (i < passage.size() && !std::isspace(static_cast<unsigned char>(passage[i]))) ++i;
+        if (i > b) words.push_back({b, i});
+    }
+    std::vector<char>& marks = highlights_[passage];
+    marks.resize(words.size(), 0);
+    const bool any = std::find(marks.begin(), marks.end(), 1) != marks.end();
+    const bool active = !touch_ || highlightMode_;  // on a mouse, dragging always highlights
+
+    // ---- Toolbar: text size, (touch) the highlight switch, clear
+    textIn(fonts.small, col::Muted, "Passage");
+    const float bh = touch_ ? 38.0f : 30.0f;
+    if (button("A-##pz_out", passageZoom_ > 0 ? ButtonStyle::Outline : ButtonStyle::Disabled, ImVec2(48, bh)) && passageZoom_ > 0) {
+        --passageZoom_;
+        saveSettings();
+    }
+    ImGui::SameLine(0, 8);
+    if (button("A+##pz_in", passageZoom_ < kSteps - 1 ? ButtonStyle::Outline : ButtonStyle::Disabled, ImVec2(48, bh)) &&
+        passageZoom_ < kSteps - 1) {
+        ++passageZoom_;
+        saveSettings();
+    }
+    if (touch_) {
+        ImGui::SameLine(0, 8);
+        if (button("Highlight##pz_hl", highlightMode_ ? ButtonStyle::Primary : ButtonStyle::Outline, ImVec2(0, bh)))
+            highlightMode_ = !highlightMode_;
+    }
+    if (any) {
+        sameLineIfFits(buttonWidth("Clear"), 8);
+        if (button("Clear##pz_clear", ButtonStyle::Outline, ImVec2(0, bh))) {
+            std::fill(marks.begin(), marks.end(), 0);
+            hlDrag_.active = false;
+        }
+    }
+    if (!any || (touch_ && !highlightMode_))
+        wrappedIn(fonts.small, col::Muted,
+                  touch_ ? (highlightMode_ ? "Drag across words to highlight them. Drag over highlighted words to erase."
+                                           : "Turn on Highlight, then drag across words to mark them.")
+                         : "Drag across words to highlight them. Drag over highlighted words to erase.");
+
+    // ---- Lay the words out at the zoomed size
+    beginCallout();
+    ImFont* font = fonts.body;
+    const float width = std::max(80.0f, ImGui::GetContentRegionAvail().x - 24.0f);
+    const float size = fontPx(font) * kZoom[passageZoom_], lineH = std::round(size * 1.5f);
+    const float space = font->CalcTextSizeA(size, FLT_MAX, 0.0f, " ").x;
+    struct Placed { float x, w; int line; };
+    std::vector<Placed> at(words.size());
+    std::vector<int> lineFirst;  // index of each line's first word
+    float x = 0.0f;
+    int line = 0;
+    for (size_t i = 0; i < words.size(); ++i) {
+        const float w = font->CalcTextSizeA(size, FLT_MAX, 0.0f, passage.c_str() + words[i].begin, passage.c_str() + words[i].end).x;
+        if (x > 0.0f && x + w > width) {
+            x = 0.0f;
+            ++line;
+        }
+        if (lineFirst.size() <= static_cast<size_t>(line)) lineFirst.push_back(static_cast<int>(i));
+        at[i] = {x, w, line};
+        x += w + space;
+    }
+    const int lines = static_cast<int>(lineFirst.size());
+    const float height = std::max(1.0f, static_cast<float>(lines) * lineH);
+
+    const ImVec2 o = ImGui::GetCursorScreenPos();
+    ImGui::InvisibleButton("##passage", ImVec2(width, height));
+    passageMin_ = o;
+    passageMax_ = o + ImVec2(width, height);
+    passageLive_ = touch_ && highlightMode_;
+
+    // The word under (or nearest to) a point: pick the line by height, then the word by position
+    auto wordAt = [&](ImVec2 m) {
+        const int ln = std::clamp(static_cast<int>(std::floor((m.y - o.y) / lineH)), 0, std::max(0, lines - 1));
+        const int first = lineFirst[static_cast<size_t>(ln)];
+        const int last = ln + 1 < lines ? lineFirst[static_cast<size_t>(ln) + 1] - 1 : static_cast<int>(words.size()) - 1;
+        for (int i = first; i < last; ++i)
+            if (m.x <= o.x + at[static_cast<size_t>(i)].x + at[static_cast<size_t>(i)].w + space * 0.5f) return i;
+        return last;
+    };
+    if (active && !words.empty()) {
+        const ImVec2 mouse = ImGui::GetIO().MousePos;
+        if (ImGui::IsItemActivated()) {
+            const int a = wordAt(mouse);
+            hlDrag_ = {true, a, !marks[static_cast<size_t>(a)], marks};
+        }
+        if (hlDrag_.active && (!ImGui::IsItemActive() || hlDrag_.base.size() != marks.size())) hlDrag_.active = false;
+        if (hlDrag_.active) {
+            const int c = wordAt(mouse);
+            marks = hlDrag_.base;
+            for (int i = std::min(hlDrag_.anchor, c); i <= std::max(hlDrag_.anchor, c); ++i)
+                marks[static_cast<size_t>(i)] = hlDrag_.paint ? 1 : 0;
+        }
+    }
+
+    // ---- Draw: highlights under the words, one bar per run of marked words on a line
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    for (size_t i = 0; i < words.size(); ++i) {
+        if (!marks[i]) continue;
+        const bool joinNext = i + 1 < words.size() && marks[i + 1] && at[i + 1].line == at[i].line;
+        const float top = o.y + static_cast<float>(at[i].line) * lineH + 1.0f;
+        dl->AddRectFilled(ImVec2(o.x + at[i].x - 1.0f, top), ImVec2(o.x + at[i].x + at[i].w + (joinNext ? space : 1.0f), top + lineH - 2.0f),
+                          u32(col::Highlight), 2.0f);
+    }
+    for (size_t i = 0; i < words.size(); ++i)
+        dl->AddText(font, size, ImVec2(o.x + at[i].x, o.y + static_cast<float>(at[i].line) * lineH + (lineH - size) * 0.5f),
+                    u32(marks[i] ? col::Ink : col::InkSoft), passage.c_str() + words[i].begin, passage.c_str() + words[i].end);
+    endCallout(col::Bg, col::CalloutEdge);
+    ImGui::Dummy(ImVec2(0, 4));
 }
 
 // Warrior Knowledge: the question on the front, the answer on the back. You grade
@@ -2677,6 +2811,8 @@ void GuiApp::startSubtest(const SubtestInfo& s, SessionMode mode) {
     relDrill_ = weeklySession_ = false;
     cardMode_ = track_ == "warrior";
     swipe_ = SwipeCard{};
+    highlights_.clear();  // highlights last only while a session is open
+    hlDrag_.active = false;
     engine_.start(s.id, std::move(questions), mode, s.timeLimitSeconds);
     screen_ = Screen::Quiz;
 }
@@ -2699,6 +2835,8 @@ void GuiApp::startEndless(const SubtestInfo& s) {
     relDrill_ = weeklySession_ = false;
     cardMode_ = false;
     swipe_ = SwipeCard{};
+    highlights_.clear();  // highlights last only while a session is open
+    hlDrag_.active = false;
     engine_.start(s.id, std::move(questions), SessionMode::Practice, 0);
     screen_ = Screen::Quiz;
 }
@@ -2766,6 +2904,8 @@ void GuiApp::startWarmup() {
     relDrill_ = weeklySession_ = false;
     cardMode_ = track_ == "warrior";
     swipe_ = SwipeCard{};
+    highlights_.clear();  // highlights last only while a session is open
+    hlDrag_.active = false;
     engine_.start(track_ == "afoqt" ? "warmup" : "warmup_" + track_, std::move(questions), SessionMode::Practice, 0);
     screen_ = Screen::Quiz;
 }
@@ -2796,6 +2936,8 @@ void GuiApp::startReview(const std::string& subtestId) {
     relDrill_ = weeklySession_ = false;
     cardMode_ = track_ == "warrior";
     swipe_ = SwipeCard{};
+    highlights_.clear();  // highlights last only while a session is open
+    hlDrag_.active = false;
     engine_.start("review", std::move(questions), SessionMode::Practice, 0);
     screen_ = Screen::Quiz;
 }
@@ -2853,6 +2995,8 @@ void GuiApp::startWarriorRepetition() {
     relDrill_ = weeklySession_ = false;
     cardMode_ = true;
     swipe_ = SwipeCard{};
+    highlights_.clear();  // highlights last only while a session is open
+    hlDrag_.active = false;
     engine_.start("repetition_warrior", std::move(questions), SessionMode::Practice, 0);
     screen_ = Screen::Quiz;
 }
@@ -2951,6 +3095,8 @@ void GuiApp::startRelationDrill(const std::string& type) {
     feedbackTime_ = -1.0;
     cardMode_ = false;
     swipe_ = SwipeCard{};
+    highlights_.clear();  // highlights last only while a session is open
+    hlDrag_.active = false;
     engine_.start(va ? va->id : "verbal_analogies", std::move(pool), SessionMode::Practice, 0);
     screen_ = Screen::Quiz;
 }
@@ -3064,6 +3210,8 @@ void GuiApp::startReadingType(const std::string& type) {
     feedbackTime_ = -1.0;
     cardMode_ = false;
     swipe_ = SwipeCard{};
+    highlights_.clear();  // highlights last only while a session is open
+    hlDrag_.active = false;
     engine_.start("reading_comprehension", std::move(pool), SessionMode::Practice, 0);
     screen_ = Screen::Quiz;
 }
@@ -3101,6 +3249,8 @@ void GuiApp::startWeeklyReading() {
     feedbackTime_ = -1.0;
     cardMode_ = false;
     swipe_ = SwipeCard{};
+    highlights_.clear();  // highlights last only while a session is open
+    hlDrag_.active = false;
     engine_.start(rc->id, std::move(questions), SessionMode::Timed, seconds);
     screen_ = Screen::Quiz;
 }
@@ -3346,10 +3496,13 @@ void GuiApp::loadSettings() {
         definitionFirst_ = j.value("definition_first", false);
         track_ = j.value("track", "afoqt");
         deviceId_ = j.value("device", "");
+        passageZoom_ = std::clamp(j.value("passage_zoom", 1), 0, 3);
         if (track_ != trackInfo(track_).id) track_ = "afoqt";  // unknown track
     } catch (...) {
-        pinnedByTrack_.clear();  // unreadable file: use defaults
+        pinnedByTrack_.clear();  // damaged file: set a copy aside before it is saved over, use defaults
         track_ = "afoqt";
+        in.close();
+        atomicfile::setAside(apppaths::userFile("afoqt_settings.json"));
     }
     pinnedFocus_ = pinnedByTrack_[track_];
     if (deviceId_.empty()) {  // first run (or an older settings file): this device's id for the miss counts
@@ -3369,7 +3522,8 @@ void GuiApp::saveSettings() const {
     j["definition_first"] = definitionFirst_;
     j["track"] = track_;
     j["device"] = deviceId_;
-    std::ofstream(apppaths::userFile("afoqt_settings.json")) << j.dump(2);
+    j["passage_zoom"] = passageZoom_;
+    atomicfile::write(apppaths::userFile("afoqt_settings.json"), j.dump(2));
 }
 
 // ================================================================ stats

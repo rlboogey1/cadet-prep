@@ -1,4 +1,5 @@
 #include "AppPaths.h"
+#include "AtomicFile.h"
 #include "ConsoleUI.h"
 #include "FlashcardDeck.h"
 #include "Composites.h"
@@ -228,6 +229,7 @@ int main(int argc, char* argv[]) {
 
     app.ui.showMessage("Welcome to Cadet Prep. Let's get some AFOQT reps in.");
     while (true) {
+        for (const auto& note : atomicfile::takeNotices()) app.ui.showMessage("Note: " + note);  // damaged file set aside, failed save
         int choice = app.ui.menu("What would you like to do?", {
             "Practice a subtest (untimed, instant feedback)",
             "Timed test (one subtest)",

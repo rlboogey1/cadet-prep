@@ -1,4 +1,5 @@
 #include "FlashcardDeck.h"
+#include "AtomicFile.h"
 #include "SyncMerge.h"
 #include <algorithm>
 #include <fstream>
@@ -39,8 +40,9 @@ void FlashcardDeck::loadProgress(const std::string& progressPath) {
         const json changed = root.value("changed", json::object());
         for (const auto& [word, t] : changed.items()) changed_[word] = t.get<long long>();
     } catch (...) {
-        boxes_.clear();  // corrupt file: start fresh
+        boxes_.clear();  // damaged file: set a copy aside before a save replaces it, then start fresh
         changed_.clear();
+        atomicfile::setAside(progressPath);
     }
 }
 
@@ -49,7 +51,7 @@ void FlashcardDeck::saveProgress() const {
     json root;
     root["boxes"] = boxes_;
     root["changed"] = changed_;
-    std::ofstream(progressPath_) << root.dump(2);
+    atomicfile::write(progressPath_, root.dump(2));
 }
 
 int FlashcardDeck::box(const std::string& word) const {

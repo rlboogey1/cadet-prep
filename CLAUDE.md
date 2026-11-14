@@ -125,6 +125,12 @@ vocabulary cards), `root:`, `relation:` (analogy answers), `relname:` (drill ste
 counts, with buttons to drill each list. `recordMisses()` counts a quiz when it finishes; cards
 count as they're swiped. MissLog keeps counts per device (`deviceId_`, in settings) so syncing never
 double counts.
+**Reading passages** (`drawPassage`) have a text size control (`passageZoom_`, 4 steps, saved in settings as
+`passage_zoom`) and word highlighting. ImGui has no text selection, so the passage is wrapped and drawn by
+hand with one flag per word (`highlights_`, keyed by passage text, kept only until the next session starts;
+nothing is saved or synced). Press and drag across words to mark them, or over marked words to erase. On
+touch a drag scrolls the page, so the Highlight button (`highlightMode_`) switches that off over the passage
+(`passageLive_`, checked in `touchScroll`). The marker color is `col::Highlight`.
 
 **Warrior Knowledge has no multiple choice:** its blocks are built only from the handbook items in
 `data/warrior_cards.json` (`addWarriorCards()`: `pos` "BLOCK n" → `wk_blockNN`, front = `word`, back

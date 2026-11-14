@@ -1,4 +1,5 @@
 #include "RepetitionDeck.h"
+#include "AtomicFile.h"
 #include "FlashcardDeck.h"
 #include "SyncMerge.h"
 #include <algorithm>
@@ -56,10 +57,12 @@ void RepetitionDeck::load(const std::string& path, const FlashcardDeck& vocab) {
             lastDay_ = root.value("last_day", "");
             updated_ = root.value("updated", 0LL);
         } catch (...) {
-            words_.clear();
+            words_.clear();  // damaged file: set a copy aside before the save below replaces it
             batches_.clear();
             streak_ = best_ = 0;
             lastDay_.clear();
+            in.close();
+            atomicfile::setAside(path);
         }
     }
     // Drop words no longer in the vocabulary file, and batches that no longer fit.
@@ -139,7 +142,7 @@ void RepetitionDeck::save() const {
     root["best_streak"] = best_;
     root["last_day"] = lastDay_;
     root["updated"] = updated_;
-    std::ofstream(path_) << root.dump(2);
+    atomicfile::write(path_, root.dump(2));
 }
 
 // ---------------------------------------------------------------- BlockRepetition
@@ -162,9 +165,11 @@ void BlockRepetition::load(const std::string& path, int blockCount) {
             lastDay_ = root.value("last_day", "");
             updated_ = root.value("updated", 0LL);
         } catch (...) {
-            blocks_.clear();
+            blocks_.clear();  // damaged file: set a copy aside before the save below replaces it
             streak_ = best_ = 0;
             lastDay_.clear();
+            in.close();
+            atomicfile::setAside(path);
         }
     }
     // Keep real blocks, once each, in order; a new deck starts with Block 1
@@ -216,5 +221,5 @@ void BlockRepetition::save() const {
     root["best_streak"] = best_;
     root["last_day"] = lastDay_;
     root["updated"] = updated_;
-    std::ofstream(path_) << root.dump(2);
+    atomicfile::write(path_, root.dump(2));
 }

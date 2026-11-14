@@ -1,5 +1,6 @@
 #include "CloudSync.h"
 #include "AppPaths.h"
+#include "AtomicFile.h"
 #include "Http.h"
 #include "SyncMerge.h"
 #include <chrono>
@@ -42,6 +43,8 @@ json readJson(const std::string& path) {
         in >> j;
         return j;
     } catch (...) {
+        in.close();
+        atomicfile::setAside(path);  // keep the damaged file; a sync may replace it with the merged one
         return json();
     }
 }
@@ -293,7 +296,7 @@ void CloudSync::saveAccount() const {
     const json j = {{"email", account_.email}, {"user_id", account_.userId},
                     {"access_token", account_.accessToken}, {"refresh_token", account_.refreshToken},
                     {"expires_at", account_.expiresAt}, {"last_sync", static_cast<long long>(lastSync_)}};
-    std::ofstream(path) << j.dump(2);
+    atomicfile::write(path, j.dump(2));  // on failure the tokens stay in memory and are retried on the next save
 }
 
 std::string CloudSync::status() const {
@@ -415,13 +418,15 @@ bool CloudSync::apply(Job& job) {
         // while the sync ran; that newer progress goes up with the next sync.
         const json now = readLocal();
         const json merged = cloudsync::mergeBundle(now, job.merged);
+        bool allSaved = true;
         for (const auto& [key, file] : cloudsync::syncedFiles()) {
             if (!merged.contains(key) || (now.contains(key) && now[key] == merged[key])) continue;
-            std::ofstream(apppaths::userFile(file)) << merged[key].dump(2);
-            changed = true;
+            if (atomicfile::write(apppaths::userFile(file), merged[key].dump(2))) changed = true;
+            else allSaved = false;  // the old file is untouched; the next regular sync merges again
         }
         if (now != job.local) pending_ = true;
-        lastSync_ = std::time(nullptr);
+        if (allSaved) lastSync_ = std::time(nullptr);
+        else error_ = "Couldn't save the synced progress to this device";
     }
     saveAccount();
     rememberFileTimes();

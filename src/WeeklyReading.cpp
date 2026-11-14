@@ -1,4 +1,5 @@
 #include "WeeklyReading.h"
+#include "AtomicFile.h"
 #include "SyncMerge.h"
 #include <algorithm>
 #include <cmath>
@@ -84,7 +85,8 @@ void WeeklyReading::load(const std::string& path) {
         for (const auto& [week, r] : weeks.items())
             weeks_[week] = {r.value("correct", 0), r.value("total", 0), r.value("time", 0LL)};
     } catch (...) {
-        weeks_.clear();
+        weeks_.clear();  // damaged file: set a copy aside before a save replaces it, then start fresh
+        atomicfile::setAside(path);
     }
 }
 
@@ -94,7 +96,7 @@ void WeeklyReading::save() const {
     root["weeks"] = json::object();
     for (const auto& [week, r] : weeks_)
         root["weeks"][week] = {{"correct", r.correct}, {"total", r.total}, {"time", r.time}};
-    std::ofstream(path_) << root.dump(2);
+    atomicfile::write(path_, root.dump(2));
 }
 
 const WeeklyReading::Result* WeeklyReading::thisWeekResult() const {

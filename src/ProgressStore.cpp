@@ -1,4 +1,5 @@
 #include "ProgressStore.h"
+#include "AtomicFile.h"
 #include "SyncMerge.h"
 #include <chrono>
 #include <ctime>
@@ -35,23 +36,27 @@ void ProgressStore::reload() {
 void ProgressStore::load() {
     std::ifstream in(path_);
     if (!in) return;  // first run: no file yet
-    json root;
     try {
+        json root;
         in >> root;
+        for (const auto& s : root.value("sessions", json::array())) {
+            // Sessions saved before syncing existed have no id: cloudsync::sessionKey() makes one
+            sessions_.push_back({cloudsync::sessionKey(s), s.value("date", ""), s.value("subtest", ""),
+                                 s.value("correct", 0), s.value("total", 0),
+                                 s.value("seconds", 0.0), s.value("review", false), s.value("timed", false)});
+        }
+        for (const auto& id : root.value("missed", json::array()))
+            outcomes_[id.get<std::string>()] = {true, 0};
+        const json outcomes = root.value("outcomes", json::object());  // keep alive for the loop
+        for (const auto& [id, o] : outcomes.items())
+            outcomes_[id] = {o.value("missed", false), o.value("time", 0LL)};
     } catch (...) {
-        return;  // corrupt file: start fresh rather than crash
+        // Damaged file: keep a copy before the next save replaces it, and start empty
+        sessions_.clear();
+        outcomes_.clear();
+        in.close();
+        atomicfile::setAside(path_);
     }
-    for (const auto& s : root.value("sessions", json::array())) {
-        // Sessions saved before syncing existed have no id: cloudsync::sessionKey() makes one
-        sessions_.push_back({cloudsync::sessionKey(s), s.value("date", ""), s.value("subtest", ""),
-                             s.value("correct", 0), s.value("total", 0),
-                             s.value("seconds", 0.0), s.value("review", false), s.value("timed", false)});
-    }
-    for (const auto& id : root.value("missed", json::array()))
-        outcomes_[id.get<std::string>()] = {true, 0};
-    const json outcomes = root.value("outcomes", json::object());  // keep alive for the loop
-    for (const auto& [id, o] : outcomes.items())
-        outcomes_[id] = {o.value("missed", false), o.value("time", 0LL)};
 }
 
 void ProgressStore::save() const {
@@ -65,7 +70,7 @@ void ProgressStore::save() const {
     root["missed"] = json(missedQuestionIds());  // also read by older versions
     root["outcomes"] = json::object();
     for (const auto& [id, o] : outcomes_) root["outcomes"][id] = {{"missed", o.missed}, {"time", o.time}};
-    std::ofstream(path_) << root.dump(2);
+    atomicfile::write(path_, root.dump(2));
 }
 
 void ProgressStore::record(const SessionResult& result, bool isReview, bool timed) {
