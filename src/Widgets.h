@@ -53,6 +53,9 @@ inline ImVec4 TagStrong(0.851f, 0.451f, 0.094f, 1.0f);
 inline ImVec4 Footer(0.30f, 0.37f, 0.58f, 1.0f);        // footer text on subject cards
 inline ImVec4 CalloutEdge(0.75f, 0.80f, 0.89f, 1.0f);   // edge of the passage box
 inline ImVec4 Highlight(1.0f, 0.85f, 0.30f, 0.55f);     // highlighted words in a reading passage
+// Daily streak fire icons only (orange is used nowhere else): today not done yet / today counted
+inline ImVec4 FireOff(0.690f, 0.718f, 0.769f, 1.0f);
+inline ImVec4 FireOn(0.949f, 0.420f, 0.094f, 1.0f);
 inline ImVec4 Shadow(0.086f, 0.122f, 0.235f, 1.0f);     // card shadows (alpha set where used)
 }  // namespace col
 
@@ -88,7 +91,8 @@ ImVec2 textSize(ImFont* font, const char* text, float wrap = -1.0f);
 
 // ---------------------------------------------------------------- icons
 enum class Icon { Home, Target, Clock, Review, Cards, Chart, List, Check, Cross, Sparkle, SpeakerOn, SpeakerOff, Bolt,
-                  Jet, Table, Gauge, Cube, Shield, Star, Book, Flag, Org, Gear, Moon };
+                  Jet, Table, Gauge, Cube, Shield, Star, Book, Flag, Org, Gear, Moon,
+                  Fire };  // Fire: the daily streak (shown beside streak counts, an exception to "icons only in the sidebar and on buttons")
 void drawIcon(ImDrawList* dl, Icon icon, ImVec2 center, float size, ImU32 color);
 
 // ---------------------------------------------------------------- text

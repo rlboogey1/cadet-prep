@@ -120,12 +120,12 @@ void RepetitionDeck::removeLastBatch() {
 }
 
 int RepetitionDeck::streak() const {
-    return lastDay_ == today() || lastDay_ == yesterday() ? streak_ : 0;
+    return lastDay_ >= yesterday() ? streak_ : 0;  // yesterday, today, or a synced day ahead of this one
 }
 
 bool RepetitionDeck::completePass() {
     const std::string t = today();
-    if (lastDay_ == t) return false;
+    if (lastDay_ >= t) return false;  // already counted today (or by a device that's already on tomorrow)
     streak_ = lastDay_ == yesterday() ? streak_ + 1 : 1;
     best_ = std::max(best_, streak_);
     lastDay_ = t;
@@ -200,12 +200,12 @@ void BlockRepetition::remove(int block) {
 }
 
 int BlockRepetition::streak() const {
-    return lastDay_ == RepetitionDeck::today() || lastDay_ == RepetitionDeck::yesterday() ? streak_ : 0;
+    return lastDay_ >= RepetitionDeck::yesterday() ? streak_ : 0;  // see RepetitionDeck::streak
 }
 
 bool BlockRepetition::completePass() {
     const std::string t = RepetitionDeck::today();
-    if (lastDay_ == t) return false;
+    if (lastDay_ >= t) return false;  // see RepetitionDeck::completePass
     streak_ = lastDay_ == RepetitionDeck::yesterday() ? streak_ + 1 : 1;
     best_ = std::max(best_, streak_);
     lastDay_ = t;

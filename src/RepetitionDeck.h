@@ -28,7 +28,11 @@ public:
 
     // Days in a row (still counts if today isn't done yet but yesterday was).
     int streak() const;
-    bool doneToday() const { return lastDay_ == today(); }
+    // Dates are local calendar days ("YYYY-MM-DD", which compare in date order). A last
+    // day *after* today comes from a synced device in a time zone already on tomorrow:
+    // it counts as done today, so the same real day can't be counted twice and the
+    // streak isn't reset.
+    bool doneToday() const { return lastDay_ >= today(); }
     int bestStreak() const { return best_; }
     // Call after finishing the whole deck. Returns true if this counted a new day.
     bool completePass();
@@ -65,7 +69,7 @@ public:
     void remove(int block);  // does nothing for the last block left
 
     int streak() const;
-    bool doneToday() const { return lastDay_ == RepetitionDeck::today(); }
+    bool doneToday() const { return lastDay_ >= RepetitionDeck::today(); }  // see RepetitionDeck::doneToday
     int bestStreak() const { return best_; }
     bool completePass();  // after going through the whole deck; true if it counted a new day
 

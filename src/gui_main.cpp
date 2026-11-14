@@ -56,6 +56,11 @@ int main(int argc, char* argv[]) {
     glfwSetWindowFocusCallback(window, [](GLFWwindow* w, int focused) {
         if (focused) static_cast<GuiApp*>(glfwGetWindowUserPointer(w))->onForeground();
     });
+    // Minimized: a timed test's clock stops (the questions can't be seen). Clicking
+    // another app doesn't stop it, since the window, and the question, stay in view.
+    glfwSetWindowIconifyCallback(window, [](GLFWwindow* w, int iconified) {
+        static_cast<GuiApp*>(glfwGetWindowUserPointer(w))->setActive(!iconified);
+    });
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);  // vsync
 

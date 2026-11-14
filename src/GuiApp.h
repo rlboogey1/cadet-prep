@@ -44,6 +44,9 @@ public:
     void setSafeArea(float top, float right, float bottom, float left) { safe_ = {top, right, bottom, left}; }
     bool animating() const;  // something is moving: keep drawing at full speed
     void onForeground() { cloud_.onForeground(); }  // app came back to the front: pull other devices' progress
+    // The app can't be seen (phone app in the background, window minimized, browser tab
+    // hidden): a timed test's clock stops until it's back.
+    void setActive(bool active) { engine_.setPaused(!active); }
     ImVec4 backgroundColor() const { return ui::col::Bg; }
 
 private:
@@ -53,6 +56,7 @@ private:
     void drawSidebar(float height);
     void drawTopBar(ImVec2 origin, float width, float height);  // phone layout
     void drawDrawer();                                          // phone layout: the sidebar, slid in
+    void drawStreakPopup();                                     // "you kept your streak", over everything
     const char* pageName() const;                               // top bar title
     void touchScroll();                                         // drag with a finger to scroll
 
@@ -100,6 +104,7 @@ private:
         enum Kind { None, Review, Deck, Practice } kind = None;
         std::string track, title, detail, button, subtest;
         bool urgent = false;  // amber mark: missed questions waiting, or a streak at risk
+        bool fire = false;    // a daily deck: a gray fire before the detail (it's only offered while today isn't done)
     };
     NextUp nextUpFor(const std::string& track) const;
     bool drawNextUp(const NextUp& n, bool showTrack, bool warmup);  // true if it started something
@@ -241,6 +246,18 @@ private:
     BlockRepetition wkRep_;    // Warrior Knowledge: blocks in the spaced repetition deck, and its streak
     bool wkRepCounted_ = false;  // the last Warrior Knowledge deck session counted a new streak day
     bool definitionFirst_ = false;
+
+    // "Streak kept" popup: shown once when finishing a daily deck makes today count.
+    // completePass() returns true only the first time a day is counted (it saves the
+    // deck's last_day), so finishing again that day, a restart, or a day another device
+    // already counted never shows it again.
+    struct StreakPopup {
+        bool show = false;
+        std::string deck;  // "Vocabulary deck", ...
+        int streak = 0;
+        int frame = 0;     // the frame it opened on: the Enter that finished the deck mustn't also close it
+    } streakPopup_;
+    void dayCounted(const char* deck, int streak) { streakPopup_ = {true, deck, streak, ImGui::GetFrameCount()}; }
 
     // Weak spots: what's missed most (afoqt_misses.json; counted per device, see MissLog)
     MissLog misses_;

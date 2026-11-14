@@ -32,7 +32,8 @@ Supabase storage; only the user runs it (`--dry-run` to check). Test login and s
 `web/fake_supabase.py`, never the real project.
 
 To check layouts without clicking, `cadet_mobile --script file.txt` replays `wait N`, `tap X Y`,
-`drag X1 Y1 X2 Y2 FRAMES`, `type TEXT`, `key enter`, and `shot out.bmp` lines (points, touch input), then quits. Run it with
+`drag X1 Y1 X2 Y2 FRAMES`, `type TEXT`, `key enter`, `background`/`foreground` (the app hidden, still drawing),
+`freeze SECONDS` (the loop stopped, like sleep) and `shot out.bmp` lines (points, touch input), then quits. Run it with
 `HOME` set to a scratch folder so it doesn't touch the user's real progress.
 
 There are no tests and no linter. Builds use `-Wall -Wextra -Wpedantic`; keep them warning-free.
@@ -49,7 +50,10 @@ run `cmake --build build` after editing anything in `data/`. If the project fold
 app (`main.cpp`, `ConsoleUI`) runs quizzes with `TestSession`, which blocks on input through the
 abstract `UI` interface. The window app (`gui_main.cpp`, `GuiApp`) is immediate mode: `draw()` runs
 every frame, so it uses `QuizEngine`, which advances one step at a time (`submit`, `next`, `update`
-for the timer) instead of blocking. The iPhone/iPad app (`mobile_main.cpp`, target `cadet_mobile`)
+for the timer) instead of blocking. Its clock counts only active time: the gaps between `update()`
+calls, at most 1 s each, and nothing while paused (`GuiApp::setActive`: phone in the background,
+window minimized, web tab hidden). `steady_clock` keeps running through sleep on Apple devices, so
+don't time a quiz with it directly. The iPhone/iPad app (`mobile_main.cpp`, target `cadet_mobile`)
 runs the same `GuiApp` on SDL3 with SDL's renderer (Metal on Apple devices); it passes the notch
 and home-bar insets (`setSafeArea`) and turns on touch mode (`setTouch`). Each front end gives
 `Visuals` a texture maker (`setTextureMaker`), since OpenGL and SDL make textures differently.
@@ -181,7 +185,10 @@ are in `afoqt_account.json`. Test with a fake server and a scratch `HOME`, never
 green and red only for answers, 3pt corners (`kRadius`), 1pt rules, no shadows or gradients. Pages
 are built from `drawTable` (spaced capitals only on its header row), `figuresLine` (a line of mono
 figures) and the "next up" strip (`nextUpFor`/`drawNextUp`). Icons only in the sidebar and on
-buttons. `Widgets.h/.cpp` holds the design system: fonts, cards, buttons, chips,
+buttons, except the daily streak's fire (`Icon::Fire`, `streakFig`): gray `col::FireOff` until today's
+deck is done, then orange `col::FireOn` (the only orange in the app). Finishing a deck that makes today
+count shows a "streak kept" card once (`drawStreakPopup`; `completePass()` returns true only then).
+Streak dates are local days; a synced `last_day` after today counts as done today (`>=`). `Widgets.h/.cpp` holds the design system: fonts, cards, buttons, chips,
 toggles, answer cards, icons (`Icon` enum + `drawIcon`), and the `col::` palette. The palette is
 mutable: `setDarkMode()` assigns light or dark values and re-applies the ImGui style. Don't
 hard-code colors in drawing code; add a `col::` token and give it both values in `setDarkMode()`.

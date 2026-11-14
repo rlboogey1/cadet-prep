@@ -151,6 +151,8 @@ void setDarkMode(bool dark) {
     set(col::Footer, {0.290f, 0.322f, 0.384f, 1}, {0.604f, 0.639f, 0.694f, 1});
     set(col::CalloutEdge, {0.722f, 0.753f, 0.800f, 1}, {0.227f, 0.278f, 0.361f, 1});
     set(col::Highlight, {1.0f, 0.85f, 0.30f, 0.55f}, {0.85f, 0.62f, 0.12f, 0.45f});
+    set(col::FireOff, {0.690f, 0.718f, 0.769f, 1}, {0.310f, 0.345f, 0.408f, 1});
+    set(col::FireOn, {0.949f, 0.420f, 0.094f, 1}, {1.0f, 0.533f, 0.204f, 1});
     set(col::Shadow, {0.067f, 0.094f, 0.153f, 1}, {0.0f, 0.0f, 0.0f, 1});
     applyTheme();
 }
@@ -449,6 +451,16 @@ void drawIcon(ImDrawList* dl, Icon icon, ImVec2 c, float size, ImU32 color) {
             dl->PathStroke(color, ImDrawFlags_Closed, t);
             break;
         }
+        case Icon::Fire:  // flame: a filled silhouette, a tall tip leaning right and a small tongue on the left
+            dl->PathLineTo(P(0.0f, 0.95f));
+            dl->PathBezierCubicCurveTo(P(-0.62f, 0.95f), P(-0.88f, 0.38f), P(-0.62f, -0.12f));
+            dl->PathBezierCubicCurveTo(P(-0.55f, -0.27f), P(-0.50f, -0.40f), P(-0.46f, -0.55f));
+            dl->PathBezierCubicCurveTo(P(-0.34f, -0.36f), P(-0.27f, -0.26f), P(-0.18f, -0.18f));
+            dl->PathBezierCubicCurveTo(P(-0.20f, -0.52f), P(-0.04f, -0.80f), P(0.12f, -1.0f));
+            dl->PathBezierCubicCurveTo(P(0.58f, -0.55f), P(0.90f, 0.20f), P(0.58f, 0.72f));
+            dl->PathBezierCubicCurveTo(P(0.44f, 0.90f), P(0.24f, 0.95f), P(0.0f, 0.95f));
+            dl->PathFillConcave(color);
+            break;
         case Icon::Bolt:  // lightning: two overlapping triangles
             dl->AddTriangleFilled(P(0.3f, -0.95f), P(-0.55f, 0.15f), P(0.15f, 0.0f), color);
             dl->AddTriangleFilled(P(-0.3f, 0.95f), P(0.55f, -0.15f), P(-0.15f, 0.0f), color);

@@ -1,4 +1,5 @@
 #include "QuizEngine.h"
+#include <algorithm>
 
 void QuizEngine::start(std::string subtestId, std::vector<Question> questions,
                        SessionMode mode, int timeLimitSeconds) {
@@ -11,17 +12,30 @@ void QuizEngine::start(std::string subtestId, std::vector<Question> questions,
     lastChoice_ = -1;
     showingFeedback_ = false;
     finished_ = questions_.empty();
-    start_ = questionStart_ = Clock::now();
+    active_ = questionStart_ = 0.0;
+    lastTick_ = Clock::now();
+}
+
+void QuizEngine::tick() {
+    const Clock::time_point now = Clock::now();
+    const double gap = std::chrono::duration<double>(now - lastTick_).count();
+    lastTick_ = now;
+    if (!paused_ && !finished_) active_ += std::clamp(gap, 0.0, kMaxStep);
+}
+
+void QuizEngine::setPaused(bool paused) {
+    tick();  // count the time up to now with the old state
+    paused_ = paused;
 }
 
 int QuizEngine::secondsLeft() const {
     if (mode_ != SessionMode::Timed || timeLimitSeconds_ <= 0) return -1;
-    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(Clock::now() - start_);
-    int left = timeLimitSeconds_ - static_cast<int>(elapsed.count());
+    const int left = timeLimitSeconds_ - static_cast<int>(active_);
     return left > 0 ? left : 0;
 }
 
 void QuizEngine::update() {
+    tick();
     if (finished_ || secondsLeft() != 0) return;
     // Out of time: every remaining question counts as unanswered.
     for (int j = index_; j < total(); ++j)
@@ -32,8 +46,9 @@ void QuizEngine::update() {
 
 void QuizEngine::submit(int choice) {
     if (finished_ || showingFeedback_) return;
+    tick();
     const Question& q = questions_[index_];
-    double secs = std::chrono::duration<double>(Clock::now() - questionStart_).count();
+    const double secs = active_ - questionStart_;
     result_.answers.push_back({q.id, choice, choice == q.correctIndex, secs});
     lastChoice_ = choice;
 
@@ -56,12 +71,14 @@ void QuizEngine::finishNow() {
 }
 
 void QuizEngine::advance() {
+    tick();
     ++index_;
-    questionStart_ = Clock::now();
+    questionStart_ = active_;
     if (index_ >= total()) finish();
 }
 
 void QuizEngine::finish() {
+    tick();
     finished_ = true;
-    result_.totalSeconds = std::chrono::duration<double>(Clock::now() - start_).count();
+    result_.totalSeconds = active_;
 }

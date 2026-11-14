@@ -190,8 +190,13 @@ std::string whenText(const std::string& date) {
 struct Fig {
     std::string value, label;
     ImVec4 color;
-    Fig(std::string v, std::string l, ImVec4 c = col::Ink) : value(std::move(v)), label(std::move(l)), color(c) {}
+    int fire;  // a daily streak: -1 = no icon, 0 = gray fire (today not done yet), 1 = orange (today counted)
+    Fig(std::string v, std::string l, ImVec4 c = col::Ink, int f = -1)
+        : value(std::move(v)), label(std::move(l)), color(c), fire(f) {}
 };
+
+// A daily streak's figure: the count, with a fire that's orange once today is counted.
+Fig streakFig(int streak, bool doneToday) { return Fig(fmt("%d", streak), "day streak", col::Ink, doneToday ? 1 : 0); }
 
 void figuresLine(const std::vector<Fig>& items) {
     ImDrawList* dl = ImGui::GetWindowDrawList();
@@ -202,15 +207,20 @@ void figuresLine(const std::vector<Fig>& items) {
     for (const Fig& f : items) {
         const std::string& value = f.value;
         const std::string& label = f.label;
+        const float fw = f.fire >= 0 ? vh + 4 : 0.0f;  // the fire icon before a streak's value
         const float vw = textSize(fonts.monoStrong, value.c_str()).x;
-        const float iw = vw + 7 + textSize(fonts.small, label.c_str()).x;
+        const float iw = fw + vw + 7 + textSize(fonts.small, label.c_str()).x;
         if (x > o.x && x + iw > o.x + w) {
             x = o.x;
             y += vh + 10;
         }
+        if (f.fire >= 0) {
+            drawIcon(dl, Icon::Fire, ImVec2(x + vh * 0.5f, y + vh * 0.5f), vh, u32(f.fire ? col::FireOn : col::FireOff));
+            x += fw;
+        }
         dl->AddText(fonts.monoStrong, vh, ImVec2(x, y), u32(f.color), value.c_str());
         dl->AddText(fonts.small, lh, ImVec2(x + vw + 7, y + vh - lh - 1), u32(col::Muted), label.c_str());
-        x += iw + gap;
+        x += iw - fw + gap;
     }
     ImGui::Dummy(ImVec2(w, y - o.y + vh));
 }
@@ -455,6 +465,7 @@ void GuiApp::draw() {
 
     ImGui::End();
     if (compact_ && menuOpen_) drawDrawer();
+    drawStreakPopup();
 }
 
 // Phone layout: navy bar with the menu button, logo, and the page name.
@@ -533,6 +544,62 @@ void GuiApp::drawDrawer() {
     drawSidebar(sideH);
     ImGui::EndChild();
     ImGui::PopStyleVar();
+    ImGui::End();
+}
+
+// The "streak kept" card over a dimmed page: a large orange fire, the new count, one
+// line, and Continue. The page underneath can't be clicked until it's closed.
+void GuiApp::drawStreakPopup() {
+    if (!streakPopup_.show) return;
+    const ImGuiViewport* vp = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(vp->WorkPos);
+    ImGui::SetNextWindowSize(vp->WorkSize);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
+    ImGui::Begin("streakpopup", nullptr,
+                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings |
+                     ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+    ImGui::PopStyleColor();
+    ImGui::PopStyleVar();
+    const ImVec2 o = ImGui::GetWindowPos(), sz = ImGui::GetWindowSize();
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    dl->AddRectFilled(o, o + sz, IM_COL32(0, 0, 0, 120));  // the same dim as the phone drawer
+    ImGui::SetCursorScreenPos(o);
+    ImGui::InvisibleButton("streak_scrim", sz);  // the page underneath takes no clicks
+
+    const int n = streakPopup_.streak;
+    const std::string count = std::to_string(n);
+    const std::string line = n <= 1 ? std::string("Streak started. Come back tomorrow to keep it going.")
+                                    : fmt("You kept your streak! %d days in a row.", n);
+    const std::string deck = upper(streakPopup_.deck);
+    const float w = std::min(380.0f, sz.x - 32.0f), pad = 28.0f, inner = w - pad * 2;
+    const float fire = 84.0f, btnH = 46.0f;
+    const float countH = fontPx(fonts.hero), lineH = textSize(fonts.body, line.c_str(), inner).y + fontPx(fonts.body) * 0.5f;
+    const float h = pad + fontPx(fonts.label) + 14 + fire + 12 + countH + 4 + fontPx(fonts.small) + 16 + lineH + 18 + btnH + pad;
+    const ImVec2 p(o.x + (sz.x - w) * 0.5f, o.y + std::max(16.0f, (sz.y - h) * 0.45f));
+    cardShape(dl, p, ImVec2(w, h));  // 3pt corners, 1pt rule, no shadow
+
+    auto centered = [&](ImFont* f, ImVec4 c, const std::string& t, float y) {
+        const float tw = textSize(f, t.c_str()).x;
+        dl->AddText(f, fontPx(f), ImVec2(p.x + (w - tw) * 0.5f, y), u32(c), t.c_str());
+    };
+    float y = p.y + pad;
+    centered(fonts.label, col::Muted, deck, y);
+    y += fontPx(fonts.label) + 14;
+    drawIcon(dl, Icon::Fire, ImVec2(p.x + w * 0.5f, y + fire * 0.5f), fire, u32(col::FireOn));
+    y += fire + 12;
+    centered(fonts.hero, col::Ink, count, y);
+    y += countH + 4;
+    centered(fonts.small, col::Muted, "day streak", y);
+    y += fontPx(fonts.small) + 16;
+    ImGui::SetCursorScreenPos(ImVec2(p.x + pad, y));
+    cardText(fonts.body, col::Ink, line.c_str(), p.x + pad, inner);
+    y += lineH + 18;
+    ImGui::SetCursorScreenPos(ImVec2(p.x + pad, y));
+    const bool enter = ImGui::GetFrameCount() > streakPopup_.frame &&
+                       (ImGui::IsKeyPressed(ImGuiKey_Enter, false) || ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false));
+    if (button(touch_ ? "Continue" : "Continue   Enter", ButtonStyle::Primary, ImVec2(inner, btnH)) || enter)
+        streakPopup_.show = false;
     ImGui::End();
 }
 
@@ -884,6 +951,7 @@ GuiApp::NextUp GuiApp::nextUpFor(const std::string& track) const {
     if (!deckDone) {
         const int streak = afoqt ? repDeck_.streak() : wkRep_.streak();
         n.kind = NextUp::Deck;
+        n.fire = true;
         n.urgent = streak > 0;  // a streak that ends tonight
         n.title = afoqt ? "Today's vocabulary deck" : "Today's spaced repetition deck";
         std::string size;
@@ -901,6 +969,7 @@ GuiApp::NextUp GuiApp::nextUpFor(const std::string& track) const {
     if (afoqt && !rootRep_.doneToday()) {
         const int streak = rootRep_.streak();
         n.kind = NextUp::Deck;
+        n.fire = true;
         n.subtest = "roots";
         n.urgent = streak > 0;
         n.title = "Today's word roots deck";
@@ -984,7 +1053,8 @@ bool GuiApp::drawNextUp(const NextUp& n, bool showTrack, bool warmup) {
     const std::string title = any ? n.title : "You're all caught up";
     const std::string detail = any ? n.detail : "Nothing to review and today's decks are done.";
     const float headH = textSize(fonts.heading, title.c_str(), textW).y;
-    const float detH = textSize(fonts.body, detail.c_str(), textW).y;
+    const float fireW = any && n.fire ? fontPx(fonts.body) + 6 : 0.0f;  // the streak's fire before the detail
+    const float detH = textSize(fonts.body, detail.c_str(), textW - fireW).y;
     const float textH = fontPx(fonts.small) + 6 + headH + 4 + detH;
     const float h = compact_ ? pad + textH + 16 + btnH + pad : std::max(textH, btnH) + pad * 2;
 
@@ -996,7 +1066,12 @@ bool GuiApp::drawNextUp(const NextUp& n, bool showTrack, bool warmup) {
     y += fontPx(fonts.small) + 6;
     dl->AddText(fonts.heading, fontPx(fonts.heading), ImVec2(o.x + pad, y), u32(col::Ink), title.c_str(), nullptr, textW);
     y += headH + 4;
-    dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(o.x + pad, y), u32(col::Muted), detail.c_str(), nullptr, textW);
+    if (fireW > 0) {
+        const float s = fontPx(fonts.body);
+        drawIcon(dl, Icon::Fire, ImVec2(o.x + pad + s * 0.5f, y + s * 0.5f), s * 0.95f, u32(col::FireOff));
+    }
+    dl->AddText(fonts.body, fontPx(fonts.body), ImVec2(o.x + pad + fireW, y), u32(col::Muted), detail.c_str(), nullptr,
+                textW - fireW);
 
     bool started = false;
     float x, by, gw = goW, ww = warmW;
@@ -1043,11 +1118,11 @@ void GuiApp::drawFigures() {
     };
     if (afoqt) {
         items.push_back({fmt("%d/%d", deck_.masteredCount(), static_cast<int>(deck_.size())), "words mastered"});
-        items.push_back({fmt("%d", repDeck_.streak()), repDeck_.streak() == 1 ? "day streak" : "day streak"});
+        items.push_back(streakFig(repDeck_.streak(), repDeck_.doneToday()));
     } else {
         items.push_back({fmt("%d/%d", static_cast<int>(wkRep_.blocks().size()), static_cast<int>(trackSections().size())),
                          "blocks in deck"});
-        items.push_back({fmt("%d", wkRep_.streak()), "day streak"});
+        items.push_back(streakFig(wkRep_.streak(), wkRep_.doneToday()));
     }
     figuresLine(items);
 }
@@ -2019,7 +2094,7 @@ void GuiApp::drawFlashcards() {
                                     plural(streak, "day").c_str()).c_str()
                               : "You already finished your deck today, so the streak stays the same. Come back tomorrow "
                                 "to add another day.");
-        figuresLine({{fmt("%d", streak), "day streak"},
+        figuresLine({streakFig(streak, activeRep().doneToday()),
                      {fmt("%d", activeRep().bestStreak()), "best"},
                      {fmt("%d", deck.sessionGotIt()), "knew it"},
                      {fmt("%d", deck.sessionMissed()), "repeated"}});
@@ -2123,7 +2198,10 @@ void GuiApp::drawFlashcards() {
         if (swiped > 0) sound_.correct();
         if (vocab) recordCard(c, swiped > 0);
         deck.mark(swiped > 0);
-        if (repSession_ && deck.sessionDone()) repCounted_ = activeRep().completePass();
+        if (repSession_ && deck.sessionDone()) {
+            repCounted_ = activeRep().completePass();
+            if (repCounted_) dayCounted(repRoots_ ? "Word roots deck" : "Vocabulary deck", activeRep().streak());
+        }
     }
 }
 
@@ -2151,7 +2229,7 @@ void GuiApp::drawRepetition(bool roots) {
     ImGui::Dummy(ImVec2(0, 6));
     int mastered = 0;
     for (const auto& w : words) mastered += cards.box(w) >= FlashcardDeck::kMasteredBox ? 1 : 0;
-    figuresLine({{fmt("%d", streak), "day streak"},
+    figuresLine({streakFig(streak, done),
                  {done ? "Done" : "Not yet", "today", done ? col::Ink : streak > 0 ? col::TagStrong : col::Ink},
                  {fmt("%d", n), roots ? (n == 1 ? "root in deck" : "roots in deck") : (n == 1 ? "word in deck" : "words in deck")},
                  {fmt("%d", mastered), "mastered"}});
@@ -2385,7 +2463,10 @@ void GuiApp::finishDeckCard(bool knewIt) {
     repRevealed_ = repDontKnow_ = false;
     repFocus_ = true;
     feedbackTime_ = -1.0;
-    if (activeDeck().sessionDone()) repCounted_ = activeRep().completePass();
+    if (activeDeck().sessionDone()) {
+        repCounted_ = activeRep().completePass();
+        if (repCounted_) dayCounted(repRoots_ ? "Word roots deck" : "Vocabulary deck", activeRep().streak());
+    }
 }
 
 // Warrior Knowledge spaced repetition: the user picks which handbook blocks are in
@@ -2413,7 +2494,7 @@ void GuiApp::drawWarriorRepetition() {
     const bool done = wkRep_.doneToday();
 
     const int nb = static_cast<int>(wkRep_.blocks().size());
-    figuresLine({{fmt("%d", streak), "day streak"},
+    figuresLine({streakFig(streak, done),
                  {fmt("%d", wkRep_.bestStreak()), "best"},
                  {done ? "Done" : "Not yet", "today", done ? col::Ink : streak > 0 ? col::TagStrong : col::Ink},
                  {fmt("%d", cards), cards == 1 ? "card in deck" : "cards in deck"},
@@ -2491,6 +2572,11 @@ void GuiApp::drawProgress() {
         rows.push_back(r);
     }
     drawTable("prog_sections", afoqt ? "SECTION" : "BLOCK", {"SESSIONS", afoqt ? "ACCURACY" : "KNOWN", "PACE", "LAST 10"}, rows);
+    ImGui::Dummy(ImVec2(0, 2));
+    // ProgressStore::stats() leaves review sessions out, so the numbers aren't inflated by re-asked questions
+    wrappedIn(fonts.small, col::Muted,
+              afoqt ? "Review sessions aren't counted in accuracy, since they repeat questions you missed."
+                    : "Reviews and spaced repetition decks aren't counted in % known, since they repeat cards you missed.");
     ImGui::Dummy(ImVec2(0, 8));
 
     // ---- Session log, newest first
@@ -3005,7 +3091,10 @@ void GuiApp::finishSession() {
     progress_.record(engine_.result(), isReview_, sessionTag_ == "TIMED TEST");
     recordMisses();
     if (weeklySession_) weekly_.complete(engine_.result().correctCount(), static_cast<int>(engine_.questions().size()));
-    if (warriorRepSession()) wkRepCounted_ = wkRep_.completePass();  // the whole deck, so the day counts
+    if (warriorRepSession()) {
+        wkRepCounted_ = wkRep_.completePass();  // the whole deck, so the day counts
+        if (wkRepCounted_) dayCounted("Warrior Knowledge deck", wkRep_.streak());
+    }
     feedbackTime_ = -1.0;
     screen_ = Screen::Results;
 }

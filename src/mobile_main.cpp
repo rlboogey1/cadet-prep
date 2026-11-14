@@ -16,6 +16,8 @@
 //   type some text          type into the text box that has focus
 //   key enter               press Return
 //   shot out.bmp            save a screenshot
+//   background / foreground act as if the app went to the background (it keeps drawing)
+//   freeze 5                stop for 5 seconds, as if the computer slept or the app was suspended
 #include "AppPaths.h"
 #include "GuiApp.h"
 #include "Visuals.h"
@@ -145,6 +147,8 @@ struct Script {
     bool fingerDown = false, liftNext = false, hideNext = false;
     std::string shot;  // save a screenshot after this frame is drawn
     std::string typed;  // text to type this frame
+    bool hidden = false;   // "background" until "foreground"
+    int freezeMs = 0;      // stop the loop this long this frame
     bool enter = false, enterUp = false;  // press Return this frame; let it go the next
 
     bool load(const char* path) {
@@ -199,6 +203,12 @@ struct Script {
                 std::getline(cmd >> std::ws, typed);
             } else if (op == "key") {
                 enter = true;  // the only key so far: Return
+            } else if (op == "background" || op == "foreground") {
+                hidden = op == "background";
+            } else if (op == "freeze") {
+                double s = 0;
+                cmd >> s;
+                freezeMs = static_cast<int>(s * 1000);
             }
         }
         return true;
@@ -301,6 +311,7 @@ int main(int argc, char* argv[]) {
     ui::setTextureMaker(makeSdlTexture);
 
     static bool done = false, background = false;
+    static bool minimized = false, hidden = false;  // window minimized; web: the tab isn't showing
     static bool fingerDown = false;  // a finger is on the screen
     static Uint64 lastInput = 0;
     lastInput = SDL_GetTicks();
@@ -336,6 +347,11 @@ int main(int argc, char* argv[]) {
                     background = false;
                     app.onForeground();  // pull progress saved on the other devices
                     break;
+                case SDL_EVENT_WINDOW_MINIMIZED: minimized = true; break;
+                case SDL_EVENT_WINDOW_RESTORED:
+                case SDL_EVENT_WINDOW_MAXIMIZED: minimized = false; break;
+                case SDL_EVENT_WINDOW_HIDDEN: hidden = true; break;
+                case SDL_EVENT_WINDOW_SHOWN: hidden = false; break;
                 case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
                     if (e.window.windowID == SDL_GetWindowID(window)) done = true;
                     break;
@@ -349,6 +365,9 @@ int main(int argc, char* argv[]) {
         // in order, so a tap in this batch still lands first.
         if (touch && touchEvents && !fingerDown) io.AddMousePosEvent(-FLT_MAX, -FLT_MAX);
         if (done) return false;
+        // Out of sight: a timed test's clock stops (it also skips any long gap between
+        // frames, for when the app is suspended without being told)
+        app.setActive(!(background || minimized || hidden || script.hidden));
         if (background) return true;
         if (app.animating()) lastInput = SDL_GetTicks();
 
@@ -365,6 +384,10 @@ int main(int argc, char* argv[]) {
         if (scripted) {
             if (!script.step()) return false;
             script.feed(io);
+            if (script.freezeMs > 0) {
+                SDL_Delay(static_cast<Uint32>(script.freezeMs));
+                script.freezeMs = 0;
+            }
         }
         ImGui::NewFrame();
         app.draw();
