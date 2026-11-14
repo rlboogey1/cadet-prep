@@ -1,5 +1,6 @@
 #include "QuestionBank.h"
 #include "QuestionGenerator.h"
+#include "VerbalTypes.h"
 #include <numeric>
 #include <algorithm>
 #include <fstream>
@@ -29,6 +30,11 @@ void QuestionBank::loadFile(const std::string& path, const std::string& subtestI
         q.choices = item.at("choices").get<std::vector<std::string>>();
         q.correctIndex = item.at("answer").get<int>();
         q.explanation = item.value("explanation", "");
+        q.type = item.value("type", "");
+        if (!verbal::typesFor(subtestId).empty() && !verbal::findType(subtestId, q.type)) {
+            throw std::runtime_error(path + ": question " + q.id + " needs a \"type\" from the list in VerbalTypes.cpp" +
+                                     (q.type.empty() ? "" : " (\"" + q.type + "\" isn't one)"));
+        }
 
         if (q.choices.size() < 2 || q.correctIndex < 0 ||
             q.correctIndex >= static_cast<int>(q.choices.size())) {
@@ -100,6 +106,12 @@ std::vector<Question> QuestionBank::byIds(const std::vector<std::string>& ids) c
         }
     }
     return out;
+}
+
+const std::vector<Question>& QuestionBank::all(const std::string& subtestId) const {
+    static const std::vector<Question> none;
+    auto it = bySubtest_.find(subtestId);
+    return it == bySubtest_.end() ? none : it->second;
 }
 
 size_t QuestionBank::size(const std::string& subtestId) const {

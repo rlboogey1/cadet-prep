@@ -2,6 +2,7 @@
 #include "AppPaths.h"
 #include "CloudSync.h"
 #include "FlashcardDeck.h"
+#include "MissLog.h"
 #include "ProgressStore.h"
 #include "QuestionBank.h"
 #include "QuizEngine.h"
@@ -11,6 +12,7 @@
 #include "imgui.h"
 #include "SubtestRegistry.h"
 #include "Widgets.h"
+#include "WeeklyReading.h"
 #include <map>
 #include <utility>
 #include <random>
@@ -45,7 +47,7 @@ public:
     ImVec4 backgroundColor() const { return ui::col::Bg; }
 
 private:
-    enum class Screen { Home, Settings, Dashboard, Practice, Review, Flashcards, Progress, Quiz, Results };
+    enum class Screen { Home, Settings, Dashboard, Practice, Review, Flashcards, Progress, Quiz, Results, WeakSpots };
 
     // Frame pieces
     void drawSidebar(float height);
@@ -63,6 +65,7 @@ private:
     void drawReview();
     void drawFlashcards();
     void drawProgress();
+    void drawWeakSpots();  // AFOQT: the words, roots and question types missed most
     void drawQuiz();
     void drawCardQuestion(const Question& q);  // Warrior Knowledge: the question as a swipe card
     void swipeButtons(const char* flipLabel);  // the buttons under a swipe card
@@ -116,10 +119,22 @@ private:
     void startWarmup();
     void startReview(const std::string& subtestId);  // empty = all sections
     void startFlashcards(size_t count, bool learningOnly);
+    void startCardDrill(const std::vector<std::string>& words, bool roots);  // Weak spots: these cards, once
+    void recordCard(const Flashcard& c, bool knewIt);  // vocabulary and roots cards: count it for Weak spots
+    // Verbal Analogies relationship drill: name the first pair's relationship, then answer.
+    // `type` empty = every relationship.
+    void startRelationDrill(const std::string& type);
+    void drawRelationStep(const Question& q);
+    void startReadingType(const std::string& type);  // Reading Comprehension: questions of one type
+    // The weekly timed reading set (WeeklyReading)
+    std::vector<Question> weeklyQuestions() const;  // this week's, in passage order, choices as written
+    void startWeeklyReading();
+    void drawWeeklyStrip();  // its row on the AFOQT dashboard
+    void recordMisses();     // after a quiz: count its words and question types for Weak spots
     // The AFOQT spaced repetition deck can be studied three ways (see repMode_).
     enum class RepMode { Swipe, Quiz, Describe };
-    void startRepetition(RepMode mode);
-    void drawRepetition();
+    void startRepetition(RepMode mode, bool roots = false);
+    void drawRepetition(bool roots);  // roots: the word roots deck instead of the vocabulary deck
     void buildDeckQuestion(const Flashcard& c);  // a quiz question for this word (repQ_)
     void drawDeckQuiz(const Flashcard& c);
     void drawDeckDescribe(const Flashcard& c);
@@ -194,10 +209,14 @@ private:
     FlashcardDeck deck_;     // AFOQT: Word Knowledge vocabulary
     FlashcardDeck memDeck_;  // Warrior Knowledge: memorize cards (creeds, oaths, lists)
     FlashcardDeck vaWords_;  // Verbal Analogies word definitions (lookup only, never studied)
-    FlashcardDeck& activeDeck() { return track_ == "afoqt" ? deck_ : memDeck_; }
-    const FlashcardDeck& activeDeck() const { return track_ == "afoqt" ? deck_ : memDeck_; }
+    FlashcardDeck rootDeck_; // AFOQT: word roots, prefixes and suffixes (data/roots.json)
+    bool repRoots_ = false;  // the flashcard session on screen is the roots deck
+    FlashcardDeck& activeDeck() { return track_ == "afoqt" ? (repRoots_ ? rootDeck_ : deck_) : memDeck_; }
+    const FlashcardDeck& activeDeck() const { return track_ == "afoqt" ? (repRoots_ ? rootDeck_ : deck_) : memDeck_; }
+    RepetitionDeck& activeRep() { return repRoots_ ? rootRep_ : repDeck_; }
     bool flashActive_ = false;
     RepetitionDeck repDeck_;   // AFOQT: the spaced repetition deck and its daily streak
+    RepetitionDeck rootRep_;   // AFOQT: the word roots deck and its own daily streak
     bool repSession_ = false;  // the current flashcard session is the spaced repetition deck
     bool repCounted_ = false;  // that session's finish counted a new streak day
     RepMode repMode_ = RepMode::Swipe;  // how the deck is being studied (the last way used, between sessions)
@@ -220,6 +239,22 @@ private:
     BlockRepetition wkRep_;    // Warrior Knowledge: blocks in the spaced repetition deck, and its streak
     bool wkRepCounted_ = false;  // the last Warrior Knowledge deck session counted a new streak day
     bool definitionFirst_ = false;
+
+    // Weak spots: what's missed most (afoqt_misses.json; counted per device, see MissLog)
+    MissLog misses_;
+    std::string deviceId_;  // this device's id in that file (saved in settings, which don't sync)
+
+    // Relationship drill: step 1 (name the relationship) for the question on screen
+    bool relDrill_ = false;
+    int relStepFor_ = -1;        // the question index whose step 1 is done (-1 = none yet)
+    int relChoicesFor_ = -1;     // the question index relChoices_ was made for
+    std::vector<int> relChoices_;  // indexes into verbal::relationTypes()
+    int relPick_ = -1;           // the choice picked in step 1 (-1 = not yet)
+    int relNamed_ = 0, relNamedRight_ = 0;  // step 1 this session
+
+    // The weekly reading set
+    WeeklyReading weekly_;
+    bool weeklySession_ = false;  // the session on screen is this week's set
 
     // Online sync (Settings > Account)
     CloudSync cloud_;

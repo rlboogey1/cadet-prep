@@ -28,6 +28,8 @@ public:
     static void shuffleChoices(Question& q, std::mt19937& rng);
 
     size_t size(const std::string& subtestId) const;
+    // Every question of one subtest, in file order, choices as written (not shuffled).
+    const std::vector<Question>& all(const std::string& subtestId) const;
 
     // Adds a question made in code (Warrior Knowledge cards).
     void add(Question q) { bySubtest_[q.subtest].push_back(std::move(q)); }

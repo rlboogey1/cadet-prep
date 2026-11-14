@@ -11,7 +11,8 @@
         "port"
       ],
       "answer": 0,
-      "explanation": "A pilot commands an aircraft; a captain commands a ship."
+      "explanation": "A pilot commands an aircraft; a captain commands a ship.",
+      "type": "worker_work"
     },
     {
       "id": "VA-002",
@@ -24,7 +25,8 @@
         "toe"
       ],
       "answer": 1,
-      "explanation": "A glove covers a hand; a sock covers a foot."
+      "explanation": "A glove covers a hand; a sock covers a foot.",
+      "type": "function"
     },
     {
       "id": "VA-003",
@@ -37,7 +39,8 @@
         "summer"
       ],
       "answer": 2,
-      "explanation": "Ecstatic is an extreme degree of happy; scorching is an extreme degree of warm."
+      "explanation": "Ecstatic is an extreme degree of happy; scorching is an extreme degree of warm.",
+      "type": "degree"
     },
     {
       "id": "VA-004",
@@ -50,7 +53,8 @@
         "stove is to kitchen"
       ],
       "answer": 1,
-      "explanation": "A scalpel is a tool used by a surgeon; a brush is a tool used by a painter. A hammer acts on a nail, which is a different relationship."
+      "explanation": "A scalpel is a tool used by a surgeon; a brush is a tool used by a painter. A hammer acts on a nail, which is a different relationship.",
+      "type": "worker_tool"
     },
     {
       "id": "VA-005",
@@ -63,7 +67,8 @@
         "crop"
       ],
       "answer": 2,
-      "explanation": "A drought is a lack of water; a famine is a lack of food. Hunger is a result of famine, not what is lacking."
+      "explanation": "A drought is a lack of water; a famine is a lack of food. Hunger is a result of famine, not what is lacking.",
+      "type": "lack"
     },
     {
       "id": "VA-006",
@@ -76,7 +81,8 @@
         "degree"
       ],
       "answer": 1,
-      "explanation": "An altimeter measures altitude; a thermometer measures temperature."
+      "explanation": "An altimeter measures altitude; a thermometer measures temperature.",
+      "type": "function"
     },
     {
       "id": "VA-007",
@@ -89,7 +95,8 @@
         "overture is to opera"
       ],
       "answer": 4,
-      "explanation": "A preface is an introduction that comes before a book; an overture is an introduction that comes before an opera. A chapter is a part of a novel but not an introduction."
+      "explanation": "A preface is an introduction that comes before a book; an overture is an introduction that comes before an opera. A chapter is a part of a novel but not an introduction.",
+      "type": "sequence"
     },
     {
       "id": "VA-008",
@@ -102,7 +109,8 @@
         "careful"
       ],
       "answer": 2,
-      "explanation": "Cowardly is the opposite of brave; frugal is the opposite of wasteful. 'Thrifty' is a synonym, a common trap."
+      "explanation": "Cowardly is the opposite of brave; frugal is the opposite of wasteful. 'Thrifty' is a synonym, a common trap.",
+      "type": "antonym"
     },
     {
       "id": "VA-009",
@@ -115,7 +123,8 @@
         "audience"
       ],
       "answer": 1,
-      "explanation": "An architect creates a blueprint (a written plan); a composer creates a score (written music)."
+      "explanation": "An architect creates a blueprint (a written plan); a composer creates a score (written music).",
+      "type": "worker_creation"
     },
     {
       "id": "VA-010",
@@ -128,7 +137,8 @@
         "pack"
       ],
       "answer": 4,
-      "explanation": "A group of fish is a school; a group of wolves is a pack."
+      "explanation": "A group of fish is a school; a group of wolves is a pack.",
+      "type": "group_member"
     },
     {
       "id": "VA-011",
@@ -141,7 +151,8 @@
         "triumph"
       ],
       "answer": 1,
-      "explanation": "Opposites. Triumph is a synonym of victory, a common trap."
+      "explanation": "Opposites. Triumph is a synonym of victory, a common trap.",
+      "type": "antonym"
     },
     {
       "id": "VA-012",
@@ -154,7 +165,8 @@
         "ink"
       ],
       "answer": 2,
-      "explanation": "A petal is part of a flower; a page is part of a book. Paper is what a page is made of, a different relationship."
+      "explanation": "A petal is part of a flower; a page is part of a book. Paper is what a page is made of, a different relationship.",
+      "type": "part_whole"
     },
     {
       "id": "VA-013",
@@ -167,7 +179,8 @@
         "wall"
       ],
       "answer": 0,
-      "explanation": "A compass shows direction; a clock shows time."
+      "explanation": "A compass shows direction; a clock shows time.",
+      "type": "function"
     },
     {
       "id": "VA-014",
@@ -180,7 +193,8 @@
         "concert"
       ],
       "answer": 2,
-      "explanation": "A novel is divided into chapters; a symphony is divided into movements."
+      "explanation": "A novel is divided into chapters; a symphony is divided into movements.",
+      "type": "part_whole"
     },
     {
       "id": "VA-015",
@@ -193,7 +207,8 @@
         "sting"
       ],
       "answer": 1,
-      "explanation": "A flock is a group of sheep; a swarm is a group of bees."
+      "explanation": "A flock is a group of sheep; a swarm is a group of bees.",
+      "type": "group_member"
     },
     {
       "id": "VA-016",
@@ -206,7 +221,8 @@
         "inch"
       ],
       "answer": 0,
-      "explanation": "A minute is a smaller unit of an hour; an ounce is a smaller unit of a pound."
+      "explanation": "A minute is a smaller unit of an hour; an ounce is a smaller unit of a pound.",
+      "type": "part_whole"
     },
     {
       "id": "VA-017",
@@ -219,7 +235,8 @@
         "hammer"
       ],
       "answer": 1,
-      "explanation": "A carpenter works with wood; a mason works with stone."
+      "explanation": "A carpenter works with wood; a mason works with stone.",
+      "type": "worker_work"
     },
     {
       "id": "VA-018",
@@ -232,7 +249,8 @@
         "kind"
       ],
       "answer": 2,
-      "explanation": "Opposites. Giving is a synonym of generous, a trap."
+      "explanation": "Opposites. Giving is a synonym of generous, a trap.",
+      "type": "antonym"
     },
     {
       "id": "VA-019",
@@ -245,7 +263,8 @@
         "story"
       ],
       "answer": 2,
-      "explanation": "A prologue comes first and an epilogue comes last, as beginning and end do."
+      "explanation": "A prologue comes first and an epilogue comes last, as beginning and end do.",
+      "type": "sequence"
     },
     {
       "id": "VA-020",
@@ -258,7 +277,8 @@
         "lesson"
       ],
       "answer": 0,
-      "explanation": "Where each person works."
+      "explanation": "Where each person works.",
+      "type": "place"
     },
     {
       "id": "VA-021",
@@ -271,7 +291,8 @@
         "car"
       ],
       "answer": 4,
-      "explanation": "A hangar shelters aircraft; a garage shelters cars."
+      "explanation": "A hangar shelters aircraft; a garage shelters cars.",
+      "type": "place"
     },
     {
       "id": "VA-022",
@@ -284,7 +305,8 @@
         "concise"
       ],
       "answer": 4,
-      "explanation": "Opposites. Wordy is a synonym of verbose, a trap."
+      "explanation": "Opposites. Wordy is a synonym of verbose, a trap.",
+      "type": "antonym"
     },
     {
       "id": "VA-023",
@@ -297,7 +319,8 @@
         "statue"
       ],
       "answer": 3,
-      "explanation": "A painter works on canvas; a sculptor works in marble. A chisel is a tool and a statue is the finished product."
+      "explanation": "A painter works on canvas; a sculptor works in marble. A chisel is a tool and a statue is the finished product.",
+      "type": "worker_work"
     },
     {
       "id": "VA-024",
@@ -310,7 +333,8 @@
         "umbrella"
       ],
       "answer": 2,
-      "explanation": "A breeze is mild wind and a hurricane is extreme wind; a drizzle is light rain and a downpour is extreme rain."
+      "explanation": "A breeze is mild wind and a hurricane is extreme wind; a drizzle is light rain and a downpour is extreme rain.",
+      "type": "degree"
     },
     {
       "id": "VA-025",
@@ -323,7 +347,8 @@
         "ring is to finger"
       ],
       "answer": 3,
-      "explanation": "A key opens a lock; a password opens an account."
+      "explanation": "A key opens a lock; a password opens an account.",
+      "type": "function"
     },
     {
       "id": "VA-026",
@@ -336,7 +361,8 @@
         "sad is to tears"
       ],
       "answer": 2,
-      "explanation": "Drinking relieves thirst; sleep relieves tiredness. Smile and tears are results, not remedies."
+      "explanation": "Drinking relieves thirst; sleep relieves tiredness. Smile and tears are results, not remedies.",
+      "type": "cause_effect"
     },
     {
       "id": "VA-027",
@@ -349,7 +375,8 @@
         "see is to blind"
       ],
       "answer": 2,
-      "explanation": "Scrutinize is a more intense form of observe; adore is a more intense form of like."
+      "explanation": "Scrutinize is a more intense form of observe; adore is a more intense form of like.",
+      "type": "degree"
     },
     {
       "id": "VA-028",
@@ -362,7 +389,8 @@
         "darkness"
       ],
       "answer": 2,
-      "explanation": "Each is a fear of the thing named."
+      "explanation": "Each is a fear of the thing named.",
+      "type": "characteristic"
     },
     {
       "id": "VA-029",
@@ -375,7 +403,8 @@
         "sky"
       ],
       "answer": 0,
-      "explanation": "Many trees make up a forest; many stars make up a galaxy."
+      "explanation": "Many trees make up a forest; many stars make up a galaxy.",
+      "type": "group_member"
     },
     {
       "id": "VA-030",
@@ -388,7 +417,8 @@
         "generals"
       ],
       "answer": 3,
-      "explanation": "A library stores books; an armory stores weapons."
+      "explanation": "A library stores books; an armory stores weapons.",
+      "type": "place"
     },
     {
       "id": "VA-031",
@@ -401,7 +431,8 @@
         "cabinet"
       ],
       "answer": 1,
-      "explanation": "Second in command to the first."
+      "explanation": "Second in command to the first.",
+      "type": "sequence"
     },
     {
       "id": "VA-032",
@@ -414,7 +445,8 @@
         "millimeter"
       ],
       "answer": 2,
-      "explanation": "A smaller unit to the next standard unit in the same system."
+      "explanation": "A smaller unit to the next standard unit in the same system.",
+      "type": "part_whole"
     },
     {
       "id": "VA-033",
@@ -427,7 +459,8 @@
         "hidden"
       ],
       "answer": 3,
-      "explanation": "Synonyms."
+      "explanation": "Synonyms.",
+      "type": "synonym"
     },
     {
       "id": "VA-034",
@@ -440,7 +473,8 @@
         "descend"
       ],
       "answer": 4,
-      "explanation": "Opposites."
+      "explanation": "Opposites.",
+      "type": "antonym"
     },
     {
       "id": "VA-035",
@@ -453,7 +487,8 @@
         "sharp"
       ],
       "answer": 2,
-      "explanation": "A tool and the action it performs."
+      "explanation": "A tool and the action it performs.",
+      "type": "function"
     },
     {
       "id": "VA-036",
@@ -466,7 +501,8 @@
         "roof is to house"
       ],
       "answer": 3,
-      "explanation": "The engine powers a car; the heart powers the body."
+      "explanation": "The engine powers a car; the heart powers the body.",
+      "type": "part_whole"
     },
     {
       "id": "VA-037",
@@ -479,7 +515,8 @@
         "bored"
       ],
       "answer": 3,
-      "explanation": "Famished is extremely hungry; exhausted is extremely tired."
+      "explanation": "Famished is extremely hungry; exhausted is extremely tired.",
+      "type": "degree"
     },
     {
       "id": "VA-038",
@@ -492,7 +529,8 @@
         "conductor"
       ],
       "answer": 2,
-      "explanation": "A group and its members."
+      "explanation": "A group and its members.",
+      "type": "group_member"
     },
     {
       "id": "VA-039",
@@ -505,7 +543,8 @@
         "captain"
       ],
       "answer": 1,
-      "explanation": "An airplane lands on a runway; a ship ties up at a dock."
+      "explanation": "An airplane lands on a runway; a ship ties up at a dock.",
+      "type": "place"
     },
     {
       "id": "VA-040",
@@ -518,7 +557,8 @@
         "yoke"
       ],
       "answer": 4,
-      "explanation": "A tool each person handles directly to do the job: a surgeon's scalpel, a pilot's control yoke."
+      "explanation": "A tool each person handles directly to do the job: a surgeon's scalpel, a pilot's control yoke.",
+      "type": "worker_tool"
     },
     {
       "id": "VA-041",
@@ -531,7 +571,8 @@
         "knight"
       ],
       "answer": 3,
-      "explanation": "The purpose of each object: a lock secures, a shield protects."
+      "explanation": "The purpose of each object: a lock secures, a shield protects.",
+      "type": "function"
     },
     {
       "id": "VA-042",
@@ -544,7 +585,8 @@
         "leaf"
       ],
       "answer": 0,
-      "explanation": "Each is the young form of the animal named. A cocoon is a stage, not the adult."
+      "explanation": "Each is the young form of the animal named. A cocoon is a stage, not the adult.",
+      "type": "sequence"
     },
     {
       "id": "VA-043",
@@ -557,7 +599,8 @@
         "fan"
       ],
       "answer": 1,
-      "explanation": "Shivering is the body's reaction to cold; sweating is its reaction to heat."
+      "explanation": "Shivering is the body's reaction to cold; sweating is its reaction to heat.",
+      "type": "cause_effect"
     },
     {
       "id": "VA-044",
@@ -570,7 +613,8 @@
         "desert"
       ],
       "answer": 4,
-      "explanation": "An island is surrounded by water; an oasis is surrounded by desert."
+      "explanation": "An island is surrounded by water; an oasis is surrounded by desert.",
+      "type": "place"
     },
     {
       "id": "VA-045",
@@ -583,7 +627,8 @@
         "prisoner"
       ],
       "answer": 1,
-      "explanation": "A doctor prescribes; a judge sentences. Each is the action the person performs."
+      "explanation": "A doctor prescribes; a judge sentences. Each is the action the person performs.",
+      "type": "worker_work"
     },
     {
       "id": "VA-046",
@@ -596,7 +641,8 @@
         "pressure"
       ],
       "answer": 2,
-      "explanation": "Each instrument measures the thing named."
+      "explanation": "Each instrument measures the thing named.",
+      "type": "function"
     },
     {
       "id": "VA-047",
@@ -609,7 +655,8 @@
         "period"
       ],
       "answer": 3,
-      "explanation": "A wall is built from bricks; a sentence is built from words."
+      "explanation": "A wall is built from bricks; a sentence is built from words.",
+      "type": "part_whole"
     },
     {
       "id": "VA-048",
@@ -622,7 +669,8 @@
         "writer"
       ],
       "answer": 3,
-      "explanation": "To censor is to remove material; to edit is to revise it."
+      "explanation": "To censor is to remove material; to edit is to revise it.",
+      "type": "type_category"
     },
     {
       "id": "VA-049",
@@ -635,7 +683,8 @@
         "empty"
       ],
       "answer": 0,
-      "explanation": "Opposites. Thin and rare are synonyms of sparse, the traps."
+      "explanation": "Opposites. Thin and rare are synonyms of sparse, the traps.",
+      "type": "antonym"
     },
     {
       "id": "VA-050",
@@ -648,7 +697,8 @@
         "wood"
       ],
       "answer": 2,
-      "explanation": "A bow is used to play a violin; a stick is used to play a drum."
+      "explanation": "A bow is used to play a violin; a stick is used to play a drum.",
+      "type": "function"
     },
     {
       "id": "VA-051",
@@ -661,7 +711,8 @@
         "blaze"
       ],
       "answer": 4,
-      "explanation": "A novice grows into an expert; a spark grows into a blaze. Small to large."
+      "explanation": "A novice grows into an expert; a spark grows into a blaze. Small to large.",
+      "type": "sequence"
     },
     {
       "id": "VA-052",
@@ -674,7 +725,8 @@
         "fuel"
       ],
       "answer": 1,
-      "explanation": "A throttle controls an engine's power; a rudder controls direction."
+      "explanation": "A throttle controls an engine's power; a rudder controls direction.",
+      "type": "function"
     },
     {
       "id": "VA-053",
@@ -687,7 +739,8 @@
         "bird"
       ],
       "answer": 4,
-      "explanation": "Where each animal lives."
+      "explanation": "Where each animal lives.",
+      "type": "place"
     },
     {
       "id": "VA-054",
@@ -700,7 +753,8 @@
         "fire"
       ],
       "answer": 3,
-      "explanation": "Something fragile breaks easily; something flammable burns easily."
+      "explanation": "Something fragile breaks easily; something flammable burns easily.",
+      "type": "characteristic"
     },
     {
       "id": "VA-055",
@@ -713,7 +767,8 @@
         "draw"
       ],
       "answer": 3,
-      "explanation": "A hypothesis is made to be tested; a blueprint is made to be built from."
+      "explanation": "A hypothesis is made to be tested; a blueprint is made to be built from.",
+      "type": "function"
     },
     {
       "id": "VA-056",
@@ -726,7 +781,8 @@
         "rude"
       ],
       "answer": 1,
-      "explanation": "Opposites. Honest, blunt, and open are close to candid."
+      "explanation": "Opposites. Honest, blunt, and open are close to candid.",
+      "type": "antonym"
     },
     {
       "id": "VA-057",
@@ -739,7 +795,8 @@
         "farmer is to crop"
       ],
       "answer": 3,
-      "explanation": "A worker and a tool of the trade. Hospital is a workplace and crop is a product."
+      "explanation": "A worker and a tool of the trade. Hospital is a workplace and crop is a product.",
+      "type": "worker_tool"
     },
     {
       "id": "VA-058",
@@ -752,7 +809,8 @@
         "rain is to cloud"
       ],
       "answer": 3,
-      "explanation": "A drop is one tiny part of an ocean; a grain of sand is one tiny part of a beach."
+      "explanation": "A drop is one tiny part of an ocean; a grain of sand is one tiny part of a beach.",
+      "type": "part_whole"
     },
     {
       "id": "VA-059",
@@ -765,7 +823,8 @@
         "cure is to medicine"
       ],
       "answer": 0,
-      "explanation": "An antidote counteracts poison; a repair counteracts damage."
+      "explanation": "An antidote counteracts poison; a repair counteracts damage.",
+      "type": "function"
     },
     {
       "id": "VA-060",
@@ -778,7 +837,8 @@
         "quick is to speed"
       ],
       "answer": 1,
-      "explanation": "Reckless means lacking caution; rude means lacking courtesy. The others describe having the quality."
+      "explanation": "Reckless means lacking caution; rude means lacking courtesy. The others describe having the quality.",
+      "type": "lack"
     },
     {
       "id": "VA-061",
@@ -791,7 +851,8 @@
         "map is to road"
       ],
       "answer": 2,
-      "explanation": "A tool and the professional who uses it."
+      "explanation": "A tool and the professional who uses it.",
+      "type": "worker_tool"
     },
     {
       "id": "VA-062",
@@ -804,7 +865,8 @@
         "breath"
       ],
       "answer": 3,
-      "explanation": "Fish breathe with gills; humans breathe with lungs."
+      "explanation": "Fish breathe with gills; humans breathe with lungs.",
+      "type": "part_whole"
     },
     {
       "id": "VA-063",
@@ -817,7 +879,8 @@
         "school is to books"
       ],
       "answer": 1,
-      "explanation": "A group and the people who make it up."
+      "explanation": "A group and the people who make it up.",
+      "type": "group_member"
     },
     {
       "id": "VA-064",
@@ -830,7 +893,8 @@
         "laboratory is to scientist"
       ],
       "answer": 1,
-      "explanation": "An astronomer studies with a telescope; a biologist studies with a microscope."
+      "explanation": "An astronomer studies with a telescope; a biologist studies with a microscope.",
+      "type": "worker_tool"
     },
     {
       "id": "VA-065",
@@ -843,7 +907,8 @@
         "stars"
       ],
       "answer": 4,
-      "explanation": "A fleet is a group of ships; a constellation is a group of stars."
+      "explanation": "A fleet is a group of ships; a constellation is a group of stars.",
+      "type": "group_member"
     },
     {
       "id": "VA-066",
@@ -856,7 +921,8 @@
         "private"
       ],
       "answer": 2,
-      "explanation": "In the Air Force, each rank is the next one up: lieutenant, then captain, then major."
+      "explanation": "In the Air Force, each rank is the next one up: lieutenant, then captain, then major.",
+      "type": "sequence"
     },
     {
       "id": "VA-067",
@@ -869,7 +935,8 @@
         "captain"
       ],
       "answer": 0,
-      "explanation": "An airman serves in the Air Force; a sailor serves in the Navy."
+      "explanation": "An airman serves in the Air Force; a sailor serves in the Navy.",
+      "type": "group_member"
     },
     {
       "id": "VA-068",
@@ -882,7 +949,8 @@
         "thread"
       ],
       "answer": 3,
-      "explanation": "A helmet protects the head; a thimble protects a finger."
+      "explanation": "A helmet protects the head; a thimble protects a finger.",
+      "type": "function"
     },
     {
       "id": "VA-069",
@@ -895,7 +963,8 @@
         "plains"
       ],
       "answer": 1,
-      "explanation": "An archipelago is a chain of islands; a range is a chain of mountains."
+      "explanation": "An archipelago is a chain of islands; a range is a chain of mountains.",
+      "type": "group_member"
     },
     {
       "id": "VA-070",
@@ -908,7 +977,8 @@
         "mighty"
       ],
       "answer": 4,
-      "explanation": "Meager is the opposite of abundant; feeble is the opposite of mighty."
+      "explanation": "Meager is the opposite of abundant; feeble is the opposite of mighty.",
+      "type": "antonym"
     },
     {
       "id": "VA-071",
@@ -921,7 +991,8 @@
         "still"
       ],
       "answer": 2,
-      "explanation": "The words in each pair are opposites. Calm is the opposite of agitated."
+      "explanation": "The words in each pair are opposites. Calm is the opposite of agitated.",
+      "type": "antonym"
     },
     {
       "id": "VA-072",
@@ -934,7 +1005,8 @@
         "quiet"
       ],
       "answer": 0,
-      "explanation": "A shout is a much stronger whisper; a pound is a much stronger tap."
+      "explanation": "A shout is a much stronger whisper; a pound is a much stronger tap.",
+      "type": "degree"
     },
     {
       "id": "VA-073",
@@ -947,7 +1019,8 @@
         "thirst"
       ],
       "answer": 3,
-      "explanation": "A guffaw is a big, loud chuckle; a gulp is a big, fast sip."
+      "explanation": "A guffaw is a big, loud chuckle; a gulp is a big, fast sip.",
+      "type": "degree"
     },
     {
       "id": "VA-074",
@@ -960,7 +1033,8 @@
         "fish"
       ],
       "answer": 1,
-      "explanation": "An ornithologist studies birds; an entomologist studies insects. (Etymology, not entomology, is the study of words.)"
+      "explanation": "An ornithologist studies birds; an entomologist studies insects. (Etymology, not entomology, is the study of words.)",
+      "type": "worker_work"
     },
     {
       "id": "VA-075",
@@ -973,7 +1047,8 @@
         "dictionaries"
       ],
       "answer": 4,
-      "explanation": "A cartographer makes maps; a lexicographer makes dictionaries."
+      "explanation": "A cartographer makes maps; a lexicographer makes dictionaries.",
+      "type": "worker_creation"
     },
     {
       "id": "VA-076",
@@ -986,7 +1061,8 @@
         "store"
       ],
       "answer": 2,
-      "explanation": "A baker makes bread; a cobbler makes and repairs shoes. Leather is a material, not the product."
+      "explanation": "A baker makes bread; a cobbler makes and repairs shoes. Leather is a material, not the product.",
+      "type": "worker_creation"
     },
     {
       "id": "VA-077",
@@ -999,7 +1075,8 @@
         "audience"
       ],
       "answer": 0,
-      "explanation": "An author writes a novel; a playwright writes a play."
+      "explanation": "An author writes a novel; a playwright writes a play.",
+      "type": "worker_creation"
     },
     {
       "id": "VA-078",
@@ -1012,7 +1089,8 @@
         "slice"
       ],
       "answer": 3,
-      "explanation": "Bark is the tough outer covering of a tree; rind is the tough outer covering of a melon."
+      "explanation": "Bark is the tough outer covering of a tree; rind is the tough outer covering of a melon.",
+      "type": "part_whole"
     },
     {
       "id": "VA-079",
@@ -1025,7 +1103,8 @@
         "audience"
       ],
       "answer": 1,
-      "explanation": "A chapter is one section of a book; a scene is one section of a play."
+      "explanation": "A chapter is one section of a book; a scene is one section of a play.",
+      "type": "part_whole"
     },
     {
       "id": "VA-080",
@@ -1038,7 +1117,8 @@
         "freeze"
       ],
       "answer": 4,
-      "explanation": "An oven is used to bake; a freezer is used to freeze. Cold and ice describe it but are not the action."
+      "explanation": "An oven is used to bake; a freezer is used to freeze. Cold and ice describe it but are not the action.",
+      "type": "function"
     },
     {
       "id": "VA-081",
@@ -1051,7 +1131,8 @@
         "altitude"
       ],
       "answer": 2,
-      "explanation": "An anemometer measures wind speed; a barometer measures air pressure."
+      "explanation": "An anemometer measures wind speed; a barometer measures air pressure.",
+      "type": "function"
     },
     {
       "id": "VA-082",
@@ -1064,7 +1145,8 @@
         "dock"
       ],
       "answer": 0,
-      "explanation": "A propeller moves an airplane forward; an oar moves a rowboat forward."
+      "explanation": "A propeller moves an airplane forward; an oar moves a rowboat forward.",
+      "type": "function"
     },
     {
       "id": "VA-083",
@@ -1077,7 +1159,8 @@
         "speed"
       ],
       "answer": 3,
-      "explanation": "A wing produces lift; an engine produces thrust. Lift, thrust, drag, and weight are the four forces of flight."
+      "explanation": "A wing produces lift; an engine produces thrust. Lift, thrust, drag, and weight are the four forces of flight.",
+      "type": "function"
     },
     {
       "id": "VA-084",
@@ -1090,7 +1173,8 @@
         "lick"
       ],
       "answer": 1,
-      "explanation": "The nose is the organ of smell; the tongue is the organ of taste."
+      "explanation": "The nose is the organ of smell; the tongue is the organ of taste.",
+      "type": "function"
     },
     {
       "id": "VA-085",
@@ -1103,7 +1187,8 @@
         "communicate"
       ],
       "answer": 4,
-      "explanation": "Radar is used to detect; a radio is used to communicate."
+      "explanation": "Radar is used to detect; a radio is used to communicate.",
+      "type": "function"
     },
     {
       "id": "VA-086",
@@ -1116,7 +1201,8 @@
         "sailor"
       ],
       "answer": 2,
-      "explanation": "A pilot works in the cockpit; a cook works in the galley (a ship's or aircraft's kitchen)."
+      "explanation": "A pilot works in the cockpit; a cook works in the galley (a ship's or aircraft's kitchen).",
+      "type": "place"
     },
     {
       "id": "VA-087",
@@ -1129,7 +1215,8 @@
         "campus"
       ],
       "answer": 0,
-      "explanation": "Soldiers live in barracks; students live in a dormitory."
+      "explanation": "Soldiers live in barracks; students live in a dormitory.",
+      "type": "place"
     },
     {
       "id": "VA-088",
@@ -1142,7 +1229,8 @@
         "anger"
       ],
       "answer": 3,
-      "explanation": "A salute is a gesture that shows respect; a nod is a gesture that shows agreement."
+      "explanation": "A salute is a gesture that shows respect; a nod is a gesture that shows agreement.",
+      "type": "function"
     },
     {
       "id": "VA-089",
@@ -1155,7 +1243,8 @@
         "fish"
       ],
       "answer": 1,
-      "explanation": "A group of cattle is a herd; a group of lions is a pride."
+      "explanation": "A group of cattle is a herd; a group of lions is a pride.",
+      "type": "group_member"
     },
     {
       "id": "VA-090",
@@ -1168,7 +1257,8 @@
         "whales"
       ],
       "answer": 4,
-      "explanation": "A group of ants is a colony; a group of whales is a pod."
+      "explanation": "A group of ants is a colony; a group of whales is a pod.",
+      "type": "group_member"
     },
     {
       "id": "VA-091",
@@ -1181,7 +1271,8 @@
         "deer"
       ],
       "answer": 2,
-      "explanation": "A puppy is a young dog; a foal is a young horse."
+      "explanation": "A puppy is a young dog; a foal is a young horse.",
+      "type": "sequence"
     },
     {
       "id": "VA-092",
@@ -1194,7 +1285,8 @@
         "lamb"
       ],
       "answer": 0,
-      "explanation": "A cub is a young bear; a kid is a young goat."
+      "explanation": "A cub is a young bear; a kid is a young goat.",
+      "type": "sequence"
     },
     {
       "id": "VA-093",
@@ -1207,7 +1299,8 @@
         "garden"
       ],
       "answer": 3,
-      "explanation": "An oak grows from an acorn; a tulip grows from a bulb. Lamp and light use the other meaning of bulb."
+      "explanation": "An oak grows from an acorn; a tulip grows from a bulb. Lamp and light use the other meaning of bulb.",
+      "type": "sequence"
     },
     {
       "id": "VA-094",
@@ -1220,7 +1313,8 @@
         "water"
       ],
       "answer": 1,
-      "explanation": "A kilogram is 1,000 grams; a liter is 1,000 milliliters."
+      "explanation": "A kilogram is 1,000 grams; a liter is 1,000 milliliters.",
+      "type": "part_whole"
     },
     {
       "id": "VA-095",
@@ -1233,7 +1327,8 @@
         "millennium"
       ],
       "answer": 4,
-      "explanation": "Ten decades make a century; ten centuries make a millennium."
+      "explanation": "Ten decades make a century; ten centuries make a millennium.",
+      "type": "part_whole"
     },
     {
       "id": "VA-096",
@@ -1246,7 +1341,8 @@
         "money"
       ],
       "answer": 2,
-      "explanation": "A quart is one fourth of a gallon; a quarter is one fourth of a dollar."
+      "explanation": "A quart is one fourth of a gallon; a quarter is one fourth of a dollar.",
+      "type": "part_whole"
     },
     {
       "id": "VA-097",
@@ -1259,7 +1355,8 @@
         "polished"
       ],
       "answer": 0,
-      "explanation": "Transparent is the opposite of opaque; smooth is the opposite of rough."
+      "explanation": "Transparent is the opposite of opaque; smooth is the opposite of rough.",
+      "type": "antonym"
     },
     {
       "id": "VA-098",
@@ -1272,7 +1369,8 @@
         "empty"
       ],
       "answer": 3,
-      "explanation": "Ephemeral (short-lived) is the opposite of permanent; scarce is the opposite of plentiful."
+      "explanation": "Ephemeral (short-lived) is the opposite of permanent; scarce is the opposite of plentiful.",
+      "type": "antonym"
     },
     {
       "id": "VA-099",
@@ -1285,7 +1383,8 @@
         "tired"
       ],
       "answer": 1,
-      "explanation": "Benevolent means kind; malevolent means wishing harm, or cruel."
+      "explanation": "Benevolent means kind; malevolent means wishing harm, or cruel.",
+      "type": "synonym"
     },
     {
       "id": "VA-100",
@@ -1298,7 +1397,8 @@
         "cheerful"
       ],
       "answer": 4,
-      "explanation": "Lethargic is the opposite of energetic; gloomy is the opposite of cheerful."
+      "explanation": "Lethargic is the opposite of energetic; gloomy is the opposite of cheerful.",
+      "type": "antonym"
     },
     {
       "id": "VA-101",
@@ -1311,7 +1411,8 @@
         "war"
       ],
       "answer": 2,
-      "explanation": "Adversary and foe mean the same thing; ally and partner mean the same thing."
+      "explanation": "Adversary and foe mean the same thing; ally and partner mean the same thing.",
+      "type": "synonym"
     },
     {
       "id": "VA-102",
@@ -1324,7 +1425,8 @@
         "mask"
       ],
       "answer": 0,
-      "explanation": "Conceal means hide; reveal means expose."
+      "explanation": "Conceal means hide; reveal means expose.",
+      "type": "synonym"
     },
     {
       "id": "VA-103",
@@ -1337,7 +1439,8 @@
         "late"
       ],
       "answer": 3,
-      "explanation": "Abundant and plentiful are synonyms; rapid and swift are synonyms."
+      "explanation": "Abundant and plentiful are synonyms; rapid and swift are synonyms.",
+      "type": "synonym"
     },
     {
       "id": "VA-104",
@@ -1350,7 +1453,8 @@
         "drawing"
       ],
       "answer": 1,
-      "explanation": "A pen leaves a mark with ink; a pencil leaves a mark with graphite."
+      "explanation": "A pen leaves a mark with ink; a pencil leaves a mark with graphite.",
+      "type": "characteristic"
     },
     {
       "id": "VA-105",
@@ -1363,7 +1467,8 @@
         "body"
       ],
       "answer": 4,
-      "explanation": "Fuel powers an engine; food powers the body."
+      "explanation": "Fuel powers an engine; food powers the body.",
+      "type": "function"
     },
     {
       "id": "VA-106",
@@ -1376,7 +1481,8 @@
         "buckle"
       ],
       "answer": 2,
-      "explanation": "A vaccine protects against disease; a seatbelt protects against injury. A seatbelt does not prevent the crash itself."
+      "explanation": "A vaccine protects against disease; a seatbelt protects against injury. A seatbelt does not prevent the crash itself.",
+      "type": "function"
     },
     {
       "id": "VA-107",
@@ -1389,7 +1495,8 @@
         "compass"
       ],
       "answer": 0,
-      "explanation": "A sponge's job is to absorb; a magnet's job is to attract."
+      "explanation": "A sponge's job is to absorb; a magnet's job is to attract.",
+      "type": "function"
     },
     {
       "id": "VA-108",
@@ -1402,7 +1509,8 @@
         "point"
       ],
       "answer": 3,
-      "explanation": "Scissors are used to cut; a needle is used to sew."
+      "explanation": "Scissors are used to cut; a needle is used to sew.",
+      "type": "function"
     },
     {
       "id": "VA-109",
@@ -1415,7 +1523,8 @@
         "toll"
       ],
       "answer": 1,
-      "explanation": "A ladder lets you climb; a bridge lets you cross."
+      "explanation": "A ladder lets you climb; a bridge lets you cross.",
+      "type": "function"
     },
     {
       "id": "VA-110",
@@ -1428,7 +1537,8 @@
         "wood"
       ],
       "answer": 4,
-      "explanation": "A crumb is a tiny piece of bread; a splinter is a tiny piece of wood."
+      "explanation": "A crumb is a tiny piece of bread; a splinter is a tiny piece of wood.",
+      "type": "part_whole"
     },
     {
       "id": "VA-111",
@@ -1441,7 +1551,8 @@
         "ski"
       ],
       "answer": 2,
-      "explanation": "A shard is a small piece of glass; a flake is a small piece of snow."
+      "explanation": "A shard is a small piece of glass; a flake is a small piece of snow.",
+      "type": "part_whole"
     },
     {
       "id": "VA-112",
@@ -1454,7 +1565,8 @@
         "sky"
       ],
       "answer": 0,
-      "explanation": "A horse has hooves on its feet; an eagle has talons on its feet."
+      "explanation": "A horse has hooves on its feet; an eagle has talons on its feet.",
+      "type": "part_whole"
     },
     {
       "id": "VA-113",
@@ -1467,7 +1579,8 @@
         "piglet"
       ],
       "answer": 3,
-      "explanation": "A horse is kept in a stable; a pig is kept in a sty."
+      "explanation": "A horse is kept in a stable; a pig is kept in a sty.",
+      "type": "place"
     },
     {
       "id": "VA-114",
@@ -1480,7 +1593,8 @@
         "beach"
       ],
       "answer": 1,
-      "explanation": "A glacier is a huge mass of ice; a dune is a large mound of sand."
+      "explanation": "A glacier is a huge mass of ice; a dune is a large mound of sand.",
+      "type": "characteristic"
     },
     {
       "id": "VA-115",
@@ -1493,7 +1607,8 @@
         "crest"
       ],
       "answer": 4,
-      "explanation": "The peak is the top of a mountain; the crest is the top of a wave. The trough is the bottom."
+      "explanation": "The peak is the top of a mountain; the crest is the top of a wave. The trough is the bottom.",
+      "type": "part_whole"
     },
     {
       "id": "VA-116",
@@ -1506,7 +1621,8 @@
         "game"
       ],
       "answer": 2,
-      "explanation": "A conductor leads an orchestra; a coach leads a team."
+      "explanation": "A conductor leads an orchestra; a coach leads a team.",
+      "type": "worker_work"
     },
     {
       "id": "VA-117",
@@ -1519,7 +1635,8 @@
         "sailor"
       ],
       "answer": 0,
-      "explanation": "A general is a top officer in the Army; an admiral is a top officer in the Navy."
+      "explanation": "A general is a top officer in the Army; an admiral is a top officer in the Navy.",
+      "type": "group_member"
     },
     {
       "id": "VA-118",
@@ -1532,7 +1649,8 @@
         "jury"
       ],
       "answer": 3,
-      "explanation": "A referee oversees a game; a judge oversees a trial."
+      "explanation": "A referee oversees a game; a judge oversees a trial.",
+      "type": "worker_work"
     },
     {
       "id": "VA-119",
@@ -1545,7 +1663,8 @@
         "medicine"
       ],
       "answer": 1,
-      "explanation": "A jury reaches a verdict; a doctor reaches a diagnosis."
+      "explanation": "A jury reaches a verdict; a doctor reaches a diagnosis.",
+      "type": "worker_creation"
     },
     {
       "id": "VA-120",
@@ -1558,7 +1677,8 @@
         "sculptor"
       ],
       "answer": 4,
-      "explanation": "A poet creates a poem; a sculptor creates a statue."
+      "explanation": "A poet creates a poem; a sculptor creates a statue.",
+      "type": "worker_creation"
     },
     {
       "id": "VA-121",
@@ -1571,7 +1691,8 @@
         "kilogram"
       ],
       "answer": 2,
-      "explanation": "A mile is a unit of distance; a pound is a unit of weight."
+      "explanation": "A mile is a unit of distance; a pound is a unit of weight.",
+      "type": "type_category"
     },
     {
       "id": "VA-122",
@@ -1584,7 +1705,8 @@
         "mile"
       ],
       "answer": 0,
-      "explanation": "A knot is a nautical unit of speed; a fathom is a nautical unit of depth (6 feet)."
+      "explanation": "A knot is a nautical unit of speed; a fathom is a nautical unit of depth (6 feet).",
+      "type": "type_category"
     },
     {
       "id": "VA-123",
@@ -1597,7 +1719,8 @@
         "top"
       ],
       "answer": 3,
-      "explanation": "The zenith is the highest point and the nadir the lowest; the ceiling is the top of a room and the floor the bottom."
+      "explanation": "The zenith is the highest point and the nadir the lowest; the ceiling is the top of a room and the floor the bottom.",
+      "type": "antonym"
     },
     {
       "id": "VA-124",
@@ -1610,7 +1733,8 @@
         "ticket"
       ],
       "answer": 1,
-      "explanation": "Takeoff starts a flight and landing ends it; departure starts a trip and arrival ends it."
+      "explanation": "Takeoff starts a flight and landing ends it; departure starts a trip and arrival ends it.",
+      "type": "sequence"
     },
     {
       "id": "VA-125",
@@ -1623,7 +1747,8 @@
         "contract"
       ],
       "answer": 4,
-      "explanation": "Inhale and exhale are opposites; expand and contract are opposites."
+      "explanation": "Inhale and exhale are opposites; expand and contract are opposites.",
+      "type": "antonym"
     },
     {
       "id": "VA-126",
@@ -1636,7 +1761,8 @@
         "polite"
       ],
       "answer": 2,
-      "explanation": "Humble is the opposite of arrogant; obedient is the opposite of defiant."
+      "explanation": "Humble is the opposite of arrogant; obedient is the opposite of defiant.",
+      "type": "antonym"
     },
     {
       "id": "VA-127",
@@ -1649,7 +1775,8 @@
         "painful"
       ],
       "answer": 0,
-      "explanation": "Proficient means skilled; arduous means difficult."
+      "explanation": "Proficient means skilled; arduous means difficult.",
+      "type": "synonym"
     },
     {
       "id": "VA-128",
@@ -1662,7 +1789,8 @@
         "short"
       ],
       "answer": 3,
-      "explanation": "Haphazard is the opposite of orderly; vague is the opposite of precise."
+      "explanation": "Haphazard is the opposite of orderly; vague is the opposite of precise.",
+      "type": "antonym"
     },
     {
       "id": "VA-129",
@@ -1675,7 +1803,8 @@
         "smart"
       ],
       "answer": 1,
-      "explanation": "Loquacious means talkative; taciturn means silent, or saying very little."
+      "explanation": "Loquacious means talkative; taciturn means silent, or saying very little.",
+      "type": "synonym"
     },
     {
       "id": "VA-130",
@@ -1688,7 +1817,8 @@
         "memory"
       ],
       "answer": 4,
-      "explanation": "Insomnia is a loss of sleep; amnesia is a loss of memory."
+      "explanation": "Insomnia is a loss of sleep; amnesia is a loss of memory.",
+      "type": "lack"
     },
     {
       "id": "VA-131",
@@ -1701,7 +1831,8 @@
         "music"
       ],
       "answer": 2,
-      "explanation": "A blind person lacks sight; a deaf person lacks hearing."
+      "explanation": "A blind person lacks sight; a deaf person lacks hearing.",
+      "type": "lack"
     },
     {
       "id": "VA-132",
@@ -1714,7 +1845,8 @@
         "metal"
       ],
       "answer": 0,
-      "explanation": "A virus causes illness; friction causes heat."
+      "explanation": "A virus causes illness; friction causes heat.",
+      "type": "cause_effect"
     },
     {
       "id": "VA-133",
@@ -1727,7 +1859,8 @@
         "stadium"
       ],
       "answer": 3,
-      "explanation": "An instructor teaches a trainee; a coach teaches an athlete."
+      "explanation": "An instructor teaches a trainee; a coach teaches an athlete.",
+      "type": "worker_work"
     },
     {
       "id": "VA-134",
@@ -1740,7 +1873,8 @@
         "engine"
       ],
       "answer": 1,
-      "explanation": "A ship is steered with a rudder; a car is steered with a steering wheel."
+      "explanation": "A ship is steered with a rudder; a car is steered with a steering wheel.",
+      "type": "function"
     },
     {
       "id": "VA-135",
@@ -1753,7 +1887,8 @@
         "neck"
       ],
       "answer": 4,
-      "explanation": "A sleeve covers the arm; a collar goes around the neck."
+      "explanation": "A sleeve covers the arm; a collar goes around the neck.",
+      "type": "function"
     },
     {
       "id": "VA-136",
@@ -1766,7 +1901,8 @@
         "satin"
       ],
       "answer": 2,
-      "explanation": "Wool comes from sheep; silk comes from silkworms."
+      "explanation": "Wool comes from sheep; silk comes from silkworms.",
+      "type": "characteristic"
     },
     {
       "id": "VA-137",
@@ -1779,7 +1915,8 @@
         "heat"
       ],
       "answer": 0,
-      "explanation": "A heater produces warmth; a fan produces a breeze."
+      "explanation": "A heater produces warmth; a fan produces a breeze.",
+      "type": "function"
     },
     {
       "id": "VA-138",
@@ -1792,7 +1929,8 @@
         "rope"
       ],
       "answer": 3,
-      "explanation": "A flag hangs from a pole; a sail hangs from a mast."
+      "explanation": "A flag hangs from a pole; a sail hangs from a mast.",
+      "type": "place"
     },
     {
       "id": "VA-139",
@@ -1805,7 +1943,8 @@
         "knight"
       ],
       "answer": 1,
-      "explanation": "A marksman shoots a rifle; an archer shoots a bow. Violin uses the other meaning of bow."
+      "explanation": "A marksman shoots a rifle; an archer shoots a bow. Violin uses the other meaning of bow.",
+      "type": "worker_tool"
     },
     {
       "id": "VA-140",
@@ -1818,7 +1957,8 @@
         "holster"
       ],
       "answer": 4,
-      "explanation": "A sword is carried in a sheath; a pistol is carried in a holster."
+      "explanation": "A sword is carried in a sheath; a pistol is carried in a holster.",
+      "type": "place"
     },
     {
       "id": "VA-141",
@@ -1831,7 +1971,8 @@
         "loss"
       ],
       "answer": 2,
-      "explanation": "A medal is awarded for valor; a trophy is awarded for victory."
+      "explanation": "A medal is awarded for valor; a trophy is awarded for victory.",
+      "type": "cause_effect"
     },
     {
       "id": "VA-142",
@@ -1844,7 +1985,8 @@
         "bonus"
       ],
       "answer": 0,
-      "explanation": "A promotion increases rank; a raise increases salary."
+      "explanation": "A promotion increases rank; a raise increases salary.",
+      "type": "cause_effect"
     },
     {
       "id": "VA-143",
@@ -1857,7 +1999,8 @@
         "yield"
       ],
       "answer": 3,
-      "explanation": "Retreat is the opposite of advance; surrender is the opposite of resist."
+      "explanation": "Retreat is the opposite of advance; surrender is the opposite of resist.",
+      "type": "antonym"
     },
     {
       "id": "VA-144",
@@ -1870,7 +2013,8 @@
         "darkness"
       ],
       "answer": 1,
-      "explanation": "Camouflage is used to conceal; a beacon is used to signal."
+      "explanation": "Camouflage is used to conceal; a beacon is used to signal.",
+      "type": "function"
     },
     {
       "id": "VA-145",
@@ -1883,7 +2027,8 @@
         "water"
       ],
       "answer": 4,
-      "explanation": "A silo stores grain; a reservoir stores water."
+      "explanation": "A silo stores grain; a reservoir stores water.",
+      "type": "place"
     },
     {
       "id": "VA-146",
@@ -1896,7 +2041,8 @@
         "leather"
       ],
       "answer": 2,
-      "explanation": "A quiver holds arrows; a wallet holds cash."
+      "explanation": "A quiver holds arrows; a wallet holds cash.",
+      "type": "place"
     },
     {
       "id": "VA-147",
@@ -1909,7 +2055,8 @@
         "eraser"
       ],
       "answer": 0,
-      "explanation": "A sketch is an early version of a painting; a draft is an early version of an essay."
+      "explanation": "A sketch is an early version of a painting; a draft is an early version of an essay.",
+      "type": "sequence"
     },
     {
       "id": "VA-148",
@@ -1922,7 +2069,8 @@
         "win"
       ],
       "answer": 3,
-      "explanation": "A rehearsal prepares for a performance; practice prepares for a game."
+      "explanation": "A rehearsal prepares for a performance; practice prepares for a game.",
+      "type": "sequence"
     },
     {
       "id": "VA-149",
@@ -1935,7 +2083,8 @@
         "lions"
       ],
       "answer": 1,
-      "explanation": "An apiary is where bees are kept; an aviary is where birds are kept. Aviary looks like aviation but has nothing to do with planes."
+      "explanation": "An apiary is where bees are kept; an aviary is where birds are kept. Aviary looks like aviation but has nothing to do with planes.",
+      "type": "place"
     },
     {
       "id": "VA-150",
@@ -1948,7 +2097,8 @@
         "disease"
       ],
       "answer": 4,
-      "explanation": "A clue helps solve a mystery; a symptom helps identify a disease. Fever is itself a symptom."
+      "explanation": "A clue helps solve a mystery; a symptom helps identify a disease. Fever is itself a symptom.",
+      "type": "function"
     },
     {
       "id": "VA-151",
@@ -1961,7 +2111,8 @@
         "steam"
       ],
       "answer": 2,
-      "explanation": "Water that evaporates becomes vapor; water that freezes becomes ice."
+      "explanation": "Water that evaporates becomes vapor; water that freezes becomes ice.",
+      "type": "cause_effect"
     },
     {
       "id": "VA-152",
@@ -1974,7 +2125,8 @@
         "world"
       ],
       "answer": 0,
-      "explanation": "A continent is divided into countries; a country is divided into states."
+      "explanation": "A continent is divided into countries; a country is divided into states.",
+      "type": "part_whole"
     },
     {
       "id": "VA-153",
@@ -1987,7 +2139,8 @@
         "oil"
       ],
       "answer": 3,
-      "explanation": "A pedometer counts steps; an odometer counts miles traveled. A speedometer, not an odometer, shows speed."
+      "explanation": "A pedometer counts steps; an odometer counts miles traveled. A speedometer, not an odometer, shows speed.",
+      "type": "function"
     },
     {
       "id": "VA-154",
@@ -2000,7 +2153,8 @@
         "storms"
       ],
       "answer": 1,
-      "explanation": "A seismograph measures earthquakes; a rain gauge measures rainfall."
+      "explanation": "A seismograph measures earthquakes; a rain gauge measures rainfall.",
+      "type": "function"
     },
     {
       "id": "VA-155",
@@ -2013,7 +2167,8 @@
         "adult"
       ],
       "answer": 4,
-      "explanation": "A bud grows into a blossom; a child grows into an adult."
+      "explanation": "A bud grows into a blossom; a child grows into an adult.",
+      "type": "sequence"
     },
     {
       "id": "VA-156",
@@ -2026,7 +2181,8 @@
         "honest"
       ],
       "answer": 2,
-      "explanation": "An optimist is hopeful; a pessimist is doubtful."
+      "explanation": "An optimist is hopeful; a pessimist is doubtful.",
+      "type": "characteristic"
     },
     {
       "id": "VA-157",
@@ -2039,7 +2195,8 @@
         "borrow"
       ],
       "answer": 0,
-      "explanation": "A miser hoards money; a spendthrift squanders it."
+      "explanation": "A miser hoards money; a spendthrift squanders it.",
+      "type": "worker_work"
     },
     {
       "id": "VA-158",
@@ -2052,7 +2209,8 @@
         "diet"
       ],
       "answer": 3,
-      "explanation": "A pacifist rejects violence; a vegetarian rejects meat."
+      "explanation": "A pacifist rejects violence; a vegetarian rejects meat.",
+      "type": "lack"
     },
     {
       "id": "VA-159",
@@ -2065,7 +2223,8 @@
         "story"
       ],
       "answer": 1,
-      "explanation": "A traitor lacks loyalty; a liar lacks honesty."
+      "explanation": "A traitor lacks loyalty; a liar lacks honesty.",
+      "type": "lack"
     },
     {
       "id": "VA-160",
@@ -2078,7 +2237,8 @@
         "wiring"
       ],
       "answer": 4,
-      "explanation": "A plumber installs and fixes pipes; an electrician installs and fixes wiring."
+      "explanation": "A plumber installs and fixes pipes; an electrician installs and fixes wiring.",
+      "type": "worker_work"
     },
     {
       "id": "VA-161",
@@ -2091,7 +2251,8 @@
         "wrist"
       ],
       "answer": 2,
-      "explanation": "A tailor makes a suit; a jeweler makes a necklace. Gold and diamond are materials, not the product."
+      "explanation": "A tailor makes a suit; a jeweler makes a necklace. Gold and diamond are materials, not the product.",
+      "type": "worker_creation"
     },
     {
       "id": "VA-162",
@@ -2104,7 +2265,8 @@
         "oceans"
       ],
       "answer": 0,
-      "explanation": "A geologist studies rocks; a meteorologist studies weather (not meteors, despite the name)."
+      "explanation": "A geologist studies rocks; a meteorologist studies weather (not meteors, despite the name).",
+      "type": "worker_work"
     },
     {
       "id": "VA-163",
@@ -2117,7 +2279,8 @@
         "hospitals"
       ],
       "answer": 3,
-      "explanation": "A pediatrician treats children; a veterinarian treats animals."
+      "explanation": "A pediatrician treats children; a veterinarian treats animals.",
+      "type": "worker_work"
     },
     {
       "id": "VA-164",
@@ -2130,7 +2293,8 @@
         "skin"
       ],
       "answer": 1,
-      "explanation": "A dentist cares for teeth; an optometrist cares for eyes."
+      "explanation": "A dentist cares for teeth; an optometrist cares for eyes.",
+      "type": "worker_work"
     },
     {
       "id": "VA-165",
@@ -2143,7 +2307,8 @@
         "state"
       ],
       "answer": 4,
-      "explanation": "A mayor leads a city; a governor leads a state."
+      "explanation": "A mayor leads a city; a governor leads a state.",
+      "type": "worker_work"
     },
     {
       "id": "VA-166",
@@ -2156,7 +2321,8 @@
         "record"
       ],
       "answer": 2,
-      "explanation": "Abridge means shorten; amplify means intensify, or make stronger."
+      "explanation": "Abridge means shorten; amplify means intensify, or make stronger.",
+      "type": "synonym"
     },
     {
       "id": "VA-167",
@@ -2169,7 +2335,8 @@
         "race"
       ],
       "answer": 0,
-      "explanation": "Mitigate (make less severe) is the opposite of worsen; accelerate is the opposite of slow."
+      "explanation": "Mitigate (make less severe) is the opposite of worsen; accelerate is the opposite of slow.",
+      "type": "antonym"
     },
     {
       "id": "VA-168",
@@ -2182,7 +2349,8 @@
         "repeat"
       ],
       "answer": 3,
-      "explanation": "Commence means begin; cease means stop."
+      "explanation": "Commence means begin; cease means stop.",
+      "type": "synonym"
     },
     {
       "id": "VA-169",
@@ -2195,7 +2363,8 @@
         "grow"
       ],
       "answer": 1,
-      "explanation": "Augment means increase; diminish means decrease."
+      "explanation": "Augment means increase; diminish means decrease.",
+      "type": "synonym"
     },
     {
       "id": "VA-170",
@@ -2208,7 +2377,8 @@
         "reckless"
       ],
       "answer": 4,
-      "explanation": "Prudent means wise; rash means reckless. Itchy uses the other meaning of rash."
+      "explanation": "Prudent means wise; rash means reckless. Itchy uses the other meaning of rash.",
+      "type": "synonym"
     },
     {
       "id": "VA-171",
@@ -2221,7 +2391,8 @@
         "sleep"
       ],
       "answer": 2,
-      "explanation": "A nocturnal animal is active at night; a diurnal animal is active during the day."
+      "explanation": "A nocturnal animal is active at night; a diurnal animal is active during the day.",
+      "type": "characteristic"
     },
     {
       "id": "VA-172",
@@ -2234,7 +2405,8 @@
         "hunter"
       ],
       "answer": 0,
-      "explanation": "A herbivore eats plants; a carnivore eats meat."
+      "explanation": "A herbivore eats plants; a carnivore eats meat.",
+      "type": "characteristic"
     },
     {
       "id": "VA-173",
@@ -2247,7 +2419,8 @@
         "bird"
       ],
       "answer": 3,
-      "explanation": "A frog is an amphibian; a lizard is a reptile. Toads and salamanders are amphibians too."
+      "explanation": "A frog is an amphibian; a lizard is a reptile. Toads and salamanders are amphibians too.",
+      "type": "type_category"
     },
     {
       "id": "VA-174",
@@ -2260,7 +2433,8 @@
         "kite"
       ],
       "answer": 1,
-      "explanation": "A whale is a mammal that doesn't look like one; a penguin is a bird that can't fly. A bat flies but is a mammal."
+      "explanation": "A whale is a mammal that doesn't look like one; a penguin is a bird that can't fly. A bat flies but is a mammal.",
+      "type": "type_category"
     },
     {
       "id": "VA-175",
@@ -2273,7 +2447,8 @@
         "six"
       ],
       "answer": 4,
-      "explanation": "A triangle has three sides; a hexagon has six."
+      "explanation": "A triangle has three sides; a hexagon has six.",
+      "type": "characteristic"
     },
     {
       "id": "VA-176",
@@ -2286,7 +2461,8 @@
         "line"
       ],
       "answer": 2,
-      "explanation": "A sphere is the 3D form of a circle; a cube is the 3D form of a square."
+      "explanation": "A sphere is the 3D form of a circle; a cube is the 3D form of a square.",
+      "type": "characteristic"
     },
     {
       "id": "VA-177",
@@ -2299,7 +2475,8 @@
         "number"
       ],
       "answer": 0,
-      "explanation": "Addition gives a sum; multiplication gives a product. Division gives a quotient and subtraction a difference."
+      "explanation": "Addition gives a sum; multiplication gives a product. Division gives a quotient and subtraction a difference.",
+      "type": "cause_effect"
     },
     {
       "id": "VA-178",
@@ -2312,7 +2489,8 @@
         "bridge"
       ],
       "answer": 3,
-      "explanation": "A bank is the edge of a river; a shoulder is the edge of a road."
+      "explanation": "A bank is the edge of a river; a shoulder is the edge of a road.",
+      "type": "part_whole"
     },
     {
       "id": "VA-179",
@@ -2325,7 +2503,8 @@
         "electricity"
       ],
       "answer": 1,
-      "explanation": "A thermostat adjusts temperature; a dimmer adjusts brightness."
+      "explanation": "A thermostat adjusts temperature; a dimmer adjusts brightness.",
+      "type": "function"
     },
     {
       "id": "VA-180",
@@ -2338,7 +2517,8 @@
         "mountain"
       ],
       "answer": 4,
-      "explanation": "A lake is a larger pond; a mountain is a larger hill."
+      "explanation": "A lake is a larger pond; a mountain is a larger hill.",
+      "type": "degree"
     },
     {
       "id": "VA-181",
@@ -2351,7 +2531,8 @@
         "dust"
       ],
       "answer": 2,
-      "explanation": "A twig is a small branch; a pebble is a small boulder. Sand and dust are smaller still."
+      "explanation": "A twig is a small branch; a pebble is a small boulder. Sand and dust are smaller still.",
+      "type": "degree"
     },
     {
       "id": "VA-182",
@@ -2364,7 +2545,8 @@
         "sail"
       ],
       "answer": 0,
-      "explanation": "A mansion is a large, luxurious house; a yacht is a large, luxurious boat."
+      "explanation": "A mansion is a large, luxurious house; a yacht is a large, luxurious boat.",
+      "type": "degree"
     },
     {
       "id": "VA-183",
@@ -2377,7 +2559,8 @@
         "heat"
       ],
       "answer": 3,
-      "explanation": "Rain comes out of a cloud; lava comes out of a volcano."
+      "explanation": "Rain comes out of a cloud; lava comes out of a volcano.",
+      "type": "cause_effect"
     },
     {
       "id": "VA-184",
@@ -2390,7 +2573,8 @@
         "road"
       ],
       "answer": 1,
-      "explanation": "A candle is made of wax; a tire is made of rubber."
+      "explanation": "A candle is made of wax; a tire is made of rubber.",
+      "type": "characteristic"
     },
     {
       "id": "VA-185",
@@ -2403,7 +2587,8 @@
         "profit"
       ],
       "answer": 4,
-      "explanation": "You sow seeds and later reap a harvest; you invest money and later profit."
+      "explanation": "You sow seeds and later reap a harvest; you invest money and later profit.",
+      "type": "sequence"
     },
     {
       "id": "VA-186",
@@ -2416,7 +2601,8 @@
         "paper"
       ],
       "answer": 2,
-      "explanation": "An excerpt is a short piece taken from a book; a clip is a short piece taken from a movie."
+      "explanation": "An excerpt is a short piece taken from a book; a clip is a short piece taken from a movie.",
+      "type": "part_whole"
     },
     {
       "id": "VA-187",
@@ -2429,7 +2615,8 @@
         "singer"
       ],
       "answer": 0,
-      "explanation": "Syllables combine to make a word; notes combine to make a melody."
+      "explanation": "Syllables combine to make a word; notes combine to make a melody.",
+      "type": "part_whole"
     },
     {
       "id": "VA-188",
@@ -2442,7 +2629,8 @@
         "line"
       ],
       "answer": 3,
-      "explanation": "An essay is made of paragraphs; a poem is made of stanzas."
+      "explanation": "An essay is made of paragraphs; a poem is made of stanzas.",
+      "type": "part_whole"
     },
     {
       "id": "VA-189",
@@ -2455,7 +2643,8 @@
         "microscope"
       ],
       "answer": 1,
-      "explanation": "Atoms join to form a molecule; cells join to form tissue. The nucleus and membrane are parts of a cell."
+      "explanation": "Atoms join to form a molecule; cells join to form tissue. The nucleus and membrane are parts of a cell.",
+      "type": "part_whole"
     },
     {
       "id": "VA-190",
@@ -2468,7 +2657,8 @@
         "scale is to fish"
       ],
       "answer": 4,
-      "explanation": "Feathers cover a bird's body; scales cover a fish's body."
+      "explanation": "Feathers cover a bird's body; scales cover a fish's body.",
+      "type": "part_whole"
     },
     {
       "id": "VA-191",
@@ -2481,7 +2671,8 @@
         "drawer is to desk"
       ],
       "answer": 2,
-      "explanation": "An archive is where records are stored; a pantry is where food is stored."
+      "explanation": "An archive is where records are stored; a pantry is where food is stored.",
+      "type": "place"
     },
     {
       "id": "VA-192",
@@ -2494,7 +2685,8 @@
         "sleet is to ice"
       ],
       "answer": 0,
-      "explanation": "A blizzard is an extreme snowfall; a deluge is an extreme rainfall."
+      "explanation": "A blizzard is an extreme snowfall; a deluge is an extreme rainfall.",
+      "type": "degree"
     },
     {
       "id": "VA-193",
@@ -2507,7 +2699,8 @@
         "medic is to bandage"
       ],
       "answer": 3,
-      "explanation": "A sentry's job is to guard; a scout's job is to explore."
+      "explanation": "A sentry's job is to guard; a scout's job is to explore.",
+      "type": "worker_work"
     },
     {
       "id": "VA-194",
@@ -2520,7 +2713,8 @@
         "fan is to stadium"
       ],
       "answer": 1,
-      "explanation": "An amateur is less skilled than a professional; an apprentice is less skilled than a master."
+      "explanation": "An amateur is less skilled than a professional; an apprentice is less skilled than a master.",
+      "type": "degree"
     },
     {
       "id": "VA-195",
@@ -2533,7 +2727,8 @@
         "feather is to bird"
       ],
       "answer": 4,
-      "explanation": "A leaf grows from and covers a tree; a feather grows from and covers a bird. A nest is not part of the bird."
+      "explanation": "A leaf grows from and covers a tree; a feather grows from and covers a bird. A nest is not part of the bird.",
+      "type": "part_whole"
     },
     {
       "id": "VA-196",
@@ -2546,7 +2741,8 @@
         "warm is to mild"
       ],
       "answer": 2,
-      "explanation": "Freezing is an extreme form of cool; soaked is an extreme form of damp."
+      "explanation": "Freezing is an extreme form of cool; soaked is an extreme form of damp.",
+      "type": "degree"
     },
     {
       "id": "VA-197",
@@ -2559,7 +2755,8 @@
         "fisherman is to fish"
       ],
       "answer": 0,
-      "explanation": "A lifeguard watches over and protects swimmers; a shepherd watches over and protects sheep."
+      "explanation": "A lifeguard watches over and protects swimmers; a shepherd watches over and protects sheep.",
+      "type": "worker_work"
     },
     {
       "id": "VA-198",
@@ -2572,7 +2769,8 @@
         "tundra is to hot"
       ],
       "answer": 3,
-      "explanation": "A desert is arid (dry); a rainforest is humid. A tundra is cold, not hot."
+      "explanation": "A desert is arid (dry); a rainforest is humid. A tundra is cold, not hot.",
+      "type": "characteristic"
     },
     {
       "id": "VA-199",
@@ -2585,7 +2783,8 @@
         "freeze is to ice"
       ],
       "answer": 1,
-      "explanation": "You starve without food; you suffocate without air."
+      "explanation": "You starve without food; you suffocate without air.",
+      "type": "lack"
     },
     {
       "id": "VA-200",
@@ -2598,7 +2797,8 @@
         "vineyard is to grapes"
       ],
       "answer": 4,
-      "explanation": "Fruit is grown in an orchard; grapes are grown in a vineyard."
+      "explanation": "Fruit is grown in an orchard; grapes are grown in a vineyard.",
+      "type": "place"
     }
   ]
 }

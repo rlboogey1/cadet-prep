@@ -66,8 +66,10 @@ says "tap" instead of "click"/keyboard hints.
 `category` (group within a track, e.g. AFOQT `knowledge`/`pilot`), question `file`, `visual`,
 timed-test `time_limit_seconds` and `question_count`, `tips`, and optional `icon`/`description`
 (not shown in the GUI any more). Multiple-choice sections need only a JSON entry plus a question file
-(`{"questions":[{id, prompt, choices, answer (0-based), explanation, passage?}]}`). IDs must be
-unique; they key the missed-question list.
+(`{"questions":[{id, prompt, choices, answer (0-based), explanation, passage?, type?}]}`). IDs must be
+unique; they key the missed-question list. Verbal Analogies and Reading Comprehension questions
+need a `type` from the lists in `VerbalTypes.cpp` (15 analogy relationships, 5 reading question
+types); loading fails without one, so tag new questions when adding them.
 
 **Questions.** `QuestionBank` loads and validates files, draws sets, and shuffles choices per
 draw (`shuffleChoices` also permutes `choiceVisuals` so pictures stay with their choice).
@@ -106,6 +108,24 @@ vocabulary file; a missed word comes back asked another way), and describe (`dra
 meaning, reveal, self-grade Got it / Missed; "I don't know" counts as missed). All three use
 `FlashcardDeck`'s session, so every answer moves the word's box, and finishing any of them counts the day.
 None of them record to `ProgressStore`.
+The Flashcards screen also has a **word roots deck** (`rootDeck_`, `data/roots.json`: prefixes, roots
+and suffixes in the flashcard format, `pos` = prefix/root/suffix, `synonym` = example words) with its
+own `RepetitionDeck` (`rootRep_`) and streak. It reuses the three study modes; `repRoots_` says which
+deck a session uses (`activeDeck()`, `activeRep()`). The deck grows in file order, so keep the most
+useful roots first.
+
+**Verbal sections.** The Verbal Analogies "Drill" button (`startRelationDrill`, tag "RELATION DRILL")
+asks each question in two steps: name the first pair's relationship from six choices
+(`drawRelationStep`), then answer the analogy. The **weekly reading set** (`WeeklyReading`,
+`drawWeeklyStrip` on the AFOQT dashboard) is 3 Reading Comprehension passages per calendar week
+(Monday start), moving 3 passages along the file each week, taken as a timed test at the RC pace;
+finishing it marks the week and keeps a weekly streak. **Weak spots** (`Screen::WeakSpots`, AFOQT
+only) shows what's missed most from `MissLog` (`afoqt_misses.json`): `word:` (Word Knowledge and
+vocabulary cards), `root:`, `relation:` (analogy answers), `relname:` (drill step 1) and `reading:`
+counts, with buttons to drill each list. `recordMisses()` counts a quiz when it finishes; cards
+count as they're swiped. MissLog keeps counts per device (`deviceId_`, in settings) so syncing never
+double counts.
+
 **Warrior Knowledge has no multiple choice:** its blocks are built only from the handbook items in
 `data/warrior_cards.json` (`addWarriorCards()`: `pos` "BLOCK n" → `wk_blockNN`, front = `word`, back
 = `definition`, id `WK-` + title). Exceptions, matched by exact card title: the rank lists
@@ -132,8 +152,10 @@ macOS, `~/.cadet-prep` elsewhere) and migrates older folders. **Always save and 
 into the bundle's Resources folder unless `GLFW_COCOA_CHDIR_RESOURCES` is off (it's turned off in
 `gui_main.cpp`), which once made settings save inside the app. Files: `afoqt_progress.json`
 (`ProgressStore`; review sessions don't count toward accuracy), `afoqt_flashcards.json`, `afoqt_repetition.json` (spaced repetition deck and streak), `warrior_repetition.json` (Warrior Knowledge block deck and streak), `afoqt_saved_questions.json` (saved generated questions),
+`afoqt_roots.json` and `afoqt_roots_repetition.json` (word roots boxes and deck), `afoqt_misses.json`
+(Weak spots counts), `afoqt_weekly.json` (weekly reading weeks done),
 `warrior_cards_progress.json` (no longer written, kept for old installs), and `afoqt_settings.json` (sound, dark mode, definition-first,
-last track, focus area per track). Settings save on every change.
+last track, focus area per track, and this device's id for the miss counts). Settings save on every change.
 
 **Online sync** (`SYNC.md`): one Supabase account (only the user's; sign-ups off) keeps the progress
 files the same across devices. Settings don't sync. `cloudsync::syncedFiles()` in `SyncMerge.h` lists
@@ -141,7 +163,8 @@ what syncs. The files are bundled into one JSON row (`progress` table) and merge
 (core): sessions are unioned by `id` (older id-less ones get a key made from their fields), and missed
 questions (`outcomes`) and flashcard boxes (`changed`) are decided per item by the newer timestamp.
 Merges must stay order-independent and repeatable; when you add a field or a synced file, merge it
-the same way. `CloudSync` (GUI only) runs the network calls on a background thread through `Http.mm`
+the same way. `mergeBundle` keeps keys it doesn't know as they are, so an older app version won't
+drop a newer version's files (versions from before Nov 2026 still do). `CloudSync` (GUI only) runs the network calls on a background thread through `Http.mm`
 (NSURLSession; a stub elsewhere) and reads and writes files only on the main thread in `update()`,
 then `GuiApp::reloadProgress()` reloads them. The server address and key come from the git-ignored
 `supabase.json`, read by CMake. Without it the Account card says sync isn't set up. Sign-in tokens

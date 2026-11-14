@@ -1,0 +1,725 @@
+{
+  "cards": [
+    {
+      "word": "bene-",
+      "pos": "prefix",
+      "definition": "good, well",
+      "synonym": "benevolent, benefit, benefactor",
+      "example": "A benefactor is someone who does good for others."
+    },
+    {
+      "word": "mal-",
+      "pos": "prefix",
+      "definition": "bad, badly",
+      "synonym": "malevolent, malfunction, malice",
+      "example": "Malevolent means wishing bad things on others."
+    },
+    {
+      "word": "ambi-",
+      "pos": "prefix",
+      "definition": "both, around",
+      "synonym": "ambiguous, ambivalent, ambidextrous",
+      "example": "Ambivalent means having feelings both ways at once."
+    },
+    {
+      "word": "un-",
+      "pos": "prefix",
+      "definition": "not",
+      "synonym": "unwary, unbiased, unkempt",
+      "example": "Unbiased means not leaning toward one side."
+    },
+    {
+      "word": "in- / im-",
+      "pos": "prefix",
+      "definition": "not",
+      "synonym": "inept, impartial, incessant",
+      "example": "Incessant means not ceasing: it never stops."
+    },
+    {
+      "word": "dis-",
+      "pos": "prefix",
+      "definition": "not, apart, away",
+      "synonym": "disparage, dissent, disperse",
+      "example": "To disperse is to scatter apart."
+    },
+    {
+      "word": "a- / an-",
+      "pos": "prefix",
+      "definition": "without, not",
+      "synonym": "apathy, anonymous, amoral",
+      "example": "Apathy is being without feeling or interest."
+    },
+    {
+      "word": "anti-",
+      "pos": "prefix",
+      "definition": "against",
+      "synonym": "antidote, antipathy, antagonize",
+      "example": "An antidote is a remedy given against a poison."
+    },
+    {
+      "word": "pro-",
+      "pos": "prefix",
+      "definition": "forward, for, before",
+      "synonym": "proceed, prolific, proponent",
+      "example": "A proponent is someone who speaks for an idea."
+    },
+    {
+      "word": "pre-",
+      "pos": "prefix",
+      "definition": "before",
+      "synonym": "precede, premonition, precaution",
+      "example": "A premonition is a warning felt before something happens."
+    },
+    {
+      "word": "post-",
+      "pos": "prefix",
+      "definition": "after",
+      "synonym": "postpone, posterity, postwar",
+      "example": "To postpone is to put something off until after."
+    },
+    {
+      "word": "re-",
+      "pos": "prefix",
+      "definition": "again, back",
+      "synonym": "revoke, reiterate, rebuke",
+      "example": "To reiterate is to say again."
+    },
+    {
+      "word": "sub-",
+      "pos": "prefix",
+      "definition": "under, below",
+      "synonym": "subordinate, submerge, subtle",
+      "example": "A subordinate ranks under someone else."
+    },
+    {
+      "word": "super- / sur-",
+      "pos": "prefix",
+      "definition": "over, above",
+      "synonym": "superfluous, surplus, supervise",
+      "example": "Superfluous means more than enough: over what is needed."
+    },
+    {
+      "word": "trans-",
+      "pos": "prefix",
+      "definition": "across, beyond",
+      "synonym": "transient, transmit, transparent",
+      "example": "Transient means passing across quickly, not lasting."
+    },
+    {
+      "word": "inter-",
+      "pos": "prefix",
+      "definition": "between, among",
+      "synonym": "intervene, intermittent, interject",
+      "example": "Intermittent means stopping and starting, with gaps between."
+    },
+    {
+      "word": "intra- / intro-",
+      "pos": "prefix",
+      "definition": "within, inward",
+      "synonym": "introvert, intravenous, introspection",
+      "example": "Introspection is looking inward at your own thoughts."
+    },
+    {
+      "word": "circum-",
+      "pos": "prefix",
+      "definition": "around",
+      "synonym": "circumvent, circumspect, circumference",
+      "example": "To circumvent a rule is to go around it."
+    },
+    {
+      "word": "con- / com- / col-",
+      "pos": "prefix",
+      "definition": "with, together",
+      "synonym": "consensus, comply, collaborate",
+      "example": "A consensus is a judgment held together by a group."
+    },
+    {
+      "word": "contra- / counter-",
+      "pos": "prefix",
+      "definition": "against, opposite",
+      "synonym": "contradict, contrary, counteract",
+      "example": "To contradict is to speak against what was said."
+    },
+    {
+      "word": "de-",
+      "pos": "prefix",
+      "definition": "down, away from, undo",
+      "synonym": "deplete, deter, debase",
+      "example": "To deplete a supply is to draw it down."
+    },
+    {
+      "word": "ex- / e-",
+      "pos": "prefix",
+      "definition": "out, out of",
+      "synonym": "exonerate, exacerbate, emit",
+      "example": "To exonerate is to take the blame out: to clear someone."
+    },
+    {
+      "word": "mis-",
+      "pos": "prefix",
+      "definition": "wrong, badly",
+      "synonym": "misnomer, mislead, misconstrue",
+      "example": "A misnomer is a wrong name for something."
+    },
+    {
+      "word": "non-",
+      "pos": "prefix",
+      "definition": "not",
+      "synonym": "nonchalant, nondescript, nonpartisan",
+      "example": "Nondescript means not easy to describe: plain."
+    },
+    {
+      "word": "omni-",
+      "pos": "prefix",
+      "definition": "all",
+      "synonym": "omnipotent, omniscient, omnivore",
+      "example": "Omniscient means knowing all."
+    },
+    {
+      "word": "pan-",
+      "pos": "prefix",
+      "definition": "all, every",
+      "synonym": "panacea, panorama, pandemic",
+      "example": "A panacea is a cure for all problems."
+    },
+    {
+      "word": "mono- / uni-",
+      "pos": "prefix",
+      "definition": "one",
+      "synonym": "monotonous, unanimous, uniform",
+      "example": "Unanimous means all of one mind."
+    },
+    {
+      "word": "bi- / di-",
+      "pos": "prefix",
+      "definition": "two",
+      "synonym": "bilateral, dichotomy, biannual",
+      "example": "A dichotomy is a split into two opposite parts."
+    },
+    {
+      "word": "tri-",
+      "pos": "prefix",
+      "definition": "three",
+      "synonym": "trilogy, tripod, trivial",
+      "example": "A tripod stands on three feet."
+    },
+    {
+      "word": "poly- / multi-",
+      "pos": "prefix",
+      "definition": "many",
+      "synonym": "polyglot, multitude, polygon",
+      "example": "A polyglot speaks many languages."
+    },
+    {
+      "word": "hyper-",
+      "pos": "prefix",
+      "definition": "over, too much",
+      "synonym": "hyperbole, hyperactive, hypersensitive",
+      "example": "Hyperbole is exaggeration: saying too much."
+    },
+    {
+      "word": "hypo-",
+      "pos": "prefix",
+      "definition": "under, too little",
+      "synonym": "hypothermia, hypothesis, hypocrite",
+      "example": "Hypothermia is body heat under normal."
+    },
+    {
+      "word": "auto-",
+      "pos": "prefix",
+      "definition": "self",
+      "synonym": "autonomous, autocrat, automatic",
+      "example": "Autonomous means governing itself."
+    },
+    {
+      "word": "ab- / abs-",
+      "pos": "prefix",
+      "definition": "away from",
+      "synonym": "abstain, abdicate, abhor",
+      "example": "To abstain is to hold yourself away from something."
+    },
+    {
+      "word": "ad- / ac- / af-",
+      "pos": "prefix",
+      "definition": "to, toward",
+      "synonym": "adhere, accord, affinity",
+      "example": "To adhere is to stick to something."
+    },
+    {
+      "word": "ob-",
+      "pos": "prefix",
+      "definition": "against, in the way",
+      "synonym": "obstinate, obstruct, obscure",
+      "example": "Obstinate means stubbornly standing against change."
+    },
+    {
+      "word": "per-",
+      "pos": "prefix",
+      "definition": "through, thoroughly",
+      "synonym": "persevere, permeate, peruse",
+      "example": "To permeate is to spread all the way through."
+    },
+    {
+      "word": "se-",
+      "pos": "prefix",
+      "definition": "apart, aside",
+      "synonym": "segregate, secede, seclude",
+      "example": "To seclude is to set apart from others."
+    },
+    {
+      "word": "eu-",
+      "pos": "prefix",
+      "definition": "good, pleasant",
+      "synonym": "eulogy, euphoria, euphemism",
+      "example": "A eulogy is good words about someone who has died."
+    },
+    {
+      "word": "dys-",
+      "pos": "prefix",
+      "definition": "bad, difficult",
+      "synonym": "dysfunction, dystopia, dyslexia",
+      "example": "A dystopia is a bad, frightening imagined society."
+    },
+    {
+      "word": "vol / volv",
+      "pos": "root",
+      "definition": "wish, will; roll",
+      "synonym": "benevolent, voluntary, revolve",
+      "example": "Benevolent: bene (good) + vol (will) = wishing good."
+    },
+    {
+      "word": "ver",
+      "pos": "root",
+      "definition": "true",
+      "synonym": "veracity, verify, verdict",
+      "example": "Veracity is truthfulness."
+    },
+    {
+      "word": "cred",
+      "pos": "root",
+      "definition": "believe",
+      "synonym": "credible, incredulous, credence",
+      "example": "Incredulous means not believing."
+    },
+    {
+      "word": "dict",
+      "pos": "root",
+      "definition": "say, speak",
+      "synonym": "contradict, diction, edict",
+      "example": "An edict is an order spoken by an authority."
+    },
+    {
+      "word": "loqu / locut",
+      "pos": "root",
+      "definition": "speak",
+      "synonym": "loquacious, eloquent, circumlocution",
+      "example": "Loquacious means speaking a lot."
+    },
+    {
+      "word": "voc / vok",
+      "pos": "root",
+      "definition": "call, voice",
+      "synonym": "revoke, vociferous, advocate",
+      "example": "Vociferous means loud and full of voice."
+    },
+    {
+      "word": "scrib / script",
+      "pos": "root",
+      "definition": "write",
+      "synonym": "prescribe, transcript, inscribe",
+      "example": "To inscribe is to write into a surface."
+    },
+    {
+      "word": "graph",
+      "pos": "root",
+      "definition": "write, draw",
+      "synonym": "biography, cartographer, graphic",
+      "example": "A cartographer draws maps."
+    },
+    {
+      "word": "spec / spic",
+      "pos": "root",
+      "definition": "look, see",
+      "synonym": "circumspect, spectator, conspicuous",
+      "example": "Circumspect means looking around carefully: cautious."
+    },
+    {
+      "word": "vid / vis",
+      "pos": "root",
+      "definition": "see",
+      "synonym": "evident, visible, revise",
+      "example": "Evident means easy to see."
+    },
+    {
+      "word": "aud",
+      "pos": "root",
+      "definition": "hear",
+      "synonym": "audible, audience, audit",
+      "example": "Audible means loud enough to hear."
+    },
+    {
+      "word": "port",
+      "pos": "root",
+      "definition": "carry",
+      "synonym": "portable, transport, deportment",
+      "example": "Portable means easy to carry."
+    },
+    {
+      "word": "duc / duct",
+      "pos": "root",
+      "definition": "lead",
+      "synonym": "induce, conduct, deduce",
+      "example": "To induce is to lead someone into doing something."
+    },
+    {
+      "word": "mit / miss",
+      "pos": "root",
+      "definition": "send",
+      "synonym": "transmit, emissary, remiss",
+      "example": "An emissary is someone sent on a mission."
+    },
+    {
+      "word": "ject",
+      "pos": "root",
+      "definition": "throw",
+      "synonym": "eject, interject, project",
+      "example": "To interject is to throw a remark in between."
+    },
+    {
+      "word": "tract",
+      "pos": "root",
+      "definition": "pull, drag",
+      "synonym": "retract, tractable, protracted",
+      "example": "Protracted means drawn out longer than expected."
+    },
+    {
+      "word": "fer",
+      "pos": "root",
+      "definition": "carry, bear",
+      "synonym": "transfer, defer, infer",
+      "example": "To defer is to carry something off until later."
+    },
+    {
+      "word": "ten / tain",
+      "pos": "root",
+      "definition": "hold",
+      "synonym": "tenacious, retain, tenable",
+      "example": "Tenacious means holding on firmly."
+    },
+    {
+      "word": "pel / puls",
+      "pos": "root",
+      "definition": "drive, push",
+      "synonym": "compel, repel, impulsive",
+      "example": "To compel is to drive someone to act."
+    },
+    {
+      "word": "cede / ceed / cess",
+      "pos": "root",
+      "definition": "go, yield",
+      "synonym": "precede, recede, incessant",
+      "example": "To recede is to go back."
+    },
+    {
+      "word": "clude / clus",
+      "pos": "root",
+      "definition": "shut, close",
+      "synonym": "exclude, preclude, recluse",
+      "example": "To preclude is to shut out in advance: to prevent."
+    },
+    {
+      "word": "rupt",
+      "pos": "root",
+      "definition": "break",
+      "synonym": "disrupt, erupt, rupture",
+      "example": "To disrupt is to break apart the normal flow."
+    },
+    {
+      "word": "fract / frag",
+      "pos": "root",
+      "definition": "break",
+      "synonym": "fragile, fraction, fragment",
+      "example": "Fragile means easily broken."
+    },
+    {
+      "word": "struct",
+      "pos": "root",
+      "definition": "build",
+      "synonym": "construct, obstruct, infrastructure",
+      "example": "To obstruct is to build something in the way."
+    },
+    {
+      "word": "vert / vers",
+      "pos": "root",
+      "definition": "turn",
+      "synonym": "divert, adversary, versatile",
+      "example": "Versatile means able to turn to many uses."
+    },
+    {
+      "word": "fid",
+      "pos": "root",
+      "definition": "faith, trust",
+      "synonym": "fidelity, confide, diffident",
+      "example": "Fidelity is faithfulness."
+    },
+    {
+      "word": "am / amor",
+      "pos": "root",
+      "definition": "love",
+      "synonym": "amiable, amicable, enamored",
+      "example": "Amicable means friendly and peaceful."
+    },
+    {
+      "word": "phil",
+      "pos": "root",
+      "definition": "love",
+      "synonym": "philanthropy, bibliophile, philosophy",
+      "example": "Philanthropy is love of people shown by giving."
+    },
+    {
+      "word": "phob",
+      "pos": "root",
+      "definition": "fear",
+      "synonym": "claustrophobia, acrophobia, xenophobia",
+      "example": "Acrophobia is a fear of heights."
+    },
+    {
+      "word": "path",
+      "pos": "root",
+      "definition": "feeling, suffering",
+      "synonym": "apathy, empathy, pathetic",
+      "example": "Empathy is sharing another person's feeling."
+    },
+    {
+      "word": "anim",
+      "pos": "root",
+      "definition": "life, mind, spirit",
+      "synonym": "animosity, unanimous, animated",
+      "example": "Animated means full of life."
+    },
+    {
+      "word": "viv / vit",
+      "pos": "root",
+      "definition": "life",
+      "synonym": "vivid, vital, revive",
+      "example": "To revive is to bring back to life."
+    },
+    {
+      "word": "mort",
+      "pos": "root",
+      "definition": "death",
+      "synonym": "mortal, immortal, mortify",
+      "example": "Immortal means never dying."
+    },
+    {
+      "word": "chron",
+      "pos": "root",
+      "definition": "time",
+      "synonym": "chronic, chronological, synchronize",
+      "example": "A chronic problem lasts a long time."
+    },
+    {
+      "word": "temp",
+      "pos": "root",
+      "definition": "time",
+      "synonym": "temporary, contemporary, temporize",
+      "example": "Contemporary means living at the same time."
+    },
+    {
+      "word": "ann / enn",
+      "pos": "root",
+      "definition": "year",
+      "synonym": "annual, perennial, anniversary",
+      "example": "Perennial means lasting year after year."
+    },
+    {
+      "word": "cap / cip / cept",
+      "pos": "root",
+      "definition": "take, seize",
+      "synonym": "capture, incipient, intercept",
+      "example": "To intercept is to seize something between two points."
+    },
+    {
+      "word": "cur / curs",
+      "pos": "root",
+      "definition": "run",
+      "synonym": "cursory, concur, recur",
+      "example": "Cursory means done quickly, as if running past."
+    },
+    {
+      "word": "fac / fic / fect",
+      "pos": "root",
+      "definition": "make, do",
+      "synonym": "facile, efficacy, proficient",
+      "example": "Efficacy is the power to make something happen."
+    },
+    {
+      "word": "gen",
+      "pos": "root",
+      "definition": "birth, kind, origin",
+      "synonym": "genesis, generate, genre",
+      "example": "Genesis is the birth or beginning of something."
+    },
+    {
+      "word": "greg",
+      "pos": "root",
+      "definition": "flock, group",
+      "synonym": "gregarious, congregate, segregate",
+      "example": "Gregarious means fond of being in a group."
+    },
+    {
+      "word": "jud / jur",
+      "pos": "root",
+      "definition": "law, judge",
+      "synonym": "judicious, prejudice, jurisdiction",
+      "example": "Judicious means showing good judgment."
+    },
+    {
+      "word": "log / logy",
+      "pos": "root",
+      "definition": "word, study",
+      "synonym": "logical, eulogy, geology",
+      "example": "Geology is the study of the earth."
+    },
+    {
+      "word": "man / manu",
+      "pos": "root",
+      "definition": "hand",
+      "synonym": "manual, manipulate, manuscript",
+      "example": "A manuscript was originally written by hand."
+    },
+    {
+      "word": "pac / plac",
+      "pos": "root",
+      "definition": "peace, calm",
+      "synonym": "pacify, placate, implacable",
+      "example": "To placate is to calm someone down."
+    },
+    {
+      "word": "pend / pens",
+      "pos": "root",
+      "definition": "hang, weigh",
+      "synonym": "pending, suspend, compensate",
+      "example": "Pending means hanging, not yet decided."
+    },
+    {
+      "word": "sequ / secut",
+      "pos": "root",
+      "definition": "follow",
+      "synonym": "sequence, consequence, persecute",
+      "example": "A consequence follows from an action."
+    },
+    {
+      "word": "sol",
+      "pos": "root",
+      "definition": "alone; sun",
+      "synonym": "solitary, desolate, solar",
+      "example": "Solitary means alone."
+    },
+    {
+      "word": "tort",
+      "pos": "root",
+      "definition": "twist",
+      "synonym": "distort, contort, tortuous",
+      "example": "To distort is to twist out of shape."
+    },
+    {
+      "word": "ven / vent",
+      "pos": "root",
+      "definition": "come",
+      "synonym": "intervene, convene, advent",
+      "example": "To convene is to come together."
+    },
+    {
+      "word": "verb",
+      "pos": "root",
+      "definition": "word",
+      "synonym": "verbose, verbatim, proverb",
+      "example": "Verbose means using too many words."
+    },
+    {
+      "word": "belli / bell",
+      "pos": "root",
+      "definition": "war",
+      "synonym": "belligerent, bellicose, rebel",
+      "example": "Belligerent means eager to fight."
+    },
+    {
+      "word": "magn",
+      "pos": "root",
+      "definition": "great, large",
+      "synonym": "magnify, magnanimous, magnitude",
+      "example": "Magnanimous means great-spirited and generous."
+    },
+    {
+      "word": "-ous / -ose",
+      "pos": "suffix",
+      "definition": "full of",
+      "synonym": "verbose, perilous, tenacious",
+      "example": "Perilous means full of danger."
+    },
+    {
+      "word": "-ity / -ty",
+      "pos": "suffix",
+      "definition": "state or quality of (makes a noun)",
+      "synonym": "veracity, brevity, animosity",
+      "example": "Brevity is the quality of being brief."
+    },
+    {
+      "word": "-ize / -ify",
+      "pos": "suffix",
+      "definition": "to make, to cause (makes a verb)",
+      "synonym": "pacify, verify, scrutinize",
+      "example": "To pacify is to make peaceful."
+    },
+    {
+      "word": "-able / -ible",
+      "pos": "suffix",
+      "definition": "able to be",
+      "synonym": "tenable, credible, tractable",
+      "example": "Credible means able to be believed."
+    },
+    {
+      "word": "-less",
+      "pos": "suffix",
+      "definition": "without",
+      "synonym": "reckless, relentless, feckless",
+      "example": "Relentless means without letting up."
+    },
+    {
+      "word": "-ist / -er / -or",
+      "pos": "suffix",
+      "definition": "a person who",
+      "synonym": "pacifist, optimist, mediator",
+      "example": "A pacifist is a person who opposes violence."
+    },
+    {
+      "word": "-cide",
+      "pos": "suffix",
+      "definition": "killing, killer",
+      "synonym": "pesticide, homicide, genocide",
+      "example": "A pesticide kills pests."
+    },
+    {
+      "word": "-ology",
+      "pos": "suffix",
+      "definition": "study of",
+      "synonym": "biology, meteorology, psychology",
+      "example": "Meteorology is the study of weather."
+    },
+    {
+      "word": "-phobia",
+      "pos": "suffix",
+      "definition": "fear of",
+      "synonym": "claustrophobia, acrophobia, xenophobia",
+      "example": "Claustrophobia is a fear of enclosed spaces."
+    },
+    {
+      "word": "-ate",
+      "pos": "suffix",
+      "definition": "to make, to act on (often a verb)",
+      "synonym": "mitigate, alleviate, exacerbate",
+      "example": "To alleviate is to make lighter: to ease."
+    }
+  ]
+}

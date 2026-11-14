@@ -140,7 +140,10 @@ add_library(afoqt_core STATIC
     src/QuestionGenerator.cpp
     src/SavedQuestions.cpp
     src/Composites.cpp
-    src/SyncMerge.cpp)
+    src/SyncMerge.cpp
+    src/VerbalTypes.cpp
+    src/MissLog.cpp
+    src/WeeklyReading.cpp)
 target_include_directories(afoqt_core PUBLIC src)
 target_link_libraries(afoqt_core PUBLIC nlohmann_json::nlohmann_json)
 if(CADET_WEB)

@@ -157,6 +157,51 @@ json mergeSaved(const json& a, const json& b) {
     return out;
 }
 
+json mergeMisses(const json& a, const json& b) {
+    // Each device only ever raises its own counts, so the larger count is the newer one
+    json out;
+    out["devices"] = json::object();
+    for (const json* side : {&a, &b}) {
+        const json devices = side->value("devices", json::object());
+        for (const auto& [dev, keys] : devices.items()) {
+            if (!keys.is_object()) continue;
+            json& mine = out["devices"][dev];
+            if (!mine.is_object()) mine = json::object();
+            for (const auto& [key, v] : keys.items()) {
+                if (!v.is_array() || v.size() < 3) continue;
+                if (!mine.contains(key)) {
+                    mine[key] = v;
+                    continue;
+                }
+                json& m = mine[key];
+                for (size_t i = 0; i < 3; ++i)
+                    if (v[i].get<long long>() > m[i].get<long long>()) m[i] = v[i];
+            }
+        }
+    }
+    return out;
+}
+
+json mergeWeekly(const json& a, const json& b) {
+    // Every week done on either device; a week done on both keeps the later result
+    json out;
+    out["weeks"] = json::object();
+    for (const json* side : {&a, &b}) {
+        const json weeks = side->value("weeks", json::object());
+        for (const auto& [week, r] : weeks.items()) {
+            if (!r.is_object()) continue;
+            if (!out["weeks"].contains(week)) {
+                out["weeks"][week] = r;
+                continue;
+            }
+            const json& cur = out["weeks"][week];
+            const long long t = r.value("time", 0LL), ct = cur.value("time", 0LL);
+            if (t > ct || (t == ct && r.dump() > cur.dump())) out["weeks"][week] = r;
+        }
+    }
+    return out;
+}
+
 const std::vector<std::pair<std::string, std::string>>& syncedFiles() {
     static const std::vector<std::pair<std::string, std::string>> files = {
         {"progress", "afoqt_progress.json"},
@@ -165,6 +210,10 @@ const std::vector<std::pair<std::string, std::string>>& syncedFiles() {
         {"repetition", "afoqt_repetition.json"},
         {"warrior_repetition", "warrior_repetition.json"},
         {"saved_questions", "afoqt_saved_questions.json"},
+        {"roots", "afoqt_roots.json"},
+        {"roots_repetition", "afoqt_roots_repetition.json"},
+        {"misses", "afoqt_misses.json"},
+        {"weekly", "afoqt_weekly.json"},
     };
     return files;
 }
@@ -180,9 +229,22 @@ json mergeBundle(const json& a, const json& b) {
         if (!present(fa)) fa = json::object();
         if (!present(fb)) fb = json::object();
         if (key == "progress") out[key] = mergeProgress(fa, fb);
-        else if (key == "repetition" || key == "warrior_repetition") out[key] = mergeRepetition(fa, fb);
+        else if (key == "repetition" || key == "warrior_repetition" || key == "roots_repetition")
+            out[key] = mergeRepetition(fa, fb);
         else if (key == "saved_questions") out[key] = mergeSaved(fa, fb);
+        else if (key == "misses") out[key] = mergeMisses(fa, fb);
+        else if (key == "weekly") out[key] = mergeWeekly(fa, fb);
         else out[key] = mergeBoxes(fa, fb);
+    }
+    // Files from a newer version: keep them (the same pick whichever side is first)
+    for (const json* side : {&a, &b}) {
+        if (!side->is_object()) continue;
+        for (const auto& [key, v] : side->items()) {
+            bool known = false;
+            for (const auto& f : syncedFiles()) known = known || f.first == key;
+            if (known) continue;
+            if (!out.contains(key) || v.dump() > out[key].dump()) out[key] = v;
+        }
     }
     return out;
 }

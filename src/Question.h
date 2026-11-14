@@ -33,6 +33,8 @@ struct Question {
     std::vector<std::string> choices;
     int correctIndex = 0;     // 0-based index into choices
     std::string explanation;
+    std::string type;         // Verbal Analogies: the relationship; Reading Comprehension: the
+                              // question type (ids in VerbalTypes.cpp); empty for other sections
     Visual visual;            // optional picture (pilot sections)
     std::vector<Visual> choiceVisuals;  // optional: one picture per choice, shown instead
                                         // of the choice text (Instrument Comprehension)

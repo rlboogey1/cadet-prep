@@ -13,7 +13,8 @@
         "Airline training has become shorter over time."
       ],
       "answer": 1,
-      "explanation": "The passage explains why CRM was created and what it teaches. Saying captains no longer have authority contradicts the passage, which says the captain keeps final authority."
+      "explanation": "The passage explains why CRM was created and what it teaches. Saying captains no longer have authority contradicts the passage, which says the captain keeps final authority.",
+      "type": "main_idea"
     },
     {
       "id": "RC-002",
@@ -27,7 +28,8 @@
         "radio communication with the ground failed"
       ],
       "answer": 3,
-      "explanation": "The second sentence states this directly. None of the other choices is mentioned."
+      "explanation": "The second sentence states this directly. None of the other choices is mentioned.",
+      "type": "detail"
     },
     {
       "id": "RC-003",
@@ -41,7 +43,8 @@
         "the captain's role has been eliminated"
       ],
       "answer": 0,
-      "explanation": "The captain 'still has final authority,' but information can come from anyone on the team."
+      "explanation": "The captain 'still has final authority,' but information can come from anyone on the team.",
+      "type": "inference"
     },
     {
       "id": "RC-004",
@@ -55,7 +58,8 @@
         "A hot, humid afternoon at a high-elevation airport"
       ],
       "answer": 4,
-      "explanation": "Heat, elevation, and humidity all thin the air, which lengthens the takeoff run. The hot, humid, high-elevation choice combines all three."
+      "explanation": "Heat, elevation, and humidity all thin the air, which lengthens the takeoff run. The hot, humid, high-elevation choice combines all three.",
+      "type": "inference"
     },
     {
       "id": "RC-005",
@@ -69,7 +73,8 @@
         "the altitude at which the air is most humid"
       ],
       "answer": 1,
-      "explanation": "The passage defines it as the altitude at which the airplane performs as though it were operating, which can differ from the real field elevation."
+      "explanation": "The passage defines it as the altitude at which the airplane performs as though it were operating, which can differ from the real field elevation.",
+      "type": "vocab"
     },
     {
       "id": "RC-006",
@@ -83,7 +88,8 @@
         "argue that humidity has little effect on flight"
       ],
       "answer": 2,
-      "explanation": "The passage explains cause and effect: thinner air leads to weaker performance. It does not tell pilots to avoid mountain airports."
+      "explanation": "The passage explains cause and effect: thinner air leads to weaker performance. It does not tell pilots to avoid mountain airports.",
+      "type": "main_idea"
     },
     {
       "id": "RC-007",
@@ -97,7 +103,8 @@
         "They use fixed routes."
       ],
       "answer": 2,
-      "explanation": "The jet stream flows west to east, so it pushes eastbound flights along."
+      "explanation": "The jet stream flows west to east, so it pushes eastbound flights along.",
+      "type": "detail"
     },
     {
       "id": "RC-008",
@@ -111,7 +118,8 @@
         "the temperature difference between polar and tropical air is greatest"
       ],
       "answer": 4,
-      "explanation": "The second sentence links its winter speed to the temperature difference."
+      "explanation": "The second sentence links its winter speed to the temperature difference.",
+      "type": "detail"
     },
     {
       "id": "RC-009",
@@ -125,7 +133,8 @@
         "fixed routes are not allowed"
       ],
       "answer": 3,
-      "explanation": "The last sentence gives this reason directly."
+      "explanation": "The last sentence gives this reason directly.",
+      "type": "detail"
     },
     {
       "id": "RC-010",
@@ -139,7 +148,8 @@
         "tired people may not recognize how impaired they are"
       ],
       "answer": 4,
-      "explanation": "The third and fourth sentences connect poor self-judgment to the need for rules."
+      "explanation": "The third and fourth sentences connect poor self-judgment to the need for rules.",
+      "type": "inference"
     },
     {
       "id": "RC-011",
@@ -153,7 +163,8 @@
         "Short naps"
       ],
       "answer": 2,
-      "explanation": "The last sentence says none of them replaces adequate sleep."
+      "explanation": "The last sentence says none of them replaces adequate sleep.",
+      "type": "detail"
     },
     {
       "id": "RC-012",
@@ -167,7 +178,8 @@
         "given less importance than it deserves"
       ],
       "answer": 4,
-      "explanation": "To underestimate something is to judge it as smaller or less serious than it is."
+      "explanation": "To underestimate something is to judge it as smaller or less serious than it is.",
+      "type": "vocab"
     },
     {
       "id": "RC-013",
@@ -181,7 +193,8 @@
         "blocking airspeed sensors"
       ],
       "answer": 2,
-      "explanation": "The passage lists lift, drag, weight, and sensors. It never mentions engine power increasing."
+      "explanation": "The passage lists lift, drag, weight, and sensors. It never mentions engine power increasing.",
+      "type": "detail"
     },
     {
       "id": "RC-014",
@@ -195,7 +208,8 @@
         "climbs above all clouds"
       ],
       "answer": 3,
-      "explanation": "The passage names visible moisture at temperatures near or below freezing."
+      "explanation": "The passage names visible moisture at temperatures near or below freezing.",
+      "type": "detail"
     },
     {
       "id": "RC-015",
@@ -209,7 +223,8 @@
         "are helpful but not a substitute for avoiding icing"
       ],
       "answer": 4,
-      "explanation": "Pilots still avoid icing even though many aircraft have these systems."
+      "explanation": "Pilots still avoid icing even though many aircraft have these systems.",
+      "type": "inference"
     },
     {
       "id": "RC-016",
@@ -223,7 +238,8 @@
         "speed up the start of a flight"
       ],
       "answer": 1,
-      "explanation": "The last sentence states this directly."
+      "explanation": "The last sentence states this directly.",
+      "type": "detail"
     },
     {
       "id": "RC-017",
@@ -237,7 +253,8 @@
         "an inexperienced pilot"
       ],
       "answer": 2,
-      "explanation": "The second sentence names the forgotten control lock. Investigators said the airplane was not too difficult to fly."
+      "explanation": "The second sentence names the forgotten control lock. Investigators said the airplane was not too difficult to fly.",
+      "type": "detail"
     },
     {
       "id": "RC-018",
@@ -251,7 +268,8 @@
         "Pilots should fly only simple aircraft."
       ],
       "answer": 1,
-      "explanation": "The airplane was 'only too complicated to fly from memory.'"
+      "explanation": "The airplane was 'only too complicated to fly from memory.'",
+      "type": "inference"
     },
     {
       "id": "RC-019",
@@ -265,7 +283,8 @@
         "how far away the food is"
       ],
       "answer": 4,
-      "explanation": "The third sentence says the length of the run indicates distance."
+      "explanation": "The third sentence says the length of the run indicates distance.",
+      "type": "detail"
     },
     {
       "id": "RC-020",
@@ -279,7 +298,8 @@
         "the nearest flower"
       ],
       "answer": 3,
-      "explanation": "The angle shows direction relative to the sun."
+      "explanation": "The angle shows direction relative to the sun.",
+      "type": "detail"
     },
     {
       "id": "RC-021",
@@ -293,7 +313,8 @@
         "The Life Cycle of the Honeybee"
       ],
       "answer": 1,
-      "explanation": "The whole passage explains how one bee tells others where food is."
+      "explanation": "The whole passage explains how one bee tells others where food is.",
+      "type": "main_idea"
     },
     {
       "id": "RC-022",
@@ -307,7 +328,8 @@
         "satellite signals"
       ],
       "answer": 0,
-      "explanation": "The second sentence lists speed, heading, and elapsed time. Radio beacons were used to check the estimate, not to make it."
+      "explanation": "The second sentence lists speed, heading, and elapsed time. Radio beacons were used to check the estimate, not to make it.",
+      "type": "detail"
     },
     {
       "id": "RC-023",
@@ -321,7 +343,8 @@
         "Dead reckoning only worked at night."
       ],
       "answer": 2,
-      "explanation": "The passage says small errors 'added up,' which is why navigators corrected the plot whenever they could."
+      "explanation": "The passage says small errors 'added up,' which is why navigators corrected the plot whenever they could.",
+      "type": "detail"
     },
     {
       "id": "RC-024",
@@ -335,7 +358,8 @@
         "the story of a book"
       ],
       "answer": 1,
-      "explanation": "Navigators were 'correcting the plot,' meaning the course they had marked on the chart."
+      "explanation": "Navigators were 'correcting the plot,' meaning the course they had marked on the chart.",
+      "type": "vocab"
     },
     {
       "id": "RC-025",
@@ -349,7 +373,8 @@
         "pilots should fly along the edge of storms"
       ],
       "answer": 0,
-      "explanation": "The passage corrects the common belief about lightning and describes drafts, hail, and turbulence as the greater threats."
+      "explanation": "The passage corrects the common belief about lightning and describes drafts, hail, and turbulence as the greater threats.",
+      "type": "main_idea"
     },
     {
       "id": "RC-026",
@@ -363,7 +388,8 @@
         "Radio signals do not work near storms."
       ],
       "answer": 1,
-      "explanation": "The last sentence gives this reason directly."
+      "explanation": "The last sentence gives this reason directly.",
+      "type": "detail"
     },
     {
       "id": "RC-027",
@@ -377,7 +403,8 @@
         "impossible"
       ],
       "answer": 3,
-      "explanation": "Airplanes are 'designed to conduct lightning safely around the passengers and fuel.'"
+      "explanation": "Airplanes are 'designed to conduct lightning safely around the passengers and fuel.'",
+      "type": "inference"
     },
     {
       "id": "RC-028",
@@ -391,7 +418,8 @@
         "a way for the pilot to control the aircraft"
       ],
       "answer": 4,
-      "explanation": "The first sentence says historians point to control rather than the engine."
+      "explanation": "The first sentence says historians point to control rather than the engine.",
+      "type": "detail"
     },
     {
       "id": "RC-029",
@@ -405,7 +433,8 @@
         "an aircraft would need to be balanced actively by its pilot"
       ],
       "answer": 4,
-      "explanation": "Like a bicycle, a flying machine 'would need to be actively balanced by its operator.' The idea that balance would take care of itself belonged to earlier experimenters."
+      "explanation": "Like a bicycle, a flying machine 'would need to be actively balanced by its operator.' The idea that balance would take care of itself belonged to earlier experimenters.",
+      "type": "inference"
     },
     {
       "id": "RC-030",
@@ -419,7 +448,8 @@
         "land without wheels"
       ],
       "answer": 1,
-      "explanation": "The final sentence describes wing warping as rolling the aircraft to keep it level or bank into a turn."
+      "explanation": "The final sentence describes wing warping as rolling the aircraft to keep it level or bank into a turn.",
+      "type": "detail"
     },
     {
       "id": "RC-031",
@@ -433,7 +463,8 @@
         "feel the turn more strongly than usual"
       ],
       "answer": 2,
-      "explanation": "The third sentence describes this exact situation."
+      "explanation": "The third sentence describes this exact situation.",
+      "type": "detail"
     },
     {
       "id": "RC-032",
@@ -447,7 +478,8 @@
         "the flight is short"
       ],
       "answer": 0,
-      "explanation": "In clouds or on a dark night with no visible horizon, nothing corrects the false sensation."
+      "explanation": "In clouds or on a dark night with no visible horizon, nothing corrects the false sensation.",
+      "type": "detail"
     },
     {
       "id": "RC-033",
@@ -461,7 +493,8 @@
         "Turn back immediately"
       ],
       "answer": 0,
-      "explanation": "Pilots are trained to trust their instruments 'even when the instruments seem wrong.'"
+      "explanation": "Pilots are trained to trust their instruments 'even when the instruments seem wrong.'",
+      "type": "detail"
     },
     {
       "id": "RC-034",
@@ -475,7 +508,8 @@
         "convinced the Army to close the Tuskegee airfield"
       ],
       "answer": 1,
-      "explanation": "The passage says their record helped persuade leaders that segregation wasted talent, and integration was ordered in 1948."
+      "explanation": "The passage says their record helped persuade leaders that segregation wasted talent, and integration was ordered in 1948.",
+      "type": "inference"
     },
     {
       "id": "RC-035",
@@ -489,7 +523,8 @@
         "a nickname given by enemy pilots"
       ],
       "answer": 2,
-      "explanation": "The passage states the aircraft were known as Red Tails \"for their painted tail sections.\""
+      "explanation": "The passage states the aircraft were known as Red Tails \"for their painted tail sections.\"",
+      "type": "detail"
     },
     {
       "id": "RC-036",
@@ -503,7 +538,8 @@
         "It explains how bombers were designed."
       ],
       "answer": 3,
-      "explanation": "The passage moves from early doubts, to the airmen's combat performance, to the integration that followed."
+      "explanation": "The passage moves from early doubts, to the airmen's combat performance, to the integration that followed.",
+      "type": "purpose"
     },
     {
       "id": "RC-037",
@@ -517,7 +553,8 @@
         "are made from chlorophyll"
       ],
       "answer": 1,
-      "explanation": "The passage says leaves already contain yellow and orange pigments that chlorophyll hides until it fades."
+      "explanation": "The passage says leaves already contain yellow and orange pigments that chlorophyll hides until it fades.",
+      "type": "detail"
     },
     {
       "id": "RC-038",
@@ -531,7 +568,8 @@
         "Hot days and hot nights"
       ],
       "answer": 2,
-      "explanation": "Red pigments form \"especially when days are sunny and nights are cool but not freezing.\""
+      "explanation": "Red pigments form \"especially when days are sunny and nights are cool but not freezing.\"",
+      "type": "inference"
     },
     {
       "id": "RC-039",
@@ -545,7 +583,8 @@
         "absorb"
       ],
       "answer": 1,
-      "explanation": "As the green fades, the hidden colors are uncovered."
+      "explanation": "As the green fades, the hidden colors are uncovered.",
+      "type": "vocab"
     },
     {
       "id": "RC-040",
@@ -559,7 +598,8 @@
         "word lists are the best way to study"
       ],
       "answer": 2,
-      "explanation": "The passage argues that cutting sleep to study is \"often a poor\" trade because sleep strengthens memory."
+      "explanation": "The passage argues that cutting sleep to study is \"often a poor\" trade because sleep strengthens memory.",
+      "type": "main_idea"
     },
     {
       "id": "RC-041",
@@ -573,7 +613,8 @@
         "Nothing happens to it."
       ],
       "answer": 1,
-      "explanation": "The passage says the brain \"replays and strengthens\" information and moves it into longer-lasting memory."
+      "explanation": "The passage says the brain \"replays and strengthens\" information and moves it into longer-lasting memory.",
+      "type": "detail"
     },
     {
       "id": "RC-042",
@@ -587,7 +628,8 @@
         "memory improves with repetition"
       ],
       "answer": 1,
-      "explanation": "The sentence about rereading directly follows the statement that sleep loss weakens attention."
+      "explanation": "The sentence about rereading directly follows the statement that sleep loss weakens attention.",
+      "type": "purpose"
     },
     {
       "id": "RC-043",
@@ -601,7 +643,8 @@
         "deliver weapons to West German forces"
       ],
       "answer": 1,
-      "explanation": "The passage says they acted \"rather than abandon the city or force the routes open.\""
+      "explanation": "The passage says they acted \"rather than abandon the city or force the routes open.\"",
+      "type": "detail"
     },
     {
       "id": "RC-044",
@@ -615,7 +658,8 @@
         "prove that the airlift was too expensive"
       ],
       "answer": 0,
-      "explanation": "The candy drops are a personal detail that shows the airlift's human side, not a fact about logistics."
+      "explanation": "The candy drops are a personal detail that shows the airlift's human side, not a fact about logistics.",
+      "type": "purpose"
     },
     {
       "id": "RC-045",
@@ -629,7 +673,8 @@
         "was kept secret"
       ],
       "answer": 1,
-      "explanation": "It was called a victory, and \"without firing a shot\" stresses that it was won without fighting."
+      "explanation": "It was called a victory, and \"without firing a shot\" stresses that it was won without fighting.",
+      "type": "inference"
     },
     {
       "id": "RC-046",
@@ -643,7 +688,8 @@
         "counting the satellites in view"
       ],
       "answer": 2,
-      "explanation": "The delay between when the signal was sent and when it arrived gives the distance, since the signal's speed is known."
+      "explanation": "The delay between when the signal was sent and when it arrived gives the distance, since the signal's speed is known.",
+      "type": "detail"
     },
     {
       "id": "RC-047",
@@ -657,7 +703,8 @@
         "Because they are cheaper than other clocks"
       ],
       "answer": 1,
-      "explanation": "The passage explains that an error of a millionth of a second shifts the position by about 300 meters."
+      "explanation": "The passage explains that an error of a millionth of a second shifts the position by about 300 meters.",
+      "type": "detail"
     },
     {
       "id": "RC-048",
@@ -671,7 +718,8 @@
         "Atomic clocks are used in every wristwatch."
       ],
       "answer": 0,
-      "explanation": "The passage says the receiver works out its position \"with distances to several satellites,\" so one is not enough."
+      "explanation": "The passage says the receiver works out its position \"with distances to several satellites,\" so one is not enough.",
+      "type": "inference"
     },
     {
       "id": "RC-049",
@@ -685,7 +733,8 @@
         "To make it harder to see on radar"
       ],
       "answer": 2,
-      "explanation": "The passage says the bullet shape was \"known to stay stable at supersonic speed.\""
+      "explanation": "The passage says the bullet shape was \"known to stay stable at supersonic speed.\"",
+      "type": "detail"
     },
     {
       "id": "RC-050",
@@ -699,7 +748,8 @@
         "engineers stopped studying high-speed flight"
       ],
       "answer": 1,
-      "explanation": "Calling it \"a problem of design, not a limit of nature\" means good design could overcome it."
+      "explanation": "Calling it \"a problem of design, not a limit of nature\" means good design could overcome it.",
+      "type": "inference"
     },
     {
       "id": "RC-051",
@@ -713,7 +763,8 @@
         "It was launched straight up like a missile."
       ],
       "answer": 2,
-      "explanation": "The X-1 \"was carried aloft under a B-29 bomber and released.\""
+      "explanation": "The X-1 \"was carried aloft under a B-29 bomber and released.\"",
+      "type": "detail"
     },
     {
       "id": "RC-052",
@@ -727,7 +778,8 @@
         "cold winter storms"
       ],
       "answer": 1,
-      "explanation": "The passage says unusually warm water for weeks makes the coral expel the algae, which turns it white."
+      "explanation": "The passage says unusually warm water for weeks makes the coral expel the algae, which turns it white.",
+      "type": "detail"
     },
     {
       "id": "RC-053",
@@ -741,7 +793,8 @@
         "It is a different species."
       ],
       "answer": 1,
-      "explanation": "\"Bleached coral is not dead, and it can recover if temperatures return to normal soon enough.\""
+      "explanation": "\"Bleached coral is not dead, and it can recover if temperatures return to normal soon enough.\"",
+      "type": "inference"
     },
     {
       "id": "RC-054",
@@ -755,7 +808,8 @@
         "compare reefs to forests"
       ],
       "answer": 1,
-      "explanation": "The final sentence ties the fish fact to how losing a reef \"affects far more than the coral itself.\""
+      "explanation": "The final sentence ties the fish fact to how losing a reef \"affects far more than the coral itself.\"",
+      "type": "purpose"
     },
     {
       "id": "RC-055",
@@ -769,7 +823,8 @@
         "how to avoid making hard decisions"
       ],
       "answer": 1,
-      "explanation": "The passage describes leaders who see their job as \"making it possible for their people to succeed.\""
+      "explanation": "The passage describes leaders who see their job as \"making it possible for their people to succeed.\"",
+      "type": "main_idea"
     },
     {
       "id": "RC-056",
@@ -783,7 +838,8 @@
         "puts personal comfort first"
       ],
       "answer": 2,
-      "explanation": "The passage lists taking responsibility when things go wrong; it also says this does not mean lowering standards."
+      "explanation": "The passage lists taking responsibility when things go wrong; it also says this does not mean lowering standards.",
+      "type": "detail"
     },
     {
       "id": "RC-057",
@@ -797,7 +853,8 @@
         "a rule found only in the Navy"
       ],
       "answer": 2,
-      "explanation": "The passage explains that the saying means the leader's comfort comes after the needs of those being led."
+      "explanation": "The passage explains that the saying means the leader's comfort comes after the needs of those being led.",
+      "type": "purpose"
     },
     {
       "id": "RC-058",
@@ -811,7 +868,8 @@
         "Humid air makes people less thirsty."
       ],
       "answer": 1,
-      "explanation": "The passage says sweat evaporates slowly in humid air, so cooling \"works poorly.\""
+      "explanation": "The passage says sweat evaporates slowly in humid air, so cooling \"works poorly.\"",
+      "type": "detail"
     },
     {
       "id": "RC-059",
@@ -825,7 +883,8 @@
         "it prevents sweating"
       ],
       "answer": 1,
-      "explanation": "\"Thirst is a late signal,\" so waiting for it means drinking too late."
+      "explanation": "\"Thirst is a late signal,\" so waiting for it means drinking too late.",
+      "type": "detail"
     },
     {
       "id": "RC-060",
@@ -839,7 +898,8 @@
         "dangerous to plants"
       ],
       "answer": 0,
-      "explanation": "The passage says humidity is risky \"even when the temperature does not seem\" very severe."
+      "explanation": "The passage says humidity is risky \"even when the temperature does not seem\" very severe.",
+      "type": "vocab"
     },
     {
       "id": "RC-061",
@@ -853,7 +913,8 @@
         "Ice formed on the wings."
       ],
       "answer": 2,
-      "explanation": "The passage says the ash \"had melted inside the hot engines and choked them.\""
+      "explanation": "The passage says the ash \"had melted inside the hot engines and choked them.\"",
+      "type": "detail"
     },
     {
       "id": "RC-062",
@@ -867,7 +928,8 @@
         "was turned off"
       ],
       "answer": 1,
-      "explanation": "The radar \"showed nothing ahead\" even though the airplane was flying into an ash cloud."
+      "explanation": "The radar \"showed nothing ahead\" even though the airplane was flying into an ash cloud.",
+      "type": "inference"
     },
     {
       "id": "RC-063",
@@ -881,7 +943,8 @@
         "Night flying was outlawed."
       ],
       "answer": 2,
-      "explanation": "The last sentence says it \"led to a worldwide system for warning pilots about volcanic ash.\""
+      "explanation": "The last sentence says it \"led to a worldwide system for warning pilots about volcanic ash.\"",
+      "type": "detail"
     },
     {
       "id": "RC-064",
@@ -895,7 +958,8 @@
         "That they eat fir trees"
       ],
       "answer": 1,
-      "explanation": "The passage says \"what makes this journey remarkable is that no single butterfly makes the round trip.\""
+      "explanation": "The passage says \"what makes this journey remarkable is that no single butterfly makes the round trip.\"",
+      "type": "purpose"
     },
     {
       "id": "RC-065",
@@ -909,7 +973,8 @@
         "following other species of birds"
       ],
       "answer": 2,
-      "explanation": "Scientists believe they use \"the position of the sun along with an internal clock.\""
+      "explanation": "Scientists believe they use \"the position of the sun along with an internal clock.\"",
+      "type": "detail"
     },
     {
       "id": "RC-066",
@@ -923,7 +988,8 @@
         "Monarchs choose new forests every year."
       ],
       "answer": 1,
-      "explanation": "The next several generations \"live only a few weeks each\"; the passage says the exact navigation is \"partly a mystery.\""
+      "explanation": "The next several generations \"live only a few weeks each\"; the passage says the exact navigation is \"partly a mystery.\"",
+      "type": "inference"
     },
     {
       "id": "RC-067",
@@ -937,7 +1003,8 @@
         "pilots to train without aircraft"
       ],
       "answer": 1,
-      "explanation": "By ferrying, towing, and testing aircraft, the WASP freed male pilots \"for duty overseas.\""
+      "explanation": "By ferrying, towing, and testing aircraft, the WASP freed male pilots \"for duty overseas.\"",
+      "type": "detail"
     },
     {
       "id": "RC-068",
@@ -951,7 +1018,8 @@
         "Congress had not yet been formed."
       ],
       "answer": 1,
-      "explanation": "The passage says \"because the women were classified as civilians, their families received no military benefits.\""
+      "explanation": "The passage says \"because the women were classified as civilians, their families received no military benefits.\"",
+      "type": "detail"
     },
     {
       "id": "RC-069",
@@ -965,7 +1033,8 @@
         "uncertain"
       ],
       "answer": 1,
-      "explanation": "The passage describes their service and recognition in a respectful, factual way."
+      "explanation": "The passage describes their service and recognition in a respectful, factual way.",
+      "type": "purpose"
     },
     {
       "id": "RC-070",
@@ -979,7 +1048,8 @@
         "By draining water from the lock"
       ],
       "answer": 2,
-      "explanation": "\"Water flows in from above until the ship has risen.\" The passage says the system needs no pumps."
+      "explanation": "\"Water flows in from above until the ship has risen.\" The passage says the system needs no pumps.",
+      "type": "detail"
     },
     {
       "id": "RC-071",
@@ -993,7 +1063,8 @@
         "pumps need rain to run"
       ],
       "answer": 1,
-      "explanation": "The locks are filled from the lake, so a lower lake means less water to move ships through."
+      "explanation": "The locks are filled from the lake, so a lower lake means less water to move ships through.",
+      "type": "inference"
     },
     {
       "id": "RC-072",
@@ -1007,7 +1078,8 @@
         "warn about the dangers of shipping"
       ],
       "answer": 1,
-      "explanation": "Most of the passage explains step by step how locks raise and lower ships."
+      "explanation": "Most of the passage explains step by step how locks raise and lower ships.",
+      "type": "main_idea"
     },
     {
       "id": "RC-073",
@@ -1021,7 +1093,8 @@
         "part of the Marine Corps"
       ],
       "answer": 2,
-      "explanation": "During World War II it was \"part of the Army, as the Army Air Forces.\""
+      "explanation": "During World War II it was \"part of the Army, as the Army Air Forces.\"",
+      "type": "detail"
     },
     {
       "id": "RC-074",
@@ -1035,7 +1108,8 @@
         "argue that they should be banned"
       ],
       "answer": 0,
-      "explanation": "Leaders \"pointed to\" atomic weapons, which only aircraft could deliver, to argue for a separate service."
+      "explanation": "Leaders \"pointed to\" atomic weapons, which only aircraft could deliver, to argue for a separate service.",
+      "type": "purpose"
     },
     {
       "id": "RC-075",
@@ -1049,7 +1123,8 @@
         "Ended the bombing campaigns"
       ],
       "answer": 1,
-      "explanation": "The Act \"created the United States Air Force as an independent branch.\""
+      "explanation": "The Act \"created the United States Air Force as an independent branch.\"",
+      "type": "detail"
     },
     {
       "id": "RC-076",
@@ -1063,7 +1138,8 @@
         "a result of having too much free time"
       ],
       "answer": 2,
-      "explanation": "The passage says procrastination is \"less a problem of scheduling than a way of avoiding unpleasant emotions.\""
+      "explanation": "The passage says procrastination is \"less a problem of scheduling than a way of avoiding unpleasant emotions.\"",
+      "type": "detail"
     },
     {
       "id": "RC-077",
@@ -1077,7 +1153,8 @@
         "It causes people to forget the task."
       ],
       "answer": 1,
-      "explanation": "Delay \"brings quick relief from that feeling, which makes delay more likely the next time.\""
+      "explanation": "Delay \"brings quick relief from that feeling, which makes delay more likely the next time.\"",
+      "type": "detail"
     },
     {
       "id": "RC-078",
@@ -1091,7 +1168,8 @@
         "people procrastinate only on easy tasks"
       ],
       "answer": 1,
-      "explanation": "The passage says starting for five minutes \"often works better than a new planner.\""
+      "explanation": "The passage says starting for five minutes \"often works better than a new planner.\"",
+      "type": "inference"
     },
     {
       "id": "RC-079",
@@ -1105,7 +1183,8 @@
         "Doctors use stronger drugs."
       ],
       "answer": 1,
-      "explanation": "Survivors with helpful differences face less competition and multiply until most are resistant."
+      "explanation": "Survivors with helpful differences face less competition and multiply until most are resistant.",
+      "type": "detail"
     },
     {
       "id": "RC-080",
@@ -1119,7 +1198,8 @@
         "colds are caused by resistant bacteria"
       ],
       "answer": 1,
-      "explanation": "The passage calls colds \"illnesses they cannot treat\" because they are caused by viruses."
+      "explanation": "The passage calls colds \"illnesses they cannot treat\" because they are caused by viruses.",
+      "type": "inference"
     },
     {
       "id": "RC-081",
@@ -1133,7 +1213,8 @@
         "a direction of travel"
       ],
       "answer": 2,
-      "explanation": "\"Stopping a prescribed course early\" refers to the full set of doses a doctor prescribes."
+      "explanation": "\"Stopping a prescribed course early\" refers to the full set of doses a doctor prescribes.",
+      "type": "vocab"
     },
     {
       "id": "RC-082",
@@ -1147,7 +1228,8 @@
         "turning the light off during the day"
       ],
       "answer": 1,
-      "explanation": "The prisms \"bent light that would have escaped and gathered it into a single powerful beam.\""
+      "explanation": "The prisms \"bent light that would have escaped and gathered it into a single powerful beam.\"",
+      "type": "detail"
     },
     {
       "id": "RC-083",
@@ -1161,7 +1243,8 @@
         "Because each used a different lens maker"
       ],
       "answer": 2,
-      "explanation": "The pattern let sailors \"tell which light they were seeing and thus where they were.\""
+      "explanation": "The pattern let sailors \"tell which light they were seeing and thus where they were.\"",
+      "type": "detail"
     },
     {
       "id": "RC-084",
@@ -1175,7 +1258,8 @@
         "needed no keepers"
       ],
       "answer": 1,
-      "explanation": "A Fresnel light could be seen more than 20 miles out, \"far beyond the reach of earlier lights.\""
+      "explanation": "A Fresnel light could be seen more than 20 miles out, \"far beyond the reach of earlier lights.\"",
+      "type": "inference"
     },
     {
       "id": "RC-085",
@@ -1189,7 +1273,8 @@
         "space travel had become cheap"
       ],
       "answer": 1,
-      "explanation": "The passage says its creation \"reflected how much modern life and military operations depend on satellites.\""
+      "explanation": "The passage says its creation \"reflected how much modern life and military operations depend on satellites.\"",
+      "type": "detail"
     },
     {
       "id": "RC-086",
@@ -1203,7 +1288,8 @@
         "has no members of its own"
       ],
       "answer": 1,
-      "explanation": "Like the Marines within the Department of the Navy, the Space Force is a branch within the Department of the Air Force."
+      "explanation": "Like the Marines within the Department of the Navy, the Space Force is a branch within the Department of the Air Force.",
+      "type": "purpose"
     },
     {
       "id": "RC-087",
@@ -1217,7 +1303,8 @@
         "build rockets"
       ],
       "answer": 2,
-      "explanation": "Guardians \"operate satellites and track thousands of objects in orbit, rather than flying into space.\""
+      "explanation": "Guardians \"operate satellites and track thousands of objects in orbit, rather than flying into space.\"",
+      "type": "detail"
     },
     {
       "id": "RC-088",
@@ -1231,7 +1318,8 @@
         "engineers designed the filters incorrectly on purpose"
       ],
       "answer": 1,
-      "explanation": "The spare filters were square, \"while the lunar module's openings were round.\""
+      "explanation": "The spare filters were square, \"while the lunar module's openings were round.\"",
+      "type": "detail"
     },
     {
       "id": "RC-089",
@@ -1245,7 +1333,8 @@
         "the design of the oxygen tank"
       ],
       "answer": 1,
-      "explanation": "Most of the passage describes the engineers improvising a fix from only what the crew had aboard."
+      "explanation": "Most of the passage describes the engineers improvising a fix from only what the crew had aboard.",
+      "type": "main_idea"
     },
     {
       "id": "RC-090",
@@ -1259,7 +1348,8 @@
         "unnecessary"
       ],
       "answer": 1,
-      "explanation": "The adapter was built from bags, cardboard, and tape, made on the spot from what was on hand."
+      "explanation": "The adapter was built from bags, cardboard, and tape, made on the spot from what was on hand.",
+      "type": "vocab"
     },
     {
       "id": "RC-091",
@@ -1273,7 +1363,8 @@
         "decision, willpower, and success"
       ],
       "answer": 1,
-      "explanation": "The passage names \"a cue,\" \"the routine itself,\" and \"a reward.\""
+      "explanation": "The passage names \"a cue,\" \"the routine itself,\" and \"a reward.\"",
+      "type": "detail"
     },
     {
       "id": "RC-092",
@@ -1287,7 +1378,8 @@
         "how habits form in children"
       ],
       "answer": 1,
-      "explanation": "The walk replaces the snacking routine at the same time (cue) while still easing boredom (reward)."
+      "explanation": "The walk replaces the snacking routine at the same time (cue) while still easing boredom (reward).",
+      "type": "purpose"
     },
     {
       "id": "RC-093",
@@ -1301,7 +1393,8 @@
         "makes the reward stronger"
       ],
       "answer": 1,
-      "explanation": "\"Because the cue and reward hold the loop together, trying to stop a habit by willpower alone often fails.\""
+      "explanation": "\"Because the cue and reward hold the loop together, trying to stop a habit by willpower alone often fails.\"",
+      "type": "inference"
     },
     {
       "id": "RC-094",
@@ -1315,7 +1408,8 @@
         "Orange is cheaper than black."
       ],
       "answer": 1,
-      "explanation": "They are painted bright orange \"so searchers can spot them in wreckage.\""
+      "explanation": "They are painted bright orange \"so searchers can spot them in wreckage.\"",
+      "type": "detail"
     },
     {
       "id": "RC-095",
@@ -1329,7 +1423,8 @@
         "The amount of fuel"
       ],
       "answer": 2,
-      "explanation": "The voice recorder \"captures the pilots' conversations and other sounds\"; the others are flight data."
+      "explanation": "The voice recorder \"captures the pilots' conversations and other sounds\"; the others are flight data.",
+      "type": "inference"
     },
     {
       "id": "RC-096",
@@ -1343,7 +1438,8 @@
         "training is more important than design"
       ],
       "answer": 2,
-      "explanation": "The findings \"often lead to changes... that make future flights safer.\""
+      "explanation": "The findings \"often lead to changes... that make future flights safer.\"",
+      "type": "inference"
     },
     {
       "id": "RC-097",
@@ -1357,7 +1453,8 @@
         "blue has the longest wavelength"
       ],
       "answer": 1,
-      "explanation": "Molecules \"scatter short wavelengths, such as blue, much more strongly.\""
+      "explanation": "Molecules \"scatter short wavelengths, such as blue, much more strongly.\"",
+      "type": "detail"
     },
     {
       "id": "RC-098",
@@ -1371,7 +1468,8 @@
         "Red light travels faster at night."
       ],
       "answer": 1,
-      "explanation": "At sunset light travels through much more air, and \"most of the blue has been scattered away.\""
+      "explanation": "At sunset light travels through much more air, and \"most of the blue has been scattered away.\"",
+      "type": "detail"
     },
     {
       "id": "RC-099",
@@ -1385,7 +1483,8 @@
         "White light has a single wavelength."
       ],
       "answer": 1,
-      "explanation": "The passage opens by saying sunlight \"is made of all the colors of the rainbow.\" Red has a longer wavelength than blue."
+      "explanation": "The passage opens by saying sunlight \"is made of all the colors of the rainbow.\" Red has a longer wavelength than blue.",
+      "type": "inference"
     },
     {
       "id": "RC-100",
@@ -1399,7 +1498,8 @@
         "rank team members by performance"
       ],
       "answer": 1,
-      "explanation": "The review asks what to sustain and improve, and \"is not meant to assign blame.\""
+      "explanation": "The review asks what to sustain and improve, and \"is not meant to assign blame.\"",
+      "type": "detail"
     },
     {
       "id": "RC-101",
@@ -1413,7 +1513,8 @@
         "To avoid discussing the mission"
       ],
       "answer": 2,
-      "explanation": "Leaders admitting mistakes first \"encourages others to speak honestly.\""
+      "explanation": "Leaders admitting mistakes first \"encourages others to speak honestly.\"",
+      "type": "detail"
     },
     {
       "id": "RC-102",
@@ -1427,7 +1528,8 @@
         "it is required before eating"
       ],
       "answer": 1,
-      "explanation": "Reviews happen right away \"while memories are fresh,\" so lessons are \"captured before they are lost.\""
+      "explanation": "Reviews happen right away \"while memories are fresh,\" so lessons are \"captured before they are lost.\"",
+      "type": "inference"
     },
     {
       "id": "RC-103",
@@ -1441,7 +1543,8 @@
         "explain how deserts form"
       ],
       "answer": 1,
-      "explanation": "The passage corrects the belief about humps and then explains the real ways camels save water."
+      "explanation": "The passage corrects the belief about humps and then explains the real ways camels save water.",
+      "type": "detail"
     },
     {
       "id": "RC-104",
@@ -1455,7 +1558,8 @@
         "is filled with air"
       ],
       "answer": 1,
-      "explanation": "\"In fact, a camel's hump is mostly fat.\""
+      "explanation": "\"In fact, a camel's hump is mostly fat.\"",
+      "type": "detail"
     },
     {
       "id": "RC-105",
@@ -1469,7 +1573,8 @@
         "Sweating less"
       ],
       "answer": 3,
-      "explanation": "The passage says the hump holds fat, not water; the other traits are all listed."
+      "explanation": "The passage says the hump holds fat, not water; the other traits are all listed.",
+      "type": "detail"
     },
     {
       "id": "RC-106",
@@ -1483,7 +1588,8 @@
         "it replaced paper with metal"
       ],
       "answer": 0,
-      "explanation": "Letters \"could be arranged into pages... and then rearranged for the next job.\""
+      "explanation": "Letters \"could be arranged into pages... and then rearranged for the next job.\"",
+      "type": "detail"
     },
     {
       "id": "RC-107",
@@ -1497,7 +1603,8 @@
         "Books became rare after 1450."
       ],
       "answer": 1,
-      "explanation": "Cheaper books meant more readers, and ideas \"spread far more quickly than before.\""
+      "explanation": "Cheaper books meant more readers, and ideas \"spread far more quickly than before.\"",
+      "type": "detail"
     },
     {
       "id": "RC-108",
@@ -1511,7 +1618,8 @@
         "kept in storage"
       ],
       "answer": 1,
-      "explanation": "Millions of books being \"in circulation\" means they were out among readers."
+      "explanation": "Millions of books being \"in circulation\" means they were out among readers.",
+      "type": "vocab"
     },
     {
       "id": "RC-109",
@@ -1525,7 +1633,8 @@
         "temperature"
       ],
       "answer": 2,
-      "explanation": "\"Light is the strongest signal for resetting it.\""
+      "explanation": "\"Light is the strongest signal for resetting it.\"",
+      "type": "detail"
     },
     {
       "id": "RC-110",
@@ -1539,7 +1648,8 @@
         "There is less daylight in the east."
       ],
       "answer": 1,
-      "explanation": "Flying east \"requires the body to fall asleep earlier than it is ready to.\""
+      "explanation": "Flying east \"requires the body to fall asleep earlier than it is ready to.\"",
+      "type": "detail"
     },
     {
       "id": "RC-111",
@@ -1553,7 +1663,8 @@
         "Fly only at night."
       ],
       "answer": 2,
-      "explanation": "Travelers can speed adjustment \"by eating and sleeping on the new local schedule as soon as possible.\""
+      "explanation": "Travelers can speed adjustment \"by eating and sleeping on the new local schedule as soon as possible.\"",
+      "type": "inference"
     },
     {
       "id": "RC-112",
@@ -1567,7 +1678,8 @@
         "The weather was too poor."
       ],
       "answer": 1,
-      "explanation": "They flew on to China \"since they could not land back aboard the carrier.\""
+      "explanation": "They flew on to China \"since they could not land back aboard the carrier.\"",
+      "type": "detail"
     },
     {
       "id": "RC-113",
@@ -1581,7 +1693,8 @@
         "damaging Japanese factories heavily"
       ],
       "answer": 2,
-      "explanation": "\"The raid did little physical damage, but it lifted American morale and forced Japan to keep more forces at home.\""
+      "explanation": "\"The raid did little physical damage, but it lifted American morale and forced Japan to keep more forces at home.\"",
+      "type": "detail"
     },
     {
       "id": "RC-114",
@@ -1595,7 +1708,8 @@
         "The bombers flew from Pearl Harbor."
       ],
       "answer": 1,
-      "explanation": "Taking off from a carrier was \"something never before attempted with planes that large.\""
+      "explanation": "Taking off from a carrier was \"something never before attempted with planes that large.\"",
+      "type": "detail"
     },
     {
       "id": "RC-115",
@@ -1609,7 +1723,8 @@
         "His time as a truck driver"
       ],
       "answer": 1,
-      "explanation": "The passage describes the 62-day convoy and his being impressed by Germany's highways."
+      "explanation": "The passage describes the 62-day convoy and his being impressed by Germany's highways.",
+      "type": "detail"
     },
     {
       "id": "RC-116",
@@ -1623,7 +1738,8 @@
         "building new cities"
       ],
       "answer": 1,
-      "explanation": "\"Good roads were needed both for commerce and for national defense.\""
+      "explanation": "\"Good roads were needed both for commerce and for national defense.\"",
+      "type": "detail"
     },
     {
       "id": "RC-117",
@@ -1637,7 +1753,8 @@
         "that the convoy was cancelled"
       ],
       "answer": 0,
-      "explanation": "They explain why the trip took 62 days on roads that were \"often little more than dirt tracks.\""
+      "explanation": "They explain why the trip took 62 days on roads that were \"often little more than dirt tracks.\"",
+      "type": "purpose"
     },
     {
       "id": "RC-118",
@@ -1651,7 +1768,8 @@
         "used by machines"
       ],
       "answer": 2,
-      "explanation": "The passage lists these three traits directly."
+      "explanation": "The passage lists these three traits directly.",
+      "type": "detail"
     },
     {
       "id": "RC-119",
@@ -1665,7 +1783,8 @@
         "a joke between Marines"
       ],
       "answer": 0,
-      "explanation": "The Code Talkers used \"Navajo words for military terms\"; a tortoise, like a tank, is armored and slow."
+      "explanation": "The Code Talkers used \"Navajo words for military terms\"; a tortoise, like a tank, is armored and slow.",
+      "type": "purpose"
     },
     {
       "id": "RC-120",
@@ -1679,7 +1798,8 @@
         "The Navy, not the Marines, used the Code Talkers."
       ],
       "answer": 2,
-      "explanation": "They \"could send a message in minutes that took machines far longer.\""
+      "explanation": "They \"could send a message in minutes that took machines far longer.\"",
+      "type": "inference"
     }
   ]
 }

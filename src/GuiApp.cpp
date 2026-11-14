@@ -2,6 +2,8 @@
 #include "GuiApp.h"
 #include "Composites.h"
 #include "QuestionGenerator.h"
+#include "SyncMerge.h"
+#include "VerbalTypes.h"
 #include "Visuals.h"
 #include "Widgets.h"
 #include "imgui.h"
@@ -93,6 +95,16 @@ std::vector<const Flashcard*> definitionsFor(const Question& q, int chosen,
 std::string upper(std::string s) {
     for (char& c : s) c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
     return s;
+}
+
+// The label over a card's word: its part of speech, or for the roots deck its kind.
+const char* partName(const std::string& pos) {
+    return pos == "adj"      ? "ADJECTIVE"
+           : pos == "verb"   ? "VERB"
+           : pos == "prefix" ? "PREFIX"
+           : pos == "root"   ? "ROOT"
+           : pos == "suffix" ? "SUFFIX"
+                             : "NOUN";
 }
 
 std::string plural(int n, const char* word) { return fmt("%d %s%s", n, word, n == 1 ? "" : "s"); }
@@ -223,6 +235,9 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
         deck_.load(dataDir + "/flashcards.json");
         deck_.loadProgress(apppaths::userFile("afoqt_flashcards.json"));
         repDeck_.load(apppaths::userFile("afoqt_repetition.json"), deck_);
+        rootDeck_.load(dataDir + "/roots.json");
+        rootDeck_.loadProgress(apppaths::userFile("afoqt_roots.json"));
+        rootRep_.load(apppaths::userFile("afoqt_roots_repetition.json"), rootDeck_);
         vaWords_.load(dataDir + "/va_definitions.json");
 #ifndef CADET_NO_WARRIOR  // the website has no Warrior Knowledge files, and never writes its progress
         memDeck_.load(dataDir + "/warrior_cards.json");
@@ -236,7 +251,9 @@ bool GuiApp::load(const std::string& dataDir, std::string& error) {
         error = e.what();
         return false;
     }
-    loadSettings();
+    loadSettings();  // first: it has this device's id for the miss counts
+    misses_.load(apppaths::userFile("afoqt_misses.json"), deviceId_);
+    weekly_.load(apppaths::userFile("afoqt_weekly.json"));
     cloud_.load();
     return true;
 }
@@ -248,6 +265,10 @@ void GuiApp::reloadProgress() {
         if (bank_.byIds({q.id}).empty()) bank_.add(q);
     deck_.reloadProgress();
     repDeck_.reload(deck_);
+    rootDeck_.reloadProgress();
+    rootRep_.reload(rootDeck_);
+    misses_.reload();
+    weekly_.reload();
 #ifndef CADET_NO_WARRIOR
     memDeck_.reloadProgress();
     wkRep_.reload();
@@ -411,6 +432,7 @@ void GuiApp::draw() {
         case Screen::Progress: drawProgress(); break;
         case Screen::Quiz: drawQuiz(); break;
         case Screen::Results: drawResults(); break;
+        case Screen::WeakSpots: drawWeakSpots(); break;
     }
     ImGui::Dummy(ImVec2(0, 12 + safe_.bottom));  // breathing room at the bottom (and above a home bar)
     ImGui::EndChild();
@@ -458,6 +480,7 @@ const char* GuiApp::pageName() const {
         case Screen::Progress: return "My progress";
         case Screen::Quiz: return sessionName_.c_str();
         case Screen::Results: return "Results";
+        case Screen::WeakSpots: return "Weak spots";
     }
     return "Cadet Prep";
 }
@@ -623,6 +646,8 @@ void GuiApp::drawSidebar(float height) {
     if (navItem("n_rev", "Review missed", Icon::Review, section == Screen::Review, w, badge.c_str())) goTo(Screen::Review);
     if (track_ == "afoqt" && navItem("n_vocab", "Vocabulary cards", Icon::Cards, section == Screen::Flashcards, w))
         goTo(Screen::Flashcards);
+    if (track_ == "afoqt" && navItem("n_weak", "Weak spots", Icon::Bolt, section == Screen::WeakSpots, w))
+        goTo(Screen::WeakSpots);
     if (track_ == "warrior" && navItem("n_wkrep", "Spaced repetition", Icon::Cards, section == Screen::Flashcards, w))
         goTo(Screen::Flashcards);
     if (navItem("n_prog", "My progress", Icon::Chart, section == Screen::Progress, w)) goTo(Screen::Progress);
@@ -856,6 +881,17 @@ GuiApp::NextUp GuiApp::nextUpFor(const std::string& track) const {
         n.button = "Study deck";
         return n;
     }
+    if (afoqt && !rootRep_.doneToday()) {
+        const int streak = rootRep_.streak();
+        n.kind = NextUp::Deck;
+        n.subtest = "roots";
+        n.urgent = streak > 0;
+        n.title = "Today's word roots deck";
+        n.detail = plural(static_cast<int>(rootRep_.words().size()), "root") + "  \xC2\xB7  " +
+                   (streak > 0 ? plural(streak, "day") + " streak, finish today to keep it" : std::string("Finish it to start a streak"));
+        n.button = "Study roots";
+        return n;
+    }
 
     // 3. Practice the focus area: pinned, else a section not tried yet, else the lowest accuracy
     const auto stats = progress_.stats();
@@ -903,7 +939,7 @@ void GuiApp::runNextUp(const NextUp& n) {
         case NextUp::Deck:
             if (n.track == "afoqt") {
                 goTo(Screen::Flashcards);
-                startRepetition(repMode_);
+                startRepetition(repMode_, n.subtest == "roots");
             } else {
                 startWarriorRepetition();
             }
@@ -929,7 +965,7 @@ bool GuiApp::drawNextUp(const NextUp& n, bool showTrack, bool warmup) {
     const float textW = compact_ ? w - pad * 2 : w - pad * 2 - buttonsW - 24;
     const std::string kicker = showTrack ? "Next up  \xC2\xB7  " + std::string(trackInfo(n.track).name) : "Next up";
     const std::string title = any ? n.title : "You're all caught up";
-    const std::string detail = any ? n.detail : "Nothing to review and today's deck is done.";
+    const std::string detail = any ? n.detail : "Nothing to review and today's decks are done.";
     const float headH = textSize(fonts.heading, title.c_str(), textW).y;
     const float detH = textSize(fonts.body, detail.c_str(), textW).y;
     const float textH = fontPx(fonts.small) + 6 + headH + 4 + detH;
@@ -1107,6 +1143,11 @@ void GuiApp::drawDashboard() {
     ImGui::Dummy(ImVec2(0, 4));
     drawFigures();
     ImGui::Dummy(ImVec2(0, 10));
+    if (afoqt) {
+        drawWeeklyStrip();
+        if (screen_ != Screen::Dashboard) return;  // it started the set
+        ImGui::Dummy(ImVec2(0, 8));
+    }
 
     const auto stats = progress_.stats();
     const std::string focus = focusId();
@@ -1171,6 +1212,7 @@ void GuiApp::drawDashboard() {
                        {tried ? whenText(it->second.last) : dash, tried ? whenText(it->second.last) : ""}};
             r.buttons = {"Practice", "Timed"};
             if (s.id == "math_knowledge" || s.id == "arithmetic_reasoning") r.buttons.push_back("Endless");
+            if (s.id == "verbal_analogies") r.buttons.push_back("Drill");
             r.focusMenu = registry_.find(s.id);
             rows.push_back(r);
         }
@@ -1180,6 +1222,7 @@ void GuiApp::drawDashboard() {
             const SubtestInfo& s = secs[static_cast<size_t>(hit.first)];
             if (hit.second == 0) startSubtest(s, SessionMode::Practice);
             else if (hit.second == 1) startSubtest(s, SessionMode::Timed);
+            else if (s.id == "verbal_analogies") startRelationDrill("");
             else startEndless(s);
             return;
         }
@@ -1274,6 +1317,7 @@ void GuiApp::drawPractice() {
                         s.id == focus && tried ? col::TagStrong : col::Ink}};
             r.buttons = {afoqt ? "Practice" : "Study", "Timed"};
             if (s.id == "math_knowledge" || s.id == "arithmetic_reasoning") r.buttons.push_back("Endless");
+            if (s.id == "verbal_analogies") r.buttons.push_back("Drill");
             r.focusMenu = registry_.find(s.id);
             rows.push_back(r);
         }
@@ -1283,6 +1327,7 @@ void GuiApp::drawPractice() {
             const SubtestInfo& s = g.secs[static_cast<size_t>(hit.first)];
             if (hit.second == 0) startSubtest(s, SessionMode::Practice);
             else if (hit.second == 1) startSubtest(s, SessionMode::Timed);
+            else if (s.id == "verbal_analogies") startRelationDrill("");
             else startEndless(s);
             return;
         }
@@ -1369,7 +1414,7 @@ void GuiApp::drawQuiz() {
     const bool urgent = left >= 0 && left <= 30;
     bool quit = false;
     // Endless and AFOQT practice (which runs through the whole bank) end when you say so, and count.
-    const bool openEnded = endless_ || (sessionTag_ == "PRACTICE" && !cardMode_);
+    const bool openEnded = endless_ || relDrill_ || (sessionTag_ == "PRACTICE" && !cardMode_);
     const char* quitLabel = openEnded ? "Finish" : "Quit";
     const float quitW = textSize(fonts.strong, quitLabel).x + 40;
     {
@@ -1415,10 +1460,11 @@ void GuiApp::drawQuiz() {
                        : sessionTag_ == "PRACTICE"   ? "Practice"
                        : warriorRepSession()         ? "Spaced repetition"
                                                      : nullptr;  // warm-up and review: the name says it
-    const std::string count = openEnded ? fmt("Question %d", engine_.index() + 1)
+    const std::string count = openEnded && !relDrill_ ? fmt("Question %d", engine_.index() + 1)
                               : fmt(cardMode_ ? "Card %d of %d" : "Question %d of %d", engine_.index() + 1, engine_.total());
     textIn(fonts.strong, col::InkSoft, (mode ? std::string(mode) + "  \xC2\xB7  " + count : count).c_str());
     std::string score = sessionTag_ == "TIMED TEST" ? std::string("Score shown at the end")
+                        : relDrill_ ? fmt("%d/%d named \xC2\xB7 %d/%d answered", relNamedRight_, relNamed_, r.correctCount(), answered)
                         : cardMode_ ? fmt("%d known \xC2\xB7 %d learning", r.correctCount(), answered - r.correctCount())
                                     : fmt("%d right \xC2\xB7 %d missed", r.correctCount(), answered - r.correctCount());
     ImFont* sf = sessionTag_ == "TIMED TEST" ? fonts.body : fonts.mono;
@@ -1427,6 +1473,10 @@ void GuiApp::drawQuiz() {
     ImGui::Dummy(ImVec2(0, 2));
     if (cardMode_) {
         drawCardQuestion(q);
+        return;
+    }
+    if (relDrill_ && relStepFor_ != engine_.index()) {  // step 1: name the relationship first
+        drawRelationStep(q);
         return;
     }
 
@@ -1469,6 +1519,11 @@ void GuiApp::drawQuiz() {
         ImGui::PopTextWrapPos();
         endCallout(col::Bg, col::CalloutEdge);
         ImGui::Dummy(ImVec2(0, 4));
+    }
+    if (relDrill_) {  // step 2: the relationship stays in view
+        const verbal::TypeInfo* t = verbal::findType(q.subtest, q.type);
+        textIn(fonts.small, col::Muted, fmt("Step 2 of 2  \xC2\xB7  Relationship: %s", t ? t->name : "?").c_str());
+        ImGui::Dummy(ImVec2(0, 2));
     }
     wrappedIn(fonts.prompt, col::Ink, q.prompt.c_str());
     ImGui::Dummy(ImVec2(0, 6));
@@ -1527,6 +1582,11 @@ void GuiApp::drawQuiz() {
         beginCallout();
         textIn(fonts.heading, right ? col::Good : col::Bad, right ? "Correct" : chosen < 0 ? "Skipped" : "Not quite");
         wrappedIn(fonts.body, col::Ink, q.explanation.c_str());
+        if (const verbal::TypeInfo* t = verbal::findType(q.subtest, q.type)) {  // name the type, to learn to spot it
+            ImGui::Dummy(ImVec2(0, 2));
+            wrappedIn(fonts.small, col::Muted,
+                      fmt("%s: %s. %s", q.subtest == "verbal_analogies" ? "Relationship" : "Question type", t->name, t->hint).c_str());
+        }
         if (!right) {
             const auto defs = definitionsFor(q, chosen, {&deck_, &vaWords_});
             if (!defs.empty()) {
@@ -1663,6 +1723,7 @@ void GuiApp::drawResults() {
     if (r.answeredCount())
         figs.push_back({fmt("%.0f s", r.totalSeconds / r.answeredCount()), cardMode_ ? "per card" : "per answer"});
     if (!cardMode_ && r.answeredCount() < total) figs.push_back({fmt("%d", total - r.answeredCount()), "unanswered"});
+    if (relDrill_) figs.push_back({fmt("%d/%d", relNamedRight_, relNamed_), "relationships named"});
     figuresLine(figs);
     ImGui::Dummy(ImVec2(0, 10));
 
@@ -1673,6 +1734,15 @@ void GuiApp::drawResults() {
         endCallout(col::BadSoft, col::Bad);
     }
 
+    if (weeklySession_) {
+        const int streak = weekly_.streak();
+        beginCallout();
+        textIn(fonts.heading, col::Ink, "This week's reading is done");
+        wrappedIn(fonts.body, col::Ink,
+                  fmt("Your weekly streak is %s (best: %s). A new set of passages comes every Monday.",
+                      plural(streak, "week").c_str(), plural(weekly_.bestStreak(), "week").c_str()).c_str());
+        endCallout(col::GoodSoft, col::Good);
+    }
     if (warriorRepSession()) {
         const int streak = wkRep_.streak();
         beginCallout();
@@ -1736,11 +1806,13 @@ void GuiApp::drawFlashcards() {
         drawWarriorRepetition();
         return;
     }
-    // AFOQT: vocabulary cards. Warrior Knowledge: memorize cards (title on the
-    // front, the full text on the back; recite it, then flip to check).
+    // AFOQT: vocabulary cards (and word roots). Warrior Knowledge: memorize cards (title
+    // on the front, the full text on the back; recite it, then flip to check).
+    if (!flashActive_) repRoots_ = false;  // the start page is about the vocabulary deck
     FlashcardDeck& deck = activeDeck();
     const bool vocab = track_ == "afoqt";
-    const char* deckName = vocab ? "Vocabulary cards" : "Warrior Knowledge cards";
+    const bool roots = vocab && repRoots_;
+    const char* deckName = roots ? "Word roots" : vocab ? "Vocabulary cards" : "Warrior Knowledge cards";
     const int mastered = deck.masteredCount();
     const int total = static_cast<int>(deck.size());
 
@@ -1769,8 +1841,13 @@ void GuiApp::drawFlashcards() {
             ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 1);
             textIn(fonts.body, col::InkSoft, "Definition first: guess the word from its meaning");
             ImGui::Dummy(ImVec2(0, 14));
-            drawRepetition();
+            drawRepetition(false);
             if (flashActive_) return;  // a session just started
+            ImGui::Dummy(ImVec2(0, 18));
+            divider();
+            ImGui::Dummy(ImVec2(0, 10));
+            drawRepetition(true);
+            if (flashActive_) return;
             ImGui::Dummy(ImVec2(0, 18));
         }
 
@@ -1802,14 +1879,14 @@ void GuiApp::drawFlashcards() {
 
     // ---- Session finished
     if (deck.sessionDone() && repSession_) {
-        const int streak = repDeck_.streak();
-        pageTitle("Deck complete",
+        const int streak = activeRep().streak();
+        pageTitle(roots ? "Roots deck complete" : "Deck complete",
                   repCounted_ ? fmt("You went through your whole deck today. Your streak is now %s.",
                                     plural(streak, "day").c_str()).c_str()
                               : "You already finished your deck today, so the streak stays the same. Come back tomorrow "
                                 "to add another day.");
         figuresLine({{fmt("%d", streak), "day streak"},
-                     {fmt("%d", repDeck_.bestStreak()), "best"},
+                     {fmt("%d", activeRep().bestStreak()), "best"},
                      {fmt("%d", deck.sessionGotIt()), "knew it"},
                      {fmt("%d", deck.sessionMissed()), "repeated"}});
         ImGui::Dummy(ImVec2(0, 8));
@@ -1817,11 +1894,12 @@ void GuiApp::drawFlashcards() {
         return;
     }
     if (deck.sessionDone()) {
-        pageTitle("Session complete", vocab ? "Nice work. Words you marked \"still learning\" will come back sooner next time."
+        pageTitle("Session complete", roots ? "Nice work. Roots you marked \"still learning\" will come back sooner next time."
+                                      : vocab ? "Nice work. Words you marked \"still learning\" will come back sooner next time."
                                             : "Nice work. Cards you marked \"still learning\" will come back sooner next time.");
         figuresLine({{fmt("%d", deck.sessionGotIt()), "knew it"},
                      {fmt("%d", deck.sessionMissed()), "still learning", deck.sessionMissed() ? col::TagStrong : col::Ink},
-                     {fmt("%d/%d", mastered, total), vocab ? "words mastered" : "cards mastered"}});
+                     {fmt("%d/%d", mastered, total), roots ? "roots mastered" : vocab ? "words mastered" : "cards mastered"}});
         ImGui::Dummy(ImVec2(0, 8));
         if (button(vocab ? "Back to vocabulary cards" : "Back to Warrior Knowledge")) flashActive_ = false;
         return;
@@ -1832,9 +1910,9 @@ void GuiApp::drawFlashcards() {
     const float ty = ImGui::GetCursorPosY();
     const bool written = repSession_ && repMode_ != RepMode::Swipe;  // quiz or describe instead of a swipe card
     const char* sessionTitle = !repSession_                     ? deckName
-                               : repMode_ == RepMode::Quiz     ? "Spaced repetition: quiz"
-                               : repMode_ == RepMode::Describe ? "Spaced repetition: describe"
-                                                               : "Spaced repetition";
+                               : repMode_ == RepMode::Quiz     ? (roots ? "Word roots: quiz" : "Spaced repetition: quiz")
+                               : repMode_ == RepMode::Describe ? (roots ? "Word roots: describe" : "Spaced repetition: describe")
+                                                               : (roots ? "Word roots" : "Spaced repetition");
     textIn(compact_ ? fonts.heading : fonts.title, col::Ink, sessionTitle);
     alignRight(textSize(fonts.strong, "End session").x + 40);
     ImGui::SetCursorPosY(ty);
@@ -1843,7 +1921,7 @@ void GuiApp::drawFlashcards() {
         return;
     }
     wrappedIn(fonts.body, col::Muted, fmt("%d %s left  \xC2\xB7  %d known  \xC2\xB7  %d still learning",
-                                          static_cast<int>(deck.remaining()), written ? "words" : "cards",
+                                          static_cast<int>(deck.remaining()), written ? (roots ? "roots" : "words") : "cards",
                                           deck.sessionGotIt(), deck.sessionMissed()).c_str());
     ImGui::Dummy(ImVec2(0, 4));
     if (written) {
@@ -1853,9 +1931,8 @@ void GuiApp::drawFlashcards() {
     }
 
     const float minH = std::clamp(ImGui::GetContentRegionAvail().y - 170, 300.0f, vocab ? 420.0f : 520.0f);
-    auto posName = [&] {
-        return c.partOfSpeech == "adj" ? "ADJECTIVE" : c.partOfSpeech == "verb" ? "VERB" : "NOUN";
-    };
+    auto posName = [&] { return partName(c.partOfSpeech); };
+    const char* thing = roots ? "part" : "word";
     const int swiped = swipeCard(
         "flash", swipe_, minH,
         [&](float left, float width) {
@@ -1870,13 +1947,13 @@ void GuiApp::drawFlashcards() {
                 ImGui::Dummy(ImVec2(0, 10));
                 cardText(fonts.title, col::Ink, c.definition.c_str(), left, width);
                 ImGui::Dummy(ImVec2(0, 14));
-                cardText(fonts.body, col::Muted, "Which word has this meaning?", left, width);
+                cardText(fonts.body, col::Muted, fmt("Which %s has this meaning?", thing).c_str(), left, width);
             } else {
                 cardText(fonts.label, col::Muted, posName(), left, width);
                 ImGui::Dummy(ImVec2(0, 6));
                 cardText(fonts.hero, col::Accent, c.word.c_str(), left, width);
                 ImGui::Dummy(ImVec2(0, 14));
-                cardText(fonts.body, col::Muted, "What does this word mean?", left, width);
+                cardText(fonts.body, col::Muted, fmt("What does this %s mean?", thing).c_str(), left, width);
             }
         },
         [&](float left, float width) {
@@ -1892,7 +1969,7 @@ void GuiApp::drawFlashcards() {
             ImGui::Dummy(ImVec2(0, 12));
             cardText(fonts.prompt, col::Ink, c.definition.c_str(), left, width);
             ImGui::Dummy(ImVec2(0, 12));
-            cardText(fonts.label, col::Muted, "SYNONYM", left, width);
+            cardText(fonts.label, col::Muted, roots ? "EXAMPLES" : "SYNONYM", left, width);
             ImGui::Dummy(ImVec2(0, 4));
             cardText(fonts.strong, col::Good, c.synonym.c_str(), left, width);
             if (!c.example.empty()) {
@@ -1910,30 +1987,39 @@ void GuiApp::drawFlashcards() {
                                                 "left if you're still learning (or use the arrow keys).");
     if (swiped != 0) {
         if (swiped > 0) sound_.correct();
+        if (vocab) recordCard(c, swiped > 0);
         deck.mark(swiped > 0);
-        if (repSession_ && deck.sessionDone()) repCounted_ = repDeck_.completePass();
+        if (repSession_ && deck.sessionDone()) repCounted_ = activeRep().completePass();
     }
 }
 
-// The spaced repetition deck on the vocabulary cards page: a small deck that grows
-// 3 words at a time, and a streak for going through all of it once a day.
-void GuiApp::drawRepetition() {
-    const auto& words = repDeck_.words();
+// The spaced repetition decks on the vocabulary cards page: a small deck that grows
+// 3 at a time, and a streak for going through all of it once a day. There are two,
+// each with its own streak: vocabulary words, and word roots (prefixes, roots and
+// suffixes, for decoding unfamiliar words).
+void GuiApp::drawRepetition(bool roots) {
+    const FlashcardDeck& cards = roots ? rootDeck_ : deck_;
+    RepetitionDeck& rep = roots ? rootRep_ : repDeck_;
+    const auto& words = rep.words();
     const int n = static_cast<int>(words.size());
-    const int streak = repDeck_.streak();
-    const bool done = repDeck_.doneToday();
+    const int streak = rep.streak();
+    const bool done = rep.doneToday();
+    ImGui::PushID(roots ? "roots" : "vocab");
 
-    textIn(fonts.heading, col::Ink, "Spaced repetition");
+    textIn(fonts.heading, col::Ink, roots ? "Word roots" : "Spaced repetition");
     wrappedIn(fonts.small, col::Muted,
-              "Your own deck, starting with 3 words. Go through the whole deck once a day to keep your streak, "
-              "with swipe cards, a multiple choice quiz, or by describing each word in your own words. Words you "
-              "miss come back until you know them. Add 3 more words whenever you're ready.");
+              roots ? "Prefixes, roots and suffixes, so you can take apart a word you've never seen on test day "
+                      "(bene + vol = wishing good). Same rules as your word deck: it starts with 3, you go through "
+                      "it once a day for its own streak, and you add 3 more whenever you're ready."
+                    : "Your own deck, starting with 3 words. Go through the whole deck once a day to keep your streak, "
+                      "with swipe cards, a multiple choice quiz, or by describing each word in your own words. Words you "
+                      "miss come back until you know them. Add 3 more words whenever you're ready.");
     ImGui::Dummy(ImVec2(0, 6));
     int mastered = 0;
-    for (const auto& w : words) mastered += deck_.box(w) >= FlashcardDeck::kMasteredBox ? 1 : 0;
+    for (const auto& w : words) mastered += cards.box(w) >= FlashcardDeck::kMasteredBox ? 1 : 0;
     figuresLine({{fmt("%d", streak), "day streak"},
                  {done ? "Done" : "Not yet", "today", done ? col::Ink : streak > 0 ? col::TagStrong : col::Ink},
-                 {fmt("%d", n), n == 1 ? "word in deck" : "words in deck"},
+                 {fmt("%d", n), roots ? (n == 1 ? "root in deck" : "roots in deck") : (n == 1 ? "word in deck" : "words in deck")},
                  {fmt("%d", mastered), "mastered"}});
     ImGui::Dummy(ImVec2(0, 4));
     std::string list;
@@ -1948,23 +2034,26 @@ void GuiApp::drawRepetition() {
         if (i > 0) sameLineIfFits(buttonWidth(ways[i].label));
         const bool strong = !done && ways[i].mode == repMode_;
         if (button(ways[i].label, strong ? ButtonStyle::Primary : ButtonStyle::Outline)) {
-            startRepetition(ways[i].mode);
+            startRepetition(ways[i].mode, roots);
+            ImGui::PopID();
             return;
         }
     }
-    const int canAdd = repDeck_.canAdd(deck_);
+    const int canAdd = rep.canAdd(cards);
+    const char* unit = roots ? (canAdd == 1 ? "root" : "roots") : (canAdd == 1 ? "word" : "words");
     if (canAdd > 0) {
-        const std::string add = fmt("Add %d %s", canAdd, canAdd == 1 ? "word" : "words");
+        const std::string add = fmt("Add %d %s", canAdd, unit);
         sameLineIfFits(buttonWidth(add.c_str()));
-        if (button(add.c_str(), ButtonStyle::Outline)) repDeck_.addMore(deck_);
+        if (button(add.c_str(), ButtonStyle::Outline)) rep.addMore(cards);
     }
-    const int last = repDeck_.lastBatchSize();
+    const int last = rep.lastBatchSize();
     if (last > 0) {
         const std::string remove = fmt("Remove the last %d", last);
         sameLineIfFits(buttonWidth(remove.c_str()));
-        if (button(remove.c_str(), ButtonStyle::Outline)) repDeck_.removeLastBatch();
+        if (button(remove.c_str(), ButtonStyle::Outline)) rep.removeLastBatch();
     }
-    if (canAdd == 0) wrappedIn(fonts.small, col::Muted, "Every vocabulary word is in your deck.");
+    if (canAdd == 0) wrappedIn(fonts.small, col::Muted, roots ? "Every root is in your deck." : "Every vocabulary word is in your deck.");
+    ImGui::PopID();
 }
 
 // ---- Spaced repetition: quiz and describe
@@ -1973,9 +2062,6 @@ namespace {
 std::string lowerCopy(std::string s) {
     for (char& ch : s) ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
     return s;
-}
-const char* partName(const std::string& pos) {
-    return pos == "adj" ? "ADJECTIVE" : pos == "verb" ? "VERB" : "NOUN";
 }
 }  // namespace
 
@@ -1989,11 +2075,14 @@ void GuiApp::buildDeckQuestion(const Flashcard& c) {
     if (last != repLastKind_.end()) kind = (last->second + 1 + std::uniform_int_distribution<int>(0, 1)(rng_)) % 3;
     repLastKind_[c.word] = kind;
 
-    auto field = [kind](const Flashcard& f) -> const std::string& {
-        return kind == 0 ? f.definition : kind == 1 ? f.word : f.synonym;
+    // Roots deck: the "synonym" field holds example words, so the third way asks which
+    // part a few words share (the choices are other roots)
+    const bool roots = repRoots_;
+    auto field = [kind, roots](const Flashcard& f) -> const std::string& {
+        return kind == 0 ? f.definition : kind == 1 || roots ? f.word : f.synonym;
     };
     std::vector<const Flashcard*> same, other;
-    for (const Flashcard& f : deck_.cards()) {
+    for (const Flashcard& f : activeDeck().cards()) {
         if (f.word == c.word || field(f).empty()) continue;
         (f.partOfSpeech == c.partOfSpeech ? same : other).push_back(&f);
     }
@@ -2012,9 +2101,14 @@ void GuiApp::buildDeckQuestion(const Flashcard& c) {
     }
     std::shuffle(q.choices.begin(), q.choices.end(), rng_);
     q.correct = static_cast<int>(std::find(q.choices.begin(), q.choices.end(), field(c)) - q.choices.begin());
-    q.prompt = kind == 0 ? "What does " + upper(c.word) + " mean?"
-             : kind == 1 ? "Which word means: \"" + c.definition + "\""
-                         : upper(c.word) + " most nearly means:";
+    if (roots)
+        q.prompt = kind == 0 ? "What does " + upper(c.word) + " mean?"
+                 : kind == 1 ? "Which part means: \"" + c.definition + "\""
+                             : "Which part do these words share: " + c.synonym + "?";
+    else
+        q.prompt = kind == 0 ? "What does " + upper(c.word) + " mean?"
+                 : kind == 1 ? "Which word means: \"" + c.definition + "\""
+                             : upper(c.word) + " most nearly means:";
     repQ_ = q;
 }
 
@@ -2025,7 +2119,7 @@ void GuiApp::drawDeckQuiz(const Flashcard& c) {
     const float anim = feedbackTime_ < 0 ? -1.0f : static_cast<float>(ImGui::GetTime() - feedbackTime_);
 
     beginAutoCard("deckquiz", ImVec2(32, 30));
-    textIn(fonts.label, col::Muted, q.kind == 0 ? "MEANING" : q.kind == 1 ? "WORD" : "SYNONYM");
+    textIn(fonts.label, col::Muted, q.kind == 0 ? "MEANING" : q.kind == 1 ? (repRoots_ ? "PART" : "WORD") : (repRoots_ ? "EXAMPLES" : "SYNONYM"));
     ImGui::Dummy(ImVec2(0, 2));
     wrappedIn(fonts.prompt, col::Ink, q.prompt.c_str());
     ImGui::Dummy(ImVec2(0, 6));
@@ -2056,7 +2150,7 @@ void GuiApp::drawDeckQuiz(const Flashcard& c) {
         textIn(fonts.heading, right ? col::Good : col::Bad, right ? "Correct" : "Not quite");
         textIn(fonts.strong, col::Ink, (c.word + "  (" + c.partOfSpeech + ")").c_str());
         wrappedIn(fonts.body, col::InkSoft, c.definition.c_str());
-        if (!c.synonym.empty()) wrappedIn(fonts.body, col::InkSoft, ("Synonym: " + c.synonym).c_str());
+        if (!c.synonym.empty()) wrappedIn(fonts.body, col::InkSoft, ((repRoots_ ? "Examples: " : "Synonym: ") + c.synonym).c_str());
         if (!c.example.empty()) wrappedIn(fonts.body, col::InkSoft, ("\"" + c.example + "\"").c_str());
         if (!right) wrappedIn(fonts.small, col::Muted, "It comes back at the end, asked a different way.");
         endCallout(right ? col::GoodSoft : col::BadSoft, right ? col::Good : col::Bad);
@@ -2093,7 +2187,8 @@ void GuiApp::drawDeckDescribe(const Flashcard& c) {
 
     int verdict = 0;  // +1 got it, -1 missed
     if (!repRevealed_) {
-        wrappedIn(fonts.body, col::InkSoft, "Describe what this word means in your own words.");
+        wrappedIn(fonts.body, col::InkSoft, repRoots_ ? "Describe what this part means in your own words."
+                                                      : "Describe what this word means in your own words.");
         ImGui::Dummy(ImVec2(0, 4));
         const float w = ImGui::GetContentRegionAvail().x;
         textArea("##describe", "Type your answer", repText_, sizeof repText_, ImVec2(w, compact_ ? 130.0f : 120.0f),
@@ -2120,9 +2215,9 @@ void GuiApp::drawDeckDescribe(const Flashcard& c) {
         wrappedIn(fonts.prompt, col::Ink, c.definition.c_str());
         if (!c.synonym.empty()) {
             ImGui::Dummy(ImVec2(0, 8));
-            textIn(fonts.label, col::Muted, "SYNONYM");
+            textIn(fonts.label, col::Muted, repRoots_ ? "EXAMPLES" : "SYNONYM");
             ImGui::Dummy(ImVec2(0, 2));
-            textIn(fonts.strong, col::Good, c.synonym.c_str());
+            wrappedIn(fonts.strong, col::Good, c.synonym.c_str());
         }
         if (!c.example.empty()) {
             ImGui::Dummy(ImVec2(0, 8));
@@ -2149,13 +2244,14 @@ void GuiApp::drawDeckDescribe(const Flashcard& c) {
 }
 
 void GuiApp::finishDeckCard(bool knewIt) {
-    deck_.mark(knewIt);
+    recordCard(activeDeck().current(), knewIt);
+    activeDeck().mark(knewIt);
     repQ_ = DeckQuestion{};
     repText_[0] = 0;
     repRevealed_ = repDontKnow_ = false;
     repFocus_ = true;
     feedbackTime_ = -1.0;
-    if (deck_.sessionDone()) repCounted_ = repDeck_.completePass();
+    if (activeDeck().sessionDone()) repCounted_ = activeRep().completePass();
 }
 
 // Warrior Knowledge spaced repetition: the user picks which handbook blocks are in
@@ -2578,6 +2674,7 @@ void GuiApp::startSubtest(const SubtestInfo& s, SessionMode mode) {
     endless_ = false;
     isReview_ = false;
     feedbackTime_ = -1.0;
+    relDrill_ = weeklySession_ = false;
     cardMode_ = track_ == "warrior";
     swipe_ = SwipeCard{};
     engine_.start(s.id, std::move(questions), mode, s.timeLimitSeconds);
@@ -2599,6 +2696,7 @@ void GuiApp::startEndless(const SubtestInfo& s) {
     isReview_ = false;
     endless_ = true;
     feedbackTime_ = -1.0;
+    relDrill_ = weeklySession_ = false;
     cardMode_ = false;
     swipe_ = SwipeCard{};
     engine_.start(s.id, std::move(questions), SessionMode::Practice, 0);
@@ -2665,6 +2763,7 @@ void GuiApp::startWarmup() {
     endless_ = false;
     isReview_ = false;
     feedbackTime_ = -1.0;
+    relDrill_ = weeklySession_ = false;
     cardMode_ = track_ == "warrior";
     swipe_ = SwipeCard{};
     engine_.start(track_ == "afoqt" ? "warmup" : "warmup_" + track_, std::move(questions), SessionMode::Practice, 0);
@@ -2694,6 +2793,7 @@ void GuiApp::startReview(const std::string& subtestId) {
     endless_ = false;
     isReview_ = true;
     feedbackTime_ = -1.0;
+    relDrill_ = weeklySession_ = false;
     cardMode_ = track_ == "warrior";
     swipe_ = SwipeCard{};
     engine_.start("review", std::move(questions), SessionMode::Practice, 0);
@@ -2701,6 +2801,7 @@ void GuiApp::startReview(const std::string& subtestId) {
 }
 
 void GuiApp::startFlashcards(size_t count, bool learningOnly) {
+    repRoots_ = false;
     activeDeck().startSession(count, learningOnly, rng_);
     swipe_ = SwipeCard{};
     repSession_ = repCounted_ = false;
@@ -2712,8 +2813,9 @@ void GuiApp::startFlashcards(size_t count, bool learningOnly) {
     flashActive_ = true;
 }
 
-void GuiApp::startRepetition(RepMode mode) {
-    deck_.startSession(repDeck_.words(), rng_);
+void GuiApp::startRepetition(RepMode mode, bool roots) {
+    repRoots_ = roots;
+    activeDeck().startSession(activeRep().words(), rng_);
     repMode_ = mode;
     repQ_ = DeckQuestion{};
     repLastKind_.clear();
@@ -2725,7 +2827,7 @@ void GuiApp::startRepetition(RepMode mode) {
     repSession_ = true;
     repCounted_ = false;
     message_.clear();
-    flashActive_ = !deck_.sessionDone();
+    flashActive_ = !activeDeck().sessionDone();
 }
 
 void GuiApp::startWarriorRepetition() {
@@ -2748,6 +2850,7 @@ void GuiApp::startWarriorRepetition() {
     isReview_ = true;  // missed cards repeat, so the session doesn't count toward accuracy
     wkRepCounted_ = false;
     feedbackTime_ = -1.0;
+    relDrill_ = weeklySession_ = false;
     cardMode_ = true;
     swipe_ = SwipeCard{};
     engine_.start("repetition_warrior", std::move(questions), SessionMode::Practice, 0);
@@ -2756,9 +2859,423 @@ void GuiApp::startWarriorRepetition() {
 
 void GuiApp::finishSession() {
     progress_.record(engine_.result(), isReview_, sessionTag_ == "TIMED TEST");
+    recordMisses();
+    if (weeklySession_) weekly_.complete(engine_.result().correctCount(), static_cast<int>(engine_.questions().size()));
     if (warriorRepSession()) wkRepCounted_ = wkRep_.completePass();  // the whole deck, so the day counts
     feedbackTime_ = -1.0;
     screen_ = Screen::Results;
+}
+
+// ================================================================ verbal: drills, weekly reading, weak spots
+
+namespace {
+std::string lowerWord(std::string s) {
+    for (char& ch : s) ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+    return s;
+}
+
+// "YYYY-MM-DD HH:MM" for a time in seconds since 1970 (whenText reads it)
+std::string epochDate(long long t) {
+    if (t <= 0) return "";
+    const std::time_t tt = static_cast<std::time_t>(t);
+    std::tm tm{};
+    localtime_r(&tt, &tm);
+    char buf[32];
+    std::strftime(buf, sizeof buf, "%Y-%m-%d %H:%M", &tm);
+    return buf;
+}
+}  // namespace
+
+void GuiApp::recordCard(const Flashcard& c, bool knewIt) {
+    if (track_ != "afoqt") return;
+    if (repRoots_) misses_.record("root", c.word, !knewIt);
+    else misses_.record("word", lowerWord(c.word), !knewIt);
+    misses_.save();
+}
+
+// Counts every answered question by what it tests: the word (Word Knowledge), the
+// relationship (Verbal Analogies), or the question type (Reading Comprehension).
+// Questions left blank when time ran out don't count; a skip does.
+void GuiApp::recordMisses() {
+    const SessionResult& r = engine_.result();
+    const auto& qs = engine_.questions();
+    bool any = false;
+    for (size_t i = 0; i < r.answers.size() && i < qs.size(); ++i) {
+        if (r.answers[i].chosenIndex < 0 && r.timeExpired) continue;
+        const Question& q = qs[i];
+        const bool missed = !r.answers[i].correct;
+        if (q.subtest == "verbal_analogies" && !q.type.empty()) misses_.record("relation", q.type, missed);
+        else if (q.subtest == "reading_comprehension" && !q.type.empty()) misses_.record("reading", q.type, missed);
+        else if (q.subtest == "word_knowledge") misses_.record("word", verbal::wordKnowledgeWord(q.prompt), missed);
+        else continue;
+        any = true;
+    }
+    if (any) misses_.save();
+}
+
+void GuiApp::startCardDrill(const std::vector<std::string>& words, bool roots) {
+    goTo(Screen::Flashcards);  // first: arriving on the page resets it
+    repRoots_ = roots;
+    activeDeck().startSession(words, rng_);
+    swipe_ = SwipeCard{};
+    repSession_ = repCounted_ = false;
+    flashActive_ = !activeDeck().sessionDone();
+}
+
+void GuiApp::startRelationDrill(const std::string& type) {
+    std::vector<Question> pool;
+    for (const Question& q : bank_.all("verbal_analogies"))
+        if (type.empty() || q.type == type) pool.push_back(q);
+    if (pool.empty()) {
+        message_ = "No analogy questions of that kind.";
+        return;
+    }
+    std::shuffle(pool.begin(), pool.end(), rng_);
+    if (pool.size() > 20) pool.resize(20);
+    for (auto& q : pool) QuestionBank::shuffleChoices(q, rng_);
+    const SubtestInfo* va = registry_.find("verbal_analogies");
+    const verbal::TypeInfo* t = verbal::findType("verbal_analogies", type);
+    message_.clear();
+    sessionName_ = t ? std::string("Drill: ") + t->name : "Relationship drill";
+    sessionTag_ = "RELATION DRILL";
+    sessionTips_ = "Say the relationship as a sentence (\"a pilot commands an aircraft\"), then find the pair that fits "
+                   "the same sentence.";
+    sessionTimeLimit_ = 0;
+    endless_ = false;
+    isReview_ = false;
+    weeklySession_ = false;
+    relDrill_ = true;
+    relStepFor_ = relChoicesFor_ = -1;
+    relPick_ = -1;
+    relNamed_ = relNamedRight_ = 0;
+    feedbackTime_ = -1.0;
+    cardMode_ = false;
+    swipe_ = SwipeCard{};
+    engine_.start(va ? va->id : "verbal_analogies", std::move(pool), SessionMode::Practice, 0);
+    screen_ = Screen::Quiz;
+}
+
+// Step 1 of the drill: the first pair alone, and six relationships to pick from.
+void GuiApp::drawRelationStep(const Question& q) {
+    const auto& types = verbal::relationTypes();
+    int correct = -1;
+    for (size_t i = 0; i < types.size(); ++i)
+        if (q.type == types[i].id) correct = static_cast<int>(i);
+    if (relChoicesFor_ != engine_.index()) {  // new question: the right type and five others
+        relChoices_.clear();
+        std::vector<int> others;
+        for (int i = 0; i < static_cast<int>(types.size()); ++i)
+            if (i != correct) others.push_back(i);
+        std::shuffle(others.begin(), others.end(), rng_);
+        if (correct >= 0) relChoices_.push_back(correct);
+        for (int i = 0; i < 5 && i < static_cast<int>(others.size()); ++i) relChoices_.push_back(others[static_cast<size_t>(i)]);
+        std::shuffle(relChoices_.begin(), relChoices_.end(), rng_);
+        relChoicesFor_ = engine_.index();
+        relPick_ = -1;
+        feedbackTime_ = -1.0;
+    }
+    const auto pair = verbal::firstPair(q.prompt);
+    const bool answered = relPick_ >= 0;
+    const float anim = answered && feedbackTime_ >= 0 ? static_cast<float>(ImGui::GetTime() - feedbackTime_) : -1.0f;
+
+    beginAutoCard("relstep", ImVec2(32, 30));
+    textIn(fonts.small, col::Muted, "Step 1 of 2  \xC2\xB7  Name the relationship");
+    ImGui::Dummy(ImVec2(0, 4));
+    wrappedIn(fonts.title, col::Accent, (pair.first + "  :  " + pair.second).c_str());
+    ImGui::Dummy(ImVec2(0, 2));
+    wrappedIn(fonts.prompt, col::Ink, "How are these two words related?");
+    ImGui::Dummy(ImVec2(0, 6));
+
+    int clicked = -1;
+    const float aw = ImGui::GetContentRegionAvail().x;
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(12, 10));
+    for (int i = 0; i < static_cast<int>(relChoices_.size()); ++i) {
+        const int t = relChoices_[static_cast<size_t>(i)];
+        AnswerState st = AnswerState::Normal;
+        if (answered) st = t == correct ? AnswerState::Correct : i == relPick_ ? AnswerState::Wrong : AnswerState::Dimmed;
+        if (st == AnswerState::Wrong && anim >= 0 && anim < 0.4f)
+            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + std::sin(anim * 48.0f) * 7.0f * (1.0f - anim / 0.4f));
+        ImGui::PushID(i);
+        const bool animated = st == AnswerState::Correct || st == AnswerState::Wrong;
+        if (answerCard("rel", static_cast<char>('A' + i), types[static_cast<size_t>(t)].name, st, aw, animated ? anim : -1.0f))
+            clicked = i;
+        ImGui::PopID();
+        if (!answered && ImGui::IsKeyPressed(static_cast<ImGuiKey>(ImGuiKey_A + i), false)) clicked = i;
+    }
+    ImGui::PopStyleVar();
+    ImGui::Dummy(ImVec2(0, 4));
+
+    bool next = false;
+    if (answered && correct >= 0) {
+        const bool right = relChoices_[static_cast<size_t>(relPick_)] == correct;
+        beginCallout();
+        textIn(fonts.heading, right ? col::Good : col::Bad, right ? "Correct" : "Not quite");
+        textIn(fonts.strong, col::Ink, types[static_cast<size_t>(correct)].name);
+        wrappedIn(fonts.body, col::InkSoft, types[static_cast<size_t>(correct)].hint);
+        if (!right) {
+            const auto& picked = types[static_cast<size_t>(relChoices_[static_cast<size_t>(relPick_)])];
+            ImGui::Dummy(ImVec2(0, 2));
+            wrappedIn(fonts.small, col::Muted, fmt("You picked %s: %s", picked.name, picked.hint).c_str());
+        }
+        endCallout(right ? col::GoodSoft : col::BadSoft, right ? col::Good : col::Bad);
+        next = button(touch_ ? "Answer the analogy  \xE2\x86\x92" : "Answer the analogy  \xE2\x86\x92   Enter", ButtonStyle::Primary,
+                      ImVec2(compact_ ? ImGui::GetContentRegionAvail().x : 0, compact_ ? 48 : 0)) ||
+               ImGui::IsKeyPressed(ImGuiKey_Enter, false) || ImGui::IsKeyPressed(ImGuiKey_KeypadEnter, false);
+    }
+    ImGui::Dummy(ImVec2(0, 4));
+    divider();
+    wrappedIn(fonts.small, col::Muted, ("Tip: " + sessionTips_ +
+                                        (touch_ ? "" : "   Keys: A\xE2\x80\x93" "F to answer, Enter for next.")).c_str());
+    endAutoCard();
+
+    if (!answered && clicked >= 0) {
+        relPick_ = clicked;
+        feedbackTime_ = ImGui::GetTime();
+        const bool right = relChoices_[static_cast<size_t>(clicked)] == correct;
+        ++relNamed_;
+        if (right) ++relNamedRight_;
+        if (right) sound_.correct();
+        else sound_.wrong();
+        misses_.record("relname", q.type, !right);
+        misses_.save();
+    } else if (next) {
+        relStepFor_ = engine_.index();
+        relPick_ = -1;
+        feedbackTime_ = -1.0;
+    }
+}
+
+void GuiApp::startReadingType(const std::string& type) {
+    std::vector<Question> pool;
+    for (const Question& q : bank_.all("reading_comprehension"))
+        if (q.type == type) pool.push_back(q);
+    const verbal::TypeInfo* t = verbal::findType("reading_comprehension", type);
+    if (pool.empty() || !t) return;
+    std::shuffle(pool.begin(), pool.end(), rng_);
+    for (auto& q : pool) QuestionBank::shuffleChoices(q, rng_);
+    message_.clear();
+    sessionName_ = std::string("Reading: ") + t->name;
+    sessionTag_ = "PRACTICE";
+    sessionTips_ = t->hint;
+    sessionTimeLimit_ = 0;
+    endless_ = false;
+    isReview_ = false;
+    relDrill_ = weeklySession_ = false;
+    feedbackTime_ = -1.0;
+    cardMode_ = false;
+    swipe_ = SwipeCard{};
+    engine_.start("reading_comprehension", std::move(pool), SessionMode::Practice, 0);
+    screen_ = Screen::Quiz;
+}
+
+std::vector<Question> GuiApp::weeklyQuestions() const {
+    const auto& all = bank_.all("reading_comprehension");
+    std::vector<std::string> passages;  // in file order, once each
+    for (const Question& q : all)
+        if (!q.passage.empty() && std::find(passages.begin(), passages.end(), q.passage) == passages.end())
+            passages.push_back(q.passage);
+    std::vector<Question> out;
+    for (size_t p : WeeklyReading::passagesFor(WeeklyReading::weekNumber(), passages.size()))
+        for (const Question& q : all)
+            if (q.passage == passages[p]) out.push_back(q);
+    return out;
+}
+
+void GuiApp::startWeeklyReading() {
+    auto questions = weeklyQuestions();
+    const SubtestInfo* rc = registry_.find("reading_comprehension");
+    if (questions.empty() || !rc) return;
+    for (auto& q : questions) QuestionBank::shuffleChoices(q, rng_);  // passages stay together, in order
+    // The same pace as the timed Reading Comprehension test
+    const int count = rc->questionCount > 0 ? rc->questionCount : static_cast<int>(questions.size());
+    const int seconds = rc->timeLimitSeconds * static_cast<int>(questions.size()) / count;
+    message_.clear();
+    sessionName_ = "This week's reading";
+    sessionTag_ = "TIMED TEST";
+    sessionTips_ = rc->tips;
+    sessionTimeLimit_ = seconds;
+    endless_ = false;
+    isReview_ = false;
+    relDrill_ = false;
+    weeklySession_ = true;
+    feedbackTime_ = -1.0;
+    cardMode_ = false;
+    swipe_ = SwipeCard{};
+    engine_.start(rc->id, std::move(questions), SessionMode::Timed, seconds);
+    screen_ = Screen::Quiz;
+}
+
+void GuiApp::drawWeeklyStrip() {
+    const SubtestInfo* rc = registry_.find("reading_comprehension");
+    const int n = static_cast<int>(weeklyQuestions().size());
+    if (!rc || n == 0) return;
+    const int count = rc->questionCount > 0 ? rc->questionCount : n;
+    const int seconds = rc->timeLimitSeconds * n / count;
+    const WeeklyReading::Result* res = weekly_.thisWeekResult();
+    const int streak = weekly_.streak();
+    static const char* months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    const std::string monday = WeeklyReading::thisWeek();
+    TableRow r;
+    r.name = fmt("Week of %s %d", months[std::clamp(std::atoi(monday.c_str() + 5) - 1, 0, 11)], std::atoi(monday.c_str() + 8));
+    r.tag = res ? "" : "THIS WEEK";
+    r.note = fmt("%d passages, timed like the real test. A new set every Monday.", WeeklyReading::kPassages);
+    r.cells = {{fmt("%d in %s", n, mmss(seconds).c_str()), fmt("%d questions in %s", n, mmss(seconds).c_str())},
+               {res ? fmt("Done %d/%d", res->correct, res->total) : "Not yet",
+                res ? fmt("Done this week, %d of %d right", res->correct, res->total) : "Not done this week",
+                res ? col::Ink : streak > 0 ? col::TagStrong : col::Ink},
+               {streak ? plural(streak, "week") : "\xE2\x80\x94", streak ? plural(streak, "week") + " in a row" : ""}};
+    r.buttons = {res ? "Retake" : "Start"};
+    // Room for three buttons, like the section tables under it, so the columns line up
+    float actionsW = 0.0f;
+    for (const char* l : {"Practice", "Timed", "Endless"}) actionsW += textSize(fonts.strong, l).x + 26.0f + 8.0f;
+    const auto hit = drawTable("weekly", "WEEKLY READING", {"SET", "THIS WEEK", "STREAK"}, {r}, actionsW);
+    if (hit.first == 0) startWeeklyReading();
+}
+
+void GuiApp::drawWeakSpots() {
+    const char* intro = "What you miss most, counted from every quiz, drill and card. Drill a list to work on it.";
+    if (!compact_) pageTitle("Weak spots", intro);
+    else {
+        wrappedIn(fonts.small, col::Muted, intro);
+        ImGui::Dummy(ImVec2(0, 2));
+    }
+    if (!message_.empty()) {
+        beginCallout();
+        textIn(fonts.strong, col::Ink, message_.c_str());
+        endCallout(col::AccentSoft, col::Accent);
+    }
+    const char* dash = "\xE2\x80\x94";
+    auto pct = [](int right, int seen) { return seen ? fmt("%d%%", right * 100 / seen) : std::string("\xE2\x80\x94"); };
+
+    // ---- Words and roots: the ten missed most (ties: the higher miss rate first)
+    auto missedList = [&](const char* kind) {
+        auto all = misses_.counts(kind);
+        all.erase(std::remove_if(all.begin(), all.end(), [](const MissLog::Count& c) { return c.missed == 0; }), all.end());
+        std::sort(all.begin(), all.end(), [](const MissLog::Count& a, const MissLog::Count& b) {
+            if (a.missed != b.missed) return a.missed > b.missed;
+            if (a.missRate() != b.missRate()) return a.missRate() > b.missRate();
+            return a.name < b.name;
+        });
+        if (all.size() > 10) all.resize(10);
+        return all;
+    };
+    auto cardList = [&](const char* kind, const FlashcardDeck& cards, const char* label, const char* unit,
+                        const char* empty, bool roots) {
+        const auto list = missedList(kind);
+        std::vector<TableRow> rows;
+        std::vector<std::string> names;
+        for (const auto& c : list) {
+            const Flashcard* card = nullptr;
+            for (const Flashcard& f : cards.cards())
+                if (lowerWord(f.word) == lowerWord(c.name)) card = &f;
+            if (!card) continue;  // no longer in the file
+            TableRow r;
+            r.name = card->word;
+            r.note = card->definition;
+            r.cells = {{fmt("%d", c.missed), c.missed == 1 ? std::string("1 miss") : fmt("%d misses", c.missed), col::TagStrong},
+                       {fmt("%d of %d", c.missed, c.seen), fmt("missed %d of %d times", c.missed, c.seen)},
+                       {whenText(epochDate(c.lastMiss)), "last missed " + whenText(epochDate(c.lastMiss))}};
+            rows.push_back(r);
+            names.push_back(card->word);
+        }
+        const float ty = ImGui::GetCursorPosY();
+        textIn(fonts.heading, col::Ink, label);
+        if (!names.empty()) {
+            const std::string drill = fmt("Drill these %s", plural(static_cast<int>(names.size()), unit).c_str());
+            if (!compact_) {
+                alignRight(buttonWidth(drill.c_str()));
+                ImGui::SetCursorPosY(ty - 4);
+            }
+            if (button(drill.c_str(), ButtonStyle::Outline, ImVec2(compact_ ? ImGui::GetContentRegionAvail().x : 0, 0))) {
+                startCardDrill(names, roots);
+                return true;
+            }
+        }
+        ImGui::Dummy(ImVec2(0, 2));
+        if (rows.empty()) wrappedIn(fonts.body, col::Muted, empty);
+        else drawTable(kind, roots ? "ROOT" : "WORD", {"MISSED", "RATE", "LAST"}, rows);
+        ImGui::Dummy(ImVec2(0, 14));
+        return false;
+    };
+    if (cardList("word", deck_, "Most-missed words", "word",
+                 "No missed words yet. Word Knowledge questions and vocabulary cards count here.", false))
+        return;
+    if (cardList("root", rootDeck_, "Most-missed roots", "root",
+                 "No missed roots yet. Cards from the word roots deck count here.", true))
+        return;
+
+    // ---- Analogy relationships: naming it (drill step 1) and answering the analogy
+    {
+        const auto& types = verbal::relationTypes();
+        struct Row { size_t i; int missed; };
+        std::vector<Row> order;
+        for (size_t i = 0; i < types.size(); ++i) {
+            const auto named = misses_.count("relname", types[i].id), answered = misses_.count("relation", types[i].id);
+            order.push_back({i, named.missed + answered.missed});
+        }
+        std::stable_sort(order.begin(), order.end(), [](const Row& a, const Row& b) { return a.missed > b.missed; });
+        std::vector<TableRow> rows;
+        for (const Row& o : order) {
+            const auto& t = types[o.i];
+            const auto named = misses_.count("relname", t.id), answered = misses_.count("relation", t.id);
+            TableRow r;
+            r.name = t.name;
+            r.note = t.hint;
+            r.cells = {{pct(named.seen - named.missed, named.seen),
+                        named.seen ? fmt("named %s", pct(named.seen - named.missed, named.seen).c_str()) : ""},
+                       {pct(answered.seen - answered.missed, answered.seen),
+                        answered.seen ? fmt("answered %s", pct(answered.seen - answered.missed, answered.seen).c_str()) : ""},
+                       {o.missed ? fmt("%d", o.missed) : dash,
+                        o.missed ? (o.missed == 1 ? std::string("1 miss") : fmt("%d misses", o.missed)) : "Not missed yet",
+                        o.missed ? col::TagStrong : col::Muted}};
+            r.buttons = {"Drill"};
+            rows.push_back(r);
+        }
+        const float ty = ImGui::GetCursorPosY();
+        textIn(fonts.heading, col::Ink, "Analogy relationships");
+        const char* all = "Drill every type";
+        if (!compact_) {
+            alignRight(buttonWidth(all));
+            ImGui::SetCursorPosY(ty - 4);
+        }
+        if (button(all, ButtonStyle::Outline, ImVec2(compact_ ? ImGui::GetContentRegionAvail().x : 0, 0))) {
+            startRelationDrill("");
+            return;
+        }
+        wrappedIn(fonts.small, col::Muted, "Named: picking the relationship in step 1 of a drill. Answered: Verbal Analogies "
+                                           "questions of that type, anywhere in the app.");
+        ImGui::Dummy(ImVec2(0, 4));
+        const auto hit = drawTable("weak_rel", "RELATIONSHIP", {"NAMED", "ANSWERED", "MISSED"}, rows);
+        if (hit.first >= 0) {
+            startRelationDrill(types[order[static_cast<size_t>(hit.first)].i].id);
+            return;
+        }
+        ImGui::Dummy(ImVec2(0, 14));
+    }
+
+    // ---- Reading question types
+    {
+        const auto& types = verbal::readingTypes();
+        std::vector<TableRow> rows;
+        for (const auto& t : types) {
+            const auto c = misses_.count("reading", t.id);
+            int n = 0;
+            for (const Question& q : bank_.all("reading_comprehension")) n += q.type == t.id ? 1 : 0;
+            TableRow r;
+            r.name = t.name;
+            r.note = t.hint;
+            r.cells = {{pct(c.seen - c.missed, c.seen), c.seen ? pct(c.seen - c.missed, c.seen) + " right" : "Not tried yet"},
+                       {c.missed ? fmt("%d", c.missed) : dash, c.missed ? (c.missed == 1 ? std::string("1 miss") : fmt("%d misses", c.missed)) : "",
+                        c.missed ? col::TagStrong : col::Muted},
+                       {fmt("%d", n), plural(n, "question")}};
+            r.buttons = {"Practice"};
+            rows.push_back(r);
+        }
+        textIn(fonts.heading, col::Ink, "Reading question types");
+        ImGui::Dummy(ImVec2(0, 2));
+        const auto hit = drawTable("weak_read", "QUESTION TYPE", {"RIGHT", "MISSED", "IN BANK"}, rows);
+        if (hit.first >= 0) startReadingType(types[static_cast<size_t>(hit.first)].id);
+    }
 }
 
 // ================================================================ focus area
@@ -2818,8 +3335,7 @@ void GuiApp::switchTrack(const std::string& track) {
 
 void GuiApp::loadSettings() {
     std::ifstream in(apppaths::userFile("afoqt_settings.json"));
-    if (!in) return;  // first run
-    try {
+    if (in) try {  // no file: first run
         nlohmann::json j;
         in >> j;
         pinnedByTrack_["afoqt"] = j.value("focus", "");  // older files only had the AFOQT focus
@@ -2829,12 +3345,17 @@ void GuiApp::loadSettings() {
         darkMode_ = j.value("dark", false);
         definitionFirst_ = j.value("definition_first", false);
         track_ = j.value("track", "afoqt");
+        deviceId_ = j.value("device", "");
         if (track_ != trackInfo(track_).id) track_ = "afoqt";  // unknown track
     } catch (...) {
         pinnedByTrack_.clear();  // unreadable file: use defaults
         track_ = "afoqt";
     }
     pinnedFocus_ = pinnedByTrack_[track_];
+    if (deviceId_.empty()) {  // first run (or an older settings file): this device's id for the miss counts
+        deviceId_ = cloudsync::newId();
+        saveSettings();
+    }
 }
 
 void GuiApp::saveSettings() const {
@@ -2847,6 +3368,7 @@ void GuiApp::saveSettings() const {
     j["dark"] = darkMode_;
     j["definition_first"] = definitionFirst_;
     j["track"] = track_;
+    j["device"] = deviceId_;
     std::ofstream(apppaths::userFile("afoqt_settings.json")) << j.dump(2);
 }
 
