@@ -34,6 +34,18 @@ keep the old `.js` and `.wasm`.
   (the browser's `fetch`). The website never changes Warrior Knowledge progress: it
   carries those files through a sync untouched.
 
+## On a phone's Home Screen
+
+In Safari, **Share > Add to Home Screen** gives a "Cadet Prep" icon (`web/icons`, made
+from the iPhone app's icon) that opens `study.html` full screen, with no Safari bars
+(`web/manifest.webmanifest` and the `apple-mobile-web-app-*` tags). Full screen, the
+page runs under the clock and above the home bar: `study_shell.html` reads the
+`env(safe-area-inset-*)` values and passes them to the app (`cadet_safe_area`), which
+lays out around them as on the iPhone app. In a browser tab they're zero.
+
+A Home Screen web app keeps its own storage, apart from Safari's, so log in once from
+the icon; sync then brings the progress in.
+
 ## Login
 
 When the site is built with an account server (`supabase.json`), the study page only

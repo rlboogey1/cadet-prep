@@ -565,7 +565,10 @@ void GuiApp::drawStreakPopup() {
     ImDrawList* dl = ImGui::GetWindowDrawList();
     dl->AddRectFilled(o, o + sz, IM_COL32(0, 0, 0, 120));  // the same dim as the phone drawer
     ImGui::SetCursorScreenPos(o);
-    ImGui::InvisibleButton("streak_scrim", sz);  // the page underneath takes no clicks
+    // The page underneath takes no clicks. Continue sits on top of the scrim in the same
+    // window, so the scrim has to let it take the hover, or clicks never reach it.
+    ImGui::SetNextItemAllowOverlap();
+    ImGui::InvisibleButton("streak_scrim", sz);
 
     const int n = streakPopup_.streak;
     const std::string count = std::to_string(n);

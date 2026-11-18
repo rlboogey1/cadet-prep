@@ -234,6 +234,14 @@ struct Script {
 extern "C" EMSCRIPTEN_KEEPALIVE void cadet_resize(int w, int h) {
     if (gWindow && w > 0 && h > 0) SDL_SetWindowSize(gWindow, w, h);
 }
+
+// The page's safe-area insets (CSS env(safe-area-inset-*)), sent by study_shell.html.
+// They're zero in a browser tab; opened from the Home Screen the page runs full
+// screen, under the clock and above the home bar, like the installed app.
+static float gWebSafe[4] = {0, 0, 0, 0};  // top, right, bottom, left
+extern "C" EMSCRIPTEN_KEEPALIVE void cadet_safe_area(float top, float right, float bottom, float left) {
+    gWebSafe[0] = top, gWebSafe[1] = right, gWebSafe[2] = bottom, gWebSafe[3] = left;
+}
 #endif
 
 int main(int argc, char* argv[]) {
@@ -372,12 +380,16 @@ int main(int argc, char* argv[]) {
         if (app.animating()) lastInput = SDL_GetTicks();
 
         // Keep content out from under the notch, rounded corners, and home bar
+#if defined(__EMSCRIPTEN__)
+        app.setSafeArea(gWebSafe[0], gWebSafe[1], gWebSafe[2], gWebSafe[3]);  // SDL doesn't know them in a browser
+#else
         SDL_Rect safe{};
         int w = 0, h = 0;
         SDL_GetWindowSize(window, &w, &h);
         if (SDL_GetWindowSafeArea(window, &safe))
             app.setSafeArea(static_cast<float>(safe.y), static_cast<float>(w - safe.x - safe.w),
                             static_cast<float>(h - safe.y - safe.h), static_cast<float>(safe.x));
+#endif
 
         ImGui_ImplSDLRenderer3_NewFrame();
         ImGui_ImplSDL3_NewFrame();

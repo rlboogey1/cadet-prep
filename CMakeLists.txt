@@ -265,10 +265,11 @@ if(CADET_MOBILE)
             -sEXPORTED_RUNTIME_METHODS=HEAPF32   # miniaudio writes its sound through Module.HEAPF32
             -sEXPORTED_FUNCTIONS=_main,_malloc,_free)
 
-        # The plain pages around the app (login, password reset), their fonts, and
-        # config.js: the account server's address and public key for those pages.
+        # The plain pages around the app (login, password reset), their fonts, the
+        # Home Screen manifest and icons, and config.js: the account server's address
+        # and public key for those pages.
         configure_file(web/config.js.in "${CMAKE_BINARY_DIR}/config.js" @ONLY)
-        set(WEB_PAGES login.html reset.html site.css)
+        set(WEB_PAGES login.html reset.html site.css manifest.webmanifest)
         set(WEB_FONTS IBMPlexSans-Regular.ttf IBMPlexSans-SemiBold.ttf IBMPlexMono-Regular.ttf OFL.txt)
         list(TRANSFORM WEB_PAGES PREPEND "${CMAKE_SOURCE_DIR}/web/")
         list(TRANSFORM WEB_FONTS PREPEND "${CMAKE_SOURCE_DIR}/data/fonts/")
@@ -278,6 +279,7 @@ if(CADET_MOBILE)
             COMMAND ${CMAKE_COMMAND} -DSRC=${CMAKE_SOURCE_DIR}/data -DWEB=${CMAKE_SOURCE_DIR}/web
                     -DOUT=${CMAKE_BINARY_DIR} -P ${CMAKE_SOURCE_DIR}/web/site_data.cmake
             COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/web/shots" "${CMAKE_BINARY_DIR}/shots"
+            COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/web/icons" "${CMAKE_BINARY_DIR}/icons"  # Home Screen icon
             COMMAND ${CMAKE_COMMAND} -E copy_if_different ${WEB_PAGES} "${CMAKE_BINARY_DIR}"
             COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/fonts"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different ${WEB_FONTS} "${CMAKE_BINARY_DIR}/fonts"

@@ -57,9 +57,10 @@ if [ "$SITE" = 1 ]; then
     rm -rf "$DIST"
     mkdir -p "$DIST"
     cp "$OUT"/index.html "$OUT"/login.html "$OUT"/reset.html "$OUT"/site.css "$OUT"/config.js \
-       "$OUT"/study.html "$OUT"/study.js "$OUT"/study.wasm "$OUT"/study.data "$DIST"/
+       "$OUT"/manifest.webmanifest "$OUT"/study.html "$OUT"/study.js "$OUT"/study.wasm "$OUT"/study.data "$DIST"/
     cp -R "$OUT/fonts" "$DIST"/
     cp -R web/shots "$DIST"/   # from the source, not the build folder's copy
+    cp -R web/icons "$DIST"/   # the Home Screen icon
     # Something on this Mac (iCloud Desktop syncing, most likely) leaves duplicates
     # named "file 2.png" behind. They never belong on the site.
     find "$DIST" -name '* [0-9].*' -delete
